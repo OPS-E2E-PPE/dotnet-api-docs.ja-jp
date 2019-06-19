@@ -1,1 +1,9 @@
-<span data-ttu-id="4cad2-101">SQL Server 2000</span><span class="sxs-lookup"><span data-stu-id="4cad2-101">SQL Server 2000</span></span>
+---
+ms.openlocfilehash: 3d750e17b1c9adf0826282a45a2a42c7637a9a7e
+ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.translationtype: HT
+ms.contentlocale: ja-JP
+ms.lasthandoff: 06/15/2019
+ms.locfileid: "63870701"
+---
+<span data-ttu-id="55b10-101">SQL Server 2000</span><span class="sxs-lookup"><span data-stu-id="55b10-101">SQL Server 2000</span></span>

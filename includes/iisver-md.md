@@ -1,1 +1,9 @@
-<span data-ttu-id="a76a0-101">IIS 7.0</span><span class="sxs-lookup"><span data-stu-id="a76a0-101">IIS 7.0</span></span>
+---
+ms.openlocfilehash: 938e724f946f24ab3a228af77fd90ac48e4d54a0
+ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.translationtype: HT
+ms.contentlocale: ja-JP
+ms.lasthandoff: 06/15/2019
+ms.locfileid: "63871181"
+---
+<span data-ttu-id="92c1c-101">IIS 7.0</span><span class="sxs-lookup"><span data-stu-id="92c1c-101">IIS 7.0</span></span>

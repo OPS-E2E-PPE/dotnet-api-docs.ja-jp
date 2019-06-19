@@ -1,1 +1,9 @@
- <span data-ttu-id="28fae-101">.NET Framework 3.5</span><span class="sxs-lookup"><span data-stu-id="28fae-101">.NET Framework 3.5</span></span> 
+---
+ms.openlocfilehash: f8796fd3b89e17ea1fb139f224ecaeac56fed252
+ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.translationtype: HT
+ms.contentlocale: ja-JP
+ms.lasthandoff: 06/15/2019
+ms.locfileid: "63871090"
+---
+ <span data-ttu-id="ee04a-101">.NET Framework 3.5</span><span class="sxs-lookup"><span data-stu-id="ee04a-101">.NET Framework 3.5</span></span> 

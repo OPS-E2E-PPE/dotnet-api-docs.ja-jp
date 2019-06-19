@@ -1,1 +1,9 @@
-<span data-ttu-id="76b2c-101">識別子 (ID)</span><span class="sxs-lookup"><span data-stu-id="76b2c-101">identifier (ID)</span></span>
+---
+ms.openlocfilehash: 5e45af20a2db7575aea5e385754f306a3c986042
+ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.translationtype: HT
+ms.contentlocale: ja-JP
+ms.lasthandoff: 06/15/2019
+ms.locfileid: "63878947"
+---
+<span data-ttu-id="a0a7f-101">識別子 (ID)</span><span class="sxs-lookup"><span data-stu-id="a0a7f-101">identifier (ID)</span></span>

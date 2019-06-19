@@ -1,1 +1,9 @@
-<span data-ttu-id="5f65c-101">ポータブル クラス ライブラリ</span><span class="sxs-lookup"><span data-stu-id="5f65c-101">Portable Class Library</span></span>
+---
+ms.openlocfilehash: ab6b8cb6ea143726e9181dc9307d3accad280bb9
+ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.translationtype: HT
+ms.contentlocale: ja-JP
+ms.lasthandoff: 06/15/2019
+ms.locfileid: "63871163"
+---
+<span data-ttu-id="6403e-101">ポータブル クラス ライブラリ</span><span class="sxs-lookup"><span data-stu-id="6403e-101">Portable Class Library</span></span>
