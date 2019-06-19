@@ -1,1 +1,9 @@
-<span data-ttu-id="160f0-101">ADO.NET</span><span class="sxs-lookup"><span data-stu-id="160f0-101">ADO.NET</span></span>
+---
+ms.openlocfilehash: 23c733f8fde0aa5e6a2d4d688008a99bd1c2a4d9
+ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.translationtype: HT
+ms.contentlocale: ja-JP
+ms.lasthandoff: 06/15/2019
+ms.locfileid: "63869722"
+---
+<span data-ttu-id="6c0b0-101">ADO.NET</span><span class="sxs-lookup"><span data-stu-id="6c0b0-101">ADO.NET</span></span>

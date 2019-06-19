@@ -1,1 +1,9 @@
-<span data-ttu-id="240cd-101">コンポーネント オブジェクト モデル (COM)</span><span class="sxs-lookup"><span data-stu-id="240cd-101">Component Object Model (COM)</span></span>
+---
+ms.openlocfilehash: 04419d7ac01127a69c5ea3bd8dda1ec1f07a53ab
+ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.translationtype: HT
+ms.contentlocale: ja-JP
+ms.lasthandoff: 06/15/2019
+ms.locfileid: "63869484"
+---
+<span data-ttu-id="40ee4-101">コンポーネント オブジェクト モデル (COM)</span><span class="sxs-lookup"><span data-stu-id="40ee4-101">Component Object Model (COM)</span></span>

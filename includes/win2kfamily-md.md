@@ -1,1 +1,9 @@
-<span data-ttu-id="dd418-101">Windows 2000</span><span class="sxs-lookup"><span data-stu-id="dd418-101">Windows 2000</span></span>
+---
+ms.openlocfilehash: f6a28970a521e035e5e254c78ec61c1026703f9b
+ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.translationtype: HT
+ms.contentlocale: ja-JP
+ms.lasthandoff: 06/15/2019
+ms.locfileid: "63876200"
+---
+<span data-ttu-id="2dfa3-101">Windows 2000</span><span class="sxs-lookup"><span data-stu-id="2dfa3-101">Windows 2000</span></span>
