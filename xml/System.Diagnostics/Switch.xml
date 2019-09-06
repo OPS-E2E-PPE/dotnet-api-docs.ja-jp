@@ -1,0 +1,606 @@
+<Type Name="Switch" FullName="System.Diagnostics.Switch">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="e321b0a5d015cd9a1c18d662400546d1e7a086c1" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70404818" /></Metadata><TypeSignature Language="C#" Value="public abstract class Switch" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit Switch extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Diagnostics.Switch" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class Switch" />
+  <TypeSignature Language="C++ CLI" Value="public ref class Switch abstract" />
+  <TypeSignature Language="F#" Value="type Switch = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>新しいデバッグ スイッチおよびトレース スイッチを作成するための抽象基本クラスを提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ スイッチは、外部設定を使用して実行時にトレース出力およびデバッグ出力を制御するための効率的なメカニズムを提供します。 クラス<xref:System.Diagnostics.Switch>は、スイッチの既定の動作を実装し、実行時にスイッチレベルを変更できるようにします。  
+  
+ このクラスは、、 <xref:System.Diagnostics.BooleanSwitch> <xref:System.Diagnostics.SourceSwitch>および<xref:System.Diagnostics.TraceSwitch>クラスの基本クラスです。 これらのスイッチは、ほとんどのデバッグとトレースのニーズを満たしています。 トレーススイッチの詳細については、「[トレーススイッチ](~/docs/framework/debug-trace-profile/trace-switches.md)」を参照してください。  
+  
+ スイッチを使用するには、トレースまたはデバッグを有効にする必要があります。 次の構文はコンパイラ固有です。 または Visual Basic 以外C#のコンパイラを使用する場合は、コンパイラのドキュメントを参照してください。  
+  
+-   でC#デバッグを有効にするに`/d:DEBUG`は、コードのコンパイル時にコンパイラのコマンドラインにフラグを追加する`#define DEBUG`か、ファイルの先頭にを追加します。 Visual Basic で、コンパイラの`/d:DEBUG=True`コマンドラインにフラグを追加します。  
+  
+-   のC#を使用してトレースを有効`/d:TRACE`にするには、コードをコンパイルするときにコンパイラのコマンド`#define TRACE`ラインにフラグを追加するか、ファイルの先頭にを追加します。 Visual Basic で、コンパイラの`/d:TRACE=True`コマンドラインにフラグを追加します。  
+  
+ スイッチのレベルを設定するには、アプリケーションの名前に対応する構成ファイルを編集します。 このファイル内では、スイッチを追加してその値を設定したり、スイッチを削除したり、アプリケーションによって以前に設定されたすべてのスイッチをクリアしたりできます。 構成ファイルは、次の例のように書式設定する必要があります。  
+  
+```xml  
+<configuration>  
+  <system.diagnostics>  
+    <switches>  
+      <add name="mySwitch" value="true" />  
+    </switches>  
+  </system.diagnostics>  
+</configuration>  
+```  
+  
+ この例の構成セクションで<xref:System.Diagnostics.BooleanSwitch>は、 <xref:System.Diagnostics.Switch.DisplayName%2A> <xref:System.Diagnostics.BooleanSwitch.Enabled%2A>プロパティがに`mySwitch`設定されたを`true`定義し、値をに設定します。 アプリケーション内で、次のコード例に示すように、同じ<xref:System.Diagnostics.BooleanSwitch>名前のを作成することによって、構成されたスイッチ値を使用できます。  
+  
+ [!code-cpp[Classic Switch Example#4](~/samples/snippets/cpp/VS_Snippets_CLR_Classic/classic Switch Example/CPP/remarks.cpp#4)]
+ [!code-csharp[Classic Switch Example#4](~/samples/snippets/csharp/VS_Snippets_CLR_Classic/classic Switch Example/CS/remarks.cs#4)]  
+  
+   
+  
+## Examples  
+ 次の例は、コールスタックのトレース<xref:System.Diagnostics.Switch>に使用できる4つのレベルのトレースを持つ新しいクラスを定義する方法を示しています。 スイッチを使用して、メソッドが入力または終了するたびにログを記録するようにアプリケーションをインストルメント化できます。  
+  
+ 最初の例では、スイッチのレベルを設定するために使用する列挙体を作成します。  
+  
+ [!code-cpp[Classic Switch Example#1](~/samples/snippets/cpp/VS_Snippets_CLR_Classic/classic Switch Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic Switch Example#1](~/samples/snippets/csharp/VS_Snippets_CLR_Classic/classic Switch Example/CS/source.cs#1)]
+ [!code-vb[Classic Switch Example#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_Classic/classic Switch Example/VB/source.vb#1)]  
+  
+ 次の例では、新しいスイッチを作成します。 このコードは、 `Level`新しいスイッチの値を設定するプロパティを実装します。 `Level`新しいスイッチに値<xref:System.Diagnostics.Switch.SwitchSetting%2A>を割り当てるプロテクトプロパティを呼び出します。 また、この例では、スイッチの割り当てられた値を取得するための2つのアクセサープロパティも実装しています。  
+  
+ [!code-cpp[Classic Switch Example#2](~/samples/snippets/cpp/VS_Snippets_CLR_Classic/classic Switch Example/CPP/source.cpp#2)]
+ [!code-csharp[Classic Switch Example#2](~/samples/snippets/csharp/VS_Snippets_CLR_Classic/classic Switch Example/CS/source.cs#2)]
+ [!code-vb[Classic Switch Example#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_Classic/classic Switch Example/VB/source.vb#2)]  
+  
+ 次の例では、に`Main`新しいスイッチを作成します。 新しいスイッチが作成され、値が割り当てられます。 次に、スイッチの設定に応じて、メソッドを入力および終了するためのデバッグメッセージを出力します。  
+  
+ [!code-cpp[Classic Switch Example#3](~/samples/snippets/cpp/VS_Snippets_CLR_Classic/classic Switch Example/CPP/source.cpp#3)]
+ [!code-csharp[Classic Switch Example#3](~/samples/snippets/csharp/VS_Snippets_CLR_Classic/classic Switch Example/CS/source.cs#3)]
+ [!code-vb[Classic Switch Example#3](~/samples/snippets/visualbasic/VS_Snippets_CLR_Classic/classic Switch Example/VB/source.vb#3)]  
+  
+ ]]></format>
+    </remarks>
+    <block subset="none" type="overrides"><para>トレース<see cref="T:System.Diagnostics.BooleanSwitch" />レベル、または<see cref="T:System.Diagnostics.SourceSwitch" />とで提供されるスイッチレベルと<see cref="T:System.Diagnostics.TraceSwitch" />は異なるスイッチレベルを設定するための機構が<see cref="T:System.Diagnostics.Switch" />必要な場合は、から継承できます。 このクラスから継承する場合は、 <see cref="P:System.Diagnostics.Switch.SwitchSetting" />メソッドを実装する必要があります。</para></block>
+    <altmember cref="T:System.Diagnostics.BooleanSwitch" />
+    <altmember cref="T:System.Diagnostics.TraceSwitch" />
+    <altmember cref="T:System.Diagnostics.Debug" />
+    <altmember cref="T:System.Diagnostics.Trace" />
+    <related type="Article" href="https://msdn.microsoft.com/library/8ab913aa-f400-4406-9436-f45bc6e54fbe">トレース スイッチ</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Diagnostics.Switch" /> クラスの新しいインスタンスを初期化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected Switch (string displayName, string description);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor(string displayName, string description) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.Switch.#ctor(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New (displayName As String, description As String)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; Switch(System::String ^ displayName, System::String ^ description);" />
+      <MemberSignature Language="F#" Value="new System.Diagnostics.Switch : string * string -&gt; System.Diagnostics.Switch" Usage="new System.Diagnostics.Switch (displayName, description)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="displayName" Type="System.String" />
+        <Parameter Name="description" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="displayName">スイッチの名前です。</param>
+        <param name="description">スイッチの説明。</param>
+        <summary><see cref="T:System.Diagnostics.Switch" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 新しい<xref:System.Diagnostics.Switch>オブジェクトを作成すると、 `displayName`パラメーターの値を使用して初期スイッチ設定が検索されます。 既定値は、空の文字列 ("") です。  
+  
+ XML 構成ファイル内では、スイッチを追加してその値を設定したり、スイッチを削除したり、アプリケーションによって以前に設定されたすべてのスイッチをクリアしたりできます。 構成ファイルの動的な変更は、アプリケーションの実行中に検出されません。 構成ファイルへの変更が有効になる前に、アプリケーションを停止して再起動する必要があります。 構成ファイルは、次の例のように書式設定する必要があります。  
+  
+```xml  
+<configuration>  
+  <system.diagnostics>  
+    <switches>  
+      <add name="mySwitch" value="10" />  
+      <add name="myNewSwitch" value="20" />  
+      <remove name="mySwitch" />  
+      <clear/>  
+    </switches>  
+  </system.diagnostics>  
+</configuration>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>スイッチの値を設定するには、コンストラクター <see cref="P:System.Diagnostics.Switch.SwitchSetting" />でプロパティを設定します。</para></block>
+        <altmember cref="T:System.Diagnostics.Switch" />
+        <altmember cref="T:System.Diagnostics.BooleanSwitch" />
+        <altmember cref="T:System.Diagnostics.SourceSwitch" />
+        <altmember cref="T:System.Diagnostics.TraceSwitch" />
+        <altmember cref="T:System.Diagnostics.Debug" />
+        <altmember cref="T:System.Diagnostics.Trace" />
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected Switch (string displayName, string description, string defaultSwitchValue);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor(string displayName, string description, string defaultSwitchValue) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.Switch.#ctor(System.String,System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New (displayName As String, description As String, defaultSwitchValue As String)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; Switch(System::String ^ displayName, System::String ^ description, System::String ^ defaultSwitchValue);" />
+      <MemberSignature Language="F#" Value="new System.Diagnostics.Switch : string * string * string -&gt; System.Diagnostics.Switch" Usage="new System.Diagnostics.Switch (displayName, description, defaultSwitchValue)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="displayName" Type="System.String" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="description" Type="System.String" Index="1" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="defaultSwitchValue" Type="System.String" Index="2" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="displayName">スイッチの名前です。</param>
+        <param name="description">スイッチの説明。</param>
+        <param name="defaultSwitchValue">スイッチの既定値。</param>
+        <summary>スイッチの表示名、説明、および既定値を指定して、<see cref="T:System.Diagnostics.Switch" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ パラメーターを使用して<xref:System.Diagnostics.Switch.DisplayName%2A>プロパティの値を設定し`description` 、パラメーターを使用して<xref:System.Diagnostics.Switch.Description%2A>プロパティの値を設定します。 `displayName` プロパティがコードまたは構成ファイルの属性によって設定されていない`defaultSwitchValue`場合、パラメーターはスイッチの<xref:System.Diagnostics.Switch.Value%2A>値です。 詳細に<xref:System.Diagnostics.Switch.%23ctor%28System.String%2CSystem.String%29>ついては、「オーバーロード」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Attributes">
+      <MemberSignature Language="C#" Value="public System.Collections.Specialized.StringDictionary Attributes { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Collections.Specialized.StringDictionary Attributes" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.Switch.Attributes" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Attributes As StringDictionary" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Collections::Specialized::StringDictionary ^ Attributes { System::Collections::Specialized::StringDictionary ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Attributes : System.Collections.Specialized.StringDictionary" Usage="System.Diagnostics.Switch.Attributes" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Xml.Serialization.XmlIgnore</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Collections.Specialized.StringDictionary</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>アプリケーション構成ファイルに定義されているカスタム スイッチ属性を取得します。</summary>
+        <value>トレース スイッチの大文字小文字を区別しないカスタム属性を格納している <see cref="T:System.Collections.Specialized.StringDictionary" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティ<xref:System.Diagnostics.Switch.Attributes%2A>は、アプリケーションの構成ファイルで参照されるカスタム属性を識別します。 参照されていないカスタム属性は列挙されません。 <xref:System.Diagnostics.Switch>クラスを継承するクラスでは、 <xref:System.Diagnostics.Switch.GetSupportedAttributes%2A>メソッドをオーバーライドし、カスタム属性名の文字列配列を返すことによって、カスタム属性を追加できます。  
+  
+   
+  
+## Examples  
+ 次のコードサンプルは、カスタムスイッチの認識されない属性を表示する方法を示しています。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource#15](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource/CS/program.cs#15)]
+ [!code-vb[System.Diagnostics.TraceSource#15](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource/VB/program.vb#15)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Description">
+      <MemberSignature Language="C#" Value="public string Description { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Description" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.Switch.Description" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Description As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ Description { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Description : string" Usage="System.Diagnostics.Switch.Description" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>スイッチの説明を取得します。</summary>
+        <value>スイッチの説明。 既定値は、空の文字列 ("") です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティは、スイッチの機能を示す必要があります。たとえば、"ディレクトリウォッチャーコンポーネントのトレースを有効にします。" 値は、 `descriptor` <xref:System.Diagnostics.Switch.%23ctor%2A>コンストラクターのパラメーターによって設定されます。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Diagnostics.Switch" />
+        <altmember cref="T:System.Diagnostics.BooleanSwitch" />
+        <altmember cref="T:System.Diagnostics.TraceSwitch" />
+        <altmember cref="T:System.Diagnostics.Debug" />
+        <altmember cref="T:System.Diagnostics.Trace" />
+      </Docs>
+    </Member>
+    <Member MemberName="DisplayName">
+      <MemberSignature Language="C#" Value="public string DisplayName { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string DisplayName" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.Switch.DisplayName" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property DisplayName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ DisplayName { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.DisplayName : string" Usage="System.Diagnostics.Switch.DisplayName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>スイッチを識別するための名前を取得します。</summary>
+        <value>スイッチを識別するための名前。 既定値は、空の文字列 ("") です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 新しい<xref:System.Diagnostics.Switch>オブジェクトを作成すると、に<xref:System.Diagnostics.Switch.DisplayName%2A>よって初期スイッチ設定が検出されます。 詳細については、 <xref:System.Diagnostics.Switch.%23ctor%2A> Visual Studio ドキュメントの「コンストラクター」および「[方法: トレーススイッチを作成、初期化、および構成する](~/docs/framework/debug-trace-profile/how-to-create-initialize-and-configure-trace-switches.md)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次のコード例では、トレースソースによって使用されているスイッチの表示名を表示します。  このコード例は、 <xref:System.Diagnostics.TraceSource>クラスの概要で確認できる大きな例の一部です。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource#10](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource/CS/program.cs#10)]
+ [!code-vb[System.Diagnostics.TraceSource#10](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource/VB/program.vb#10)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Diagnostics.Switch" />
+        <altmember cref="T:System.Diagnostics.BooleanSwitch" />
+        <altmember cref="T:System.Diagnostics.TraceSwitch" />
+        <altmember cref="T:System.Diagnostics.Debug" />
+        <altmember cref="T:System.Diagnostics.Trace" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetSupportedAttributes">
+      <MemberSignature Language="C#" Value="protected internal virtual string[] GetSupportedAttributes ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance string[] GetSupportedAttributes() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.Switch.GetSupportedAttributes" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Function GetSupportedAttributes () As String()" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual cli::array &lt;System::String ^&gt; ^ GetSupportedAttributes();" />
+      <MemberSignature Language="F#" Value="abstract member GetSupportedAttributes : unit -&gt; string[]&#xA;override this.GetSupportedAttributes : unit -&gt; string[]" Usage="switch.GetSupportedAttributes " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String[]</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>スイッチによってサポートされるカスタム属性を取得します。</summary>
+        <returns>スイッチによってサポートされるカスタム属性の名前を含む文字列配列。カスタム属性がサポートされない場合は <see langword="null" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Diagnostics.Switch.GetSupportedAttributes%2A>メソッドの既定の実装では`null`、が返されます。 スイッチが構成ファイルに追加され、によって<xref:System.Diagnostics.Switch.GetSupportedAttributes%2A>返される文字列配列に含まれないカスタム属性が指定されている場合<xref:System.Configuration.ConfigurationException> 、スイッチが読み込まれるとがスローされます。  
+  
+   
+  
+## Examples  
+ 次のコードサンプルは、カスタムスイッチの<xref:System.Diagnostics.Switch.GetSupportedAttributes%2A>メソッドのオーバーライドを示しています。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource#34](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource/CS/program.cs#34)]
+ [!code-vb[System.Diagnostics.TraceSource#34](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource/VB/program.vb#34)]  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para><see cref="T:System.Diagnostics.Switch" />クラスまたは派生クラスから継承する場合、 <see cref="M:System.Diagnostics.Switch.GetSupportedAttributes" />メソッドをオーバーライドしてクラスのカスタム属性を提供できます。</para></block>
+      </Docs>
+    </Member>
+    <Member MemberName="OnSwitchSettingChanged">
+      <MemberSignature Language="C#" Value="protected virtual void OnSwitchSettingChanged ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnSwitchSettingChanged() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.Switch.OnSwitchSettingChanged" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnSwitchSettingChanged ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnSwitchSettingChanged();" />
+      <MemberSignature Language="F#" Value="abstract member OnSwitchSettingChanged : unit -&gt; unit&#xA;override this.OnSwitchSettingChanged : unit -&gt; unit" Usage="switch.OnSwitchSettingChanged " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="P:System.Diagnostics.Switch.SwitchSetting" /> プロパティが変更されると発生します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Diagnostics.Switch.OnSwitchSettingChanged%2A>は、スイッチが構成ファイルから<xref:System.Diagnostics.Switch.SwitchSetting%2A>値を読み取る最初の時点で呼び出され、スイッチの値が変更されるたびに再び呼び出されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnValueChanged">
+      <MemberSignature Language="C#" Value="protected virtual void OnValueChanged ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnValueChanged() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.Switch.OnValueChanged" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnValueChanged ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnValueChanged();" />
+      <MemberSignature Language="F#" Value="abstract member OnValueChanged : unit -&gt; unit&#xA;override this.OnValueChanged : unit -&gt; unit" Usage="switch.OnValueChanged " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="P:System.Diagnostics.Switch.Value" /> プロパティが変更されると発生します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 既定の実装では、 <xref:System.Diagnostics.Switch.Value%2A>プロパティの新しい値が、プロパティの<xref:System.Diagnostics.Switch.SwitchSetting%2A>設定に使用される整数値に解析されます。  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>このメソッドをオーバーライドし、スイッチに適切な<see cref="P:System.Diagnostics.Switch.SwitchSetting" />値を設定する変換を使用する必要があります。</para></block>
+      </Docs>
+    </Member>
+    <Member MemberName="SwitchSetting">
+      <MemberSignature Language="C#" Value="protected int SwitchSetting { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 SwitchSetting" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.Switch.SwitchSetting" />
+      <MemberSignature Language="VB.NET" Value="Protected Property SwitchSetting As Integer" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property int SwitchSetting { int get(); void set(int value); };" />
+      <MemberSignature Language="F#" Value="member this.SwitchSetting : int with get, set" Usage="System.Diagnostics.Switch.SwitchSetting" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>このスイッチの現在の設定を取得または設定します。</summary>
+        <value>このスイッチの現在の設定。 既定値は 0 です。</value>
+        <remarks>To be added.</remarks>
+        <altmember cref="T:System.Diagnostics.Switch" />
+        <altmember cref="T:System.Diagnostics.BooleanSwitch" />
+        <altmember cref="T:System.Diagnostics.TraceSwitch" />
+        <altmember cref="T:System.Diagnostics.Debug" />
+        <altmember cref="T:System.Diagnostics.Trace" />
+      </Docs>
+    </Member>
+    <Member MemberName="Value">
+      <MemberSignature Language="C#" Value="protected string Value { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Value" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.Switch.Value" />
+      <MemberSignature Language="VB.NET" Value="Protected Property Value As String" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property System::String ^ Value { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Value : string with get, set" Usage="System.Diagnostics.Switch.Value" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>スイッチの値を取得または設定します。</summary>
+        <value>スイッチの値を表す文字列。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、 <xref:System.Diagnostics.Switch.Value%2A>プロパティの値が変更されたときに呼び出されます。 <xref:System.Diagnostics.Switch.OnValueChanged%2A> メソッド<xref:System.Diagnostics.Switch.OnValueChanged%2A>は、このプロパティの値を解析し、整数値に変換します。これは、 <xref:System.Diagnostics.Switch.SwitchSetting%2A>プロパティの設定に使用されます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Configuration.ConfigurationErrorsException">値が <see langword="null" /> です。  
+  
+- または - 
+値に、必要に応じて追加されるマイナス記号と、それに続く 0 から 9 の一連の数字以外の要素が含まれています。  
+  
+- または - 
+値が、<see cref="F:System.Int32.MinValue" /> 未満の数値か、<see cref="F:System.Int32.MaxValue" /> より大きい数値を表しています。</exception>
+        <block subset="none" type="overrides"><para><see cref="M:System.Diagnostics.Switch.OnValueChanged" />メソッドをオーバーライドし、スイッチに適切な<see cref="P:System.Diagnostics.Switch.SwitchSetting" />値を設定する変換操作を提供する必要があります。</para></block>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
