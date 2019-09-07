@@ -1,0 +1,327 @@
+<Type Name="XmlChoiceIdentifierAttribute" FullName="System.Xml.Serialization.XmlChoiceIdentifierAttribute">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="ec8db61e1a53c0ec0e41a056372fd3521a88f75d" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70481058" /></Metadata><TypeSignature Language="C#" Value="public class XmlChoiceIdentifierAttribute : Attribute" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit XmlChoiceIdentifierAttribute extends System.Attribute" />
+  <TypeSignature Language="DocId" Value="T:System.Xml.Serialization.XmlChoiceIdentifierAttribute" />
+  <TypeSignature Language="VB.NET" Value="Public Class XmlChoiceIdentifierAttribute&#xA;Inherits Attribute" />
+  <TypeSignature Language="C++ CLI" Value="public ref class XmlChoiceIdentifierAttribute : Attribute" />
+  <TypeSignature Language="F#" Value="type XmlChoiceIdentifierAttribute = class&#xA;    inherit Attribute" />
+  <AssemblyInfo>
+    <AssemblyName>System.Xml.XmlSerializer</AssemblyName>
+    <AssemblyVersion>4.0.10.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Xml</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Xml.Serialization</AssemblyName>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Attribute</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute FrameworkAlternate="netcore-2.0;netcore-2.1;netstandard-2.0;netcore-2.2;dotnet-uwp-10.0;netstandard-2.1">
+      <AttributeName>System.AttributeUsage(System.AttributeTargets.Field | System.AttributeTargets.Parameter | System.AttributeTargets.Property | System.AttributeTargets.ReturnValue, AllowMultiple=false)</AttributeName>
+    </Attribute>
+    <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netcore-1.0;netcore-1.1;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0;netcore-3.0">
+      <AttributeName>System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Field | System.AttributeTargets.Parameter | System.AttributeTargets.ReturnValue, AllowMultiple=false)</AttributeName>
+    </Attribute>
+    <Attribute FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8">
+      <AttributeName>System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Field | System.AttributeTargets.Parameter | System.AttributeTargets.ReturnValue)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>列挙体を使用して、メンバーを明確に検出できるようにすることを指定します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ という名前`xsi:choice`の XML スキーマ要素定義は、インスタンス内に1つの子のみを含めることができる複合要素を定義するために使用されます (maxoccurs = 1)。 この子は、複数の型のいずれかにすることができ、複数の名前のいずれかを持つことができます。 各名前は、特定の種類に関連付けられています。ただし、複数の名前を同じ型に関連付けることができます。 このため、このような要素のインスタンスは indistinct です。 たとえば、という名前`MyChoice`の indistinct 要素を定義する次のスキーマフラグメントを考えてみます。  
+  
+```  
+<xsd:complexType name="MyChoice">  
+ <xsd:sequence>  
+ <xsd:choice minOccurs="0" maxOccurs="1">  
+ <xsd:element minOccurs="1" maxOccurs="1" name="ChoiceOne" type="xsd:string" />  
+ <xsd:element minOccurs="1" maxOccurs="1" name="ChoiceTwo" type="xsd:string" />  
+ </xsd:choice>  
+ </xsd:sequence>  
+</xsd:complexType>  
+```  
+  
+ で<xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute>は、メンバーの各インスタンスに特別な列挙値を割り当てることができます。 列挙を自分で作成するか、 [XML スキーマ定義ツール (xsd.exe)](~/docs/standard/serialization/xml-schema-definition-tool-xsd-exe.md)で生成する必要があります。 次C#のコードは、 <xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute> `Item`がフィールドにどのように適用さ<xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute.MemberName%2A>れるかを示しています。プロパティは、選択を検出するためにさらに使用される列挙体を含むフィールドを識別します。  
+  
+```  
+public class Choices{  
+ [XmlChoiceIdentifier("ItemType")]  
+ [XmlChoiceIdentifier("ChoiceOne")]  
+ [XmlChoiceIdentifier("ChoiceTwo")]  
+ public string MyChoice;  
+  
+ // Do not serialize this next field:  
+ [XmlIgnore]  
+ public ItemChoiceType ItemType;  
+}  
+// Do not include this enumeration in the XML schema.  
+[XmlType(IncludeInSchema = false)]  
+public enum ItemChoiceType{  
+ ChoiceOne,  
+ ChoiceTwo,  
+}  
+```  
+  
+ このコードが配置されている場合は、 `ItemType`フィールドを適切な列挙に設定することによって、このクラスをシリアル化および逆シリアル化できます。 たとえば、 `Choice`クラスをシリアル化するためにC# 、コードは次のようになります。  
+  
+```  
+Choices mc = new Choices();  
+mc.MyChoice = "Item Choice One";  
+mc.ItemType = ItemChoiceType.ChoiceOne;  
+```  
+  
+ 逆シリアル化するC#場合、コードは次のようになります。  
+  
+```  
+MyChoice mc = (MyChoice) myXmlSerializer.Deserialize(myReader);  
+if(mc.ItemType == ItemChoiceType.ChoiceOne)  
+ {  
+     // Handle choice one.  
+ }  
+if(mc.ItemType == ItemChoiceType.ChoiceTwo)  
+ {  
+     // Handle choice two.  
+ }  
+if(mc.ItemType != null)  
+ {  
+     throw CreateUnknownTypeException(mc.Item);  
+ }  
+```  
+  
+ を使用する場合<xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute> 、2つ目のシナリオがあります。 次のスキーマでは、メンバーは項目の配列 (maxOccurs = "非バインド") を返すフィールドです。 配列には、最初の選択肢のオブジェクト ("D-a ~ t-a") と2番目の選択肢 ("その他のデータ") を含めることができます。  
+  
+```  
+<xsd:complexType name="MyChoice">  
+ <xsd:sequence>  
+ <xsd:choice minOccurs="0" maxOccurs="unbounded">  
+ <xsd:element minOccurs="1" maxOccurs="1" name="D-a-t-a" type="xsd:string" />  
+ <xsd:element minOccurs="1" maxOccurs="1" name="MoreData" type="xsd:string" />  
+ </xsd:choice>  
+ </xsd:sequence>  
+</xsd:complexType>  
+```  
+  
+ 生成されたクラスは、フィールドを使用して項目の配列を返します。 配列内の各項目について、 `ItemChoiceType`対応する列挙も検索する必要があります。 一致する列挙体は、 `ItemsElementName`フィールドによって返される配列に格納されます。  
+  
+```  
+public class MyChoice {  
+ [System.Xml.Serialization.XmlElementAttribute("D-a-t-a", typeof(string), IsNullable=false)]  
+ [System.Xml.Serialization.XmlElementAttribute("MoreData", typeof(string), IsNullable=false)]  
+ [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]  
+ public string[] Items;  
+ [System.Xml.Serialization.XmlElementAttribute(IsNullable=false)]  
+ [System.Xml.Serialization.XmlIgnoreAttribute()]  
+ public ItemsChoiceType[] ItemsElementName;  
+}  
+[System.Xml.Serialization.XmlTypeAttribute(IncludeInSchema=false)]  
+public enum ItemsChoiceType {  
+ [System.Xml.Serialization.XmlEnumAttribute("D-a-t-a")]  
+ Data,  
+ MoreData,  
+}  
+```  
+  
+ 選択範囲を含むオブジェクトを逆シリアル化する場合は、コントロール構造 (if... など) を使用します。そうしたら。。。else 構造体) を指定して、特定の値を逆シリアル化する方法を決定します。 コントロール構造体で、列挙値を確認し、それに応じて値を逆シリアル化します。  
+  
+   
+  
+## Examples  
+ 次の例では、と`Choices`と`ManyChoices`いう2つの`MyChoice`フィールドを含むという名前のクラスをシリアル化します。 は<xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute> 、メンバー値を検出する列挙体を取得<xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute.MemberName%2A>または設定する別のクラスメンバーを指定する各フィールドに適用されます。 フィールドには、対応する列挙型のメンバーが`EnumType`フィールドにある単一の値を設定できます。 `MyChoice` フィールド`ManyChoices`は、オブジェクトの配列を返します。 フィールド`ChoiceArray`は、列挙値の配列を返します。 `ManyChoices`フィールド内の配列メンバーごとに、対応するメンバーが`ChoiceArray`フィールドによって返された配列に格納されます。  
+  
+ [!code-cpp[XmlChoiceIdentifierAttribute Example#1](~/samples/snippets/cpp/VS_Snippets_Remoting/XmlChoiceIdentifierAttribute Example/CPP/choice.cpp#1)]
+ [!code-csharp[XmlChoiceIdentifierAttribute Example#1](~/samples/snippets/csharp/VS_Snippets_Remoting/XmlChoiceIdentifierAttribute Example/CS/choice.cs#1)]
+ [!code-vb[XmlChoiceIdentifierAttribute Example#1](~/samples/snippets/visualbasic/VS_Snippets_Remoting/XmlChoiceIdentifierAttribute Example/VB/choice.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Xml.Serialization.XmlAttributes" />
+    <related type="Article" href="~/docs/standard/serialization/introducing-xml-serialization.md">XML シリアル化の概要</related>
+    <related type="Article" href="~/docs/standard/serialization/how-to-specify-an-alternate-element-name-for-an-xml-stream.md">方法 : XML ストリームの代替要素名を指定する</related>
+    <related type="Article" href="~/docs/standard/serialization/controlling-xml-serialization-using-attributes.md">属性を使用した XML シリアル化の制御</related>
+    <related type="Article" href="~/docs/standard/serialization/examples-of-xml-serialization.md">XML シリアル化の例</related>
+    <related type="Article" href="~/docs/standard/serialization/xml-schema-definition-tool-xsd-exe.md">XML Schema Definition Tool (Xsd.exe)</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.XmlSerializer</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Xml.Serialization.XmlChoiceIdentifierAttribute" /> クラスの新しいインスタンスを初期化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XmlChoiceIdentifierAttribute ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.Serialization.XmlChoiceIdentifierAttribute.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XmlChoiceIdentifierAttribute();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.XmlSerializer</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.Serialization</AssemblyName>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Xml.Serialization.XmlChoiceIdentifierAttribute" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ 次の例では、と`Choices`と`ManyChoices`いう2つの`MyChoice`フィールドを含むという名前のクラスをシリアル化します。 は<xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute> 、メンバー値を検出する列挙体を取得<xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute.MemberName%2A>または設定する別のクラスメンバーを指定する各フィールドに適用されます。 フィールドには、対応する列挙型のメンバーが`EnumType`フィールドにある単一の値を設定できます。 `MyChoice` フィールド`ManyChoices`は、オブジェクトの配列を返します。 フィールド`ChoiceArray`は、列挙値の配列を返します。 `ManyChoices`フィールド内の配列メンバーごとに、対応するメンバーが`ChoiceArray`フィールドによって返された配列に格納されます。  
+  
+ [!code-cpp[XmlChoiceIdentifierAttribute Example#1](~/samples/snippets/cpp/VS_Snippets_Remoting/XmlChoiceIdentifierAttribute Example/CPP/choice.cpp#1)]
+ [!code-csharp[XmlChoiceIdentifierAttribute Example#1](~/samples/snippets/csharp/VS_Snippets_Remoting/XmlChoiceIdentifierAttribute Example/CS/choice.cs#1)]
+ [!code-vb[XmlChoiceIdentifierAttribute Example#1](~/samples/snippets/visualbasic/VS_Snippets_Remoting/XmlChoiceIdentifierAttribute Example/VB/choice.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XmlChoiceIdentifierAttribute (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xml.Serialization.XmlChoiceIdentifierAttribute.#ctor(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (name As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XmlChoiceIdentifierAttribute(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="new System.Xml.Serialization.XmlChoiceIdentifierAttribute : string -&gt; System.Xml.Serialization.XmlChoiceIdentifierAttribute" Usage="new System.Xml.Serialization.XmlChoiceIdentifierAttribute name" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.XmlSerializer</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.Serialization</AssemblyName>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">メンバーを検出するために使用される列挙体を返すメンバー名。</param>
+        <summary><see cref="T:System.Xml.Serialization.XmlChoiceIdentifierAttribute" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MemberName">
+      <MemberSignature Language="C#" Value="public string MemberName { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string MemberName" />
+      <MemberSignature Language="DocId" Value="P:System.Xml.Serialization.XmlChoiceIdentifierAttribute.MemberName" />
+      <MemberSignature Language="VB.NET" Value="Public Property MemberName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ MemberName { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.MemberName : string with get, set" Usage="System.Xml.Serialization.XmlChoiceIdentifierAttribute.MemberName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.XmlSerializer</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Xml.Serialization</AssemblyName>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>型を検出するときに使用される列挙体を返すフィールドの名前を取得または設定します。</summary>
+        <value>列挙体を返すフィールドの名前。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute.MemberName%2A>値のという名前のフィールドによって返される列挙体には、少なくとも1つのメンバーが存在する必要があります。 既定では、この列挙体の名前は、 <xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute>が適用されているフィールドの名前を受け取ります。  
+  
+   
+  
+## Examples  
+ 次の例では、と`Choices`と`ManyChoices`いう2つの`MyChoice`フィールドを含むという名前のクラスをシリアル化します。 は<xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute> 、メンバー値を検出する列挙体を取得<xref:System.Xml.Serialization.XmlChoiceIdentifierAttribute.MemberName%2A>または設定する別のクラスメンバーを指定する各フィールドに適用されます。 フィールドには、対応する列挙型のメンバーが`EnumType`フィールドにある単一の値を設定できます。 `MyChoice` フィールド`ManyChoices`は、オブジェクトの配列を返します。 フィールド`ChoiceArray`は、列挙値の配列を返します。 `ManyChoices`フィールド内の配列メンバーごとに、対応するメンバーが`ChoiceArray`フィールドによって返された配列に格納されます。  
+  
+ [!code-cpp[XmlChoiceIdentifierAttribute Example#1](~/samples/snippets/cpp/VS_Snippets_Remoting/XmlChoiceIdentifierAttribute Example/CPP/choice.cpp#1)]
+ [!code-csharp[XmlChoiceIdentifierAttribute Example#1](~/samples/snippets/csharp/VS_Snippets_Remoting/XmlChoiceIdentifierAttribute Example/CS/choice.cs#1)]
+ [!code-vb[XmlChoiceIdentifierAttribute Example#1](~/samples/snippets/visualbasic/VS_Snippets_Remoting/XmlChoiceIdentifierAttribute Example/VB/choice.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
