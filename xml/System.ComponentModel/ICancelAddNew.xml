@@ -1,0 +1,148 @@
+<Type Name="ICancelAddNew" FullName="System.ComponentModel.ICancelAddNew">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="e12c38193c4e24968749a9097d47f821624b8f22" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70416238" /></Metadata><TypeSignature Language="C#" Value="public interface ICancelAddNew" />
+  <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract ICancelAddNew" />
+  <TypeSignature Language="DocId" Value="T:System.ComponentModel.ICancelAddNew" />
+  <TypeSignature Language="VB.NET" Value="Public Interface ICancelAddNew" />
+  <TypeSignature Language="C++ CLI" Value="public interface class ICancelAddNew" />
+  <TypeSignature Language="F#" Value="type ICancelAddNew = interface" />
+  <AssemblyInfo>
+    <AssemblyName>System</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.ComponentModel.TypeConverter</AssemblyName>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Interfaces />
+  <Docs>
+    <summary><span data-ttu-id="d2b08-101">コレクションに新しい項目を追加する際のトランザクション機能を追加します。</span><span class="sxs-lookup"><span data-stu-id="d2b08-101">Adds transactional capability when adding a new item to a collection.</span></span></summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="d2b08-102"><xref:System.ComponentModel.ICancelAddNew>インターフェイスを使用すると、コレクションは拡張可能な方法で新しい項目を追加できます。</span><span class="sxs-lookup"><span data-stu-id="d2b08-102">The <xref:System.ComponentModel.ICancelAddNew> interface enables a collection to add a new item in an extensible way.</span></span> <span data-ttu-id="d2b08-103">その後、新しい項目をコミットまたはロールバックできます。</span><span class="sxs-lookup"><span data-stu-id="d2b08-103">The new item subsequently can be committed or rolled back.</span></span> <span data-ttu-id="d2b08-104">コレクション<xref:System.ComponentModel.IBindingList.AddNew%2A>のメソッドは、項目を仮に追加するために使用されます。その後、次の操作によってトランザクションが処理されます。</span><span class="sxs-lookup"><span data-stu-id="d2b08-104">The <xref:System.ComponentModel.IBindingList.AddNew%2A> method of the collection is used to tentatively add the item, which is subsequently transacted through the following operations:</span></span>  
+  
+-   <span data-ttu-id="d2b08-105">メソッド<xref:System.ComponentModel.ICancelAddNew.EndNew%2A>は、保留中の加算を明示的にコミットします。</span><span class="sxs-lookup"><span data-stu-id="d2b08-105">The <xref:System.ComponentModel.ICancelAddNew.EndNew%2A> method will explicitly commit the pending addition.</span></span>  
+  
+-   <span data-ttu-id="d2b08-106">挿入、削除、移動などの別のコレクション操作を実行すると、保留中の追加が暗黙的にコミットされます。</span><span class="sxs-lookup"><span data-stu-id="d2b08-106">Performing another collection operation, such as an insertion, removal, or move will implicitly commit the pending addition.</span></span>  
+  
+-   <span data-ttu-id="d2b08-107">まだ<xref:System.ComponentModel.ICancelAddNew.CancelNew%2A>コミットされていない場合、メソッドは保留中の追加をロールバックします。</span><span class="sxs-lookup"><span data-stu-id="d2b08-107">The <xref:System.ComponentModel.ICancelAddNew.CancelNew%2A> method will roll back the pending addition if it has not already been committed.</span></span>  
+  
+> [!NOTE]
+>  <span data-ttu-id="d2b08-108">複合データバインディング Windows フォームなど、一部のシナリオでは、新しく追加さ<xref:System.ComponentModel.ICancelAddNew.CancelNew%2A>れ<xref:System.ComponentModel.ICancelAddNew.EndNew%2A>た項目以外の項目を受信または呼び出しする場合があります。</span><span class="sxs-lookup"><span data-stu-id="d2b08-108">In some scenarios, such as Windows Forms complex data binding, the collection may receive <xref:System.ComponentModel.ICancelAddNew.CancelNew%2A> or <xref:System.ComponentModel.ICancelAddNew.EndNew%2A> calls for items other than the newly added item.</span></span> <span data-ttu-id="d2b08-109">(各項目は通常、データビューの行です)。これらの呼び出しは無視します。項目のインデックスが指定されている場合にのみ、新しい項目をキャンセルまたはコミットします。</span><span class="sxs-lookup"><span data-stu-id="d2b08-109">(Each item is typically a row in a data view.) Ignore these calls; cancel or commit the new item only when that item's index is specified.</span></span>  
+  
+ <span data-ttu-id="d2b08-110">データバインドコレクションに項目を追加するには、次の2つのモデルがあります。</span><span class="sxs-lookup"><span data-stu-id="d2b08-110">There are two models that allow transactional addition of an item to a data-bound collection:</span></span>  
+  
+-   <span data-ttu-id="d2b08-111">以前のモデルは、 <xref:System.ComponentModel.IBindingList>インターフェイスを実装するコレクションに直接依存しており、 <xref:System.Windows.Forms.CurrencyManager?displayProperty=nameWithType>クラスを使用して直接データバインドされています。</span><span class="sxs-lookup"><span data-stu-id="d2b08-111">The older model relies directly on a collection that implements the <xref:System.ComponentModel.IBindingList> interface and is data-bound directly using the <xref:System.Windows.Forms.CurrencyManager?displayProperty=nameWithType> class.</span></span> <span data-ttu-id="d2b08-112">クラスの<xref:System.Windows.Forms.CurrencyManager.EndCurrentEdit%2A>、、および<xref:System.Windows.Forms.CurrencyManager.CancelCurrentEdit%2A>の各メソッドは、新しい項目を追加するためのトランザクションサポートを担当します。 <xref:System.Windows.Forms.CurrencyManager.AddNew%2A> <xref:System.Windows.Forms.CurrencyManager?displayProperty=nameWithType></span><span class="sxs-lookup"><span data-stu-id="d2b08-112">The <xref:System.Windows.Forms.CurrencyManager.AddNew%2A>, <xref:System.Windows.Forms.CurrencyManager.EndCurrentEdit%2A>, and <xref:System.Windows.Forms.CurrencyManager.CancelCurrentEdit%2A> methods of the <xref:System.Windows.Forms.CurrencyManager?displayProperty=nameWithType> class are responsible for transactional support for adding new items.</span></span> <span data-ttu-id="d2b08-113">ただし、この機能は、インターフェイスを<xref:System.ComponentModel.IEditableObject>介してトランザクション動作をサポートする項目に依存します。</span><span class="sxs-lookup"><span data-stu-id="d2b08-113">However, this functionality depends upon the items supporting transactional behavior through the <xref:System.ComponentModel.IEditableObject> interface.</span></span> <span data-ttu-id="d2b08-114">項目がこのインターフェイスをサポートしていない場合、の後続の呼び出し<xref:System.Windows.Forms.CurrencyManager.CancelCurrentEdit%2A>に関係なく、項目は常にリストに追加されます。</span><span class="sxs-lookup"><span data-stu-id="d2b08-114">If the items do not support this interface, the item will always be added to the list, regardless of subsequent calls to <xref:System.Windows.Forms.CurrencyManager.CancelCurrentEdit%2A>.</span></span>  
+  
+-   <span data-ttu-id="d2b08-115">新しいモデルでは、インターフェイス<xref:System.ComponentModel.BindingList%601> <xref:System.ComponentModel.IBindingList>と<xref:System.ComponentModel.ICancelAddNew>インターフェイスを実装するジェネリッククラスを通じて、より堅牢なデータバインディングシナリオがサポートされています。</span><span class="sxs-lookup"><span data-stu-id="d2b08-115">The newer model supports a more robust data-binding scenario through the generic <xref:System.ComponentModel.BindingList%601> class, which implements the <xref:System.ComponentModel.IBindingList> and <xref:System.ComponentModel.ICancelAddNew> interfaces.</span></span> <span data-ttu-id="d2b08-116">この場合、トランザクションサポートは<xref:System.ComponentModel.BindingList%601>コレクションによって直接管理されます。</span><span class="sxs-lookup"><span data-stu-id="d2b08-116">In this case, the transactional support is managed by the <xref:System.ComponentModel.BindingList%601> collection directly.</span></span>  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.ComponentModel.IBindingList" />
+    <altmember cref="T:System.Windows.Forms.CurrencyManager" />
+    <altmember cref="T:System.ComponentModel.IEditableObject" />
+    <altmember cref="T:System.ComponentModel.BindingList`1" />
+  </Docs>
+  <Members>
+    <Member MemberName="CancelNew">
+      <MemberSignature Language="C#" Value="public void CancelNew (int itemIndex);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void CancelNew(int32 itemIndex) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.ComponentModel.ICancelAddNew.CancelNew(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub CancelNew (itemIndex As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void CancelNew(int itemIndex);" />
+      <MemberSignature Language="F#" Value="abstract member CancelNew : int -&gt; unit" Usage="iCancelAddNew.CancelNew itemIndex" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.ComponentModel.TypeConverter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="itemIndex" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="itemIndex"><span data-ttu-id="d2b08-117">コレクションに既に追加されている項目のインデックス。</span><span class="sxs-lookup"><span data-stu-id="d2b08-117">The index of the item that was previously added to the collection.</span></span></param>
+        <summary><span data-ttu-id="d2b08-118">保留中の新しい項目をコレクションから破棄します。</span><span class="sxs-lookup"><span data-stu-id="d2b08-118">Discards a pending new item from the collection.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="d2b08-119">メソッド<xref:System.ComponentModel.ICancelAddNew.CancelNew%2A>は、以前にコレクション`itemIndex`に追加<xref:System.ComponentModel.IBindingList.AddNew%2A>された項目の保留中の加算 () をロールバックします。</span><span class="sxs-lookup"><span data-stu-id="d2b08-119">The <xref:System.ComponentModel.ICancelAddNew.CancelNew%2A> method rolls back a pending addition (<xref:System.ComponentModel.IBindingList.AddNew%2A>) of an item previously added to the collection at position `itemIndex`.</span></span> <span data-ttu-id="d2b08-120">複数の新しい項目が同時に保留される可能性があるため、index パラメーターが必要です。</span><span class="sxs-lookup"><span data-stu-id="d2b08-120">The index parameter is necessary because several new items can be simultaneously pending.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.ComponentModel.ICancelAddNew.EndNew(System.Int32)" />
+        <altmember cref="M:System.Windows.Forms.CurrencyManager.CancelCurrentEdit" />
+        <altmember cref="T:System.ComponentModel.IEditableObject" />
+      </Docs>
+    </Member>
+    <Member MemberName="EndNew">
+      <MemberSignature Language="C#" Value="public void EndNew (int itemIndex);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void EndNew(int32 itemIndex) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.ComponentModel.ICancelAddNew.EndNew(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub EndNew (itemIndex As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void EndNew(int itemIndex);" />
+      <MemberSignature Language="F#" Value="abstract member EndNew : int -&gt; unit" Usage="iCancelAddNew.EndNew itemIndex" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.ComponentModel.TypeConverter</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="itemIndex" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="itemIndex"><span data-ttu-id="d2b08-121">コレクションに既に追加されている項目のインデックス。</span><span class="sxs-lookup"><span data-stu-id="d2b08-121">The index of the item that was previously added to the collection.</span></span></param>
+        <summary><span data-ttu-id="d2b08-122">保留中の新しい項目をコレクションにコミットします。</span><span class="sxs-lookup"><span data-stu-id="d2b08-122">Commits a pending new item to the collection.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="d2b08-123">は<xref:System.ComponentModel.ICancelAddNew.EndNew%2A> 、以前にコレクション`itemIndex`に<xref:System.ComponentModel.IBindingList.AddNew%2A>追加された項目の保留中の加算 () をコミットします。</span><span class="sxs-lookup"><span data-stu-id="d2b08-123">The <xref:System.ComponentModel.ICancelAddNew.EndNew%2A> commits a pending addition (<xref:System.ComponentModel.IBindingList.AddNew%2A>) of an item previously added to the collection at position `itemIndex`.</span></span> <span data-ttu-id="d2b08-124">複数の新しい項目が同時に保留される可能性があるため、index パラメーターが必要です。</span><span class="sxs-lookup"><span data-stu-id="d2b08-124">The index parameter is necessary because several new items can be simultaneously pending.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.ComponentModel.ICancelAddNew.CancelNew(System.Int32)" />
+        <altmember cref="M:System.Windows.Forms.CurrencyManager.EndCurrentEdit" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>
