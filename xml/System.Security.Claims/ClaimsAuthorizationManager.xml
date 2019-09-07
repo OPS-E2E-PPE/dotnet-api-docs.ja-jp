@@ -1,0 +1,341 @@
+<Type Name="ClaimsAuthorizationManager" FullName="System.Security.Claims.ClaimsAuthorizationManager">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="7b0ce02435dc004c4e56705667ede4b0e0844cb7" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70475318" /></Metadata><TypeSignature Language="C#" Value="public class ClaimsAuthorizationManager : System.IdentityModel.Configuration.ICustomIdentityConfiguration" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit ClaimsAuthorizationManager extends System.Object implements class System.IdentityModel.Configuration.ICustomIdentityConfiguration" />
+  <TypeSignature Language="DocId" Value="T:System.Security.Claims.ClaimsAuthorizationManager" />
+  <TypeSignature Language="VB.NET" Value="Public Class ClaimsAuthorizationManager&#xA;Implements ICustomIdentityConfiguration" />
+  <TypeSignature Language="C++ CLI" Value="public ref class ClaimsAuthorizationManager : System::IdentityModel::Configuration::ICustomIdentityConfiguration" />
+  <TypeSignature Language="F#" Value="type ClaimsAuthorizationManager = class&#xA;    interface ICustomIdentityConfiguration" />
+  <AssemblyInfo>
+    <AssemblyName>System.IdentityModel</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.IdentityModel.Configuration.ICustomIdentityConfiguration</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Docs>
+    <summary>クレーム承認マネージャーの基本実装を定義します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ クラス<xref:System.Security.Claims.ClaimsAuthorizationManager>は、クレーム承認マネージャーの基本実装を提供します。 要求承認マネージャーは、次の2つのシナリオで使用できます。  
+  
+-   Web ベースのアプリケーションとサービスでは、要求承認マネージャーを処理パイプラインに追加して、アプリケーションコードの前に入力方向の要求の値に基づいてリソースへのアクセスを承認できる機能拡張ポイントを提供できます。要求されたリソースを実際に実装するが呼び出されます。  
+  
+-   <xref:System.IdentityModel.Services.ClaimsPrincipalPermission> クラス <xref:System.IdentityModel.Services.ClaimsPrincipalPermissionAttribute> またはクラスを使用して、コードで命令型または宣言型のアクセスチェックを実行すると、アプリケーション用に構成されている要求承認マネージャーがシステムによって呼び出され、オフ. 要求ベースのアクセスチェックは、web ベースのアプリケーションとデスクトップアプリケーションの両方で実行できます。  
+  
+ <xref:System.Security.Claims.ClaimsAuthorizationManager>クラスによって提供される既定の実装は、提示された各要求のアクセスを承認します。 <xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A>ただし、このクラスから派生させ、メソッドをオーバーライドして独自の承認ロジックを提供できます。  
+  
+ 要求承認マネージャーの使用は任意です。 要求承認マネージャーを使用するようにアプリケーションを構成するには、 <xref:System.IdentityModel.Configuration.IdentityConfiguration>クラスを使用するか、 [ &lt;claimsAuthorizationManager&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/claimsauthorizationmanager.md)要素を指定します。アプリケーション構成ファイル内のユーザー [ &lt;構成&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/identityconfiguration.md)要素の子要素。 アプリケーションがインターネットインフォメーションサービス (IIS) でホストされている web サイトまたは web アプリケーションの場合は、ASP.NET <xref:System.IdentityModel.Services.ClaimsAuthorizationModule> HTTP Modules コレクションにも追加する必要があります。  
+  
+> [!IMPORTANT]
+>  <xref:System.IdentityModel.Services.ClaimsPrincipalPermission>クラス<xref:System.IdentityModel.Services.FederatedAuthentication.FederationConfiguration%2A?displayProperty=nameWithType>またはクラスを使用する場合、アクセスチェックを実行するために使用される要求承認マネージャーは、プロパティの下の id 構成で指定されて <xref:System.IdentityModel.Services.ClaimsPrincipalPermissionAttribute> いるものです。 構成ファイルでは、これは`<identityConfiguration>`既定`<federationConfiguration>`の要素から参照されるセクションです。 これは、Windows Communication Foundation (WCF) サービスとデスクトップアプリケーションにも当てはまります。  
+  
+ 基本クラス<xref:System.Security.Claims.ClaimsAuthorizationManager.LoadCustomConfiguration%2A>では、追加の構成は行われません。ただし、派生クラスのをオーバーライドして、 `<claimsAuthorizationElement>`の子要素から要求承認マネージャーを初期化することができます。 <xref:System.Security.Claims.ClaimsAuthorizationManager> 一般的なシナリオでは、これらの子要素を使用して承認ポリシーを指定し、どの要求の種類と値がリソースにアクセスするために必要かを決定します。 これは難しい要件ではありませんが、実装に適した使用法と構文を自由に定義できます。  
+  
+   
+  
+## Examples  
+ <xref:System.Security.Claims.ClaimsAuthorizationManager>トピックで使用されているコード例は、「」 `Claims Based Authorization`のサンプルから抜粋したものです。 このサンプルでは、構成で指定されたポリシーに基づいてサブジェクトを承認できるカスタムクレーム承認マネージャーを提供します。 カスタム要求承認マネージャーは、次の3つの基本コンポーネントで構成<xref:System.Security.Claims.ClaimsAuthorizationManager>されています。 `ResourceAction`マネージャーを実装するから派生したクラス、リソースとアクションを組み合わせたクラス、およびであるポリシーを読み取り、コンパイルするポリシーリーダーです。構成ファイルで指定されます。 このコンパイル済みポリシーは、リソースへのアクセスを承認するために、要求承認マネージャーがプリンシパルを評価するために使用できます。 簡潔にするために、すべての要素が表示されるわけではありません。 このサンプルと、WIF で使用できるその他のサンプルと、それらをダウンロードする場所については、「 [WIF Code Sample Index](~/docs/framework/security/wif-code-sample-index.md)」を参照してください。  
+  
+ 次のコードは、カスタムクレーム承認マネージャーの実装を示しています。 メソッド<xref:System.Security.Claims.ClaimsAuthorizationManager.LoadCustomConfiguration%2A>は、ポリシーリーダーヘルパークラス (表示されません) を使用して構成からポリシーを<xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A>読み取り、コンパイルします。メソッドは、このポリシーに基づいてアクセスを許可または拒否します。  
+  
+ [!code-csharp[WifClaimsBasedAuthorization#2](~/samples/snippets/csharp/VS_Snippets_Misc/wifclaimsbasedauthorization/cs/claimsauthorizationlibrary/myclaimsauthorizationmanager.cs#2)]  
+  
+ 次のコードは、 `ResourceAction`カスタムクレームマネージャーによって使用されるクラスを示しています。  
+  
+ [!code-csharp[WifClaimsBasedAuthorization#1](~/samples/snippets/csharp/VS_Snippets_Misc/wifclaimsbasedauthorization/cs/claimsauthorizationlibrary/resourceaction.cs#1)]  
+  
+ 次の XML は、IIS 7.5 でホストされる web アプリケーションに対して、上記の要求承認マネージャーを構成する方法を示しています。 要求承認マネージャーの構成に固有の要素のみが表示されます。 <xref:System.IdentityModel.Services.ClaimsAuthorizationModule>クラスへの参照は、要素の`<system.Webserver>`下のパイプラインに追加する必要があることに注意してください。 Iis 7 より前のバージョンの iis でホストされているサイトおよびアプリケーションでは、モジュールをパイプライン`<system.Web>`の要素の下に追加できます。 この構成は表示されていますが、コメントアウトされています。  
+  
+ 要求承認マネージャーによって使用されるポリシーは、 `<policy>` [ &lt;claimsAuthorizationManager&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/claimsauthorizationmanager.md)要素の下のカスタム要素によって指定されます。 最初のポリシーでは、指定されたリソースに対して指定されたアクションを実行するために、プリンシパルは指定された要求の1つを所有している必要があります。 2番目のポリシーでは、プリンシパルは、指定されたリソースに対して指定されたアクションを実行できるように、両方の要求を持つ必要があります。 それ以外の場合、プリンシパルには、所有している要求に関係なく、自動的にアクセス権が付与されます。  
+  
+```  
+<configuration>  
+  <configSections>  
+    <!--WIF 4.5 sections -->  
+    <section name="system.identityModel" type="System.IdentityModel.Configuration.SystemIdentityModelSection, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089"/>  
+    ...  
+  
+  </configSections>  
+  
+  ...  
+  
+  <system.web>  
+    <httpModules>  
+      <!--WIF 4.5 modules -->  
+      <!--Not needed here for IIS >= 7 -->  
+      <!--<add name="ClaimsAuthorizationModule" type="System.IdentityModel.Services.ClaimsAuthorizationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>-->  
+    </httpModules>  
+  </system.web>  
+  
+  ...  
+  
+  <system.webServer>  
+    <modules>  
+      <!--WIF 4.5 modules -->  
+      <add name="ClaimsAuthorizationModule" type="System.IdentityModel.Services.ClaimsAuthorizationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>  
+    </modules>  
+  </system.webServer>  
+  
+  ...  
+  
+  <!-- WIF 4.5 s.im section-->  
+  <system.identityModel>  
+    <identityConfiguration>  
+      <claimsAuthorizationManager type="ClaimsAuthorizationLibrary.MyClaimsAuthorizationManager, ClaimsAuthorizationLibrary">  
+        <policy resource="http://localhost:28491/Developers.aspx" action="GET">  
+          <or>  
+            <claim claimType="http://schemas.microsoft.com/ws/2008/06/identity/claims/role" claimValue="developer" />  
+            <claim claimType="http://schemas.xmlsoap.org/claims/Group" claimValue="Administrator" />  
+          </or>  
+        </policy>  
+        <policy resource="http://localhost:28491/Administrators.aspx" action="GET">  
+          <and>  
+            <claim claimType="http://schemas.xmlsoap.org/claims/Group" claimValue="Administrator" />  
+            <claim claimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/country" claimValue="USA" />  
+          </and>  
+        </policy>  
+        <policy resource="http://localhost:28491/Default.aspx" action="GET">  
+        </policy>  
+        <policy resource="http://localhost:28491/" action="GET">  
+        </policy>  
+        <policy resource="http://localhost:28491/Claims.aspx" action="GET">  
+        </policy>  
+      </claimsAuthorizationManager>  
+  
+      ...  
+  
+    </identityConfiguration>  
+  </system.identityModel>  
+  ...  
+  
+</configuration><configuration>  
+  <configSections>  
+    <!--WIF 4.5 sections -->  
+    <section name="system.identityModel" type="System.IdentityModel.Configuration.SystemIdentityModelSection, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089"/>  
+    ...  
+  
+  </configSections>  
+  
+  ...  
+  
+  <system.web>  
+    <httpModules>  
+      <!--WIF 4.5 modules -->  
+      <!--Not needed here for IIS >= 7 -->  
+      <!--<add name="ClaimsAuthorizationModule" type="System.IdentityModel.Services.ClaimsAuthorizationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>-->  
+    </httpModules>  
+  </system.web>  
+  
+  ...  
+  
+  <system.webServer>  
+    <modules>  
+      <!--WIF 4.5 modules -->  
+      <add name="ClaimsAuthorizationModule" type="System.IdentityModel.Services.ClaimsAuthorizationModule, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>  
+    </modules>  
+  </system.webServer>  
+  
+  ...  
+  
+  <!-- WIF 4.5 s.im section-->  
+  <system.identityModel>  
+    <identityConfiguration>  
+      <claimsAuthorizationManager type="MyClaimsAuthorizationManager.SimpleClaimsAuthorizationManager, MyClaimsAuthorizationManager" />  
+      ...  
+  
+  </system.identityModel>  
+  ...  
+  
+</configuration>  
+```  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ClaimsAuthorizationManager ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Claims.ClaimsAuthorizationManager.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; ClaimsAuthorizationManager();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Security.Claims.ClaimsAuthorizationManager" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CheckAccess">
+      <MemberSignature Language="C#" Value="public virtual bool CheckAccess (System.Security.Claims.AuthorizationContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool CheckAccess(class System.Security.Claims.AuthorizationContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess(System.Security.Claims.AuthorizationContext)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Function CheckAccess (context As AuthorizationContext) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual bool CheckAccess(System::Security::Claims::AuthorizationContext ^ context);" />
+      <MemberSignature Language="F#" Value="abstract member CheckAccess : System.Security.Claims.AuthorizationContext -&gt; bool&#xA;override this.CheckAccess : System.Security.Claims.AuthorizationContext -&gt; bool" Usage="claimsAuthorizationManager.CheckAccess context" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Security.Claims.AuthorizationContext" />
+      </Parameters>
+      <Docs>
+        <param name="context">認証がチェックされるサブジェクト、リソース、およびアクションを含む認証コンテキスト。</param>
+        <summary>派生クラスで実装された場合、指定されたリソースで指定されたアクションを実行するために、指定されたコンテキストでサブジェクトの承認を確認します。</summary>
+        <returns>サブジェクトが指定したリソースで指定されたアクションを実行することが承認されている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 基本実装は常に`true`を返します。これはアクセスを承認します。 派生クラスでこのメソッドをオーバーライドして、RP アプリケーションの要件に基づいてアクセスを承認することができます。 このメソッドがを`false`返す場合、Windows Identity Foundation (WIF) は呼び出し元に未承認のエラーを返します。それ以外の場合は、実行が RP アプリケーションに渡されます。  
+  
+   
+  
+## Examples  
+ <xref:System.Security.Claims.ClaimsAuthorizationManager>トピックで使用されているコード例は、「」 `Claims Based Authorization`のサンプルから抜粋したものです。 このサンプルでは、構成で指定されたポリシーに基づいてサブジェクトを承認できるカスタムクレーム承認マネージャーを提供します。 カスタム要求承認マネージャーは、次の3つの基本コンポーネントで構成<xref:System.Security.Claims.ClaimsAuthorizationManager>されています。 `ResourceAction`マネージャーを実装するから派生したクラス、リソースとアクションを組み合わせたクラス、およびであるポリシーを読み取り、コンパイルするポリシーリーダーです。構成ファイルで指定されます。 このコンパイル済みポリシーは、リソースへのアクセスを承認するために、要求承認マネージャーがプリンシパルを評価するために使用できます。 簡潔にするために、すべての要素が表示されるわけではありません。 このサンプルと、WIF で使用できるその他のサンプルと、それらをダウンロードする場所については、「 [WIF Code Sample Index](~/docs/framework/security/wif-code-sample-index.md)」を参照してください。  
+  
+ 次のコードは、 <xref:System.Security.Claims.ClaimsAuthorizationManager.CheckAccess%2A>メソッドのオーバーライドを示しています。 このメソッドは、構成ファイルから読み取ってコンパイルされたポリシーに基づいてアクセスを許可または拒否します。  
+  
+ [!code-csharp[WifClaimsBasedAuthorization#3](~/samples/snippets/csharp/VS_Snippets_Misc/wifclaimsbasedauthorization/cs/claimsauthorizationlibrary/myclaimsauthorizationmanager.cs#3)]  
+[!code-csharp[WifClaimsBasedAuthorization#5](~/samples/snippets/csharp/VS_Snippets_Misc/wifclaimsbasedauthorization/cs/claimsauthorizationlibrary/myclaimsauthorizationmanager.cs#5)]  
+  
+ 次のコードは、 `ResourceAction`カスタムクレームマネージャーによって使用されるクラスを示しています。  
+  
+ [!code-csharp[WifClaimsBasedAuthorization#1](~/samples/snippets/csharp/VS_Snippets_Misc/wifclaimsbasedauthorization/cs/claimsauthorizationlibrary/resourceaction.cs#1)]  
+  
+ 要求承認マネージャーによって使用されるポリシーは、 `<policy>` [ &lt;claimsAuthorizationManager&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/claimsauthorizationmanager.md)要素の下のカスタム要素によって指定されます。 このポリシーは、 <xref:System.Security.Claims.ClaimsAuthorizationManager.LoadCustomConfiguration%2A>メソッドによって読み取られ、コンパイルされます。 最初のポリシーでは、指定されたリソースに対して指定されたアクションを実行するために、プリンシパルは指定された要求の1つを所有している必要があります。 2番目のポリシーでは、プリンシパルは、指定されたリソースに対して指定されたアクションを実行できるように、両方の要求を持つ必要があります。 それ以外の場合、プリンシパルには、所有している要求に関係なく、自動的にアクセス権が付与されます。  
+  
+```  
+<system.identityModel>  
+  <identityConfiguration>  
+    <claimsAuthorizationManager type="ClaimsAuthorizationLibrary.MyClaimsAuthorizationManager, ClaimsAuthorizationLibrary">  
+      <policy resource="http://localhost:28491/Developers.aspx" action="GET">  
+        <or>  
+          <claim claimType="http://schemas.microsoft.com/ws/2008/06/identity/claims/role" claimValue="developer" />  
+          <claim claimType="http://schemas.xmlsoap.org/claims/Group" claimValue="Administrator" />  
+        </or>  
+      </policy>  
+      <policy resource="http://localhost:28491/Administrators.aspx" action="GET">  
+        <and>  
+          <claim claimType="http://schemas.xmlsoap.org/claims/Group" claimValue="Administrator" />  
+          <claim claimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/country" claimValue="USA" />  
+        </and>  
+      </policy>  
+      <policy resource="http://localhost:28491/Default.aspx" action="GET">  
+      </policy>  
+      <policy resource="http://localhost:28491/" action="GET">  
+      </policy>  
+      <policy resource="http://localhost:28491/Claims.aspx" action="GET">  
+      </policy>  
+    </claimsAuthorizationManager>  
+  
+    ...  
+  
+  </identityConfiguration>  
+</system.identityModel>  
+```  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LoadCustomConfiguration">
+      <MemberSignature Language="C#" Value="public virtual void LoadCustomConfiguration (System.Xml.XmlNodeList nodelist);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void LoadCustomConfiguration(class System.Xml.XmlNodeList nodelist) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Claims.ClaimsAuthorizationManager.LoadCustomConfiguration(System.Xml.XmlNodeList)" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Sub LoadCustomConfiguration (nodelist As XmlNodeList)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void LoadCustomConfiguration(System::Xml::XmlNodeList ^ nodelist);" />
+      <MemberSignature Language="F#" Value="abstract member LoadCustomConfiguration : System.Xml.XmlNodeList -&gt; unit&#xA;override this.LoadCustomConfiguration : System.Xml.XmlNodeList -&gt; unit" Usage="claimsAuthorizationManager.LoadCustomConfiguration nodelist" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.IdentityModel.Configuration.ICustomIdentityConfiguration.LoadCustomConfiguration(System.Xml.XmlNodeList)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.IdentityModel</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="nodelist" Type="System.Xml.XmlNodeList" />
+      </Parameters>
+      <Docs>
+        <param name="nodelist">カスタム構成要素。 リスト内の各ノードは <see cref="T:System.Xml.XmlElement" /> 型です。</param>
+        <summary>派生クラスでオーバーライドされると、XML からカスタム構成を読み込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Security.Claims.ClaimsAuthenticationManager.LoadCustomConfiguration%2A>メソッドは、構成インフラストラクチャによって呼び出されます。 このメソッドが呼び出されると、 `nodelist`には、構成ファイルの[ &lt;claimsAuthorizationManager&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/claimsauthorizationmanager.md)要素の最上位レベルの子要素が含まれます。 これらの各要素には、派生クラスに対して定義した構成スキーマに応じて、属性または子要素が含まれている場合があります。 構成ファイルの要素の`<claimsAuthorizationManager>`下に子要素が表示されない場合、このメソッドは呼び出されません。  
+  
+ 既定の実装では<xref:System.NotImplementedException>、がスローされます。 派生クラスでこのメソッドをオーバーライドして、構成ファイルから要求承認マネージャーを初期化できるようにします。 通常、構成要素は承認ポリシーを表すために使用されます。ただし、要素を定義して、アプリケーションの要件に基づいて意味のある方法で使用することができます。  
+  
+   
+  
+## Examples  
+ <xref:System.Security.Claims.ClaimsAuthorizationManager>トピックで使用されているコード例は、「」 `Claims Based Authorization`のサンプルから抜粋したものです。 このサンプルでは、構成で指定されたポリシーに基づいてサブジェクトを承認できるカスタムクレーム承認マネージャーを提供します。 カスタム要求承認マネージャーは、次の3つの基本コンポーネントで構成<xref:System.Security.Claims.ClaimsAuthorizationManager>されています。 `ResourceAction`マネージャーを実装するから派生したクラス、リソースとアクションを組み合わせたクラス、およびであるポリシーを読み取り、コンパイルするポリシーリーダーです。構成ファイルで指定されます。 このコンパイル済みポリシーは、リソースへのアクセスを承認するために、要求承認マネージャーがプリンシパルを評価するために使用できます。 簡潔にするために、すべての要素が表示されるわけではありません。 このサンプルと、WIF で使用できるその他のサンプルと、それらをダウンロードする場所については、「 [WIF Code Sample Index](~/docs/framework/security/wif-code-sample-index.md)」を参照してください。  
+  
+ 次のコードは、 <xref:System.Security.Claims.ClaimsAuthorizationManager.LoadCustomConfiguration%2A>メソッドのオーバーライドを示しています。 このメソッドは、ヘルパーポリシーリーダークラス (非表示) を使用して、構成ファイルで指定された承認ポリシーを読み取り、コンパイルします。 ポリシーはディクショナリに追加され、対象となる`ResourceAction`リソースおよびアクションから作成されたキーオブジェクトによってアクセスされます。  
+  
+ [!code-csharp[WifClaimsBasedAuthorization#3](~/samples/snippets/csharp/VS_Snippets_Misc/wifclaimsbasedauthorization/cs/claimsauthorizationlibrary/myclaimsauthorizationmanager.cs#3)]  
+[!code-csharp[WifClaimsBasedAuthorization#4](~/samples/snippets/csharp/VS_Snippets_Misc/wifclaimsbasedauthorization/cs/claimsauthorizationlibrary/myclaimsauthorizationmanager.cs#4)]  
+  
+ 次のコードは、 `ResourceAction`カスタムクレームマネージャーによって使用されるクラスを示しています。  
+  
+ [!code-csharp[WifClaimsBasedAuthorization#1](~/samples/snippets/csharp/VS_Snippets_Misc/wifclaimsbasedauthorization/cs/claimsauthorizationlibrary/resourceaction.cs#1)]  
+  
+ 要求承認マネージャーによって使用されるポリシーは、 `<policy>` [ &lt;claimsAuthorizationManager&gt; ](~/docs/framework/configure-apps/file-schema/windows-identity-foundation/claimsauthorizationmanager.md)要素の下のカスタム要素によって指定されます。 このポリシーは、 <xref:System.Security.Claims.ClaimsAuthorizationManager.LoadCustomConfiguration%2A>メソッドによって読み取られ、コンパイルされます。 最初のポリシーでは、指定されたリソースに対して指定されたアクションを実行するために、プリンシパルは指定された要求の1つを所有している必要があります。 2番目のポリシーでは、プリンシパルは、指定されたリソースに対して指定されたアクションを実行できるように、両方の要求を持つ必要があります。 それ以外の場合、プリンシパルには、所有している要求に関係なく、自動的にアクセス権が付与されます。  
+  
+```  
+<system.identityModel>  
+  <identityConfiguration>  
+    <claimsAuthorizationManager type="ClaimsAuthorizationLibrary.MyClaimsAuthorizationManager, ClaimsAuthorizationLibrary">  
+      <policy resource="http://localhost:28491/Developers.aspx" action="GET">  
+        <or>  
+          <claim claimType="http://schemas.microsoft.com/ws/2008/06/identity/claims/role" claimValue="developer" />  
+          <claim claimType="http://schemas.xmlsoap.org/claims/Group" claimValue="Administrator" />  
+        </or>  
+      </policy>  
+      <policy resource="http://localhost:28491/Administrators.aspx" action="GET">  
+        <and>  
+          <claim claimType="http://schemas.xmlsoap.org/claims/Group" claimValue="Administrator" />  
+          <claim claimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/country" claimValue="USA" />  
+        </and>  
+      </policy>  
+      <policy resource="http://localhost:28491/Default.aspx" action="GET">  
+      </policy>  
+      <policy resource="http://localhost:28491/" action="GET">  
+      </policy>  
+      <policy resource="http://localhost:28491/Claims.aspx" action="GET">  
+      </policy>  
+    </claimsAuthorizationManager>  
+  
+    ...  
+  
+  </identityConfiguration>  
+</system.identityModel>  
+```  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

@@ -1,0 +1,123 @@
+<Type Name="QueryInterceptorAttribute" FullName="System.Data.Services.QueryInterceptorAttribute">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="fdc252612bd7236c469f7983b25bda86670230b3" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70497138" /></Metadata><TypeSignature Language="C#" Value="public sealed class QueryInterceptorAttribute : Attribute" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit QueryInterceptorAttribute extends System.Attribute" />
+  <TypeSignature Language="DocId" Value="T:System.Data.Services.QueryInterceptorAttribute" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class QueryInterceptorAttribute&#xA;Inherits Attribute" />
+  <TypeSignature Language="C++ CLI" Value="public ref class QueryInterceptorAttribute sealed : Attribute" />
+  <TypeSignature Language="F#" Value="type QueryInterceptorAttribute = class&#xA;    inherit Attribute" />
+  <AssemblyInfo>
+    <AssemblyName>System.Data.Services</AssemblyName>
+    <AssemblyVersion>3.5.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Attribute</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute>
+      <AttributeName>System.AttributeUsage(System.AttributeTargets.Method, AllowMultiple=true, Inherited=true)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary><see cref="T:System.Data.Services.QueryInterceptorAttribute" /> は、指定されたエンティティ セットに対するクエリ インターセプターとしてメソッドに注釈を付けます。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ エンティティ セット レベルの承認と検証は、<xref:System.Data.Services.QueryInterceptorAttribute> で注釈を付けたメソッドによって実装されます。 [!INCLUDE[ssAstoria](~/includes/ssastoria-md.md)] にはセキュリティ ポリシーは実装されていませんが、サービス開発者が独自のセキュリティ規則やビジネス検証をプログラミングするために必要なインフラストラクチャが備わっています。  
+  
+ エンティティ セットのアクセス制御と検証は、クエリ コンポジションを使ったクエリ操作を通じて行うことができます。 エンティティ ベースのアクセスを制御するには、エンティティ セットごとのメソッドを次の規則に従って実装します。  
+  
+ 対象となるメソッドはパブリック スコープとし、<xref:System.Data.Services.QueryInterceptorAttribute> で注釈を付ける必要があります。また、エンティティ セットの名前を受け取るパラメーターが必要です。  
+  
+ 対象となるメソッドは、パラメーターの指定を省略できることが必要です。  
+  
+ 対象となるメソッドは、`Expression<Func<T, bool>>` 型の式 (エンティティ セットに対して作成されるフィルター) を返す必要があります。  
+  
+   
+  
+## Examples  
+ 次の例では、`Customers` エンティティ セットへのアクセスを制御します。 それぞれの `Customer` から見えるのは、その `Orders` に関連付けられた `Customer` だけです。  
+  
+```  
+[QueryInterceptor("Orders")]  
+public Expression<Func<Order, bool>> FilterOrders()   
+{  
+    return o => o.Customer.Name == /* Current principal name. */;  
+}   
+  
+// Insures that the user accessing the customer(s) has the appropriate  
+// rights as defined in the QueryRules object to access the customer  
+// resource(s).  
+  
+[QueryInterceptor ("Customers")]  
+public Expression<Func<Customer, bool>> FilterCustomers()   
+{  
+  return c => c.Name == /* Current principal name. */ &&  
+              this.CurrentDataSource.QueryRules.Contains(  
+                rule => rule.Name == c.Name &&  
+                        rule.CustomerAllowedToQuery == true  
+              );  
+}  
+  
+```  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public QueryInterceptorAttribute (string entitySetName);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string entitySetName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.Services.QueryInterceptorAttribute.#ctor(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (entitySetName As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; QueryInterceptorAttribute(System::String ^ entitySetName);" />
+      <MemberSignature Language="F#" Value="new System.Data.Services.QueryInterceptorAttribute : string -&gt; System.Data.Services.QueryInterceptorAttribute" Usage="new System.Data.Services.QueryInterceptorAttribute entitySetName" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Services</AssemblyName>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="entitySetName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="entitySetName">インターセプターの適用対象となるエンティティを含んだエンティティ セットの名前。</param>
+        <summary><see cref="T:System.Data.Services.QueryInterceptorAttribute" /> パラメーターで指定されたエンティティ セットに対する <paramref name="entitySetName" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EntitySetName">
+      <MemberSignature Language="C#" Value="public string EntitySetName { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string EntitySetName" />
+      <MemberSignature Language="DocId" Value="P:System.Data.Services.QueryInterceptorAttribute.EntitySetName" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property EntitySetName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ EntitySetName { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.EntitySetName : string" Usage="System.Data.Services.QueryInterceptorAttribute.EntitySetName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Services</AssemblyName>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>get: System.Diagnostics.DebuggerStepThrough</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>インターセプターの適用対象となるエンティティを含んだエンティティ セットの名前を取得します。</summary>
+        <value>インターセプターの適用対象となるエンティティを含んだエンティティ セットの名前を表す文字列。</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

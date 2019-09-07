@@ -1,0 +1,71 @@
+<Type Name="IQueryAmbient" FullName="System.Windows.Markup.IQueryAmbient">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="3fc4b5258dc07f4eadf8564b9485e2f54ccfd49e" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70451238" /></Metadata><TypeSignature Language="C#" Value="public interface IQueryAmbient" />
+  <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract IQueryAmbient" />
+  <TypeSignature Language="DocId" Value="T:System.Windows.Markup.IQueryAmbient" />
+  <TypeSignature Language="VB.NET" Value="Public Interface IQueryAmbient" />
+  <TypeSignature Language="C++ CLI" Value="public interface class IQueryAmbient" />
+  <TypeSignature Language="F#" Value="type IQueryAmbient = interface" />
+  <AssemblyInfo>
+    <AssemblyName>System.Xaml</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Interfaces />
+  <Docs>
+    <summary>指定されたプロパティを現在のスコープでアンビエントとして扱う必要があるかどうかを照会します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ アンビエントプロパティ機構の目的は、特定のオブジェクトのインスタンス化を避けるために XAML オブジェクトライターに通知することで、解析時間を短縮することです。これは、オブジェクトが一時的であり、通常の実行時には役に立たない値であることがわかっている場合に発生します。適用. 通常、プロパティ get アクセサーの XAML 参照または XAML 処理では、このようなオブジェクトをインスタンス化して、すぐに使用できる値でオブジェクトグラフの表現を設定する必要があります。  
+  
+ <xref:System.Windows.Markup.IQueryAmbient>に1つの<xref:System.Windows.Markup.IQueryAmbient.IsAmbientPropertyAvailable%2A>メンバーがあります。  
+  
+ <xref:System.Windows.Markup.IQueryAmbient>は、に対する<xref:System.Windows.Markup.AmbientAttribute>並列機構です。 <xref:System.Windows.Markup.IQueryAmbient>は、情報を決定するためのリフレクションの使用を回避し、く (特定のオブジェクトがレポートまたは`true` `false`レポートの対象<xref:System.Windows.Markup.IQueryAmbient.IsAmbientPropertyAvailable%2A>として選択することもあります) を処理できるようにする特殊なメカニズムですが、属性は実質的には静的です。分析)。 <xref:System.Windows.Markup.AmbientAttribute>は、xaml オブジェクトライターが使用できる一般的なメカニズムであり、通常は専用の xaml 型システムプロパティ<xref:System.Xaml.XamlMember.IsAmbient%2A>と<xref:System.Xaml.XamlType.IsAmbient%2A>に関連付けられています。  
+  
+## <a name="wpf-implementations-of-iqueryambient"></a>IQueryAmbient の WPF 実装  
+ WPF では<xref:System.Windows.Markup.IQueryAmbient> 、はリソースディクショナリの参照プロセスに使用されます。 参照プロセスは、WPF `Resources`論理ツリー全体の連続する値を取得します。これは、キーが見つかるかキーがスコープ内に存在しないと判断されるまで、リソーススコープのルートに向かって機能します。 通常は、結果を受け取るために<xref:System.Windows.ResourceDictionary>毎回をインスタンス化する必要があります。 が存在する限り`Resources`アンビエントとしての`Resources`内容を宣言すると、この参照プロセスが最適化されます。 WPF では、このインターフェイスは次のような場合に実装されます。  
+  
+-   <xref:System.Windows.FrameworkElement>は<xref:System.Windows.FrameworkElement.System%23Windows%23Markup%23IQueryAmbient%23IsAmbientPropertyAvailable%2A> `true` 、の <xref:System.Windows.FrameworkElement.Resources%2A> 既存<xref:System.Windows.ResourceDictionary>のが含まれている場合に、すべてのプロパティ名に対してを返すようにを実装します。ただし、クエリがプロパティ自体のものではない場合に限ります。 <xref:System.Windows.FrameworkElement.Resources%2A>  
+  
+-   <xref:System.Windows.Style>は、と同じパターン<xref:System.Windows.Style.Resources%2A>を実装します。  
+  
+-   <xref:System.Windows.Application>は、と同じパターン<xref:System.Windows.Application.Resources%2A>を実装します。  
+  
+-   <xref:System.Windows.FrameworkContentElement>は、と同じパターン<xref:System.Windows.FrameworkContentElement.Resources%2A>を実装します。  
+  
+-   <xref:System.Windows.FrameworkTemplate>は、と同じパターン<xref:System.Windows.FrameworkTemplate.Resources%2A>を実装します。 また、コンテンツ<xref:System.Windows.FrameworkTemplate.Template%2A>をアンビエントとして`false`報告します<xref:System.Windows.FrameworkTemplate.Template%2A>が、それ自体を照会する場合はを返します。  
+  
+-   これらの各ケースでは、関連`Resources`するプロパティ ( <xref:System.Windows.FrameworkTemplate.Template%2A>および) はと<xref:System.Windows.Markup.AmbientAttribute>して属性付けされます。 一般的な使用方法は、インターフェイスを定義するオブジェクトの<xref:System.Windows.Markup.AmbientAttribute>属性付きプロパティではないプロパティを照会することです。 つまり、オブジェクトグラフを作成するときに、実行時間の可能性のある値を提供するためにリソースディクショナリが存在する限り、リソースディクショナリのプロパティコンテナー以外のプロパティはすべてアンビエントとして扱うことができます。  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="P:System.Xaml.XamlMember.IsAmbient" />
+  </Docs>
+  <Members>
+    <Member MemberName="IsAmbientPropertyAvailable">
+      <MemberSignature Language="C#" Value="public bool IsAmbientPropertyAvailable (string propertyName);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool IsAmbientPropertyAvailable(string propertyName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.IQueryAmbient.IsAmbientPropertyAvailable(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Function IsAmbientPropertyAvailable (propertyName As String) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool IsAmbientPropertyAvailable(System::String ^ propertyName);" />
+      <MemberSignature Language="F#" Value="abstract member IsAmbientPropertyAvailable : string -&gt; bool" Usage="iQueryAmbient.IsAmbientPropertyAvailable propertyName" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="propertyName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="propertyName">アンビエンス状態を確認するプロパティの名前。</param>
+        <summary>指定された名前付きプロパティを現在のスコープでアンビエントと見なすことができるかどうかを照会します。</summary>
+        <returns>要求されたプロパティをアンビエントと見なすことができる場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
