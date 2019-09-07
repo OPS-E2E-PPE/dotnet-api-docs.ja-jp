@@ -1,0 +1,1142 @@
+<Type Name="EventLogInstaller" FullName="System.Diagnostics.EventLogInstaller">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="daaccdd7e7aa2f0d40f6ad9d127bb1d9a7b2f01a" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70454958" /></Metadata><TypeSignature Language="C#" Value="public class EventLogInstaller : System.Configuration.Install.ComponentInstaller" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit EventLogInstaller extends System.Configuration.Install.ComponentInstaller" />
+  <TypeSignature Language="DocId" Value="T:System.Diagnostics.EventLogInstaller" />
+  <TypeSignature Language="VB.NET" Value="Public Class EventLogInstaller&#xA;Inherits ComponentInstaller" />
+  <TypeSignature Language="C++ CLI" Value="public ref class EventLogInstaller : System::Configuration::Install::ComponentInstaller" />
+  <TypeSignature Language="F#" Value="type EventLogInstaller = class&#xA;    inherit ComponentInstaller" />
+  <AssemblyInfo>
+    <AssemblyName>System.Configuration.Install</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Configuration.Install.ComponentInstaller</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>アプリケーションが実行時に読み書きするイベント ログをインストールおよび構成できます。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ は<xref:System.Diagnostics.EventLogInstaller> 、イベントログをインストールするときに[installutil.exe (インストーラーツール)](~/docs/framework/tools/installutil-exe-installer-tool.md)によって使用されます。 クラス<xref:System.Diagnostics.EventLogInstaller>は、ローカルコンピューターにのみイベントログをインストールできます。  
+  
+ クラスは<xref:System.Diagnostics.EventLogInstaller> 、アプリケーションがイベントログに書き込むときに使用します。アプリケーションがイベントログを読み取るときに、イベントログのインストーラーを使用する必要はありません。 アプリケーションとサービスは、アプリケーションログまたはカスタムログに書き込む必要があります。 デバイスドライバーは、システムログに書き込む必要があります。  
+  
+> [!NOTE]
+>  セキュリティログは読み取り専用です。  
+  
+ インストーラーによって、 <xref:System.Diagnostics.EventLogInstaller.Source%2A>プロパティで指定したイベントソースが作成され、[プロパティ] で<xref:System.Diagnostics.EventLogInstaller.Log%2A>指定したイベントログに登録されます。 この動作は、 <xref:System.Diagnostics.EventLog.CreateEventSource%2A> <xref:System.Diagnostics.EventLog>コンポーネントでを呼び出す場合と似ています。  
+  
+ イベントログ<xref:System.Diagnostics.EventLog.WriteEvent%2A>に<xref:System.Diagnostics.EventLog.WriteEntry%2A>イベントを書き込むには、メソッドとメソッドを使用します。 イベントを書き込むには、イベントソースを指定する必要があります。ソースとの最初のエントリを書き込む前に、イベントソースを作成して構成する必要があります。  
+  
+ アプリケーションのインストール時に新しいイベントソースを作成します。 これにより、オペレーティングシステムが登録済みのイベントソースとその構成の一覧を更新できるようになります。 オペレーティングシステムがイベントソースの一覧を更新しておらず、新しいソースでイベントを作成しようとすると、書き込み操作は失敗します。 <xref:System.Diagnostics.EventLogInstaller>を使用するか、 <xref:System.Diagnostics.EventLog.CreateEventSource%2A>メソッドを使用して、新しいソースを構成できます。 新しいイベントソースを作成するには、コンピューターの管理者権限が必要です。  
+  
+ 既存のイベントログまたは新しいイベントログのイベントソースを作成できます。 新しいイベントログ用に新しいソースを作成すると、そのログのソースが登録されますが、最初のエントリが書き込まれるまでログは作成されません。  
+  
+ イベントログをインストールするには、から<xref:System.Configuration.Install.Installer>継承されるプロジェクトインストーラークラスを作成し、クラス<xref:System.ComponentModel.RunInstallerAttribute>のを`true`に設定します。 プロジェクト内で、アプリケーションが<xref:System.Diagnostics.EventLogInstaller>書き込む各イベントログのを作成し、そのインスタンスをプロジェクトインストーラークラスに追加します。  
+  
+ [Installutil.exe (インストーラーツール)](~/docs/framework/tools/installutil-exe-installer-tool.md)が呼び出さ<xref:System.ComponentModel.RunInstallerAttribute>れると、が表示されます。 存在する場合`true`、このツールは、プロジェクトのインストーラーに<xref:System.Configuration.Install.Installer.Installers%2A>関連付けられているコレクション内のすべての項目をインストールします。 <xref:System.ComponentModel.RunInstallerAttribute> が `false` の場合、このツールはプロジェクトインストーラーを無視します。  
+  
+ の<xref:System.Diagnostics.EventLogInstaller>その他のプロパティは、プロジェクトインストーラーの<xref:System.Configuration.Install.Installer.Installers%2A>コレクションにインスタンスを追加する前または後に、インストーラーツールを実行する前に変更します。 アプリケーションがイベントログ<xref:System.Diagnostics.EventLogInstaller.Source%2A>に書き込む場合は、プロパティを設定する必要があります。  
+  
+ 新規または既存のイベントログの新しいソースを登録<xref:System.Diagnostics.EventLogInstaller> するには、を使用します。既存のソースを変更する場合は、を使用しないでください。 <xref:System.Diagnostics.EventLogInstaller> クラス<xref:System.Diagnostics.EventLogInstaller>は、指定されたインストールプロパティに一致するように、既存のソースの構成プロパティを変更しません。 この<xref:System.Diagnostics.EventLogInstaller.Install%2A>メソッドは、プロパティが<xref:System.Diagnostics.EventLogInstaller.Source%2A>コンピューター上の別のイベントログに登録されているソース名と一致する場合、例外をスローします。 プロパティが、 <xref:System.Diagnostics.EventLogInstaller.Log%2A>プロパティで指定されて<xref:System.Diagnostics.EventLogInstaller.Source%2A>いる同じイベントログに既に登録されているソース名と一致する場合、メソッドはソースを登録しません。 <xref:System.Diagnostics.EventLogInstaller.Install%2A>  
+  
+ イベントソースは、イベントカテゴリとメッセージ文字列のローカライズされたリソースファイルに登録できます。 アプリケーションでは、実際の文字列を指定するのではなく、リソース識別子を使用してイベントログエントリを書き込むことができます。 イベントビューアーは、リソース識別子を使用して、ローカライズされたリソースファイルの対応する文字列を検索し、現在の言語設定に基づいて表示します。 イベントカテゴリ、メッセージ、およびパラメーター挿入文字列用に別のファイルを登録するか、3種類のすべての文字列に同じリソースファイルを登録できます。 、 、、および <xref:System.Diagnostics.EventLogInstaller.CategoryCount%2A> の <xref:System.Diagnostics.EventLogInstaller.ParameterResourceFile%2A> 各プロパティを使用して、ローカライズされたエントリをイベントログに書き込むようにソースを構成します。 <xref:System.Diagnostics.EventLogInstaller.MessageResourceFile%2A> <xref:System.Diagnostics.EventLogInstaller.CategoryResourceFile%2A> アプリケーションが文字列値をイベントログに直接書き込む場合は、これらのプロパティを設定する必要はありません。  
+  
+ ソースは、ローカライズされたエントリを書き込むか、または直接文字列を書き込むために構成する必要があります。 アプリケーションがリソース識別子と文字列値の両方を使用してエントリを書き込む場合は、2つの異なるソースを登録する必要があります。 たとえば、リソースファイルを使用して1つのソースを構成し、その<xref:System.Diagnostics.EventLog.WriteEvent%2A>ソースをメソッドで使用して、リソース識別子を使用してエントリをイベントログに書き込みます。 リソースファイルを含まない別のソースを作成し、 <xref:System.Diagnostics.EventLog.WriteEntry%2A>メソッドでそのソースを使用して、そのソースを使用して、イベントログに直接文字列を書き込みます。  
+  
+ 通常は、コード内から<xref:System.Diagnostics.EventLogInstaller>クラスのメソッドを呼び出さず、通常は installutil.exe によってのみ呼び出されます。 このツールでは、 <xref:System.Diagnostics.EventLogInstaller.Install%2A>インストールプロセス中にメソッドが自動的に呼び出されます。 必要に応じて、例外を生成したオブジェクト<xref:System.Diagnostics.EventLogInstaller.Rollback%2A>のメソッドを呼び出すことによって、エラーをバックアップします。  
+  
+   
+  
+## Examples  
+ 次のコード例では、新しいイベントソースのインストールプロパティを設定します。 このコード例では、ソース名とイベントログ名を設定し、 <xref:System.Diagnostics.EventLogInstaller>を<xref:System.Configuration.Install.Installer.Installers%2A>コレクションに追加します。  
+  
+ [!code-cpp[EventLogInstaller#1](~/samples/snippets/cpp/VS_Snippets_CLR/EventLogInstaller/CPP/eventloginstaller.cpp#1)]
+ [!code-csharp[EventLogInstaller#1](~/samples/snippets/csharp/VS_Snippets_CLR/EventLogInstaller/CS/eventloginstaller.cs#1)]
+ [!code-vb[EventLogInstaller#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/EventLogInstaller/VB/eventloginstaller.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Diagnostics.EventLog" />
+    <altmember cref="Overload:System.Diagnostics.EventLog.CreateEventSource" />
+    <related type="Article" href="~/docs/framework/tools/installutil-exe-installer-tool.md">Installutil.exe (インストーラー ツール)</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public EventLogInstaller ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.EventLogInstaller.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; EventLogInstaller();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Diagnostics.EventLogInstaller" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CategoryCount">
+      <MemberSignature Language="C#" Value="public int CategoryCount { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 CategoryCount" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.EventLogInstaller.CategoryCount" />
+      <MemberSignature Language="VB.NET" Value="Public Property CategoryCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int CategoryCount { int get(); void set(int value); };" />
+      <MemberSignature Language="F#" Value="member this.CategoryCount : int with get, set" Usage="System.Diagnostics.EventLogInstaller.CategoryCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>カテゴリ リソース ファイル内のカテゴリの数を取得または設定します。</summary>
+        <value>カテゴリ リソース ファイル内のカテゴリの数。 既定値は 0 です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティと<xref:System.Diagnostics.EventLogInstaller.CategoryCount%2A> <xref:System.Diagnostics.EventLogInstaller.CategoryResourceFile%2A>プロパティを使用して、ローカライズされたカテゴリ文字列を持つイベントを作成します。 イベントの書き込み時にカテゴリを指定した場合、イベントビューアーにはイベントエントリのカテゴリが表示されます。 イベントログカテゴリは、イベントのフィルター処理やイベントに関する情報の提供に役立つアプリケーション定義の文字列です。 たとえば、アプリケーションでは、さまざまなコンポーネントまたは異なる操作に対して個別のカテゴリを定義できます。  
+  
+ イベントカテゴリは省略可能です。アプリケーションでカテゴリを使用しない場合は、プロパティ<xref:System.Diagnostics.EventLogInstaller.CategoryCount%2A>と<xref:System.Diagnostics.EventLogInstaller.CategoryResourceFile%2A>プロパティを設定しないでください。  
+  
+ イベントメッセージの定義とイベントリソースファイルの作成の詳細については、Platform SDK ドキュメント[http://msdn.microsoft.com](https://msdn.microsoft.com/)() の「Message Compiler (メッセージコンパイラ)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次のコード例では、新しいイベントソースのインストールプロパティを設定します。 このコード例では、ローカライズされたイベントテキストのイベントソース名、イベントログ名、およびリソースファイルを設定します。  
+  
+ [!code-cpp[EventLogInstaller_Resources#1](~/samples/snippets/cpp/VS_Snippets_CLR/eventlogInstaller_Resources/CPP/source.cpp#1)]
+ [!code-csharp[EventLogInstaller_Resources#1](~/samples/snippets/csharp/VS_Snippets_CLR/eventlogInstaller_Resources/CS/source.cs#1)]
+ [!code-vb[EventLogInstaller_Resources#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/eventlogInstaller_Resources/VB/source.vb#1)]  
+  
+ このコード例では、リソースライブラリ EventLogMsgs に組み込まれている次のメッセージテキストファイルを使用します。 メッセージテキストファイルは、メッセージリソースファイルの作成元のソースです。 メッセージテキストファイルは、カテゴリ、イベントメッセージ、およびパラメーター挿入文字列のリソース識別子とテキストを定義します。  
+  
+```  
+; // EventLogMsgs.mc  
+; // ********************************************************  
+  
+; // Use the following commands to build this file:  
+  
+; //   mc -s EventLogMsgs.mc  
+; //   rc EventLogMsgs.rc  
+; //   link /DLL /SUBSYSTEM:WINDOWS /NOENTRY /MACHINE:x86 EventLogMsgs.Res   
+; // ********************************************************  
+  
+; // - Event categories -  
+; // Categories must be numbered consecutively starting at 1.  
+; // ********************************************************  
+  
+MessageId=0x1  
+Severity=Success  
+SymbolicName=INSTALL_CATEGORY  
+Language=English  
+Installation  
+.  
+  
+MessageId=0x2  
+Severity=Success  
+SymbolicName=QUERY_CATEGORY  
+Language=English  
+Database Query  
+.  
+  
+MessageId=0x3  
+Severity=Success  
+SymbolicName=REFRESH_CATEGORY  
+Language=English  
+Data Refresh  
+.  
+  
+; // - Event messages -  
+; // *********************************  
+  
+MessageId = 1000  
+Severity = Success  
+Facility = Application  
+SymbolicName = AUDIT_SUCCESS_MESSAGE_ID_1000  
+Language=English  
+My application message text, in English, for message id 1000, called from %1.  
+.  
+  
+MessageId = 1001  
+Severity = Warning  
+Facility = Application  
+SymbolicName = AUDIT_FAILED_MESSAGE_ID_1001  
+Language=English  
+My application message text, in English, for message id 1001, called from %1.  
+.  
+  
+MessageId = 1002  
+Severity = Success  
+Facility = Application  
+SymbolicName = GENERIC_INFO_MESSAGE_ID_1002  
+Language=English  
+My generic information message in English, for message id 1002.  
+.  
+  
+MessageId = 1003  
+Severity = Warning  
+Facility = Application  
+SymbolicName = GENERIC_WARNING_MESSAGE_ID_1003  
+Language=English  
+My generic warning message in English, for message id 1003, called from %1.  
+.  
+  
+MessageId = 1004  
+Severity = Success  
+Facility = Application  
+SymbolicName = UPDATE_CYCLE_COMPLETE_MESSAGE_ID_1004  
+Language=English  
+The update cycle is complete for %%5002.  
+.  
+  
+MessageId = 1005  
+Severity = Warning  
+Facility = Application  
+SymbolicName = SERVER_CONNECTION_DOWN_MESSAGE_ID_1005  
+Language=English  
+The refresh operation did not complete because the connection to server %1 could not be established.  
+.  
+  
+; // - Event log display name -  
+; // ********************************************************  
+  
+MessageId = 5001  
+Severity = Success  
+Facility = Application  
+SymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID  
+Language=English  
+Sample Event Log  
+.  
+  
+; // - Event message parameters -  
+; //   Language independent insertion strings  
+; // ********************************************************  
+  
+MessageId = 5002  
+Severity = Success  
+Facility = Application  
+SymbolicName = EVENT_LOG_SERVICE_NAME_MSGID  
+Language=English  
+SVC_UPDATE.EXE  
+.  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Diagnostics.EventLogInstaller.CategoryResourceFile" />
+        <altmember cref="P:System.Diagnostics.EventSourceCreationData.CategoryCount" />
+        <altmember cref="Overload:System.Diagnostics.EventLog.WriteEvent" />
+      </Docs>
+    </Member>
+    <Member MemberName="CategoryResourceFile">
+      <MemberSignature Language="C#" Value="public string CategoryResourceFile { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string CategoryResourceFile" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.EventLogInstaller.CategoryResourceFile" />
+      <MemberSignature Language="VB.NET" Value="Public Property CategoryResourceFile As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ CategoryResourceFile { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.CategoryResourceFile : string with get, set" Usage="System.Diagnostics.EventLogInstaller.CategoryResourceFile" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.Editor("System.Windows.Forms.Design.FileNameEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.Editor("System.Windows.Forms.Design.FileNameEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ソースのカテゴリ文字列が格納されたリソース ファイルのパスを取得または設定します。</summary>
+        <value>カテゴリ リソース ファイルのパス。 既定値は、空の文字列 ("") です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティと<xref:System.Diagnostics.EventLogInstaller.CategoryCount%2A> <xref:System.Diagnostics.EventLogInstaller.CategoryResourceFile%2A>プロパティを使用して、ローカライズされたカテゴリ文字列を持つイベントを作成します。 イベントを記述するときにカテゴリを指定すると、イベントビューアーによってイベントエントリのカテゴリが表示されます。 イベントログカテゴリは、イベントのフィルター処理やイベントに関する情報の提供に役立つアプリケーション定義の文字列です。 たとえば、アプリケーションによっては、コンポーネントや操作ごとに異なるカテゴリが存在する場合があります。  
+  
+ イベントカテゴリは省略可能です。アプリケーションでカテゴリを使用しない場合は、プロパティ<xref:System.Diagnostics.EventLogInstaller.CategoryCount%2A>と<xref:System.Diagnostics.EventLogInstaller.CategoryResourceFile%2A>プロパティを設定しないでください。  
+  
+ イベントメッセージの定義とイベントリソースファイルの作成の詳細については、Platform SDK ドキュメント[http://msdn.microsoft.com](https://msdn.microsoft.com/)() の「Message Compiler (メッセージコンパイラ)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次のコード例では、新しいイベントソースのインストールプロパティを設定します。 このコード例では、ローカライズされたイベントテキストのイベントソース名、イベントログ名、およびリソースファイルを設定します。  
+  
+ [!code-cpp[EventLogInstaller_Resources#1](~/samples/snippets/cpp/VS_Snippets_CLR/eventlogInstaller_Resources/CPP/source.cpp#1)]
+ [!code-csharp[EventLogInstaller_Resources#1](~/samples/snippets/csharp/VS_Snippets_CLR/eventlogInstaller_Resources/CS/source.cs#1)]
+ [!code-vb[EventLogInstaller_Resources#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/eventlogInstaller_Resources/VB/source.vb#1)]  
+  
+ このコード例では、リソースライブラリ EventLogMsgs に組み込まれている次のメッセージテキストファイルを使用します。 メッセージテキストファイルは、メッセージリソースファイルの作成元のソースです。 メッセージテキストファイルは、カテゴリ、イベントメッセージ、およびパラメーター挿入文字列のリソース識別子とテキストを定義します。  
+  
+```  
+; // EventLogMsgs.mc  
+; // ********************************************************  
+  
+; // Use the following commands to build this file:  
+  
+; //   mc -s EventLogMsgs.mc  
+; //   rc EventLogMsgs.rc  
+; //   link /DLL /SUBSYSTEM:WINDOWS /NOENTRY /MACHINE:x86 EventLogMsgs.Res   
+; // ********************************************************  
+  
+; // - Event categories -  
+; // Categories must be numbered consecutively starting at 1.  
+; // ********************************************************  
+  
+MessageId=0x1  
+Severity=Success  
+SymbolicName=INSTALL_CATEGORY  
+Language=English  
+Installation  
+.  
+  
+MessageId=0x2  
+Severity=Success  
+SymbolicName=QUERY_CATEGORY  
+Language=English  
+Database Query  
+.  
+  
+MessageId=0x3  
+Severity=Success  
+SymbolicName=REFRESH_CATEGORY  
+Language=English  
+Data Refresh  
+.  
+  
+; // - Event messages -  
+; // *********************************  
+  
+MessageId = 1000  
+Severity = Success  
+Facility = Application  
+SymbolicName = AUDIT_SUCCESS_MESSAGE_ID_1000  
+Language=English  
+My application message text, in English, for message id 1000, called from %1.  
+.  
+  
+MessageId = 1001  
+Severity = Warning  
+Facility = Application  
+SymbolicName = AUDIT_FAILED_MESSAGE_ID_1001  
+Language=English  
+My application message text, in English, for message id 1001, called from %1.  
+.  
+  
+MessageId = 1002  
+Severity = Success  
+Facility = Application  
+SymbolicName = GENERIC_INFO_MESSAGE_ID_1002  
+Language=English  
+My generic information message in English, for message id 1002.  
+.  
+  
+MessageId = 1003  
+Severity = Warning  
+Facility = Application  
+SymbolicName = GENERIC_WARNING_MESSAGE_ID_1003  
+Language=English  
+My generic warning message in English, for message id 1003, called from %1.  
+.  
+  
+MessageId = 1004  
+Severity = Success  
+Facility = Application  
+SymbolicName = UPDATE_CYCLE_COMPLETE_MESSAGE_ID_1004  
+Language=English  
+The update cycle is complete for %%5002.  
+.  
+  
+MessageId = 1005  
+Severity = Warning  
+Facility = Application  
+SymbolicName = SERVER_CONNECTION_DOWN_MESSAGE_ID_1005  
+Language=English  
+The refresh operation did not complete because the connection to server %1 could not be established.  
+.  
+  
+; // - Event log display name -  
+; // ********************************************************  
+  
+MessageId = 5001  
+Severity = Success  
+Facility = Application  
+SymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID  
+Language=English  
+Sample Event Log  
+.  
+  
+; // - Event message parameters -  
+; //   Language independent insertion strings  
+; // ********************************************************  
+  
+MessageId = 5002  
+Severity = Success  
+Facility = Application  
+SymbolicName = EVENT_LOG_SERVICE_NAME_MSGID  
+Language=English  
+SVC_UPDATE.EXE  
+.  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Diagnostics.EventLogInstaller.CategoryCount" />
+        <altmember cref="P:System.Diagnostics.EventSourceCreationData.CategoryResourceFile" />
+        <altmember cref="Overload:System.Diagnostics.EventLog.WriteEvent" />
+      </Docs>
+    </Member>
+    <Member MemberName="CopyFromComponent">
+      <MemberSignature Language="C#" Value="public override void CopyFromComponent (System.ComponentModel.IComponent component);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void CopyFromComponent(class System.ComponentModel.IComponent component) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.EventLogInstaller.CopyFromComponent(System.ComponentModel.IComponent)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub CopyFromComponent (component As IComponent)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void CopyFromComponent(System::ComponentModel::IComponent ^ component);" />
+      <MemberSignature Language="F#" Value="override this.CopyFromComponent : System.ComponentModel.IComponent -&gt; unit" Usage="eventLogInstaller.CopyFromComponent component" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="component" Type="System.ComponentModel.IComponent" />
+      </Parameters>
+      <Docs>
+        <param name="component"><see cref="T:System.ComponentModel.IComponent" /> にテンプレートとして使用する <see cref="T:System.Diagnostics.EventLogInstaller" />。</param>
+        <summary>インストール時に必要な <see cref="T:System.Diagnostics.EventLog" /> コンポーネントのプロパティ値をイベント ログにコピーします。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `component`パラメーターで指定するコンポーネントはである必要<xref:System.Diagnostics.EventLog>があります。それ以外の場合は、例外がスローされます。  
+  
+ 通常は、コード内<xref:System.Diagnostics.EventLogInstaller>からのメソッドを呼び出さず、通常は[installutil.exe (インストーラーツール)](~/docs/framework/tools/installutil-exe-installer-tool.md)によってのみ呼び出されます。 <xref:System.Diagnostics.EventLogInstaller.CopyFromComponent%2A>installutil.exe でを使用して、 <xref:System.Diagnostics.EventLogInstaller>のプロパティ値を既存<xref:System.Diagnostics.EventLog>のの値に設定します。  
+  
+ 渡されたのが空の文字列 ("") である場合<xref:System.Diagnostics.EventLog.Log%2A> 、インストーラーを実行する前に、プロパティを有効な値に設定する必要があります。 <xref:System.Diagnostics.EventLog> <xref:System.Diagnostics.EventLog.Log%2A>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">指定したコンポーネントが <see cref="T:System.Diagnostics.EventLog" /> ではありません。  
+  
+または 
+指定したコンポーネントの <see cref="P:System.Diagnostics.EventLog.Log" /> プロパティまたは <see cref="P:System.Diagnostics.EventLog.Source" /> プロパティが <see langword="null" /> または空です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Install">
+      <MemberSignature Language="C#" Value="public override void Install (System.Collections.IDictionary stateSaver);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Install(class System.Collections.IDictionary stateSaver) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.EventLogInstaller.Install(System.Collections.IDictionary)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Install (stateSaver As IDictionary)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Install(System::Collections::IDictionary ^ stateSaver);" />
+      <MemberSignature Language="F#" Value="override this.Install : System.Collections.IDictionary -&gt; unit" Usage="eventLogInstaller.Install stateSaver" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="stateSaver" Type="System.Collections.IDictionary" />
+      </Parameters>
+      <Docs>
+        <param name="stateSaver">ロールバックまたはアンインストール操作を実行するために必要な情報を保存するために使用する <see cref="T:System.Collections.IDictionary" />。</param>
+        <summary>インストールを実行し、レジストリにイベント ログ情報を書き込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Diagnostics.EventLogInstaller.Install%2A>は、イベントログ情報をレジストリに書き込み、イベントログを<xref:System.Diagnostics.EventLogInstaller.Log%2A>プロパティで指定されたログに関連付けます。 ログがまだ存在せず、ソースが指定されている場合<xref:System.Diagnostics.EventLogInstaller.Install%2A>は、によってログが作成され、新しいソースが関連付けられます。  
+  
+ 通常は、コード内<xref:System.Diagnostics.EventLogInstaller>からのメソッドを呼び出さず、通常は[installutil.exe (インストーラーツール)](~/docs/framework/tools/installutil-exe-installer-tool.md)によってのみ呼び出されます。 インストールプロセス中に自動的<xref:System.Diagnostics.EventLogInstaller.Install%2A>にメソッドが呼び出され、インストールされているイベントログに関連付けられているレジストリ情報が書き込まれます。 インストールはトランザクションであるため、インストール中にインストールプロジェクトコンポーネントでエラーが発生した場合は、以前にインストールされたすべてのコンポーネントがインストール前の状態にロールバックされます。 これは、各コンポーネントの<xref:System.Diagnostics.EventLogInstaller.Rollback%2A>メソッドを呼び出すことによって実現されます。  
+  
+ 新規または既存のイベントログの新しいソースを登録<xref:System.Diagnostics.EventLogInstaller> するには、を使用します。既存のソースを変更する場合は、を使用しないでください。 <xref:System.Diagnostics.EventLogInstaller> クラス<xref:System.Diagnostics.EventLogInstaller>は、指定されたインストールプロパティに一致するように、既存のソースの構成プロパティを変更しません。 この<xref:System.Diagnostics.EventLogInstaller.Install%2A>メソッドは、プロパティが<xref:System.Diagnostics.EventLogInstaller.Source%2A>コンピューター上の別のイベントログに登録されているソース名と一致する場合、例外をスローします。 プロパティ<xref:System.Diagnostics.EventLogInstaller.Install%2A>が<xref:System.Diagnostics.EventLogInstaller.Source%2A> 、 <xref:System.Diagnostics.EventLogInstaller.Log%2A>プロパティで指定されている同じイベントログに既に登録されているソース名と一致する場合、メソッドはソースの登録をスキップします。  
+  
+ アプリケーションのインストールルーチンでは、プロジェクトインストーラーの<xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>プロパティを使用して、既にインストールされているコンポーネントに関する情報を自動的に管理します。 この状態情報は、 <xref:System.Diagnostics.EventLogInstaller.Install%2A> `stateSaver`パラメーターとしてに渡され、ツールによってインストールされる<xref:System.Diagnostics.EventLogInstaller>たびに更新されます。 通常、コードでこの状態情報を明示的に変更する必要はありません。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><see cref="P:System.Diagnostics.EventLogInstaller.Source" /> プロパティに指定された名前は、別のイベント ログに既に登録されています。</exception>
+        <altmember cref="M:System.Diagnostics.EventLogInstaller.Rollback(System.Collections.IDictionary)" />
+        <altmember cref="M:System.Diagnostics.EventLogInstaller.Uninstall(System.Collections.IDictionary)" />
+        <altmember cref="T:System.Collections.IDictionary" />
+      </Docs>
+    </Member>
+    <Member MemberName="IsEquivalentInstaller">
+      <MemberSignature Language="C#" Value="public override bool IsEquivalentInstaller (System.Configuration.Install.ComponentInstaller otherInstaller);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool IsEquivalentInstaller(class System.Configuration.Install.ComponentInstaller otherInstaller) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.EventLogInstaller.IsEquivalentInstaller(System.Configuration.Install.ComponentInstaller)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function IsEquivalentInstaller (otherInstaller As ComponentInstaller) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool IsEquivalentInstaller(System::Configuration::Install::ComponentInstaller ^ otherInstaller);" />
+      <MemberSignature Language="F#" Value="override this.IsEquivalentInstaller : System.Configuration.Install.ComponentInstaller -&gt; bool" Usage="eventLogInstaller.IsEquivalentInstaller otherInstaller" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="otherInstaller" Type="System.Configuration.Install.ComponentInstaller" />
+      </Parameters>
+      <Docs>
+        <param name="otherInstaller">比較対象のインストーラー。</param>
+        <summary>インストーラーが指定した別のインストーラーと同じソースを参照しているかどうかを判断します。</summary>
+        <returns>対象となるインストーラーと <paramref name="otherInstaller" /> パラメーターで指定されたインストーラーが同じソースをインストールまたはアンインストールする場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 通常、コード内<xref:System.Diagnostics.EventLogInstaller>からのメソッドは呼び出さないでください。通常、インストーラーツール (installutil.exe) によってのみ呼び出されます。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Diagnostics.EventLogInstaller.CopyFromComponent(System.ComponentModel.IComponent)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Log">
+      <MemberSignature Language="C#" Value="public string Log { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Log" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.EventLogInstaller.Log" />
+      <MemberSignature Language="VB.NET" Value="Public Property Log As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ Log { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Log : string with get, set" Usage="System.Diagnostics.EventLogInstaller.Log" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-1.1">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ソースを設定するログの名前を取得または設定します。</summary>
+        <value>ログの名前。 ログ名には、アプリケーション ログ名、システム ログ名、またはカスタム ログ名を指定できます。 既定値は、空の文字列 ("") です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティを使用<xref:System.Diagnostics.EventLogInstaller.Log%2A>して、 <xref:System.Diagnostics.EventLogInstaller.Source%2A>プロパティで指定したソースを、ローカルコンピューター上の既存のログまたは新しいログに関連付けることができます。 [Installutil.exe (インストーラーツール)](~/docs/framework/tools/installutil-exe-installer-tool.md)は、この情報を使用して、ソースをコンピューターのレジストリのログにマップします。 アプリケーションとサービスは、アプリケーションログまたはカスタムログに書き込む必要があります。 デバイスドライバーは、システムログに書き込む必要があります。  
+  
+ イベントログにエントリを書き込むには、ソースを作成し、イベントログに登録する必要があります。 イベントソースは、一度に1つのログにのみ書き込むことができます。 インストーラーでは、 <xref:System.Diagnostics.EventLogInstaller.Source%2A>プロパティの値を使用して、アプリケーションをエントリの有効なソースとしてイベントログに登録します。 インストーラーを実行する前にログ名を指定しないと、インストーラーによってソースがアプリケーションログに登録されます。 新しいソースと既存のログを指定すると、インストーラーによって新しいイベントソースが作成され、指定したログに関連付けられます。 新しいソースと新しいログの両方を指定すると、インストーラーによって新しいソースがレジストリの新しいログに関連付けられますが、最初のエントリが書き込まれるまでログは作成されません。  
+  
+ オペレーティングシステムは、イベントログをファイルとして保存します。 または<xref:System.Diagnostics.EventLogInstaller>メソッドを使用して新しいイベントログを作成すると、関連付けられているファイルは、指定したコンピューターの%SystemRoot%\System32\Config ディレクトリに格納されます。 <xref:System.Diagnostics.EventLog.CreateEventSource%2A> ファイル名は、 <xref:System.Diagnostics.EventLogInstaller.Log%2A>プロパティの最初の8文字に ".evt" というファイル名拡張子を追加することによって設定されます。  
+  
+ 新規または既存のイベントログの新しいソースを登録<xref:System.Diagnostics.EventLogInstaller> するには、を使用します。既存のソースを変更する場合は、を使用しないでください。 <xref:System.Diagnostics.EventLogInstaller> クラス<xref:System.Diagnostics.EventLogInstaller>は、指定されたインストールプロパティに一致するように、既存のソースの構成プロパティを変更しません。 この<xref:System.Diagnostics.EventLogInstaller.Install%2A>メソッドは、プロパティが<xref:System.Diagnostics.EventLogInstaller.Source%2A>コンピューター上の別のイベントログに登録されているソース名と一致する場合、例外をスローします。 プロパティが、 <xref:System.Diagnostics.EventLogInstaller.Log%2A>プロパティで指定されて<xref:System.Diagnostics.EventLogInstaller.Source%2A>いる同じイベントログに既に登録されているソース名と一致する場合、メソッドはソースを登録しません。 <xref:System.Diagnostics.EventLogInstaller.Install%2A>  
+  
+ イベントログとソースの動作の詳細については、プロパティ<xref:System.Diagnostics.EventLog> <xref:System.Diagnostics.EventLog.Log%2A>と<xref:System.Diagnostics.EventLog.Source%2A>プロパティのクラスのドキュメントを参照してください。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Diagnostics.EventLog.Log" />
+        <altmember cref="T:System.Diagnostics.EventLog" />
+      </Docs>
+    </Member>
+    <Member MemberName="MessageResourceFile">
+      <MemberSignature Language="C#" Value="public string MessageResourceFile { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string MessageResourceFile" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.EventLogInstaller.MessageResourceFile" />
+      <MemberSignature Language="VB.NET" Value="Public Property MessageResourceFile As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ MessageResourceFile { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.MessageResourceFile : string with get, set" Usage="System.Diagnostics.EventLogInstaller.MessageResourceFile" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.Editor("System.Windows.Forms.Design.FileNameEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.Editor("System.Windows.Forms.Design.FileNameEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ソースのメッセージ書式指定文字列が格納されたリソース ファイルのパスを取得または設定します。</summary>
+        <value>メッセージ リソース ファイルのパス。 既定値は、空の文字列 ("") です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティを<xref:System.Diagnostics.EventLogInstaller.MessageResourceFile%2A>使用して、ローカライズされたイベントメッセージを書き込むようにイベントログソースを構成します。 イベントメッセージは、ユーザーにイベントを記述するアプリケーション定義の文字列です。  
+  
+ アプリケーションでは、リソース識別子を使用してイベントログエントリを書き込むことができます。 リソース識別子は、 <xref:System.Diagnostics.EventLogInstaller.MessageResourceFile%2A>にあるメッセージにインデックスを付けます。 イベントビューアーは、リソース識別子を使用して、ローカライズされたリソースファイルの対応する文字列を検索し、現在の言語設定に基づいて表示します。  
+  
+ イベントソースは、ローカライズされたエントリを書き込むか、または直接文字列を書き込むために構成する必要があります。 <xref:System.Diagnostics.EventLog.WriteEvent%2A>メソッドを使用して、メッセージリソースファイルで構成されたソースのローカライズされたエントリを書き込みます。  
+  
+ アプリケーションで、ローカライズされたリソースファイル内のリソース識別子を使用せずに、イベントメッセージ文字列を直接書き込む<xref:System.Diagnostics.EventLogInstaller.MessageResourceFile%2A>場合は、プロパティを設定しないでください。  
+  
+ <xref:System.Diagnostics.EventLog.MachineName%2A>プロパティがローカルコンピューター識別子 (".") でない場合、.NET Framework は、リソースファイルがリモートコンピューター上にあることを前提としています。 \> \\\> \\\\ \\プロパティ値にドライブ文字が含まれている場合、リソースファイルは < machinename < drive $ share (たとえば、\ server) 上にあると見なされます。 <xref:System.Diagnostics.EventLogInstaller.MessageResourceFile%2A>\c $)。 値に文字列% systemroot% が含まれている場合\\、リソースファイルは\\< machinename\>\ admin $ 共有 (たとえば、 \\\ \ \ 管理 $) にあると見なされます。  
+  
+ イベントメッセージの定義とイベントリソースファイルの作成の詳細については、Platform SDK ドキュメント[http://msdn.microsoft.com](https://msdn.microsoft.com/)() の「Message Compiler (メッセージコンパイラ)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次のコード例では、新しいイベントソースのインストールプロパティを設定します。 このコード例では、ローカライズされたイベントテキストのイベントソース名、イベントログ名、およびリソースファイルを設定します。  
+  
+ [!code-cpp[EventLogInstaller_Resources#1](~/samples/snippets/cpp/VS_Snippets_CLR/eventlogInstaller_Resources/CPP/source.cpp#1)]
+ [!code-csharp[EventLogInstaller_Resources#1](~/samples/snippets/csharp/VS_Snippets_CLR/eventlogInstaller_Resources/CS/source.cs#1)]
+ [!code-vb[EventLogInstaller_Resources#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/eventlogInstaller_Resources/VB/source.vb#1)]  
+  
+ このコード例では、リソースライブラリ EventLogMsgs に組み込まれている次のメッセージテキストファイルを使用します。 メッセージテキストファイルは、メッセージリソースファイルの作成元のソースです。 メッセージテキストファイルは、カテゴリ、イベントメッセージ、およびパラメーター挿入文字列のリソース識別子とテキストを定義します。  
+  
+```  
+; // EventLogMsgs.mc  
+; // ********************************************************  
+  
+; // Use the following commands to build this file:  
+  
+; //   mc -s EventLogMsgs.mc  
+; //   rc EventLogMsgs.rc  
+; //   link /DLL /SUBSYSTEM:WINDOWS /NOENTRY /MACHINE:x86 EventLogMsgs.Res   
+; // ********************************************************  
+  
+; // - Event categories -  
+; // Categories must be numbered consecutively starting at 1.  
+; // ********************************************************  
+  
+MessageId=0x1  
+Severity=Success  
+SymbolicName=INSTALL_CATEGORY  
+Language=English  
+Installation  
+.  
+  
+MessageId=0x2  
+Severity=Success  
+SymbolicName=QUERY_CATEGORY  
+Language=English  
+Database Query  
+.  
+  
+MessageId=0x3  
+Severity=Success  
+SymbolicName=REFRESH_CATEGORY  
+Language=English  
+Data Refresh  
+.  
+  
+; // - Event messages -  
+; // *********************************  
+  
+MessageId = 1000  
+Severity = Success  
+Facility = Application  
+SymbolicName = AUDIT_SUCCESS_MESSAGE_ID_1000  
+Language=English  
+My application message text, in English, for message id 1000, called from %1.  
+.  
+  
+MessageId = 1001  
+Severity = Warning  
+Facility = Application  
+SymbolicName = AUDIT_FAILED_MESSAGE_ID_1001  
+Language=English  
+My application message text, in English, for message id 1001, called from %1.  
+.  
+  
+MessageId = 1002  
+Severity = Success  
+Facility = Application  
+SymbolicName = GENERIC_INFO_MESSAGE_ID_1002  
+Language=English  
+My generic information message in English, for message id 1002.  
+.  
+  
+MessageId = 1003  
+Severity = Warning  
+Facility = Application  
+SymbolicName = GENERIC_WARNING_MESSAGE_ID_1003  
+Language=English  
+My generic warning message in English, for message id 1003, called from %1.  
+.  
+  
+MessageId = 1004  
+Severity = Success  
+Facility = Application  
+SymbolicName = UPDATE_CYCLE_COMPLETE_MESSAGE_ID_1004  
+Language=English  
+The update cycle is complete for %%5002.  
+.  
+  
+MessageId = 1005  
+Severity = Warning  
+Facility = Application  
+SymbolicName = SERVER_CONNECTION_DOWN_MESSAGE_ID_1005  
+Language=English  
+The refresh operation did not complete because the connection to server %1 could not be established.  
+.  
+  
+; // - Event log display name -  
+; // ********************************************************  
+  
+MessageId = 5001  
+Severity = Success  
+Facility = Application  
+SymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID  
+Language=English  
+Sample Event Log  
+.  
+  
+; // - Event message parameters -  
+; //   Language independent insertion strings  
+; // ********************************************************  
+  
+MessageId = 5002  
+Severity = Success  
+Facility = Application  
+SymbolicName = EVENT_LOG_SERVICE_NAME_MSGID  
+Language=English  
+SVC_UPDATE.EXE  
+.  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Diagnostics.EventSourceCreationData.MessageResourceFile" />
+      </Docs>
+    </Member>
+    <Member MemberName="ParameterResourceFile">
+      <MemberSignature Language="C#" Value="public string ParameterResourceFile { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string ParameterResourceFile" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.EventLogInstaller.ParameterResourceFile" />
+      <MemberSignature Language="VB.NET" Value="Public Property ParameterResourceFile As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ ParameterResourceFile { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ParameterResourceFile : string with get, set" Usage="System.Diagnostics.EventLogInstaller.ParameterResourceFile" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.Editor("System.Windows.Forms.Design.FileNameEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.Editor("System.Windows.Forms.Design.FileNameEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ソースのメッセージ パラメーター文字列が格納されたリソース ファイルのパスを取得または設定します。</summary>
+        <value>メッセージ パラメーター リソース ファイルのパス。 既定値は、空の文字列 ("") です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティを<xref:System.Diagnostics.EventLogInstaller.ParameterResourceFile%2A>使用して、挿入されたパラメーター文字列を使用してローカライズされたイベントメッセージを書き込むようにイベントログソースを構成します。 プロパティで指定される<xref:System.Diagnostics.EventLogInstaller.MessageResourceFile%2A>ローカライズされた各イベントメッセージには、挿入文字列のプレースホルダーを含めることができます。 これらのプレースホルダーは、イベントメッセージ内の言語に依存しない文字列の位置とリソース識別子を指定するために使用されます。 イベントビューアーは、プレースホルダーをの<xref:System.Diagnostics.EventLogInstaller.ParameterResourceFile%2A>対応する文字列に置き換え、ローカライズされたイベントエントリのイベントログメッセージを書式設定します。  
+  
+ たとえば、メッセージテキストファイルの次のセクションでは、パラメータープレースホルダーを含む文字列を定義しています。  
+  
+```  
+  
+MessageId = 1501  
+Severity = Success  
+Facility = Application  
+SymbolicName = COMPONENT_STARTING  
+Language=English  
+Component %%6050 is starting.  
+.  
+```  
+  
+ パラメーターリソースファイル内では、次に示すように、プレースホルダーに対応するリソース識別子を使用して挿入文字列を定義する必要があります。  
+  
+```  
+MessageId = 6050  
+Severity = Success  
+Facility = Application  
+SymbolicName = COMPONENT_NAME_MSGID  
+Language=English  
+TRIGGER.EXE  
+.  
+```  
+  
+ イベントソースは、ローカライズされたエントリを書き込むか、または直接文字列を書き込むために構成する必要があります。 <xref:System.Diagnostics.EventLog.WriteEvent%2A>メソッドを使用して、メッセージリソースファイルで構成されたソースのローカライズされたエントリを書き込みます。  
+  
+ アプリケーションでイベントメッセージ文字列をイベントログに直接書き込む場合、またはに<xref:System.Diagnostics.EventLogInstaller.MessageResourceFile%2A>パラメーター挿入プレースホルダーを含むメッセージが含まれていない場合<xref:System.Diagnostics.EventLogInstaller.ParameterResourceFile%2A>は、プロパティを設定しないでください。  
+  
+ イベントメッセージの定義とイベントリソースファイルの作成の詳細については、Platform SDK ドキュメント[http://msdn.microsoft.com](https://msdn.microsoft.com/)() の「Message Compiler (メッセージコンパイラ)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次のコード例では、新しいイベントソースのインストールプロパティを設定します。 このコード例では、ローカライズされたイベントテキストのイベントソース名、イベントログ名、およびリソースファイルを設定します。  
+  
+ [!code-cpp[EventLogInstaller_Resources#1](~/samples/snippets/cpp/VS_Snippets_CLR/eventlogInstaller_Resources/CPP/source.cpp#1)]
+ [!code-csharp[EventLogInstaller_Resources#1](~/samples/snippets/csharp/VS_Snippets_CLR/eventlogInstaller_Resources/CS/source.cs#1)]
+ [!code-vb[EventLogInstaller_Resources#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/eventlogInstaller_Resources/VB/source.vb#1)]  
+  
+ このコード例では、リソースライブラリ EventLogMsgs に組み込まれている次のメッセージテキストファイルを使用します。 メッセージテキストファイルは、メッセージリソースファイルの作成元のソースです。 メッセージテキストファイルは、カテゴリ、イベントメッセージ、およびパラメーター挿入文字列のリソース識別子とテキストを定義します。 具体的には、リソース識別子1004に定義されたメッセージは、リソース識別子5002に定義されているパラメーター文字列のプレースホルダーを使用します。  
+  
+```  
+; // EventLogMsgs.mc  
+; // ********************************************************  
+  
+; // Use the following commands to build this file:  
+  
+; //   mc -s EventLogMsgs.mc  
+; //   rc EventLogMsgs.rc  
+; //   link /DLL /SUBSYSTEM:WINDOWS /NOENTRY /MACHINE:x86 EventLogMsgs.Res   
+; // ********************************************************  
+  
+; // - Event categories -  
+; // Categories must be numbered consecutively starting at 1.  
+; // ********************************************************  
+  
+MessageId=0x1  
+Severity=Success  
+SymbolicName=INSTALL_CATEGORY  
+Language=English  
+Installation  
+.  
+  
+MessageId=0x2  
+Severity=Success  
+SymbolicName=QUERY_CATEGORY  
+Language=English  
+Database Query  
+.  
+  
+MessageId=0x3  
+Severity=Success  
+SymbolicName=REFRESH_CATEGORY  
+Language=English  
+Data Refresh  
+.  
+  
+; // - Event messages -  
+; // *********************************  
+  
+MessageId = 1000  
+Severity = Success  
+Facility = Application  
+SymbolicName = AUDIT_SUCCESS_MESSAGE_ID_1000  
+Language=English  
+My application message text, in English, for message id 1000, called from %1.  
+.  
+  
+MessageId = 1001  
+Severity = Warning  
+Facility = Application  
+SymbolicName = AUDIT_FAILED_MESSAGE_ID_1001  
+Language=English  
+My application message text, in English, for message id 1001, called from %1.  
+.  
+  
+MessageId = 1002  
+Severity = Success  
+Facility = Application  
+SymbolicName = GENERIC_INFO_MESSAGE_ID_1002  
+Language=English  
+My generic information message in English, for message id 1002.  
+.  
+  
+MessageId = 1003  
+Severity = Warning  
+Facility = Application  
+SymbolicName = GENERIC_WARNING_MESSAGE_ID_1003  
+Language=English  
+My generic warning message in English, for message id 1003, called from %1.  
+.  
+  
+MessageId = 1004  
+Severity = Success  
+Facility = Application  
+SymbolicName = UPDATE_CYCLE_COMPLETE_MESSAGE_ID_1004  
+Language=English  
+The update cycle is complete for %%5002.  
+.  
+  
+MessageId = 1005  
+Severity = Warning  
+Facility = Application  
+SymbolicName = SERVER_CONNECTION_DOWN_MESSAGE_ID_1005  
+Language=English  
+The refresh operation did not complete because the connection to server %1 could not be established.  
+.  
+  
+; // - Event log display name -  
+; // ********************************************************  
+  
+MessageId = 5001  
+Severity = Success  
+Facility = Application  
+SymbolicName = EVENT_LOG_DISPLAY_NAME_MSGID  
+Language=English  
+Sample Event Log  
+.  
+  
+; // - Event message parameters -  
+; //   Language independent insertion strings  
+; // ********************************************************  
+  
+MessageId = 5002  
+Severity = Success  
+Facility = Application  
+SymbolicName = EVENT_LOG_SERVICE_NAME_MSGID  
+Language=English  
+SVC_UPDATE.EXE  
+.  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Diagnostics.EventSourceCreationData.ParameterResourceFile" />
+      </Docs>
+    </Member>
+    <Member MemberName="Rollback">
+      <MemberSignature Language="C#" Value="public override void Rollback (System.Collections.IDictionary savedState);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Rollback(class System.Collections.IDictionary savedState) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.EventLogInstaller.Rollback(System.Collections.IDictionary)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Rollback (savedState As IDictionary)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Rollback(System::Collections::IDictionary ^ savedState);" />
+      <MemberSignature Language="F#" Value="override this.Rollback : System.Collections.IDictionary -&gt; unit" Usage="eventLogInstaller.Rollback savedState" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="savedState" Type="System.Collections.IDictionary" />
+      </Parameters>
+      <Docs>
+        <param name="savedState">インストール前のコンピューターの状態を格納している <see cref="T:System.Collections.IDictionary" />。</param>
+        <summary>インストール プロシージャがレジストリに書き込んだイベント ログ情報をロールバックして、コンピューターをインストール前の状態に復元します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Diagnostics.EventLogInstaller.Rollback%2A>は、 <xref:System.Diagnostics.EventLogInstaller.Install%2A>メソッドの効果を元に戻します。 <xref:System.Diagnostics.EventLogInstaller.Rollback%2A>は、インストールプロジェクトのコンポーネントのインストールが失敗した場合に呼び出されます。 メソッド<xref:System.Diagnostics.EventLogInstaller.Install%2A>は、イベントログとイベントソースのプロパティを作成または設定します。 <xref:System.Diagnostics.EventLogInstaller.Rollback%2A>イベントログとソースを削除するか、既存のソースのプロパティをインストール前の値にリセットします。  
+  
+ 通常は、コード内<xref:System.Diagnostics.EventLogInstaller>からのメソッドを呼び出さず、通常は[installutil.exe (インストーラーツール)](~/docs/framework/tools/installutil-exe-installer-tool.md)によってのみ呼び出されます。 このツールは、 <xref:System.Diagnostics.EventLogInstaller.Rollback%2A>このコンポーネントまたは別のコンポーネントのインストールが失敗したときにメソッドを呼び出し、インストールプロセスによって既に行われた変更を元に戻すことができます。  
+  
+ アプリケーションのインストールルーチンでは、プロジェクトインストーラーの<xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>プロパティを使用して、既にインストールされているコンポーネントに関する情報を自動的に管理します。 この状態情報は、 <xref:System.Diagnostics.EventLogInstaller.Rollback%2A> `savedState`パラメーターとしてに渡され、ツール<xref:System.Diagnostics.EventLogInstaller>によってロールバックされると継続的に更新されます。 通常、コードでこの状態情報を明示的に変更する必要はありません。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Diagnostics.EventLogInstaller.Install(System.Collections.IDictionary)" />
+        <altmember cref="M:System.Diagnostics.EventLogInstaller.Uninstall(System.Collections.IDictionary)" />
+        <altmember cref="T:System.Collections.IDictionary" />
+      </Docs>
+    </Member>
+    <Member MemberName="Source">
+      <MemberSignature Language="C#" Value="public string Source { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Source" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.EventLogInstaller.Source" />
+      <MemberSignature Language="VB.NET" Value="Public Property Source As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ Source { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Source : string with get, set" Usage="System.Diagnostics.EventLogInstaller.Source" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-1.1">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.TypeConverter("System.Diagnostics.Design.StringValueConverter, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ログに登録するソース名を取得または設定します。</summary>
+        <value>エントリのソースとしてイベント ログに登録する名前。 既定値は、空の文字列 ("") です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ イベントソースは、イベントをログに記録するかどうかを示します。 多くの場合、アプリケーションの名前、または大規模なアプリケーション内のコンポーネントの名前です。  
+  
+ インストーラーでは、 <xref:System.Diagnostics.EventLogInstaller.Source%2A>プロパティの値を使用して、アプリケーションをエントリの有効なソースとしてイベントログに登録します。 新しいソース名は、既存のソース名または既存のイベントログ名と一致することはできません。 各ソースは、一度に1つのイベントログにのみ書き込むことができます。ただし、アプリケーションで複数のソースを使用して複数のイベントログに書き込むことができます。 たとえば、アプリケーションによっては、異なるイベントログまたは異なるリソースファイル用に複数のソースが構成されている必要があります。  
+  
+ アプリケーションとサービスは、アプリケーションログまたはカスタムログに書き込む必要があります。 デバイスドライバーは、システムログに書き込む必要があります。 インストーラーを実行する前にログ名を指定しないと、インストーラーによってソースがアプリケーションログに登録されます。 存在しないログの名前を指定した場合、システムはをそのログ<xref:System.Diagnostics.EventLogInstaller.Source%2A>に登録しますが、最初のエントリが書き込まれるまでログは作成されません。  
+  
+ 新規または既存のイベントログの新しいソースを登録<xref:System.Diagnostics.EventLogInstaller> するには、を使用します。既存のソースを変更する場合は、を使用しないでください。 <xref:System.Diagnostics.EventLogInstaller> クラス<xref:System.Diagnostics.EventLogInstaller>は、指定されたインストールプロパティに一致するように、既存のソースの構成プロパティを変更しません。 この<xref:System.Diagnostics.EventLogInstaller.Install%2A>メソッドは、プロパティが<xref:System.Diagnostics.EventLogInstaller.Source%2A>コンピューター上の別のイベントログに登録されているソース名と一致する場合、例外をスローします。 プロパティが、 <xref:System.Diagnostics.EventLogInstaller.Log%2A>プロパティで指定されて<xref:System.Diagnostics.EventLogInstaller.Source%2A>いる同じイベントログに既に登録されているソース名と一致する場合、メソッドはソースを登録しません。 <xref:System.Diagnostics.EventLogInstaller.Install%2A>  
+  
+ イベントログとソースの動作の詳細については、プロパティ<xref:System.Diagnostics.EventLog> <xref:System.Diagnostics.EventLog.Log%2A>と<xref:System.Diagnostics.EventLog.Source%2A>プロパティのクラスのドキュメントを参照してください。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Diagnostics.EventLog.Source" />
+        <altmember cref="T:System.Diagnostics.EventLog" />
+      </Docs>
+    </Member>
+    <Member MemberName="Uninstall">
+      <MemberSignature Language="C#" Value="public override void Uninstall (System.Collections.IDictionary savedState);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Uninstall(class System.Collections.IDictionary savedState) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.EventLogInstaller.Uninstall(System.Collections.IDictionary)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Uninstall (savedState As IDictionary)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Uninstall(System::Collections::IDictionary ^ savedState);" />
+      <MemberSignature Language="F#" Value="override this.Uninstall : System.Collections.IDictionary -&gt; unit" Usage="eventLogInstaller.Uninstall savedState" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="savedState" Type="System.Collections.IDictionary" />
+      </Parameters>
+      <Docs>
+        <param name="savedState">インストール前のコンピューターの状態を格納している <see cref="T:System.Collections.IDictionary" />。</param>
+        <summary>レジストリからイベント ログ情報を削除して、コンポーネントを削除します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `Remove` <xref:System.Diagnostics.EventLogInstaller.Uninstall%2A> <xref:System.Diagnostics.EventLogInstaller.Log%2A>プロパティの値がの場合、メソッドは、プロパティと<xref:System.Diagnostics.EventLogInstaller.Source%2A>プロパティが新しいイベントログとソースの作成を指定した場合に、インストーラーによって作成されたソースと関連付けられたログを削除します。 <xref:System.Diagnostics.EventLogInstaller.UninstallAction%2A>  
+  
+ 通常は、コード内からのメソッドを呼び<xref:System.Diagnostics.EventLogInstaller>出さないでください。通常、アンインストールモードでは、 [installutil.exe (インストーラーツール)](~/docs/framework/tools/installutil-exe-installer-tool.md)によってのみ呼び出されます。 ツールは自動的に<xref:System.Diagnostics.EventLogInstaller.Uninstall%2A>メソッドを呼び出し、インストールの影響を受けたシステムの部分をインストール前の状態に復元します。 これには、アンインストールするイベントログに関連するレジストリ情報の削除が含まれます。  
+  
+ アプリケーションのアンインストールルーチンは、プロジェクトインストーラーの<xref:System.Configuration.Install.Installer.Context%2A?displayProperty=nameWithType>プロパティを使用して、既にアンインストールされているコンポーネントに関する情報を自動的に管理します。 この状態情報は、 <xref:System.Diagnostics.EventLogInstaller.Uninstall%2A> `savedState`パラメーターとしてに渡され、ツールによってそれぞれ<xref:System.Diagnostics.EventLogInstaller>がアンインストールされると継続的に更新されます。 通常、コードでこの状態情報を明示的に変更する必要はありません。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Diagnostics.EventLogInstaller.Install(System.Collections.IDictionary)" />
+        <altmember cref="T:System.Collections.IDictionary" />
+      </Docs>
+    </Member>
+    <Member MemberName="UninstallAction">
+      <MemberSignature Language="C#" Value="public System.Configuration.Install.UninstallAction UninstallAction { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Configuration.Install.UninstallAction UninstallAction" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.EventLogInstaller.UninstallAction" />
+      <MemberSignature Language="VB.NET" Value="Public Property UninstallAction As UninstallAction" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Configuration::Install::UninstallAction UninstallAction { System::Configuration::Install::UninstallAction get(); void set(System::Configuration::Install::UninstallAction value); };" />
+      <MemberSignature Language="F#" Value="member this.UninstallAction : System.Configuration.Install.UninstallAction with get, set" Usage="System.Diagnostics.EventLogInstaller.UninstallAction" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Configuration.Install</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.DefaultValue(Mono.Cecil.CustomAttributeArgument)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Configuration.Install.UninstallAction</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see href="https://docs.microsoft.com/dotnet/framework/tools/installutil-exe-installer-tool">Installutil.exe (インストーラー ツール)</see> がアンインストール時にイベント ログを削除するか、インストールされた状態のままにしておくかどうかを示す値を取得または設定します。</summary>
+        <value><see cref="T:System.Configuration.Install.UninstallAction" /> がアンインストールされるときにイベント ログをどの状態にするか示す <see cref="T:System.Diagnostics.EventLog" /> 値のいずれか。 既定値は、<see langword="Remove" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ イベントログをインストールするときに、必要に応じて既存のログに接続することができます。 その場合は、ログをインストール前の状態に戻すか、現在のインストール後の状態のままにするかを決定する必要があります。 イベントログをインストール前の状態に戻すことを選択した場合、インストール時にイベントログエントリに加えられた変更は復元されません。 に関連付けられているイベントログのプロパティのみを<xref:System.Diagnostics.EventLogInstaller> 、インストール前の値にリセットできます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ComponentModel.InvalidEnumArgumentException"><see cref="P:System.Diagnostics.EventLogInstaller.UninstallAction" /> に無効な値が含まれています。 このプロパティの有効な値は、<see langword="Remove" /> と <see langword="NoAction" /> だけです。</exception>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

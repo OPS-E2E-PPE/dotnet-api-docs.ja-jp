@@ -1,0 +1,785 @@
+<Type Name="SqlException" FullName="System.Data.SqlClient.SqlException">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="9b342c323f9904a6e3706debf23c45d8ed1f02c4" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70421138" /></Metadata><TypeSignature Language="C#" Value="public sealed class SqlException : System.Data.Common.DbException" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi serializable sealed beforefieldinit SqlException extends System.Data.Common.DbException" />
+  <TypeSignature Language="DocId" Value="T:System.Data.SqlClient.SqlException" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class SqlException&#xA;Inherits DbException" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SqlException sealed : System::Data::Common::DbException" />
+  <TypeSignature Language="F#" Value="type SqlException = class&#xA;    inherit DbException" />
+  <AssemblyInfo>
+    <AssemblyName>System.Data.SqlClient</AssemblyName>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.4.0.0</AssemblyVersion>
+    <AssemblyVersion>4.5.0.0</AssemblyVersion>
+    <AssemblyVersion>4.6.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Data</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Data.Common.DbException</BaseTypeName>
+    <BaseTypeName FrameworkAlternate="netframework-1.1">System.SystemException</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0">
+      <AttributeName>System.Serializable</AttributeName>
+    </Attribute>
+    <Attribute FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0">
+      <AttributeName>System.Runtime.CompilerServices.TypeForwardedFrom("System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>この例外は、SQL サーバーから警告またはエラーが返された場合にスローされます。 このクラスは継承できません。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このクラスは、SQL Server の .NET Framework Data Provider がサーバーから生成されたエラーを検出するたびに作成されます。 (クライアント側のエラーは、標準の共通言語ランタイム例外としてスローされます)。には、常にのインスタンス<xref:System.Data.SqlClient.SqlError>が少なくとも1つ含まれています。 <xref:System.Data.SqlClient.SqlException>  
+  
+ 重大度レベルが10以下のメッセージは情報であり、ユーザーが入力した情報の誤りに起因する問題を示します。 重大度レベルが 11 ~ 16 の場合、ユーザーによって生成され、ユーザーが修正できます。 重大度レベルが 17 ～ 25 のエラーは、ソフトウェアまたはハードウェアのエラーです。 レベル17、18、または19のエラーが発生した場合でも、特定のステートメントを実行できないことがありますが、作業を続行できます。  
+  
+ 重大度レベルが 19 以下の場合、<xref:System.Data.SqlClient.SqlConnection> は開いたままです。 重大度レベルが20以上の場合、サーバーは通常、 <xref:System.Data.SqlClient.SqlConnection>を閉じます。 ただし、ユーザーは接続を再び開き、続行できます。 どちらの場合も、コマンドを実行しているメソッドによって <xref:System.Data.SqlClient.SqlException> が生成されます。  
+  
+ SQL Server によって送信される警告メッセージと情報メッセージの詳細については、「[イベントとエラーのデータベースエンジン](/sql/relational-databases/errors-events/database-engine-events-and-errors)」を参照してください。 クラス<xref:System.Data.SqlClient.SqlException>は SQL Server 重大度にマップされます。  
+  
+ 例外処理に関する一般的な情報を次に示します。 コードで例外をキャッチして、アプリケーションがクラッシュするのを防ぎ、関連するエラーメッセージをユーザーに表示できるようにする必要があります。  データベーストランザクションを使用すると、クライアントアプリケーションで何が発生したかに関係なく、データの整合性を保つことができます (クラッシュを含む)。 BeginTransaction メソッド (OleDbConnection、ODBCConnection、および) などの機能によって、例外に関係なく一貫性のあるデータが確保されるようになっています (、、および)。プロバイダーによって発生します。 トランザクションが失敗する可能性があるため、エラーをキャッチして、トランザクションを再試行してください。  
+  
+ .NET Framework 4.5 以降では、 <xref:System.Data.SqlClient.SqlException>は内部<xref:System.ComponentModel.Win32Exception>を返すことができることに注意してください。  
+  
+ .NET Framework データプロバイダーの exception クラスは、プロバイダー固有のエラーを報告します。 たとえば、SqlException には OdbcException があり、system.string には OleDbException が含まれています。また、system.string にはがあります。 最高レベルのエラーの詳細については、これらの例外をキャッチし、これらの例外クラスのメンバーを使用してエラーの詳細を取得します。  
+  
+ プロバイダー固有のエラーに加えて、.NET Framework データプロバイダーの型は、OutOfMemoryException や ThreadAbortException などの例外を .NET Framework 発生させることができます。 これらの例外からの回復が不可能な場合があります。  
+  
+ 入力が正しくないと、.NET Framework データプロバイダーの型によって ArgumentException や IndexOutOfRangeException などの例外が発生する可能性があります。  間違った時刻にメソッドを呼び出すと、InvalidOperationException が発生する可能性があります。  
+  
+ そのため、一般に、共通言語ランタイムの例外だけでなく、プロバイダー固有の例外をキャッチする例外ハンドラーを記述します。  次のように階層化できます。  
+  
+```csharp  
+try {  
+   // code here  
+}  
+catch (SqlException odbcEx) {  
+   // Handle more specific SqlException exception here.  
+}  
+catch (Exception ex) {  
+   // Handle generic ones here.  
+}  
+  
+```  
+  
+ または:  
+  
+```csharp  
+try {  
+   // code here  
+}  
+catch (Exception ex) {  
+   if (ex is SqlException) {  
+      // Handle more specific SqlException exception here.  
+   }  
+   else {  
+      // Handle generic ones here.  
+   }  
+}  
+  
+```  
+  
+ スタックにユーザーコードがないスレッドプールスレッドで、.NET Framework データプロバイダーのメソッド呼び出しが失敗する可能性もあります。 この場合、および非同期メソッド呼び出しを使用する場合は、イベントを<xref:System.AppDomain.UnhandledException>登録してこれらの例外を処理し、アプリケーションのクラッシュを回避する必要があります。  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.SqlClient.SqlException> 、が生成され、例外が表示されます。  
+  
+ [!code-csharp[Classic WebData SqlException Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlException Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData SqlException Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlException Example/VB/source.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Data.SqlClient.SqlError" />
+    <altmember cref="T:System.Data.SqlClient.SqlErrorCollection" />
+    <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">ADO.NET の概要</related>
+  </Docs>
+  <Members>
+    <Member MemberName="Class">
+      <MemberSignature Language="C#" Value="public byte Class { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance unsigned int8 Class" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlException.Class" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Class As Byte" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Byte Class { System::Byte get(); };" />
+      <MemberSignature Language="F#" Value="member this.Class : byte" Usage="System.Data.SqlClient.SqlException.Class" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>.NET Framework SQL Server 用データ プロバイダーが返したエラーの重大度レベルを取得します。</summary>
+        <value>エラーの重大度レベルを示す 1 ～ 25 の値。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 重大度レベルが10以下のメッセージは情報であり、ユーザーが入力した情報の誤りに起因する問題を示します。 重大度レベルが 11 ~ 16 の場合、ユーザーによって生成され、ユーザーが修正できます。 重大度レベルが 17 ～ 25 のエラーは、ソフトウェアまたはハードウェアのエラーです。 レベル17、18、または19のエラーが発生した場合でも、特定のステートメントを実行できないことがありますが、作業を続行できます。  
+  
+ 重大度レベルが 19 以下の場合、<xref:System.Data.SqlClient.SqlConnection> は開いたままです。 重大度レベルが20以上の場合、サーバーは通常、 <xref:System.Data.SqlClient.SqlConnection>を閉じます。 ただし、ユーザーは接続を再び開き、続行できます。 どちらの場合も、コマンドを実行しているメソッドによって <xref:System.Data.SqlClient.SqlException> が生成されます。  
+  
+ SQL Server によって送信される警告メッセージと情報メッセージの詳細については、SQL Server のドキュメントのトラブルシューティングに関するセクションを参照してください。  
+  
+ これは、 <xref:System.Data.SqlClient.SqlError.Class%2A> <xref:System.Data.SqlClient.SqlException.Errors%2A>プロパティの最初<xref:System.Data.SqlClient.SqlError>ののプロパティのラッパーです。  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.SqlClient.SqlError> 、各<xref:System.Data.SqlClient.SqlErrorCollection>をコレクション内に表示します。  
+  
+ [!code-csharp[Classic WebData SqlException.State Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData SqlException.State Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Data.SqlClient.SqlException.Number" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Source" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.State" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Server" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Procedure" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.LineNumber" />
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">ADO.NET の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="ClientConnectionId">
+      <MemberSignature Language="C#" Value="public Guid ClientConnectionId { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Guid ClientConnectionId" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlException.ClientConnectionId" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property ClientConnectionId As Guid" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property Guid ClientConnectionId { Guid get(); };" />
+      <MemberSignature Language="F#" Value="member this.ClientConnectionId : Guid" Usage="System.Data.SqlClient.SqlException.ClientConnectionId" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Guid</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>クライアント接続 ID を表します 。 詳細については、「<see href="https://docs.microsoft.com/dotnet/framework/data/adonet/data-tracing">ADO.NET のデータ追跡</see>」を参照してください。</summary>
+        <value>クライアント接続 ID。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コード例については、「<xref:System.Data.SqlClient.SqlException.ToString%2A>」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Errors">
+      <MemberSignature Language="C#" Value="public System.Data.SqlClient.SqlErrorCollection Errors { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Data.SqlClient.SqlErrorCollection Errors" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlException.Errors" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Errors As SqlErrorCollection" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Data::SqlClient::SqlErrorCollection ^ Errors { System::Data::SqlClient::SqlErrorCollection ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Errors : System.Data.SqlClient.SqlErrorCollection" Usage="System.Data.SqlClient.SqlException.Errors" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;xamarinandroid-7.1;xamarinios-10.8;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinmac-3.0">
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Content)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Data.SqlClient.SqlErrorCollection</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>.NET Framework SQL Server 用データ プロバイダーが生成する例外の詳細情報を提供する、1 つ以上の <see cref="T:System.Data.SqlClient.SqlError" /> オブジェクトのコレクションを取得します。</summary>
+        <value>収集された、<see cref="T:System.Data.SqlClient.SqlError" /> クラスのインスタンス。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ クラスには、 <xref:System.Data.SqlClient.SqlError>常にクラスのインスタンスが少なくとも1つ含まれています。 <xref:System.Data.SqlClient.SqlErrorCollection>  
+  
+ これはの<xref:System.Data.SqlClient.SqlErrorCollection>ラッパーです。 SQL Server エンジンエラーの詳細については、「[イベントとエラーのデータベースエンジン](/sql/relational-databases/errors-events/database-engine-events-and-errors)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.SqlClient.SqlError> 、各<xref:System.Data.SqlClient.SqlErrorCollection>をコレクション内に表示します。  
+  
+ [!code-csharp[Classic WebData SqlError Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlError Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData SqlError Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlError Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Data.SqlClient.SqlErrorCollection" />
+        <altmember cref="T:System.Data.SqlClient.SqlError" />
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">ADO.NET の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetObjectData">
+      <MemberSignature Language="C#" Value="public override void GetObjectData (System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void GetObjectData(class System.Runtime.Serialization.SerializationInfo si, valuetype System.Runtime.Serialization.StreamingContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub GetObjectData (si As SerializationInfo, context As StreamingContext)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void GetObjectData(System::Runtime::Serialization::SerializationInfo ^ si, System::Runtime::Serialization::StreamingContext context);" />
+      <MemberSignature Language="F#" Value="override this.GetObjectData : System.Runtime.Serialization.SerializationInfo * System.Runtime.Serialization.StreamingContext -&gt; unit" Usage="sqlException.GetObjectData (si, context)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="si" Type="System.Runtime.Serialization.SerializationInfo" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="context" Type="System.Runtime.Serialization.StreamingContext" Index="1" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="si">スローされている例外に関するシリアル化済みオブジェクト データを保持している <see cref="T:System.Runtime.Serialization.SerializationInfo" />。</param>
+        <param name="context">転送元または転送先についてのコンテキスト情報を含む <see cref="T:System.Runtime.Serialization.StreamingContext" /> です。</param>
+        <summary>例外に関する情報を含む <see cref="T:System.Runtime.Serialization.SerializationInfo" /> を設定します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `GetObjectData` は、シリアル化する対象のすべての例外オブジェクト データを使用して、`SerializationInfo` を設定します。 逆シリアル化中に、ストリームで転送された `SerializationInfo` から例外が再構成されます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="si" /> パラメーターが null 参照 (Visual Basic の場合は <see langword="Nothing" />) です。</exception>
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">ADO.NET の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="LineNumber">
+      <MemberSignature Language="C#" Value="public int LineNumber { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 LineNumber" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlException.LineNumber" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property LineNumber As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int LineNumber { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.LineNumber : int" Usage="System.Data.SqlClient.SqlException.LineNumber" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Transact-SQL コマンドのバッチまたはストアド プロシージャ内の、エラーを生成した行の番号を取得します。</summary>
+        <value>Transact-SQL コマンドのバッチまたはストアド プロシージャ内の、エラーを生成した行の番号。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 行番号は1から始まります。0が返された場合、行番号は適用されません。  
+  
+ これは、 <xref:System.Data.SqlClient.SqlError.LineNumber%2A> <xref:System.Data.SqlClient.SqlException.Errors%2A>プロパティの最初<xref:System.Data.SqlClient.SqlError>ののプロパティのラッパーです。  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.SqlClient.SqlError> 、各<xref:System.Data.SqlClient.SqlErrorCollection>をコレクション内に表示します。  
+  
+ [!code-csharp[Classic WebData SqlException.State Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData SqlException.State Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Data.SqlClient.SqlException.Number" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Source" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.State" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Class" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Server" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Procedure" />
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">ADO.NET の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Message">
+      <MemberSignature Language="C#" Value="public override string Message { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Message" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlException.Message" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property Message As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ Message { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Message : string" Usage="System.Data.SqlClient.SqlException.Message" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>エラーを説明するテキストを取得します。</summary>
+        <value>エラーを説明するテキスト。</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Number">
+      <MemberSignature Language="C#" Value="public int Number { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 Number" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlException.Number" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Number As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int Number { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.Number : int" Usage="System.Data.SqlClient.SqlException.Number" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>エラーの種類を示す番号を取得します。</summary>
+        <value>エラーの種類を示す番号。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ これは、 <xref:System.Data.SqlClient.SqlError.Number%2A> <xref:System.Data.SqlClient.SqlException.Errors%2A>プロパティの最初<xref:System.Data.SqlClient.SqlError>ののプロパティのラッパーです。 SQL Server エンジンエラーの詳細については、「[イベントとエラーのデータベースエンジン](/sql/relational-databases/errors-events/database-engine-events-and-errors)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.SqlClient.SqlError> 、各<xref:System.Data.SqlClient.SqlErrorCollection>をコレクション内に表示します。  
+  
+ [!code-csharp[Classic WebData SqlException.State Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData SqlException.State Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Data.SqlClient.SqlException.State" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Class" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Source" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Server" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Procedure" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.LineNumber" />
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">ADO.NET の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Procedure">
+      <MemberSignature Language="C#" Value="public string Procedure { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Procedure" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlException.Procedure" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Procedure As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ Procedure { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Procedure : string" Usage="System.Data.SqlClient.SqlException.Procedure" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>エラーを生成したストアド プロシージャまたはリモート プロシージャ コール (RPC) の名前を取得します。</summary>
+        <value>ストアド プロシージャまたは RPC の名前。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ これは、 <xref:System.Data.SqlClient.SqlError.Procedure%2A> <xref:System.Data.SqlClient.SqlException.Errors%2A>プロパティの最初<xref:System.Data.SqlClient.SqlError>ののプロパティのラッパーです。  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.SqlClient.SqlError> 、各<xref:System.Data.SqlClient.SqlErrorCollection>をコレクション内に表示します。  
+  
+ [!code-csharp[Classic WebData SqlException.State Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData SqlException.State Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Data.SqlClient.SqlException.Number" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.State" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Class" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Server" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Source" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.LineNumber" />
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">ADO.NET の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Server">
+      <MemberSignature Language="C#" Value="public string Server { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Server" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlException.Server" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Server As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ Server { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Server : string" Usage="System.Data.SqlClient.SqlException.Server" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>エラーを生成した SQL Server インスタンスを実行しているコンピューターの名前を取得します。</summary>
+        <value>SQL Server インスタンスを実行しているコンピューターの名前。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ これは、 <xref:System.Data.SqlClient.SqlError.Server%2A> <xref:System.Data.SqlClient.SqlException.Errors%2A>プロパティの最初<xref:System.Data.SqlClient.SqlError>ののプロパティのラッパーです。  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.SqlClient.SqlError> 、各<xref:System.Data.SqlClient.SqlErrorCollection>をコレクション内に表示します。  
+  
+ [!code-csharp[Classic WebData SqlException.State Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData SqlException.State Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Data.SqlClient.SqlException.Number" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.State" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Source" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Class" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Procedure" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.LineNumber" />
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">ADO.NET の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Source">
+      <MemberSignature Language="C#" Value="public override string Source { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Source" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlException.Source" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property Source As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ Source { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Source : string" Usage="System.Data.SqlClient.SqlException.Source" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>エラーを生成したプロバイダーの名前を取得します。</summary>
+        <value>エラーを生成したプロバイダーの名前。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ これは、 <xref:System.Data.SqlClient.SqlError.Source%2A> <xref:System.Data.SqlClient.SqlException.Errors%2A>プロパティの最初<xref:System.Data.SqlClient.SqlError>ののプロパティのラッパーです。  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.SqlClient.SqlError> 、各<xref:System.Data.SqlClient.SqlErrorCollection>をコレクション内に表示します。  
+  
+ [!code-csharp[Classic WebData SqlException.State Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData SqlException.State Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Data.SqlClient.SqlException.Number" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.State" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Class" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Server" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Procedure" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.LineNumber" />
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">ADO.NET の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="State">
+      <MemberSignature Language="C#" Value="public byte State { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance unsigned int8 State" />
+      <MemberSignature Language="DocId" Value="P:System.Data.SqlClient.SqlException.State" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property State As Byte" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Byte State { System::Byte get(); };" />
+      <MemberSignature Language="F#" Value="member this.State : byte" Usage="System.Data.SqlClient.SqlException.State" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>エラー、警告、または "データがありません" というメッセージを表す、数字によるエラー コードを SQL Server から取得します。 これらの値のデコード方法について詳しくは、<see href="/sql/relational-databases/errors-events/database-engine-events-and-errors">データベース エンジンのイベントとエラー</see>に関するページをご覧ください。</summary>
+        <value>エラー コードを表す数字。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ これは、 <xref:System.Data.SqlClient.SqlError.State%2A> <xref:System.Data.SqlClient.SqlException.Errors%2A>プロパティの最初<xref:System.Data.SqlClient.SqlError>ののプロパティのラッパーです。  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.SqlClient.SqlError> 、各<xref:System.Data.SqlClient.SqlErrorCollection>をコレクション内に表示します。  
+  
+ [!code-csharp[Classic WebData SqlException.State Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData SqlException.State Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlException.State Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Data.SqlClient.SqlException.Number" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Class" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Source" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Server" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.Procedure" />
+        <altmember cref="P:System.Data.SqlClient.SqlException.LineNumber" />
+        <related type="Article" href="~/docs/framework/data/adonet/ado-net-overview.md">ADO.NET の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public override string ToString ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string ToString() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.SqlClient.SqlException.ToString" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function ToString () As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::String ^ ToString();" />
+      <MemberSignature Language="F#" Value="override this.ToString : unit -&gt; string" Usage="sqlException.ToString " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>現在の <see cref="T:System.Data.SqlClient.SqlException" /> オブジェクトを表し、クライアント接続 ID を含む文字列を返します (詳細については、 <see cref="P:System.Data.SqlClient.SqlException.ClientConnectionId" /> を参照してください)。</summary>
+        <returns>現在の <see cref="T:System.Data.SqlClient.SqlException" /> オブジェクトを表す文字列<see cref="T:System.String" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ 次C#の例では、有効なサーバーであるが存在しないデータベースに接続し<xref:System.Data.SqlClient.SqlException>ようとすると、クライアント接続 ID を含むが発生します。  
+  
+```csharp  
+using System.Data.SqlClient;  
+using System;  
+  
+public class A {  
+   public static void Main() {  
+      SqlConnection connection = new SqlConnection();  
+      connection.ConnectionString = "Data Source=a_valid_server;Initial Catalog=Northwinda;Integrated Security=true";  
+      try {  
+         connection.Open();  
+      }  
+      catch (SqlException p) {  
+         Console.WriteLine("{0}", p.ClientConnectionId);  
+         Console.WriteLine("{0}", p.ToString());  
+      }  
+      connection.Close();  
+   }  
+}  
+```  
+  
+ 次の Visual Basic サンプルは、機能的には前のC#() サンプルと同等です。  
+  
+```vb  
+Imports System.Data.SqlClient  
+Imports System  
+  
+Module Module1  
+  
+    Sub Main()  
+        Dim connection As New SqlConnection()  
+        connection.ConnectionString = "Data Source=a_valid_server;Initial Catalog=Northwinda;Integrated Security=true"  
+        Try  
+            connection.Open()  
+        Catch p As SqlException  
+            Console.WriteLine("{0}", p.ClientConnectionId)  
+            Console.WriteLine("{0}", p.ToString())  
+        End Try  
+        connection.Close()  
+    End Sub  
+  
+End Module  
+```  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
