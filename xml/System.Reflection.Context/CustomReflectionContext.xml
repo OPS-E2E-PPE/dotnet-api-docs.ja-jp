@@ -1,0 +1,368 @@
+<Type Name="CustomReflectionContext" FullName="System.Reflection.Context.CustomReflectionContext">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="9e43f354e0b6a5d442e4029130d5e39757891bb1" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70534503" /></Metadata><TypeSignature Language="C#" Value="public abstract class CustomReflectionContext : System.Reflection.ReflectionContext" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit CustomReflectionContext extends System.Reflection.ReflectionContext" />
+  <TypeSignature Language="DocId" Value="T:System.Reflection.Context.CustomReflectionContext" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class CustomReflectionContext&#xA;Inherits ReflectionContext" />
+  <TypeSignature Language="C++ CLI" Value="public ref class CustomReflectionContext abstract : System::Reflection::ReflectionContext" />
+  <TypeSignature Language="F#" Value="type CustomReflectionContext = class&#xA;    inherit ReflectionContext" />
+  <AssemblyInfo>
+    <AssemblyName>System.Reflection.Context</AssemblyName>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.3.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Reflection.ReflectionContext</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>カスタマイズ可能なリフレクション コンテキストを表します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Reflection.Context.CustomReflectionContext>リフレクションオブジェクトからカスタム属性を追加または削除したり、リフレクションモデル全体を再実装せずに、これらのオブジェクトにダミープロパティを追加したりする方法を提供します。 既定<xref:System.Reflection.Context.CustomReflectionContext>では、変更を加えずにリフレクションオブジェクトをラップするだけですが、関連するメソッドをサブクラス化してオーバーライドすることによって、リフレクションされたパラメーターまたはメンバーに適用される属性を追加、削除、または変更したり、新しいプロパティをに追加したりできます。リフレクションされた型。  
+  
+ たとえば、コードがファクトリメソッドに特定の属性を適用するという規則に従うものの、属性のないサードパーティコードを操作する必要があるとします。 を使用<xref:System.Reflection.Context.CustomReflectionContext>すると、属性を持つ必要があるオブジェクトを識別するためのルールを指定したり、コードからそれらの属性を表示するときにオブジェクトを指定したりすることができます。  
+  
+ を効果的<xref:System.Reflection.Context.CustomReflectionContext>に使用するには、リフレクションされたオブジェクトを使用するコードが、リフレクションコンテキストを指定するという概念をサポートする必要があります。これは、リフレクションされたすべてのオブジェクトがランタイムリフレクションコンテキストに関連付けられていることを前提としている .NET Framework の多くのリフレクションメソッドには<xref:System.Reflection.ReflectionContext> 、この目的のためのパラメーターが用意されています。  
+  
+ リフレクションされたパラメーターまたはメンバーに適用される属性を変更する<xref:System.Reflection.Context.CustomReflectionContext.GetCustomAttributes%28System.Reflection.ParameterInfo%2CSystem.Collections.Generic.IEnumerable%7BSystem.Object%7D%29>に<xref:System.Reflection.Context.CustomReflectionContext.GetCustomAttributes%28System.Reflection.MemberInfo%2CSystem.Collections.Generic.IEnumerable%7BSystem.Object%7D%29>は、メソッドまたはメソッドをオーバーライドします。 これらのメソッドは、反映されたオブジェクトと現在のリフレクションコンテキストの属性のリストを受け取り、カスタムリフレクションコンテキストの下にある属性の一覧を返します。  
+  
+> [!WARNING]
+>  <xref:System.Reflection.Context.CustomReflectionContext>メソッド<xref:System.Reflection.MemberInfo.GetCustomAttributes%2A>は、指定さ<xref:System.Reflection.MemberInfo>れたまたは<xref:System.Reflection.ParameterInfo>インスタンスでメソッドを呼び出すことによって、リフレクションされたオブジェクトまたはメソッドの属性`declaredAttributes`のリストに直接アクセスすることはできません。代わりに、パラメーターとして渡されるリストを使用する必要があります。メソッドの<xref:System.Reflection.Context.CustomReflectionContext.GetCustomAttributes%2A>オーバーロードにします。  
+  
+ リフレクションされた型にプロパティを追加する<xref:System.Reflection.Context.CustomReflectionContext.AddProperties%2A>には、メソッドをオーバーライドします。 メソッドは、リフレクションされた型を指定するパラメーターを受け取り、追加のプロパティのリストを返します。 返されるプロパティオブジェクト<xref:System.Reflection.Context.CustomReflectionContext.CreateProperty%2A>を作成するには、メソッドを使用する必要があります。 プロパティアクセサーとして機能するプロパティを作成するときにデリゲートを指定できます。また、アクセサーのいずれかを省略して、読み取り専用または書き込み専用のプロパティを作成することもできます。 このようなダミープロパティには、メタデータまたは共通中間言語 (CIL) のバッキングがありません。  
+  
+> [!WARNING]
+>  リフレクションコンテキストを使用する場合、リフレクションされたオブジェクト間の等価性に注意する必要があります。これは、オブジェクトが複数のコンテキストで同じリフレクションオブジェクトを表す可能性があるためです。 メソッドを使用し<xref:System.Reflection.Context.CustomReflectionContext.MapType%2A>て、リフレクションされたオブジェクトの特定のリフレクションコンテキストのバージョンを取得できます。  
+  
+> [!WARNING]
+>  オブジェクト<xref:System.Reflection.Context.CustomReflectionContext>は、 <xref:System.Reflection.MemberInfo.GetCustomAttributes%2A>メソッドによって取得された属性など、特定のリフレクションオブジェクトによって返される属性を変更します。 <xref:System.Reflection.MemberInfo.GetCustomAttributesData%2A>メソッドによって返されるカスタム属性データは変更されません。カスタムリフレクションコンテキストを使用する場合は、これら2つのリストが一致しません。  
+  
+   
+  
+## Examples  
+ 次の例は、サブクラス<xref:System.Reflection.Context.CustomReflectionContext>を使用して、名前が "to" で始まる特定の型のすべてのメンバーにカスタム属性を追加する方法を示しています。 このコードを実行するには、空のコンソールプロジェクトに貼り付けて、必ず参照を含めてください。  
+  
+ [!code-csharp[System.Reflection.Context.CustomReflectionContext#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.reflection.context.customreflectioncontext/cs/program.cs#1)]  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Reflection.Context.CustomReflectionContext" /> クラスの新しいインスタンスを初期化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected CustomReflectionContext ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Reflection.Context.CustomReflectionContext.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; CustomReflectionContext();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Reflection.Context.CustomReflectionContext" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected CustomReflectionContext (System.Reflection.ReflectionContext source);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor(class System.Reflection.ReflectionContext source) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Reflection.Context.CustomReflectionContext.#ctor(System.Reflection.ReflectionContext)" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New (source As ReflectionContext)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; CustomReflectionContext(System::Reflection::ReflectionContext ^ source);" />
+      <MemberSignature Language="F#" Value="new System.Reflection.Context.CustomReflectionContext : System.Reflection.ReflectionContext -&gt; System.Reflection.Context.CustomReflectionContext" Usage="new System.Reflection.Context.CustomReflectionContext source" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="source" Type="System.Reflection.ReflectionContext" />
+      </Parameters>
+      <Docs>
+        <param name="source">ベースとして使用するリフレクション コンテキスト。</param>
+        <summary>指定したリフレクション コンテキストを使用して、<see cref="T:System.Reflection.Context.CustomReflectionContext" /> クラスの新しいインスタンスをベースとして初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddProperties">
+      <MemberSignature Language="C#" Value="protected virtual System.Collections.Generic.IEnumerable&lt;System.Reflection.PropertyInfo&gt; AddProperties (Type type);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance class System.Collections.Generic.IEnumerable`1&lt;class System.Reflection.PropertyInfo&gt; AddProperties(class System.Type type) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Reflection.Context.CustomReflectionContext.AddProperties(System.Type)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual System::Collections::Generic::IEnumerable&lt;System::Reflection::PropertyInfo ^&gt; ^ AddProperties(Type ^ type);" />
+      <MemberSignature Language="F#" Value="abstract member AddProperties : Type -&gt; seq&lt;System.Reflection.PropertyInfo&gt;&#xA;override this.AddProperties : Type -&gt; seq&lt;System.Reflection.PropertyInfo&gt;" Usage="customReflectionContext.AddProperties type" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.6">
+          <AttributeName>System.Runtime.CompilerServices.IteratorStateMachine(typeof(System.Reflection.Context.CustomReflectionContext/&lt;AddProperties&gt;d__1))</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Runtime.CompilerServices.IteratorStateMachine(typeof(System.Reflection.Context.CustomReflectionContext/&lt;AddProperties&gt;d__8))</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerable&lt;System.Reflection.PropertyInfo&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="type" Type="System.Type" />
+      </Parameters>
+      <Docs>
+        <param name="type">プロパティを追加した後の型。</param>
+        <summary>派生クラスでオーバーライドされると、このリフレクション コンテキストで表されるように、指定された型の追加のプロパティのコレクションを提供します。</summary>
+        <returns>指定した型の追加プロパティのコレクション。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 特定の型に追加するプロパティを指定するには、このメソッドをオーバーライドします。 プロパティを作成するには、 <xref:System.Reflection.Context.CustomReflectionContext.CreateProperty%2A>メソッドを使用します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="CreateProperty">
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="M:System.Reflection.Context.CustomReflectionContext.AddProperties(System.Type)" /> メソッドの指定に従って、型に追加するプロパティを表すオブジェクトを作成します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="CreateProperty">
+      <MemberSignature Language="C#" Value="protected System.Reflection.PropertyInfo CreateProperty (Type propertyType, string name, Func&lt;object,object&gt; getter, Action&lt;object,object&gt; setter);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig instance class System.Reflection.PropertyInfo CreateProperty(class System.Type propertyType, string name, class System.Func`2&lt;object, object&gt; getter, class System.Action`2&lt;object, object&gt; setter) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Reflection.Context.CustomReflectionContext.CreateProperty(System.Type,System.String,System.Func{System.Object,System.Object},System.Action{System.Object,System.Object})" />
+      <MemberSignature Language="VB.NET" Value="Protected Function CreateProperty (propertyType As Type, name As String, getter As Func(Of Object, Object), setter As Action(Of Object, Object)) As PropertyInfo" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; System::Reflection::PropertyInfo ^ CreateProperty(Type ^ propertyType, System::String ^ name, Func&lt;System::Object ^, System::Object ^&gt; ^ getter, Action&lt;System::Object ^, System::Object ^&gt; ^ setter);" />
+      <MemberSignature Language="F#" Value="member this.CreateProperty : Type * string * Func&lt;obj, obj&gt; * Action&lt;obj, obj&gt; -&gt; System.Reflection.PropertyInfo" Usage="customReflectionContext.CreateProperty (propertyType, name, getter, setter)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Reflection.PropertyInfo</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="propertyType" Type="System.Type" />
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="getter" Type="System.Func&lt;System.Object,System.Object&gt;" />
+        <Parameter Name="setter" Type="System.Action&lt;System.Object,System.Object&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="propertyType">作成するプロパティの型。</param>
+        <param name="name">作成するプロパティの名前。</param>
+        <param name="getter">プロパティの <see langword="get" /> アクセサーを表すオブジェクト。</param>
+        <param name="setter">プロパティの <see langword="set" /> アクセサーを表すオブジェクト。</param>
+        <summary><see cref="M:System.Reflection.Context.CustomReflectionContext.AddProperties(System.Type)" /> メソッドで使用される、型に追加するプロパティを表すオブジェクトを作成します。</summary>
+        <returns>プロパティを表すオブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドによって返されるオブジェクトは完全<xref:System.Reflection.PropertyInfo>なオブジェクトではなく、 <xref:System.Reflection.Context.CustomReflectionContext.AddProperties%2A>メソッドのコンテキストでのみ使用する必要があります。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CreateProperty">
+      <MemberSignature Language="C#" Value="protected System.Reflection.PropertyInfo CreateProperty (Type propertyType, string name, Func&lt;object,object&gt; getter, Action&lt;object,object&gt; setter, System.Collections.Generic.IEnumerable&lt;Attribute&gt; propertyCustomAttributes, System.Collections.Generic.IEnumerable&lt;Attribute&gt; getterCustomAttributes, System.Collections.Generic.IEnumerable&lt;Attribute&gt; setterCustomAttributes);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig instance class System.Reflection.PropertyInfo CreateProperty(class System.Type propertyType, string name, class System.Func`2&lt;object, object&gt; getter, class System.Action`2&lt;object, object&gt; setter, class System.Collections.Generic.IEnumerable`1&lt;class System.Attribute&gt; propertyCustomAttributes, class System.Collections.Generic.IEnumerable`1&lt;class System.Attribute&gt; getterCustomAttributes, class System.Collections.Generic.IEnumerable`1&lt;class System.Attribute&gt; setterCustomAttributes) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Reflection.Context.CustomReflectionContext.CreateProperty(System.Type,System.String,System.Func{System.Object,System.Object},System.Action{System.Object,System.Object},System.Collections.Generic.IEnumerable{System.Attribute},System.Collections.Generic.IEnumerable{System.Attribute},System.Collections.Generic.IEnumerable{System.Attribute})" />
+      <MemberSignature Language="VB.NET" Value="Protected Function CreateProperty (propertyType As Type, name As String, getter As Func(Of Object, Object), setter As Action(Of Object, Object), propertyCustomAttributes As IEnumerable(Of Attribute), getterCustomAttributes As IEnumerable(Of Attribute), setterCustomAttributes As IEnumerable(Of Attribute)) As PropertyInfo" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; System::Reflection::PropertyInfo ^ CreateProperty(Type ^ propertyType, System::String ^ name, Func&lt;System::Object ^, System::Object ^&gt; ^ getter, Action&lt;System::Object ^, System::Object ^&gt; ^ setter, System::Collections::Generic::IEnumerable&lt;Attribute ^&gt; ^ propertyCustomAttributes, System::Collections::Generic::IEnumerable&lt;Attribute ^&gt; ^ getterCustomAttributes, System::Collections::Generic::IEnumerable&lt;Attribute ^&gt; ^ setterCustomAttributes);" />
+      <MemberSignature Language="F#" Value="member this.CreateProperty : Type * string * Func&lt;obj, obj&gt; * Action&lt;obj, obj&gt; * seq&lt;Attribute&gt; * seq&lt;Attribute&gt; * seq&lt;Attribute&gt; -&gt; System.Reflection.PropertyInfo" Usage="customReflectionContext.CreateProperty (propertyType, name, getter, setter, propertyCustomAttributes, getterCustomAttributes, setterCustomAttributes)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Reflection.PropertyInfo</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="propertyType" Type="System.Type" />
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="getter" Type="System.Func&lt;System.Object,System.Object&gt;" />
+        <Parameter Name="setter" Type="System.Action&lt;System.Object,System.Object&gt;" />
+        <Parameter Name="propertyCustomAttributes" Type="System.Collections.Generic.IEnumerable&lt;System.Attribute&gt;" />
+        <Parameter Name="getterCustomAttributes" Type="System.Collections.Generic.IEnumerable&lt;System.Attribute&gt;" />
+        <Parameter Name="setterCustomAttributes" Type="System.Collections.Generic.IEnumerable&lt;System.Attribute&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="propertyType">作成するプロパティの型。</param>
+        <param name="name">作成するプロパティの名前。</param>
+        <param name="getter">プロパティの <see langword="get" /> アクセサーを表すオブジェクト。</param>
+        <param name="setter">プロパティの <see langword="set" /> アクセサーを表すオブジェクト。</param>
+        <param name="propertyCustomAttributes">プロパティに適用するカスタム属性のコレクション。</param>
+        <param name="getterCustomAttributes">プロパティの <see langword="get" /> アクセサーに適用するカスタム属性のコレクション。</param>
+        <param name="setterCustomAttributes">プロパティの <see langword="set" /> アクセサーに適用するカスタム属性のコレクション。</param>
+        <summary><see cref="M:System.Reflection.Context.CustomReflectionContext.AddProperties(System.Type)" /> メソッドで使用される、指定したカスタム属性を使用して、型に追加するプロパティを表すオブジェクトを作成します。</summary>
+        <returns>プロパティを表すオブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドによって返されるオブジェクトは完全<xref:System.Reflection.PropertyInfo>なオブジェクトではなく、 <xref:System.Reflection.Context.CustomReflectionContext.AddProperties%2A>メソッドのコンテキストでのみ使用する必要があります。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="GetCustomAttributes">
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>派生クラスでオーバーライドされると、このリフレクション コンテキストで表されるように、指定されたオブジェクトのカスタム属性の変更されたコレクションを提供します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="GetCustomAttributes">
+      <MemberSignature Language="C#" Value="protected virtual System.Collections.Generic.IEnumerable&lt;object&gt; GetCustomAttributes (System.Reflection.MemberInfo member, System.Collections.Generic.IEnumerable&lt;object&gt; declaredAttributes);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance class System.Collections.Generic.IEnumerable`1&lt;object&gt; GetCustomAttributes(class System.Reflection.MemberInfo member, class System.Collections.Generic.IEnumerable`1&lt;object&gt; declaredAttributes) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Reflection.Context.CustomReflectionContext.GetCustomAttributes(System.Reflection.MemberInfo,System.Collections.Generic.IEnumerable{System.Object})" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Function GetCustomAttributes (member As MemberInfo, declaredAttributes As IEnumerable(Of Object)) As IEnumerable(Of Object)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual System::Collections::Generic::IEnumerable&lt;System::Object ^&gt; ^ GetCustomAttributes(System::Reflection::MemberInfo ^ member, System::Collections::Generic::IEnumerable&lt;System::Object ^&gt; ^ declaredAttributes);" />
+      <MemberSignature Language="F#" Value="abstract member GetCustomAttributes : System.Reflection.MemberInfo * seq&lt;obj&gt; -&gt; seq&lt;obj&gt;&#xA;override this.GetCustomAttributes : System.Reflection.MemberInfo * seq&lt;obj&gt; -&gt; seq&lt;obj&gt;" Usage="customReflectionContext.GetCustomAttributes (member, declaredAttributes)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerable&lt;System.Object&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="member" Type="System.Reflection.MemberInfo" />
+        <Parameter Name="declaredAttributes" Type="System.Collections.Generic.IEnumerable&lt;System.Object&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="member">カスタム属性を返す対象のメンバー。</param>
+        <param name="declaredAttributes">現在のコンテキストにあるメンバーの属性のコレクション。</param>
+        <summary>派生クラスでオーバーライドされると、このリフレクション コンテキストで表されるように、指定されたメンバーのカスタム属性の一覧を提供します。</summary>
+        <returns>このリフレクション コンテキストの指定されたメンバーのカスタム属性を表すコレクション。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetCustomAttributes">
+      <MemberSignature Language="C#" Value="protected virtual System.Collections.Generic.IEnumerable&lt;object&gt; GetCustomAttributes (System.Reflection.ParameterInfo parameter, System.Collections.Generic.IEnumerable&lt;object&gt; declaredAttributes);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance class System.Collections.Generic.IEnumerable`1&lt;object&gt; GetCustomAttributes(class System.Reflection.ParameterInfo parameter, class System.Collections.Generic.IEnumerable`1&lt;object&gt; declaredAttributes) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Reflection.Context.CustomReflectionContext.GetCustomAttributes(System.Reflection.ParameterInfo,System.Collections.Generic.IEnumerable{System.Object})" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Function GetCustomAttributes (parameter As ParameterInfo, declaredAttributes As IEnumerable(Of Object)) As IEnumerable(Of Object)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual System::Collections::Generic::IEnumerable&lt;System::Object ^&gt; ^ GetCustomAttributes(System::Reflection::ParameterInfo ^ parameter, System::Collections::Generic::IEnumerable&lt;System::Object ^&gt; ^ declaredAttributes);" />
+      <MemberSignature Language="F#" Value="abstract member GetCustomAttributes : System.Reflection.ParameterInfo * seq&lt;obj&gt; -&gt; seq&lt;obj&gt;&#xA;override this.GetCustomAttributes : System.Reflection.ParameterInfo * seq&lt;obj&gt; -&gt; seq&lt;obj&gt;" Usage="customReflectionContext.GetCustomAttributes (parameter, declaredAttributes)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerable&lt;System.Object&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="parameter" Type="System.Reflection.ParameterInfo" />
+        <Parameter Name="declaredAttributes" Type="System.Collections.Generic.IEnumerable&lt;System.Object&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="parameter">カスタム属性が返されるパラメーター。</param>
+        <param name="declaredAttributes">現在のコンテキストにあるパラメーターの属性のコレクション。</param>
+        <summary>派生クラスでオーバーライドされると、このリフレクション コンテキストで表されるように、指定されたパラメーターのカスタム属性の一覧を提供します。</summary>
+        <returns>このリフレクション コンテキストの指定されたパラメーターのカスタム属性を表すコレクション。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MapAssembly">
+      <MemberSignature Language="C#" Value="public override System.Reflection.Assembly MapAssembly (System.Reflection.Assembly assembly);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Reflection.Assembly MapAssembly(class System.Reflection.Assembly assembly) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Reflection.Context.CustomReflectionContext.MapAssembly(System.Reflection.Assembly)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Reflection::Assembly ^ MapAssembly(System::Reflection::Assembly ^ assembly);" />
+      <MemberSignature Language="F#" Value="override this.MapAssembly : System.Reflection.Assembly -&gt; System.Reflection.Assembly" Usage="customReflectionContext.MapAssembly assembly" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Reflection.Assembly</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="assembly" Type="System.Reflection.Assembly" />
+      </Parameters>
+      <Docs>
+        <param name="assembly">このコンテキストで表すアセンブリの外部表現。</param>
+        <summary>このリフレクション コンテキストで、別のリフレクション コンテキストからのオブジェクトによって表されるアセンブリの表現を取得します。</summary>
+        <returns>このリフレクション コンテキストのアセンブリの表現。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MapType">
+      <MemberSignature Language="C#" Value="public override System.Reflection.TypeInfo MapType (System.Reflection.TypeInfo type);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Reflection.TypeInfo MapType(class System.Reflection.TypeInfo type) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Reflection.Context.CustomReflectionContext.MapType(System.Reflection.TypeInfo)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function MapType (type As TypeInfo) As TypeInfo" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Reflection::TypeInfo ^ MapType(System::Reflection::TypeInfo ^ type);" />
+      <MemberSignature Language="F#" Value="override this.MapType : System.Reflection.TypeInfo -&gt; System.Reflection.TypeInfo" Usage="customReflectionContext.MapType type" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Reflection.Context</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.3.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Reflection.TypeInfo</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="type" Type="System.Reflection.TypeInfo" />
+      </Parameters>
+      <Docs>
+        <param name="type">このコンテキストで表す型の外部表現。</param>
+        <summary>このリフレクション コンテキストで、別のリフレクション コンテキストからのオブジェクトによって表される型の表現を取得します。</summary>
+        <returns>このリフレクション コンテキストの型の表現。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
