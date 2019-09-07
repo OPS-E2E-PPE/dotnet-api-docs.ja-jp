@@ -1,0 +1,246 @@
+<Type Name="MethodExpression" FullName="System.Web.UI.WebControls.Expressions.MethodExpression">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="18f5a5cc687c76ffbdde27195ed9789b21921d2f" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70510853" /></Metadata><TypeSignature Language="C#" Value="public class MethodExpression : System.Web.UI.WebControls.Expressions.ParameterDataSourceExpression" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit MethodExpression extends System.Web.UI.WebControls.Expressions.ParameterDataSourceExpression" />
+  <TypeSignature Language="DocId" Value="T:System.Web.UI.WebControls.Expressions.MethodExpression" />
+  <TypeSignature Language="VB.NET" Value="Public Class MethodExpression&#xA;Inherits ParameterDataSourceExpression" />
+  <TypeSignature Language="C++ CLI" Value="public ref class MethodExpression : System::Web::UI::WebControls::Expressions::ParameterDataSourceExpression" />
+  <TypeSignature Language="F#" Value="type MethodExpression = class&#xA;    inherit ParameterDataSourceExpression" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web.Extensions</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Web.UI.WebControls.Expressions.ParameterDataSourceExpression</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>メソッドで定義されているカスタム LINQ クエリを指定する方法を提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コントロール<xref:System.Web.UI.WebControls.QueryExtender>は、カスタム LINQ クエリをサポートします。 メソッドでカスタム LINQ クエリを定義し、 <xref:System.Web.UI.WebControls.Expressions.MethodExpression>フィルターオプションを使用して<xref:System.Web.UI.WebControls.QueryExtender>コントロールでクエリを呼び出すことができます。  
+  
+ カスタム LINQ クエリを含むメソッドは、次の条件を満たしている必要があります。  
+  
+-   メソッドは静的である必要`Shared`があります (Visual Basic)。 最初のパラメーターは、オブジェクト<xref:System.Linq.IQueryable%601>また<xref:System.Collections.Generic.IEnumerable%601>はオブジェクトである必要があります。 メソッドは複数のパラメーターを持つことができます。  
+  
+-   戻り値は、クエリ対象<xref:System.Linq.IQueryable%601>の<xref:System.Collections.Generic.IEnumerable%601>型または型を変更することはできません。  
+  
+ は<xref:System.Web.UI.WebControls.Expressions.MethodExpression> 、次の順序でクエリを含むメソッドを検索します。  
+  
+1.  コントロールでプロパティが指定されている場合<xref:System.Web.UI.WebControls.Expressions.MethodExpression> 、オブジェクトは指定された型のメソッドを検索します。 <xref:System.Web.UI.WebControls.Expressions.MethodExpression.TypeName%2A> <xref:System.Web.UI.WebControls.QueryExtender>  
+  
+2.  データソースがを実装<xref:System.Web.DynamicData.IDynamicDataSource>している場合、メソッドはコンテキスト型 (<xref:System.Data.Linq.DataContext>または<xref:System.Data.Objects.ObjectContext>オブジェクト) でメソッドを検索します。  
+  
+3.  メソッドは、テンプレートコントロール、ページの基本クラス、またはユーザーコントロールでメソッドを検索します。  
+  
+ クラスはクラスに<xref:System.Web.UI.WebControls.Expressions.CustomExpression>似ていますが、メソッドの呼び出しに応答してメソッド式が実行され、イベントに応答してカスタム式が実行される点が異なります。 <xref:System.Web.UI.WebControls.Expressions.MethodExpression>  
+  
+   
+  
+## Examples  
+ 次の例では、AdventureWorks データベースの Products テーブルの ListPrice フィールドで、定価が400以上の製品を検索する方法を示します。 この例では、ページコード内のメソッドでカスタム LINQ クエリを作成する方法と、 <xref:System.Web.UI.WebControls.QueryExtender>コントロールのメソッドを呼び出す方法を示します。  
+  
+```vb  
+Public Shared Function FilterStandardPrice(ByVal query As _  
+        IQueryable(Of Product)) As IQueryable(Of Product)  
+        Return From p In query _  
+            Where p.ListPrice >= 400 _  
+            Select p  
+    End Function  
+```  
+  
+```csharp  
+public static IQueryable<Product>   
+        FilterStandardPrice(IQueryable<Product> query)  
+{  
+        return from p in query  
+                  where p.ListPrice >= 400  
+                  select p;  
+  
+    }  
+```  
+  
+ 次の例は、ページでメソッドを呼び出す方法を示しています。  
+  
+```  
+<html>  
+<head runat="server">  
+  <title>Custom Filter</title>  
+</head>  
+<body>  
+  <form id="form1" runat="server">  
+    <asp:LinqDataSource ID="LinqDataSource1" runat="server"   
+        ContextTypeName="AdventureworksDataContext" EntityTypeName=""   
+        TableName="Products">  
+    </asp:LinqDataSource>  
+  
+    <asp:QueryExtender ID="QueryExtender1" runat="server"   
+        TargetControlID="LinqDataSource1">  
+      <asp:MethodExpression MethodName="FilterStandardPrice" >  
+      </asp:MethodExpression>  
+    </asp:QueryExtender>  
+  
+    <asp:GridView ID="GridView1" runat="server"   
+        DataSourceID="LinqDataSource1"   
+        DataKeyNames="ProductID"   
+    </asp:GridView>  
+  </form>  
+</body>  
+</html>  
+```  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public MethodExpression ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.Expressions.MethodExpression.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; MethodExpression();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Web.UI.WebControls.Expressions.MethodExpression" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetQueryable">
+      <MemberSignature Language="C#" Value="public override System.Linq.IQueryable GetQueryable (System.Linq.IQueryable source);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Linq.IQueryable GetQueryable(class System.Linq.IQueryable source) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.Expressions.MethodExpression.GetQueryable(System.Linq.IQueryable)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetQueryable (source As IQueryable) As IQueryable" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Linq::IQueryable ^ GetQueryable(System::Linq::IQueryable ^ source);" />
+      <MemberSignature Language="F#" Value="override this.GetQueryable : System.Linq.IQueryable -&gt; System.Linq.IQueryable" Usage="methodExpression.GetQueryable source" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Linq.IQueryable</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="source" Type="System.Linq.IQueryable" />
+      </Parameters>
+      <Docs>
+        <param name="source">使用するデータ ソース コントロール。</param>
+        <summary>指定された <see cref="T:System.Linq.IQueryable" /> オブジェクトを使用して、式を解決します。</summary>
+        <returns>式の解決に使用された <see cref="T:System.Linq.IQueryable" /> オブジェクトのインスタンス。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException">データ ソース コントロールが <see langword="null" /> です。</exception>
+        <exception cref="T:System.InvalidOperationException">メソッドが見つかりませんでした。  
+  
+または 
+メソッドは静的ではありません。  
+  
+または 
+渡された <see langword="IQueryable&lt;T&gt;" /> オブジェクトの型が変更されました。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="IgnoreIfNotFound">
+      <MemberSignature Language="C#" Value="public bool IgnoreIfNotFound { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IgnoreIfNotFound" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.Expressions.MethodExpression.IgnoreIfNotFound" />
+      <MemberSignature Language="VB.NET" Value="Public Property IgnoreIfNotFound As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IgnoreIfNotFound { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.IgnoreIfNotFound : bool with get, set" Usage="System.Web.UI.WebControls.Expressions.MethodExpression.IgnoreIfNotFound" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>式を無視する必要があるかどうかを示す値を取得または設定します。</summary>
+        <value>式を無視する場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ オブジェクト<xref:System.Web.UI.WebControls.Expressions.MethodExpression>は、特定の場所を検索し、特定の順序で検索することで、クエリを含むメソッドを検索します。 このプロパティをに`false`設定すると、 <xref:System.Web.UI.WebControls.Expressions.CustomExpression>オブジェクトが LINQ を含むメソッドを見つけられなかった場合に例外をスローすることができます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MethodName">
+      <MemberSignature Language="C#" Value="public string MethodName { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string MethodName" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.Expressions.MethodExpression.MethodName" />
+      <MemberSignature Language="VB.NET" Value="Public Property MethodName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ MethodName { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.MethodName : string with get, set" Usage="System.Web.UI.WebControls.Expressions.MethodExpression.MethodName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>カスタム LINQ クエリを含むメソッドの名前を取得または設定します。</summary>
+        <value>カスタム LINQ クエリを含むメソッドの名前。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Web.UI.WebControls.Expressions.MethodExpression>オブジェクトを使用すると、メソッドで定義されているカスタム LINQ クエリを呼び出すことができます。 ページの<xref:System.Web.UI.WebControls.QueryExtender>コントロールでメソッドを指定します。  
+  
+   
+  
+## Examples  
+ 次の例は、 `FilterStandardPrice` <xref:System.Web.UI.WebControls.QueryExtender>コントロールのメソッドを指定する方法を示しています。 カスタム LINQ クエリは、 `FilterStandardPrice`メソッドで定義されています。  
+  
+```  
+<asp:QueryExtender ID="QueryExtender1" runat="server"   
+    TargetControlID="LinqDataSource1">  
+  <asp:MethodExpression MethodName="FilterStandardPrice">  
+  </asp:MethodExpression>  
+  </asp:QueryExtender>  
+```  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TypeName">
+      <MemberSignature Language="C#" Value="public string TypeName { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string TypeName" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.Expressions.MethodExpression.TypeName" />
+      <MemberSignature Language="VB.NET" Value="Public Property TypeName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ TypeName { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.TypeName : string with get, set" Usage="System.Web.UI.WebControls.Expressions.MethodExpression.TypeName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>メソッドにカスタム クエリが含まれているクラスを取得または設定します。</summary>
+        <value>メソッドが属するクラス。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ クラスを使用すると、 <xref:System.Web.UI.WebControls.QueryExtender>コントロールのデータソースにカスタム式を指定できます。 <xref:System.Web.UI.WebControls.Expressions.MethodExpression> <xref:System.Web.UI.WebControls.Expressions.MethodExpression.TypeName%2A>プロパティを使用して、メソッドが属するクラスを指定できます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
