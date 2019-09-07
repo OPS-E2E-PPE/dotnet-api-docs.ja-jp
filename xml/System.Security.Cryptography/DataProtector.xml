@@ -1,0 +1,397 @@
+<Type Name="DataProtector" FullName="System.Security.Cryptography.DataProtector">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="c89e6bca3bb0e347b29f0a1c442d51ebcfc522a7" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70403848" /></Metadata><TypeSignature Language="C#" Value="public abstract class DataProtector" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit DataProtector extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Security.Cryptography.DataProtector" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class DataProtector" />
+  <TypeSignature Language="C++ CLI" Value="public ref class DataProtector abstract" />
+  <TypeSignature Language="F#" Value="type DataProtector = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Security</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary><span data-ttu-id="74c2f-101">データ プロテクターの基本クラスを提供します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-101">Provides the base class for data protectors.</span></span></summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="74c2f-102">このクラスは、格納されているデータの表示や改ざんを防止します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-102">This class protects stored data from viewing and tampering.</span></span> <span data-ttu-id="74c2f-103">保護されたデータへのアクセスは、このクラスのインスタンスを作成し、データの保護に使用された正確な目的の文字列を使用することによって取得されます。</span><span class="sxs-lookup"><span data-stu-id="74c2f-103">The access to the protected data is obtained by creating an instance of this class and using the exact purpose strings that were used to protect the data.</span></span>  <span data-ttu-id="74c2f-104">呼び出し元には、データを保護または保護解除するためのキーは必要ありません。</span><span class="sxs-lookup"><span data-stu-id="74c2f-104">The caller does not need a key to either protect or unprotect the data.</span></span> <span data-ttu-id="74c2f-105">キーは暗号化アルゴリズムによって提供されます。</span><span class="sxs-lookup"><span data-stu-id="74c2f-105">The key is provided by the encryption algorithm.</span></span>  
+  
+ <span data-ttu-id="74c2f-106">派生クラスは、 <xref:System.Security.Cryptography.DataProtector.ProviderProtect%2A> <xref:System.Security.Cryptography.DataProtector>基底クラス<xref:System.Security.Cryptography.DataProtector.Unprotect%2A>がコールバックするメソッドとメソッドをオーバーライドする必要があります。</span><span class="sxs-lookup"><span data-stu-id="74c2f-106">Derived classes must override the <xref:System.Security.Cryptography.DataProtector.ProviderProtect%2A> and <xref:System.Security.Cryptography.DataProtector.Unprotect%2A> methods, which the <xref:System.Security.Cryptography.DataProtector> base class calls back into.</span></span> <span data-ttu-id="74c2f-107">また、 <xref:System.Security.Cryptography.DataProtector.IsReprotectRequired%2A>メソッドをオーバーライドする必要があります。 `true`このメソッドは、アプリケーションが格納されている暗号テキストのデータベースを更新するときに、効率が低下する可能性がある場合に常に返すことができます。</span><span class="sxs-lookup"><span data-stu-id="74c2f-107">They must also override the <xref:System.Security.Cryptography.DataProtector.IsReprotectRequired%2A> method, which can always return `true` with a  potential small loss of efficiency when applications refresh their database of stored cipher text.</span></span> <span data-ttu-id="74c2f-108">派生クラスは、、 <xref:System.Security.Cryptography.DataProtector.ApplicationName%2A> <xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A>、および<xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A>の各プロパティを設定する基底クラスのコンストラクターを呼び出すコンストラクターを提供する必要があります。</span><span class="sxs-lookup"><span data-stu-id="74c2f-108">Derived classes should provide a constructor that calls the base class constructor, which sets the <xref:System.Security.Cryptography.DataProtector.ApplicationName%2A>, <xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A>, and <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A> properties.</span></span>  
+  
+   
+  
+## Examples  
+ <span data-ttu-id="74c2f-109">次の例では、追加のエントロピのオプションで保護クラスを使用するデータ保護機能を作成する方法を示します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-109">The following example demonstrates how to create a data protector that uses a protection class with an option for extra entropy.</span></span> <span data-ttu-id="74c2f-110">既定では、 <xref:System.Security.Cryptography.DataProtector>クラスは、暗号化するデータに対して目的のプロパティのハッシュを付加します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-110">By default, the <xref:System.Security.Cryptography.DataProtector> class prepends the hash of the purpose properties to the data to be encrypted.</span></span> <span data-ttu-id="74c2f-111">追加のエントロピオプションを使用してデータプロテクターを呼び出すときに、その機能を無効にして、ハッシュ化された目的を余分なエントロピとして使用することができます。</span><span class="sxs-lookup"><span data-stu-id="74c2f-111">You can turn that functionality off and use the hashed purpose as extra entropy when calling a data protector with an extra entropy option.</span></span>  
+  
+ [!code-csharp[Cryptography.DataProtector#1](~/samples/snippets/csharp/VS_Snippets_CLR/cryptography.dataprotector/cs/class1.cs#1)]
+ [!code-vb[Cryptography.DataProtector#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/cryptography.dataprotector/vb/class1.vb#1)]  
+  
+ <span data-ttu-id="74c2f-112">クラスの機能 <xref:System.Security.Cryptography.DataProtector.PrependHashedPurposeToPlaintext%2A> を使用する単純なデータプロテクターの例を次に示します。 <xref:System.Security.Cryptography.DataProtector></span><span class="sxs-lookup"><span data-stu-id="74c2f-112">The following example demonstrates a simple data protector that uses the <xref:System.Security.Cryptography.DataProtector.PrependHashedPurposeToPlaintext%2A> functionality of the <xref:System.Security.Cryptography.DataProtector> class.</span></span>  
+  
+ [!code-csharp[Cryptography.MemoryProtector#1](~/samples/snippets/csharp/VS_Snippets_CLR/cryptography.memoryprotector/cs/class1.cs#1)]
+ [!code-vb[Cryptography.MemoryProtector#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/cryptography.memoryprotector/vb/class1.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected DataProtector (string applicationName, string primaryPurpose, string[] specificPurposes);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor(string applicationName, string primaryPurpose, string[] specificPurposes) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.DataProtector.#ctor(System.String,System.String,System.String[])" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New (applicationName As String, primaryPurpose As String, specificPurposes As String())" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; DataProtector(System::String ^ applicationName, System::String ^ primaryPurpose, cli::array &lt;System::String ^&gt; ^ specificPurposes);" />
+      <MemberSignature Language="F#" Value="new System.Security.Cryptography.DataProtector : string * string * string[] -&gt; System.Security.Cryptography.DataProtector" Usage="new System.Security.Cryptography.DataProtector (applicationName, primaryPurpose, specificPurposes)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="applicationName" Type="System.String" />
+        <Parameter Name="primaryPurpose" Type="System.String" />
+        <Parameter Name="specificPurposes" Type="System.String[]" />
+      </Parameters>
+      <Docs>
+        <param name="applicationName"><span data-ttu-id="74c2f-113">アプリケーションの名前。</span><span class="sxs-lookup"><span data-stu-id="74c2f-113">The name of the application.</span></span></param>
+        <param name="primaryPurpose"><span data-ttu-id="74c2f-114">保護されたデータの主な目的。</span><span class="sxs-lookup"><span data-stu-id="74c2f-114">The primary purpose for the protected data.</span></span></param>
+        <param name="specificPurposes"><span data-ttu-id="74c2f-115">保護されたデータの特定の目的。</span><span class="sxs-lookup"><span data-stu-id="74c2f-115">The specific purposes for the protected data.</span></span></param>
+        <summary><span data-ttu-id="74c2f-116">指定したアプリケーション名、主な目的、および特定の目的を使用して、<see cref="T:System.Security.Cryptography.DataProtector" /> クラスの新しいインスタンスを作成します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-116">Creates a new instance of the <see cref="T:System.Security.Cryptography.DataProtector" /> class by using the provided application name, primary purpose, and specific purposes.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="74c2f-117">このコンストラクターは、 <xref:System.Security.Cryptography.DataProtector.ApplicationName%2A> <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A>、、および<xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A>の各プロパティを設定します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-117">This constructor sets the <xref:System.Security.Cryptography.DataProtector.ApplicationName%2A>, <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A>, and <xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A> properties.</span></span> <span data-ttu-id="74c2f-118">これら3つのプロパティを組み合わせて、保護するデータを一意に識別する必要があります。</span><span class="sxs-lookup"><span data-stu-id="74c2f-118">The combination of these three properties must uniquely identify the data you are protecting.</span></span> <span data-ttu-id="74c2f-119">データが一意に識別されない場合は、誤って誤ったデータを読み取ることがあります。または、他のデータを置き換えてしまう可能性があります。</span><span class="sxs-lookup"><span data-stu-id="74c2f-119">If the data is not uniquely identified, you might inadvertently read the wrong data, or other data might be substituted for yours.</span></span> <span data-ttu-id="74c2f-120">プライマリと特定の目的のペアの例としては、"請求書" と請求書番号、"ギフトカード" とギフトカード番号、"パスワード"、および URL 文字列があります。</span><span class="sxs-lookup"><span data-stu-id="74c2f-120">Examples of primary and specific purpose pairs are "invoice" and invoice number, "gift card" and gift card number, "password" and URL string.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><span data-ttu-id="74c2f-121">です。<paramref name="applicationName" /> は空の文字列または <see langword="null" /> です。</span><span class="sxs-lookup"><span data-stu-id="74c2f-121"><paramref name="applicationName" /> is an empty string or <see langword="null" />.</span></span>  
+  
+<span data-ttu-id="74c2f-122">または</span><span class="sxs-lookup"><span data-stu-id="74c2f-122">-or-</span></span> 
+ <span data-ttu-id="74c2f-123">です。<paramref name="primaryPurpose" /> は空の文字列または <see langword="null" /> です。</span><span class="sxs-lookup"><span data-stu-id="74c2f-123"><paramref name="primaryPurpose" /> is an empty string or <see langword="null" />.</span></span>  
+  
+<span data-ttu-id="74c2f-124">または</span><span class="sxs-lookup"><span data-stu-id="74c2f-124">-or-</span></span> 
+ <span data-ttu-id="74c2f-125"><paramref name="specificPurposes" /> に空の文字列または <see langword="null" /> が含まれています。</span><span class="sxs-lookup"><span data-stu-id="74c2f-125"><paramref name="specificPurposes" /> contains an empty string or <see langword="null" />.</span></span></exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ApplicationName">
+      <MemberSignature Language="C#" Value="protected string ApplicationName { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string ApplicationName" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.DataProtector.ApplicationName" />
+      <MemberSignature Language="VB.NET" Value="Protected ReadOnly Property ApplicationName As String" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property System::String ^ ApplicationName { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.ApplicationName : string" Usage="System.Security.Cryptography.DataProtector.ApplicationName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="74c2f-126">アプリケーションの名前を取得します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-126">Gets the name of the application.</span></span></summary>
+        <value><span data-ttu-id="74c2f-127">アプリケーションの名前。</span><span class="sxs-lookup"><span data-stu-id="74c2f-127">The name of the application.</span></span></value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Create">
+      <MemberSignature Language="C#" Value="public static System.Security.Cryptography.DataProtector Create (string providerClass, string applicationName, string primaryPurpose, params string[] specificPurposes);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Security.Cryptography.DataProtector Create(string providerClass, string applicationName, string primaryPurpose, string[] specificPurposes) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.DataProtector.Create(System.String,System.String,System.String,System.String[])" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Create (providerClass As String, applicationName As String, primaryPurpose As String, ParamArray specificPurposes As String()) As DataProtector" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Security::Cryptography::DataProtector ^ Create(System::String ^ providerClass, System::String ^ applicationName, System::String ^ primaryPurpose, ... cli::array &lt;System::String ^&gt; ^ specificPurposes);" />
+      <MemberSignature Language="F#" Value="static member Create : string * string * string * string[] -&gt; System.Security.Cryptography.DataProtector" Usage="System.Security.Cryptography.DataProtector.Create (providerClass, applicationName, primaryPurpose, specificPurposes)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Security.Cryptography.DataProtector</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="providerClass" Type="System.String" />
+        <Parameter Name="applicationName" Type="System.String" />
+        <Parameter Name="primaryPurpose" Type="System.String" />
+        <Parameter Name="specificPurposes" Type="System.String[]">
+          <Attributes>
+            <Attribute FrameworkAlternate="netframework-4.5">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="providerClass"><span data-ttu-id="74c2f-128">データ プロテクターに使用するクラス名。</span><span class="sxs-lookup"><span data-stu-id="74c2f-128">The class name for the data protector.</span></span></param>
+        <param name="applicationName"><span data-ttu-id="74c2f-129">アプリケーションの名前。</span><span class="sxs-lookup"><span data-stu-id="74c2f-129">The name of the application.</span></span></param>
+        <param name="primaryPurpose"><span data-ttu-id="74c2f-130">保護されたデータの主な目的。</span><span class="sxs-lookup"><span data-stu-id="74c2f-130">The primary purpose for the protected data.</span></span></param>
+        <param name="specificPurposes"><span data-ttu-id="74c2f-131">保護されたデータの特定の目的。</span><span class="sxs-lookup"><span data-stu-id="74c2f-131">The specific purposes for the protected data.</span></span></param>
+        <summary><span data-ttu-id="74c2f-132">指定したデータ プロテクターのクラス名、アプリケーション名、主な目的、特定の目的を使用して、データ プロテクターの実装のインスタンスを作成します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-132">Creates an instance of a data protector implementation by using the specified class name of the data protector, the application name, the primary purpose, and the specific purposes.</span></span></summary>
+        <returns><span data-ttu-id="74c2f-133">データ プロテクターの実装オブジェクト。</span><span class="sxs-lookup"><span data-stu-id="74c2f-133">A data protector implementation object.</span></span></returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="74c2f-134"><paramref name="providerClass" /> は <see langword="null" />です。</span><span class="sxs-lookup"><span data-stu-id="74c2f-134"><paramref name="providerClass" /> is <see langword="null" />.</span></span></exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetHashedPurpose">
+      <MemberSignature Language="C#" Value="protected virtual byte[] GetHashedPurpose ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance unsigned int8[] GetHashedPurpose() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.DataProtector.GetHashedPurpose" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Function GetHashedPurpose () As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual cli::array &lt;System::Byte&gt; ^ GetHashedPurpose();" />
+      <MemberSignature Language="F#" Value="abstract member GetHashedPurpose : unit -&gt; byte[]&#xA;override this.GetHashedPurpose : unit -&gt; byte[]" Usage="dataProtector.GetHashedPurpose " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><span data-ttu-id="74c2f-135">コンストラクターで指定されたプロパティ値のハッシュを作成します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-135">Creates a hash of the property values specified by the constructor.</span></span></summary>
+        <returns><span data-ttu-id="74c2f-136"><see cref="P:System.Security.Cryptography.DataProtector.ApplicationName" />、<see cref="P:System.Security.Cryptography.DataProtector.PrimaryPurpose" />、および <see cref="P:System.Security.Cryptography.DataProtector.SpecificPurposes" /> の各プロパティのハッシュを格納するバイトの配列。</span><span class="sxs-lookup"><span data-stu-id="74c2f-136">An array of bytes that contain the hash of the <see cref="P:System.Security.Cryptography.DataProtector.ApplicationName" />, <see cref="P:System.Security.Cryptography.DataProtector.PrimaryPurpose" />, and <see cref="P:System.Security.Cryptography.DataProtector.SpecificPurposes" /> properties.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="74c2f-137"><xref:System.Security.Cryptography.DataProtector.GetHashedPurpose%2A>アプリケーション名のハッシュと完全な目的を計算します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-137"><xref:System.Security.Cryptography.DataProtector.GetHashedPurpose%2A> computes the hash of the application name and the full purpose.</span></span>  <span data-ttu-id="74c2f-138">完全な目的は、すべて<xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A>のプロパティと<xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A>プロパティを連結したものです。</span><span class="sxs-lookup"><span data-stu-id="74c2f-138">The full purpose is a concatenation of all the <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A> and <xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A> properties.</span></span>  <span data-ttu-id="74c2f-139">3つの各部分には長さが付いており、ハッシュを逆にすることができます。</span><span class="sxs-lookup"><span data-stu-id="74c2f-139">Each of the three parts is prefaced with its length so the hash can be reversed.</span></span>  
+  
+   
+  
+## Examples  
+ <span data-ttu-id="74c2f-140">次の例は、 <xref:System.Security.Cryptography.DataProtector.GetHashedPurpose%2A>メソッドを使用して、余分なエントロピとして使用するための目的のプロパティをハッシュする方法を示しています。</span><span class="sxs-lookup"><span data-stu-id="74c2f-140">The following example shows how to use the <xref:System.Security.Cryptography.DataProtector.GetHashedPurpose%2A> method to hash the purpose properties for use as extra entropy.</span></span>  <span data-ttu-id="74c2f-141">これは、 <xref:System.Security.Cryptography.DataProtector>クラスのより大きなコード例の一部です。</span><span class="sxs-lookup"><span data-stu-id="74c2f-141">It is part of a larger code example for the <xref:System.Security.Cryptography.DataProtector> class.</span></span>  
+  
+ [!code-csharp[Cryptography.DataProtector#3](~/samples/snippets/csharp/VS_Snippets_CLR/cryptography.dataprotector/cs/class1.cs#3)]
+ [!code-vb[Cryptography.DataProtector#3](~/samples/snippets/visualbasic/VS_Snippets_CLR/cryptography.dataprotector/vb/class1.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsReprotectRequired">
+      <MemberSignature Language="C#" Value="public abstract bool IsReprotectRequired (byte[] encryptedData);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool IsReprotectRequired(unsigned int8[] encryptedData) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.DataProtector.IsReprotectRequired(System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Function IsReprotectRequired (encryptedData As Byte()) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract bool IsReprotectRequired(cli::array &lt;System::Byte&gt; ^ encryptedData);" />
+      <MemberSignature Language="F#" Value="abstract member IsReprotectRequired : byte[] -&gt; bool" Usage="dataProtector.IsReprotectRequired encryptedData" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="encryptedData" Type="System.Byte[]" />
+      </Parameters>
+      <Docs>
+        <param name="encryptedData"><span data-ttu-id="74c2f-142">評価する暗号化されたデータ。</span><span class="sxs-lookup"><span data-stu-id="74c2f-142">The encrypted data to be evaluated.</span></span></param>
+        <summary><span data-ttu-id="74c2f-143">指定した暗号化データを再び暗号化する必要があるかどうかを判断します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-143">Determines if re-encryption is required for the specified encrypted data.</span></span></summary>
+        <returns><span data-ttu-id="74c2f-144">データを再び暗号化する必要がある場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</span><span class="sxs-lookup"><span data-stu-id="74c2f-144"><see langword="true" /> if the data must be re-encrypted; otherwise, <see langword="false" />.</span></span></returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PrependHashedPurposeToPlaintext">
+      <MemberSignature Language="C#" Value="protected virtual bool PrependHashedPurposeToPlaintext { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool PrependHashedPurposeToPlaintext" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.DataProtector.PrependHashedPurposeToPlaintext" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable ReadOnly Property PrependHashedPurposeToPlaintext As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual property bool PrependHashedPurposeToPlaintext { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.PrependHashedPurposeToPlaintext : bool" Usage="System.Security.Cryptography.DataProtector.PrependHashedPurposeToPlaintext" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="74c2f-145">暗号化前のテキスト配列にハッシュを付加するかどうかを指定します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-145">Specifies whether the hash is prepended to the text array before encryption.</span></span></summary>
+        <value><span data-ttu-id="74c2f-146">常に <see langword="true" />。</span><span class="sxs-lookup"><span data-stu-id="74c2f-146">Always <see langword="true" />.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="74c2f-147">既定では、派生クラスが<xref:System.Security.Cryptography.DataProtector.ApplicationName%2A>、 <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A>、、および<xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A>の各プロパティのハッシュを暗号化の前にプレーンテキストに付加することを前提としており、復号化中にハッシュを確認して検証します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-147">By default, it is assumed that derived classes will prepend the hash of the <xref:System.Security.Cryptography.DataProtector.ApplicationName%2A>, <xref:System.Security.Cryptography.DataProtector.PrimaryPurpose%2A>, and <xref:System.Security.Cryptography.DataProtector.SpecificPurposes%2A> properties to the plain text before encryption, and will check and verify  the hash during decryption.</span></span>  <span data-ttu-id="74c2f-148">派生クラスが、先頭に付加されたデータを (たとえば、オプションのエントロピ値として) 指定しようとしている場合、 `false`このプロパティをオーバーライドしてを返すように設定できます。</span><span class="sxs-lookup"><span data-stu-id="74c2f-148">If a derived class wants to specify the prepended data on its own (for example as an optional entropy value), this property can be overridden and set to return `false`.</span></span>  <span data-ttu-id="74c2f-149">が<xref:System.Security.Cryptography.DataProtector.PrependHashedPurposeToPlaintext%2A> <xref:System.Security.Cryptography.DataProtector.ProviderUnprotect%2A> <xref:System.Security.Cryptography.DataProtector.ProviderProtect%2A>の場合、 <xref:System.Security.Cryptography.DataProtector.Protect%2A>  および <xref:System.Security.Cryptography.DataProtector.Unprotect%2A> はに直接を渡し、バイト配列を変更せずにをオーバーライドします。 `false`</span><span class="sxs-lookup"><span data-stu-id="74c2f-149">If <xref:System.Security.Cryptography.DataProtector.PrependHashedPurposeToPlaintext%2A> is `false`, <xref:System.Security.Cryptography.DataProtector.Protect%2A> and <xref:System.Security.Cryptography.DataProtector.Unprotect%2A> passes directly through to the <xref:System.Security.Cryptography.DataProtector.ProviderProtect%2A> and <xref:System.Security.Cryptography.DataProtector.ProviderUnprotect%2A> overrides without altering the byte array.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PrimaryPurpose">
+      <MemberSignature Language="C#" Value="protected string PrimaryPurpose { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string PrimaryPurpose" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.DataProtector.PrimaryPurpose" />
+      <MemberSignature Language="VB.NET" Value="Protected ReadOnly Property PrimaryPurpose As String" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property System::String ^ PrimaryPurpose { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.PrimaryPurpose : string" Usage="System.Security.Cryptography.DataProtector.PrimaryPurpose" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="74c2f-150">保護されたデータの主な目的を取得します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-150">Gets the primary purpose for the protected data.</span></span></summary>
+        <value><span data-ttu-id="74c2f-151">保護されたデータの主な目的。</span><span class="sxs-lookup"><span data-stu-id="74c2f-151">The primary purpose for the protected data.</span></span></value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Protect">
+      <MemberSignature Language="C#" Value="public byte[] Protect (byte[] userData);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance unsigned int8[] Protect(unsigned int8[] userData) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.DataProtector.Protect(System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function Protect (userData As Byte()) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; cli::array &lt;System::Byte&gt; ^ Protect(cli::array &lt;System::Byte&gt; ^ userData);" />
+      <MemberSignature Language="F#" Value="member this.Protect : byte[] -&gt; byte[]" Usage="dataProtector.Protect userData" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="userData" Type="System.Byte[]" />
+      </Parameters>
+      <Docs>
+        <param name="userData"><span data-ttu-id="74c2f-152">保護するデータ。</span><span class="sxs-lookup"><span data-stu-id="74c2f-152">The data to be protected.</span></span></param>
+        <summary><span data-ttu-id="74c2f-153">指定したユーザー データを保護します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-153">Protects the specified user data.</span></span></summary>
+        <returns><span data-ttu-id="74c2f-154">暗号化されたデータを格納するバイト配列。</span><span class="sxs-lookup"><span data-stu-id="74c2f-154">A byte array that contains the encrypted data.</span></span></returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="74c2f-155"><paramref name="userData" /> が <see langword="null" /> です。</span><span class="sxs-lookup"><span data-stu-id="74c2f-155"><paramref name="userData" /> is <see langword="null" />.</span></span></exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ProviderProtect">
+      <MemberSignature Language="C#" Value="protected abstract byte[] ProviderProtect (byte[] userData);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance unsigned int8[] ProviderProtect(unsigned int8[] userData) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.DataProtector.ProviderProtect(System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Protected MustOverride Function ProviderProtect (userData As Byte()) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; abstract cli::array &lt;System::Byte&gt; ^ ProviderProtect(cli::array &lt;System::Byte&gt; ^ userData);" />
+      <MemberSignature Language="F#" Value="abstract member ProviderProtect : byte[] -&gt; byte[]" Usage="dataProtector.ProviderProtect userData" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="userData" Type="System.Byte[]" />
+      </Parameters>
+      <Docs>
+        <param name="userData"><span data-ttu-id="74c2f-156">暗号化するデータ。</span><span class="sxs-lookup"><span data-stu-id="74c2f-156">The data to be encrypted.</span></span></param>
+        <summary><span data-ttu-id="74c2f-157">基本クラスの <see cref="M:System.Security.Cryptography.DataProtector.Protect(System.Byte[])" /> メソッドがコールバックする、派生クラスのデリゲート メソッドを指定します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-157">Specifies the delegate method in the derived class that the <see cref="M:System.Security.Cryptography.DataProtector.Protect(System.Byte[])" /> method in the base class calls back into.</span></span></summary>
+        <returns><span data-ttu-id="74c2f-158">暗号化されたデータを格納するバイト配列。</span><span class="sxs-lookup"><span data-stu-id="74c2f-158">A byte array that contains the encrypted data.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ <span data-ttu-id="74c2f-159"><xref:System.Security.Cryptography.DataProtector.ProviderProtect%2A> メソッドを実装する例を次に示します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-159">The following example shows an implementation of the <xref:System.Security.Cryptography.DataProtector.ProviderProtect%2A> method.</span></span>  <span data-ttu-id="74c2f-160">これは、 <xref:System.Security.Cryptography.DataProtector>クラスのより大きなコード例の一部です。</span><span class="sxs-lookup"><span data-stu-id="74c2f-160">It is part of a larger code example for the <xref:System.Security.Cryptography.DataProtector> class.</span></span>  
+  
+ [!code-csharp[Cryptography.MemoryProtector#3](~/samples/snippets/csharp/VS_Snippets_CLR/cryptography.memoryprotector/cs/class1.cs#3)]
+ [!code-vb[Cryptography.MemoryProtector#3](~/samples/snippets/visualbasic/VS_Snippets_CLR/cryptography.memoryprotector/vb/class1.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ProviderUnprotect">
+      <MemberSignature Language="C#" Value="protected abstract byte[] ProviderUnprotect (byte[] encryptedData);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance unsigned int8[] ProviderUnprotect(unsigned int8[] encryptedData) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.DataProtector.ProviderUnprotect(System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Protected MustOverride Function ProviderUnprotect (encryptedData As Byte()) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; abstract cli::array &lt;System::Byte&gt; ^ ProviderUnprotect(cli::array &lt;System::Byte&gt; ^ encryptedData);" />
+      <MemberSignature Language="F#" Value="abstract member ProviderUnprotect : byte[] -&gt; byte[]" Usage="dataProtector.ProviderUnprotect encryptedData" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="encryptedData" Type="System.Byte[]" />
+      </Parameters>
+      <Docs>
+        <param name="encryptedData"><span data-ttu-id="74c2f-161">暗号化するデータ。</span><span class="sxs-lookup"><span data-stu-id="74c2f-161">The data to be unencrypted.</span></span></param>
+        <summary><span data-ttu-id="74c2f-162">基本クラスの <see cref="M:System.Security.Cryptography.DataProtector.Unprotect(System.Byte[])" /> メソッドがコールバックする、派生クラスのデリゲート メソッドを指定します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-162">Specifies the delegate method in the derived class that the <see cref="M:System.Security.Cryptography.DataProtector.Unprotect(System.Byte[])" /> method in the base class calls back into.</span></span></summary>
+        <returns><span data-ttu-id="74c2f-163">暗号化解除されたデータ。</span><span class="sxs-lookup"><span data-stu-id="74c2f-163">The unencrypted data.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ <span data-ttu-id="74c2f-164"><xref:System.Security.Cryptography.DataProtector.ProviderUnprotect%2A> メソッドを実装する例を次に示します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-164">The following example shows an implementation of the <xref:System.Security.Cryptography.DataProtector.ProviderUnprotect%2A> method.</span></span>  <span data-ttu-id="74c2f-165">これは、 <xref:System.Security.Cryptography.DataProtector>クラスのより大きなコード例の一部です。</span><span class="sxs-lookup"><span data-stu-id="74c2f-165">It is part of a larger code example for the <xref:System.Security.Cryptography.DataProtector> class.</span></span>  
+  
+ [!code-csharp[Cryptography.MemoryProtector#4](~/samples/snippets/csharp/VS_Snippets_CLR/cryptography.memoryprotector/cs/class1.cs#4)]
+ [!code-vb[Cryptography.MemoryProtector#4](~/samples/snippets/visualbasic/VS_Snippets_CLR/cryptography.memoryprotector/vb/class1.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SpecificPurposes">
+      <MemberSignature Language="C#" Value="protected System.Collections.Generic.IEnumerable&lt;string&gt; SpecificPurposes { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Collections.Generic.IEnumerable`1&lt;string&gt; SpecificPurposes" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.DataProtector.SpecificPurposes" />
+      <MemberSignature Language="VB.NET" Value="Protected ReadOnly Property SpecificPurposes As IEnumerable(Of String)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property System::Collections::Generic::IEnumerable&lt;System::String ^&gt; ^ SpecificPurposes { System::Collections::Generic::IEnumerable&lt;System::String ^&gt; ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.SpecificPurposes : seq&lt;string&gt;" Usage="System.Security.Cryptography.DataProtector.SpecificPurposes" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerable&lt;System.String&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="74c2f-166">保護されたデータの特定の目的を取得します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-166">Gets the specific purposes for the protected data.</span></span></summary>
+        <value><span data-ttu-id="74c2f-167">保護されたデータの特定の目的のコレクション。</span><span class="sxs-lookup"><span data-stu-id="74c2f-167">A collection of the specific purposes for the protected data.</span></span></value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Unprotect">
+      <MemberSignature Language="C#" Value="public byte[] Unprotect (byte[] encryptedData);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance unsigned int8[] Unprotect(unsigned int8[] encryptedData) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.DataProtector.Unprotect(System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function Unprotect (encryptedData As Byte()) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; cli::array &lt;System::Byte&gt; ^ Unprotect(cli::array &lt;System::Byte&gt; ^ encryptedData);" />
+      <MemberSignature Language="F#" Value="member this.Unprotect : byte[] -&gt; byte[]" Usage="dataProtector.Unprotect encryptedData" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="encryptedData" Type="System.Byte[]" />
+      </Parameters>
+      <Docs>
+        <param name="encryptedData"><span data-ttu-id="74c2f-168">保護を解除する暗号化されたデータ。</span><span class="sxs-lookup"><span data-stu-id="74c2f-168">The encrypted data to be unprotected.</span></span></param>
+        <summary><span data-ttu-id="74c2f-169">指定された保護されたデータの保護を解除します。</span><span class="sxs-lookup"><span data-stu-id="74c2f-169">Unprotects the specified protected data.</span></span></summary>
+        <returns><span data-ttu-id="74c2f-170">プレーンテキスト データを格納するバイト配列。</span><span class="sxs-lookup"><span data-stu-id="74c2f-170">A byte array that contains the plain-text data.</span></span></returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="74c2f-171"><paramref name="encryptedData" /> は <see langword="null" />です。</span><span class="sxs-lookup"><span data-stu-id="74c2f-171"><paramref name="encryptedData" /> is <see langword="null" />.</span></span></exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><span data-ttu-id="74c2f-172"><paramref name="encryptedData" /> に無効な目的が含まれていました。</span><span class="sxs-lookup"><span data-stu-id="74c2f-172"><paramref name="encryptedData" /> contained an invalid purpose.</span></span></exception>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
