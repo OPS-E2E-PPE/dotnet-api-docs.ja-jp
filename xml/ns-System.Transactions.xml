@@ -1,0 +1,56 @@
+<Namespace Name="System.Transactions">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="27e12b25390a72364c77196a34eae502971d0d2b" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70501043" /></Metadata><Docs>
+    <summary><see cref="N:System.Transactions" /> 名前空間には、トランザクション アプリケーションやリソース マネージャーを独自に作成するためのクラスが含まれます。 具体的には、1 つまたは複数の参加要素を含むローカル トランザクションまたは分散トランザクションを作成し、参加できます。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+ この`System.Transactions`インフラストラクチャにより、SQL Server、ADO.NET、MSMQ、Microsoft 分散トランザクションコーディネーター (MSDTC) で開始されたトランザクションをサポートすることで、プラットフォーム全体でトランザクションプログラミングがシンプルで効率的になります。 この<xref:System.Transactions.Transaction>クラスには、クラスに基づく明示的なプログラミングモデルと、トランザクションがインフラストラクチャによって<xref:System.Transactions.TransactionScope>自動的に管理されるクラスを使用した暗黙的なプログラミングモデルが用意されています。 開発には、より簡単な暗黙的なモデルを使用することを強くお勧めします。 開始するには、「[トランザクションスコープを使用した暗黙的なトランザクションの実装](https://docs.microsoft.com/previous-versions/dotnet/netframework-3.0/ms172152(v=vs.85))」を参照してください。 トランザクションアプリケーションの作成の詳細については、「[トランザクションアプリケーションの作成](~/docs/framework/data/transactions/writing-a-transactional-application.md)」を参照してください。
+  
+ `System.Transactions`には、リソースマネージャーを実装するための型も用意されています。 `System.Transactions`インフラストラクチャにネイティブのトランザクションマネージャーを使用すると、揮発性リソースまたは1つの永続的なリソースの参加が、効率的にコミットまたはロールバックできます。 リソース マネージャーの実装の詳細については、「[Implementing A Resource Manager](https://msdn.microsoft.com/library/81509719-d579-4530-831e-42e1acdef63e)」を参照してください。  
+  
+ また、トランザクションマネージャーは、追加の持続性のあるリソースマネージャーがトランザクションに参加するときに、DTC のようなディスクベースのトランザクションマネージャーによって調整することによって、ローカルトランザクションを分散トランザクションに透過的にエスカレートします。 `System.Transactions` インフラストラクチャでは、主に 2 つの方法でパフォーマンスを向上させています。  
+  
+-   動的エスカレーション。これは、インフラストラクチャ`System.Transactions`が実際にトランザクションに必要な場合にのみ MSDTC を使用することを意味します。 この領域の詳細については、「[トランザクション管理のエスカレーション](https://msdn.microsoft.com/library/5b87ae58-8ccf-4b9b-9715-41e4aade89b7)」を参照してください。  
+  
+-   昇格可能参加リスト。これにより、データベースなどのリソースが、トランザクションに参加している唯一のエンティティである場合に、トランザクションの所有権を取得できます。 その後、必要に応じ`System.Transactions`て、インフラストラクチャはトランザクションの管理を MSDTC にエスカレートすることができます。 これにより、MSDTC の使用頻度をさらに減らすことができます。 この領域の詳細については、「[単一フェーズコミットと昇格可能単一フェーズ通知を使用した最適化](https://docs.microsoft.com/previous-versions/dotnet/netframework-3.0/ms229980(v=vs.85))」を参照してください。  
+  
+ `System.Transactions`は、公開するリソースの種類に対するアクセスを制限する3つの信頼レベルを定義します。 具体的には** 、system.object アセンブリは、 `AllowPartiallyTrustedCallers`属性 (APTCA) でマークされているため、部分的に信頼されているコードから呼び出すことができます。 この属性は基本的に、<xref:System.Security.Permissions.SecurityAction.LinkDemand> アクセス許可セットの暗黙的な `FullTrust` を削除します。削除しない場合、これは各種類のパブリックにアクセスできるメソッドに自動的に配置されます。 ただし、種類やメンバーによっては、さらに強力なアクセス許可が必要となります。  
+  
+ 次に示すのは、部分的に信頼されるコードによって呼び出されない型とメンバーの一覧です。これらは、次の宣言型セキュリティ属性で修飾されています。  
+  
+ `PermissionSetAttribute(SecurityAction.LinkDemand, Name := "FullTrust")`  
+  
+ EnlistDurable (トランザクション)  
+  
+ Transaction.enlistpromotablesinglephase (トランザクション)  
+  
+ システムトランザクションの相互運用  
+  
+ DistributedTransactionStarted (システムトランザクション)  
+  
+ System.string. HostCurrentTransactionCallback  
+  
+ Reenlist (システムトランザクション)  
+  
+ システムトランザクションの完了  
+  
+ システムトランザクション (system.string、system.string、system.string、またはの各サービスの相互に処理する場合) の場合。  
+  
+ M:System.Transactions.TransactionScope.TransactionScope (システムトランザクションのオプション、システムトランザクションのオプション、システムのトランザクションの処理、およびサービスの処理)  
+  
+ さまざまな信頼レベルの詳細については、「[Security Trust Levels in Accessing Resources](https://msdn.microsoft.com/library/8e45acbc-0d81-4f64-9da7-8f766aebff51)」を参照してください。  
+  
+ コア開発 Technologies\Data Access\ トランザクション処理 \  
+  
+ 名前空間の`System.Transactions`使用方法の詳細については、「」の「Core Development Technologies\Data access/transaction processing\\」セクションにある概念ドキュメントの[トランザクション処理](https://docs.microsoft.com/previous-versions/dotnet/netframework-3.0/w97s6fw4(v=vs.85))を参照してください。ドキュメントを参照してください。 詳細については、次のトピックを参照してください。  
+  
+ [システムトランザクションによって提供される機能](https://msdn.microsoft.com/library/99cc5ce0-b7fd-4d78-a553-a3dd3f17ed45)  
+  
+ [リソースマネージャーの実装](https://msdn.microsoft.com/library/81509719-d579-4530-831e-42e1acdef63e)  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+</Namespace>

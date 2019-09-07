@@ -1,0 +1,1660 @@
+<Type Name="XmlDataSource" FullName="System.Web.UI.WebControls.XmlDataSource">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="e80040e0b6f88a7b20d337228c83fb1384c6a83f" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70429688" /></Metadata><TypeSignature Language="C#" Value="public class XmlDataSource : System.Web.UI.HierarchicalDataSourceControl, System.ComponentModel.IListSource, System.Web.UI.IDataSource" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit XmlDataSource extends System.Web.UI.HierarchicalDataSourceControl implements class System.ComponentModel.IListSource, class System.Web.UI.IDataSource" />
+  <TypeSignature Language="DocId" Value="T:System.Web.UI.WebControls.XmlDataSource" />
+  <TypeSignature Language="VB.NET" Value="Public Class XmlDataSource&#xA;Inherits HierarchicalDataSourceControl&#xA;Implements IDataSource, IListSource" />
+  <TypeSignature Language="C++ CLI" Value="public ref class XmlDataSource : System::Web::UI::HierarchicalDataSourceControl, System::ComponentModel::IListSource, System::Web::UI::IDataSource" />
+  <TypeSignature Language="F#" Value="type XmlDataSource = class&#xA;    inherit HierarchicalDataSourceControl&#xA;    interface IDataSource&#xA;    interface IListSource" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Web.UI.HierarchicalDataSourceControl</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.ComponentModel.IListSource</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.Web.UI.IDataSource</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes>
+    <Attribute>
+      <AttributeName>System.ComponentModel.DefaultEvent("Transforming")</AttributeName>
+    </Attribute>
+    <Attribute>
+      <AttributeName>System.ComponentModel.DefaultProperty("DataFile")</AttributeName>
+    </Attribute>
+    <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+      <AttributeName>System.ComponentModel.Designer("System.Web.UI.Design.WebControls.XmlDataSourceDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+    </Attribute>
+    <Attribute>
+      <AttributeName>System.Drawing.ToolboxBitmap(typeof(System.Web.UI.WebControls.XmlDataSource))</AttributeName>
+    </Attribute>
+    <Attribute>
+      <AttributeName>System.Web.UI.ParseChildren(true)</AttributeName>
+    </Attribute>
+    <Attribute>
+      <AttributeName>System.Web.UI.PersistChildren(false)</AttributeName>
+    </Attribute>
+    <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+      <AttributeName>System.ComponentModel.Designer("System.Web.UI.Design.WebControls.XmlDataSourceDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>データ バインドされたコントロールへの XML データ ソースを表します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このトピックの内容:  
+  
+-   [はじめに](#introduction)  
+  
+-   [XML データのソース](#source_of_xml_data)  
+  
+-   [XML データの更新](#updating_xml_data)  
+  
+-   [XSL 変換の指定](#specifying_an_xsl_transformation)  
+  
+-   [XPath 式を使用したフィルター処理](#filtering_using_an_xpath_expression)  
+  
+-   [キャッシュ](#caching)  
+  
+-   [その他の機能](#additional_features)  
+  
+-   [データビューオブジェクト](#data_view_object)  
+  
+-   [宣言型の構文](#declarative_syntax)  
+  
+<a name="introduction"></a>   
+## <a name="introduction"></a>はじめに  
+ <xref:System.Web.UI.WebControls.XmlDataSource>コントロールは、データバインドコントロールに XML データを提供するデータソースコントロールです。 コントロール<xref:System.Web.UI.WebControls.XmlDataSource>は、データバインドコントロールによって、階層データと表形式データの両方を表示するために使用できます。 この<xref:System.Web.UI.WebControls.XmlDataSource>コントロールは、通常、読み取り専用のシナリオで階層 XML データを表示するために使用されます。 コントロールは<xref:System.Web.UI.WebControls.XmlDataSource> <xref:System.Web.UI.HierarchicalDataSourceControl>クラスを拡張するため、階層データで動作します。 また<xref:System.Web.UI.WebControls.XmlDataSource> 、このコントロールは<xref:System.Web.UI.IDataSource>インターフェイスを実装し、表形式、またはリストスタイルのデータで動作します。  
+  
+> [!NOTE]
+>  セキュリティ上の理由から、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールのプロパティはビューステートに格納されません。 クライアントでビューステートの内容をデコードすることは技術的に可能であるため、データ構造またはその内容に関する機密情報を格納すると、情報漏えいの脅威にさらされる可能性があります。 プロパティなど<xref:System.Web.UI.WebControls.XmlDataSource.XPath%2A>の情報をビューステートに格納する必要がある場合は、 `@ Page`ディレクティブでを設定<xref:System.Web.UI.Page.ViewStateEncryptionMode%2A>することにより、暗号化を有効にしてコンテンツを保護することができます。  
+  
+ ページ開発者は<xref:System.Web.UI.WebControls.XmlDataSource> 、コントロールを使用して、データバインドコントロールを使用して XML データを表示します。  
+  
+<a name="source_of_xml_data"></a>   
+## <a name="sources-of-xml-data"></a>XML データのソース  
+ は、 <xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A>通常、プロパティによって指定された xml ファイルから xml データを読み込みます。 <xref:System.Web.UI.WebControls.XmlDataSource> XML データは、 <xref:System.Web.UI.WebControls.XmlDataSource.Data%2A>プロパティを使用して、データソースコントロールによって文字列形式で直接保存することもできます。 データバインドコントロールによって表示される前に XML データを変換する場合は、変換のための拡張スタイルシート言語 (XSL) スタイルシートを提供できます。 XML データと同様に、通常は<xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A>プロパティで示されるファイルからスタイルシートを読み込みますが、 <xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A>プロパティを使用して直接文字列形式で格納することもできます。  
+  
+<a name="updating_xml_data"></a>   
+## <a name="updating-xml-data"></a>XML データの更新  
+ <xref:System.Web.UI.WebControls.XmlDataSource>コントロールは、データバインドコントロールに XML データが表示される読み取り専用データのシナリオでよく使用されます。 ただし、コントロールを使用して<xref:System.Web.UI.WebControls.XmlDataSource> XML データを編集することもできます。 Xml データを編集するには、 <xref:System.Web.UI.WebControls.XmlDataSource.GetXmlDocument%2A>メソッドを呼び出して<xref:System.Xml.XmlDataDocument> 、xml データのメモリ内表現であるオブジェクトを取得します。 オブジェクト<xref:System.Xml.XmlDataDocument> および <xref:System.Xml.XmlNode> オブジェクトによって公開されているオブジェクトモデルを使用するか、XPath フィルター式を使用してドキュメント内のデータを操作できます。 XML データのメモリ内表現を変更した場合は、 <xref:System.Web.UI.WebControls.XmlDataSource.Save%2A>メソッドを呼び出してディスクに保存できます。  
+  
+ <xref:System.Web.UI.WebControls.XmlDataSource>コントロールの編集機能にはいくつかの制限があります。  
+  
+-   Xml データは、プロパティ<xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A> <xref:System.Web.UI.WebControls.XmlDataSource.Data%2A>で指定されたインライン xml ではなく、プロパティによって示される xml ファイルから読み込む必要があります。  
+  
+-   またはプロパティでは<xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A> <xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A> 、XSLT 変換を指定できません。  
+  
+-   メソッド<xref:System.Web.UI.WebControls.XmlDataSource.Save%2A>は、異なる要求による同時保存操作を処理しません。 複数のユーザーがを使用し<xref:System.Web.UI.WebControls.XmlDataSource>て XML ファイルを編集している場合、すべてのユーザーが同じデータを操作しているという保証はありません。 また、 <xref:System.Web.UI.WebControls.XmlDataSource.Save%2A>同じ同時実行の問題が原因で操作が失敗する可能性もあります。  
+  
+<a name="specifying_an_xsl_transformation"></a>   
+## <a name="specifying-an-xsl-transformation"></a>XSL 変換の指定  
+ XML データを使用して実行される一般的な操作では、ある XML データセットから別のデータセットに変換されます。 コントロール<xref:System.Web.UI.WebControls.XmlDataSource>では<xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A> 、プロパティとプロパティ<xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A>を使用した xml 変換がサポートされています。このプロパティは、データバインドコントロールに渡される前に xml <xref:System.Web.UI.WebControls.XmlDataSource.TransformArgumentList%2A>データに適用する XSL スタイルシートとプロパティを指定します。これにより、変換中に XSL スタイルシートによって使用される、XSLT スタイルシートの動的引数を指定します。 <xref:System.Web.UI.WebControls.XmlDataSource.XPath%2A>プロパティを使用して XPath フィルター式を指定した場合は、変換が行われた後に適用されます。  
+  
+> [!NOTE]
+>  クラス<xref:System.Web.UI.WebControls.XmlDataSource>は、非推奨<xref:System.Xml.Xsl.XslTransform>のクラスを使用して XSL 変換を実行します。 クラスの<xref:System.Xml.Xsl.XslTransform>非推奨となった後に導入されたスタイルシートの機能を使用する場合は、 <xref:System.Xml.Xsl.XslCompiledTransform>クラスを使用して変換を手動で適用します。  
+  
+<a name="filtering_using_an_xpath_expression"></a>   
+## <a name="filtering-using-an-xpath-expression"></a>XPath 式を使用したフィルター処理  
+ 既定で<xref:System.Web.UI.WebControls.XmlDataSource> は、 <xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A> コントロールはプロパティによって識別される xml ファイル内のすべての xml データを読み込むか、プロパティにインラインで検出されますが、XPath 式を使用してデータをフィルター処理できます。 <xref:System.Web.UI.WebControls.XmlDataSource.Data%2A> プロパティ<xref:System.Web.UI.WebControls.XmlDataSource.XPath%2A>は、XML データが読み込まれて変換された後に適用される XPath 構文フィルターをサポートします。  
+  
+<a name="caching"></a>   
+## <a name="caching"></a>キャッシュ  
+ パフォーマンス上の理由から、既定では<xref:System.Web.UI.WebControls.XmlDataSource> 、コントロールのキャッシュが有効になっています。 要求されたページが要求されるたびにサーバー上の XML ファイルを開いて読み取ると、アプリケーションのパフォーマンスが低下する可能性があります。 キャッシュを使用すると、Web サーバー上のメモリを犠牲にしてサーバーの処理負荷を軽減できます。ほとんどの場合、これは良いトレードオフです。 プロパティがに<xref:System.Web.UI.WebControls.XmlDataSource> `true`設定されている場合、は自動的にデータをキャッシュします。プロパティは、キャッシュが無効になる前にキャッシュがデータを格納する秒数に設定されます。 <xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>  <xref:System.Web.UI.WebControls.XmlDataSource.EnableCaching%2A> を使用<xref:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy%2A>すると、データソースコントロールのキャッシュ動作をさらに細かく調整できます。  
+  
+<a name="additional_features"></a>   
+## <a name="additional-features"></a>その他の機能  
+ 次の表に、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールでサポートされているその他の機能を示します。  
+  
+|機能|説明|  
+|----------------|-----------------|  
+|並べ替え|コントロールでは<xref:System.Web.UI.WebControls.XmlDataSource>サポートされていません。|  
+|フィルター処理|プロパティ<xref:System.Web.UI.WebControls.XmlDataSource.XPath%2A>は、適切な XPath 式を使用して XML データをフィルター処理するために使用できます。|  
+|ページング|コントロールでは<xref:System.Web.UI.WebControls.XmlDataSource>サポートされていません。|  
+|Updating|を<xref:System.Xml.XmlDataDocument>直接操作してから、 <xref:System.Web.UI.WebControls.XmlDataSource.Save%2A>メソッドを呼び出すことによってサポートされます。|  
+|削除中|を<xref:System.Xml.XmlDataDocument>直接操作してから、 <xref:System.Web.UI.WebControls.XmlDataSource.Save%2A>メソッドを呼び出すことによってサポートされます。|  
+|挿入|を<xref:System.Xml.XmlDataDocument>直接操作してから、 <xref:System.Web.UI.WebControls.XmlDataSource.Save%2A>メソッドを呼び出すことによってサポートされます。|  
+|キャッシュ|既定では、プロパティは<xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A> 0 (無限) に設定され、 <xref:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy%2A>プロパティはに<xref:System.Web.UI.DataSourceCacheExpiry.Absolute>設定されています。|  
+  
+<a name="data_view_object"></a>   
+## <a name="data-view-object"></a>データビューオブジェクト  
+ コントロールは<xref:System.Web.UI.WebControls.XmlDataSource> 、階層データを表示するデータバインドコントロールと、表形式データを表示するコントロールをサポートしているので、データソースコントロールは、基になる XML データに対して複数の種類のデータソースビューオブジェクトをサポートします。 コントロール<xref:System.Web.UI.WebControls.XmlDataSource>は、表形式の<xref:System.Web.UI.WebControls.XmlDataSourceView>データを表示するデータバインドコントロールと共に使用する場合に、単一の名前付きオブジェクトを取得します。 メソッド<xref:System.Web.UI.IDataSource.GetViewNames%2A>は、この単一の名前付きビューを識別します。 階層データを表示するデータバインドコントロールで使用する場合、コントロール<xref:System.Web.UI.WebControls.XmlDataSource>は、 <xref:System.Web.UI.WebControls.XmlDataSource.GetHierarchicalView%2A>メソッド<xref:System.Web.UI.WebControls.XmlHierarchicalDataSourceView>に渡される一意の階層パスのを取得します。  
+  
+<a name="declarative_syntax"></a>   
+## <a name="declarative-syntax"></a>宣言型の構文  
+  
+```  
+<asp:XmlDataSource  
+    CacheDuration="string|Infinite"  
+    CacheExpirationPolicy="Absolute|Sliding"  
+    CacheKeyDependency="string"  
+    DataFile="string"  
+    EnableCaching="True|False"  
+    EnableTheming="True|False"  
+    EnableViewState="True|False"  
+    ID="string"  
+    OnDataBinding="DataBinding event handler"  
+    OnDisposed="Disposed event handler"  
+    OnInit="Init event handler"  
+    OnLoad="Load event handler"  
+    OnPreRender="PreRender event handler"  
+    OnTransforming="Transforming event handler"  
+    OnUnload="Unload event handler"  
+    runat="server"  
+    SkinID="string"  
+    TransformArgumentList="string"  
+    TransformFile="string"  
+    Visible="True|False"  
+    XPath="string"  
+>  
+    <Data>string</Data>  
+    <Transform>string</Transform>  
+</asp:XmlDataSource>  
+```  
+  
+   
+  
+## Examples  
+ このセクションには、2 つのコード例が含まれています。 最初のコード例では、コントロール<xref:System.Web.UI.WebControls.XmlDataSource> <xref:System.Web.UI.WebControls.TreeView>とコントロールを使用して、サンプル xml ファイルの xml データを表示する方法を示します。 2番目の例では、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールとテンプレート<xref:System.Web.UI.WebControls.Repeater>化されたコントロールを使用して XML データを表示する方法を示します。  
+  
+ <xref:System.Web.UI.WebControls.XmlDataSource> コントロール <xref:System.Web.UI.WebControls.TreeView> とコントロールを使用して XML データを表示する方法を次のコード例に示します。 は<xref:System.Web.UI.WebControls.XmlDataSource> 、 <xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A>プロパティで識別される xml ファイルから xml データを読み込みます。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_1#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_1/CS/xmlds1cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_1#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_1/VB/xmlds1vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<books>  
+   <computerbooks>  
+     <book title="Secrets of Silicon Valley" author="Sheryl Hunter"/>  
+     <book title="Straight Talk About Computers" author="Dean Straight"/>  
+     <book title="You Can Combat Computer Stress!" author="Marjorie Green"/>                  
+   </computerbooks>  
+   <cookbooks>  
+     <book title="Silicon Valley Gastronomic Treats" author="Innes del Castill"/>  
+   </cookbooks>  
+</books>  
+```  
+  
+ 次のコード例では、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールとテンプレート<xref:System.Web.UI.WebControls.Repeater>化されたコントロールを使用して XML データを表示する方法を示します。 コントロール<xref:System.Web.UI.WebControls.Repeater>は、XPath データバインディング式を使用して、が<xref:System.Web.UI.WebControls.XmlDataSource>表す XML ドキュメント内のデータ項目にバインドします。 `XPath` および `XPathSelect`  データ <xref:System.Web.UI.XPathBinder> バインディング構文の詳細については、クラスを参照してください。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_14#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_14/CS/xmlds14cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_14#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_14/VB/xmlds14vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<?xml version="1.0" encoding="iso-8859-1"?>  
+ <orders>  
+   <order>  
+     <customer id="12345" />  
+     <customername>  
+         <firstn>John</firstn>  
+         <lastn>Smith</lastn>  
+     </customername>  
+     <transaction id="12345" />  
+     <shipaddress>  
+         <address1>1234 Tenth Avenue</address1>  
+         <city>Bellevue</city>  
+         <state>Washington</state>  
+         <zip>98001</zip>  
+     </shipaddress>  
+     <summary>  
+         <item dept="tools">screwdriver</item>  
+         <item dept="tools">hammer</item>  
+         <item dept="plumbing">fixture</item>  
+     </summary>  
+   </order>  
+</orders>  
+```  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="M:System.Web.UI.IDataSource.GetViewNames" />
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XmlDataSource ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.XmlDataSource.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XmlDataSource();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Web.UI.WebControls.XmlDataSource" /> クラスの新しいインスタンスを作成します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CacheDuration">
+      <MemberSignature Language="C#" Value="public virtual int CacheDuration { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 CacheDuration" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.CacheDuration" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property CacheDuration As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property int CacheDuration { int get(); void set(int value); };" />
+      <MemberSignature Language="F#" Value="member this.CacheDuration : int with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.CacheDuration" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(0)</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.ComponentModel.TypeConverter(typeof(System.Web.UI.DataSourceCacheDurationConverter))</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>データ ソース コントロールが取得したデータをキャッシュする時間 (秒単位) を取得または設定します。</summary>
+        <value><see cref="T:System.Web.UI.WebControls.XmlDataSource" /> がデータ取得操作の結果をキャッシュする秒数。 既定値は 0 です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 次<xref:System.Web.UI.WebControls.XmlDataSource>の場合は、コントロールによって自動的にデータがキャッシュされます。  
+  
+-   <xref:System.Web.UI.WebControls.XmlDataSource.EnableCaching%2A> プロパティが `true` に設定されている。  
+  
+-   <xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>プロパティが0より大きい値に設定されています。これは、キャッシュが無効になる前にキャッシュがデータを格納する秒数を示します。  
+  
+ <xref:System.Web.UI.WebControls.XmlDataSource.Data%2A>プロパティまたは XML データを含むファイルの内容を変更すると、キャッシュが無効になります。  
+  
+ 既定では、 <xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>プロパティは0に設定されます。これは無期限のキャッシュを示します。データソースは、依存する XML ファイルが変更されるまでデータをキャッシュします。  
+  
+ キャッシュの動作は、期間と<xref:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy%2A>設定の組み合わせによって管理されます。 が<xref:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy%2A>に<xref:System.Web.UI.DataSourceCacheExpiry.Absolute>設定されて<xref:System.Web.UI.WebControls.XmlDataSource>いる場合、コントロールは最初のデータ取得操作でデータをキャッシュし、によって<xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>指定された時間だけメモリ内に保持し、時間が経過した後で無効にします。 キャッシュは、次の操作時に更新されます。 が<xref:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy%2A> に <xref:System.Web.UI.DataSourceCacheExpiry.Sliding> 設定されている場合、データソースコントロールは最初のデータ取得操作時にデータをキャッシュしますが、後続の各操作でキャッシュを保持する時間枠をリセットします。 キャッシュが期限切れになるのは、最後にデータを取得して<xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>からのアクティビティがない場合のみです。  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールを使用して XML ファイルに格納されているデータを表示するときに、キャッシュを有効にする方法を示しています。 キャッシュは、 <xref:System.Web.UI.WebControls.XmlDataSource.EnableCaching%2A>プロパティがに`true`設定され、 <xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>がデータソースコントロールによってデータがキャッシュされる秒数に設定されている場合に有効になります。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_16#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_16/CS/xmlds16cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_16#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_16/VB/xmlds16vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<books>  
+   <computerbooks>  
+     <book title="Secrets of Silicon Valley" author="Sheryl Hunter"/>  
+     <book title="Straight Talk About Computers" author="Dean Straight"/>  
+     <book title="You Can Combat Computer Stress!" author="Marjorie Green"/>  
+   </computerbooks>  
+   <cookbooks>  
+     <book title="Silicon Valley Gastronomic Treats" author="Innes del Castill"/>  
+   </cookbooks>  
+</books>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.EnableCaching" />
+      </Docs>
+    </Member>
+    <Member MemberName="CacheExpirationPolicy">
+      <MemberSignature Language="C#" Value="public virtual System.Web.UI.DataSourceCacheExpiry CacheExpirationPolicy { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Web.UI.DataSourceCacheExpiry CacheExpirationPolicy" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property CacheExpirationPolicy As DataSourceCacheExpiry" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Web::UI::DataSourceCacheExpiry CacheExpirationPolicy { System::Web::UI::DataSourceCacheExpiry get(); void set(System::Web::UI::DataSourceCacheExpiry value); };" />
+      <MemberSignature Language="F#" Value="member this.CacheExpirationPolicy : System.Web.UI.DataSourceCacheExpiry with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(Mono.Cecil.CustomAttributeArgument)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Web.UI.DataSourceCacheExpiry</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>キャッシュの存続期間と組み合わされた、データ ソース コントロールが使用するキャッシュの動作を記述するキャッシュの有効期限のポリシーを取得または設定します。</summary>
+        <value><see cref="T:System.Web.UI.DataSourceCacheExpiry" /> 値のいずれか 1 つ。 既定では、キャッシュの有効期限のポリシーが <see cref="F:System.Web.UI.DataSourceCacheExpiry.Absolute" /> に設定されています。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ キャッシュの動作は、設定<xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>と<xref:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy%2A>設定の組み合わせによって管理されます。 がに<xref:System.Web.UI.DataSourceCacheExpiry.Absolute>設定されている<xref:System.Web.UI.WebControls.XmlDataSource>場合、は最初のデータ取得操作でデータをキャッシュし、によって<xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>指定された時間だけメモリ内に保持し、時間が経過した後で無効にします。 <xref:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy%2A> キャッシュは、次の操作時に更新されます。 <xref:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy%2A>がに <xref:System.Web.UI.DataSourceCacheExpiry.Sliding> 設定されている場合、データソースコントロールは最初のデータ取得操作時にデータをキャッシュしますが、後続の各操作でキャッシュを保持する時間枠をリセットします。 キャッシュが期限切れになるのは、最後にデータを取得した<xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>ときからのアクティビティがない場合のみです。  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールを使用して XML ファイルに格納されているデータを表示するときに、キャッシュを有効にする方法を示しています。 キャッシュは、 <xref:System.Web.UI.WebControls.XmlDataSource.EnableCaching%2A>プロパティがに`true`設定され、 <xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>がデータソースコントロールによってデータがキャッシュされる秒数に設定されている場合に有効になります。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_16#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_16/CS/xmlds16cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_16#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_16/VB/xmlds16vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<books>  
+   <computerbooks>  
+     <book title="Secrets of Silicon Valley" author="Sheryl Hunter"/>  
+     <book title="Straight Talk About Computers" author="Dean Straight"/>  
+     <book title="You Can Combat Computer Stress!" author="Marjorie Green"/>                  
+   </computerbooks>  
+   <cookbooks>  
+     <book title="Silicon Valley Gastronomic Treats" author="Innes del Castill"/>  
+   </cookbooks>  
+</books>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.CacheDuration" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.EnableCaching" />
+      </Docs>
+    </Member>
+    <Member MemberName="CacheKeyContext">
+      <MemberSignature Language="C#" Value="public virtual string CacheKeyContext { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string CacheKeyContext" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.CacheKeyContext" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property CacheKeyContext As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ CacheKeyContext { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.CacheKeyContext : string with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.CacheKeyContext" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ComponentModel.DefaultValue("")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ビューステートからデータ ソース コントロールのキャッシュ キーの値を取得または設定するか、キャッシュ キーをビューステートに追加します。</summary>
+        <value>キャッシュ キーの値。キャッシュ キーがビューステートに存在しない場合は、空の文字列。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティを使用すると、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールのキャッシュキーを手動で作成できます。 <xref:System.Web.UI.WebControls.XmlDataSource.CacheKeyContext%2A> これは、データを格納するファイルを指定するのではなく、XML データまたは XSLT データを含むオブジェクトをコントロールに割り当てる場合にのみ必要です。 データをコントロールに割り当てると、データはキャッシュキーの生成に使用されません。 代わりに、データオブジェクトを更新する場合は、一意のキャッシュキーを手動で生成する必要があります。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CacheKeyDependency">
+      <MemberSignature Language="C#" Value="public virtual string CacheKeyDependency { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string CacheKeyDependency" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property CacheKeyDependency As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ CacheKeyDependency { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.CacheKeyDependency : string with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue("")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>データ ソース コントロールによって作成されたすべてのデータ キャッシュ オブジェクトにリンクされる、ユーザー定義のキー依存関係を取得または設定します。 すべてのキャッシュ オブジェクトは、キーの有効期限が切れると、明示的に期限切れになります。</summary>
+        <value><see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールによって作成されたすべてのキャッシュ オブジェクトを識別するキー。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コントロール<xref:System.Web.UI.WebControls.XmlDataSource>は、データのキャッシュをサポートしています。 データがキャッシュされて<xref:System.Web.UI.WebControls.XmlDataSource>いる間、は、基になるデータファイルからではなく、キャッシュからデータを取得します。 キャッシュが期限切れになると、基になるファイルからデータが取得され、データが再度キャッシュされます。  
+  
+ <xref:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency%2A>プロパティを設定し<xref:System.Web.UI.WebControls.XmlDataSource>て、コントロールによって作成されたすべてのキャッシュエントリとキーの間の依存関係を作成できます。 キーを期限切れにすると、いつでもプログラムによってすべてのキャッシュエントリを無効にすることができます。  
+  
+ の<xref:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency%2A>作成に使用されるプロパティにより、複数<xref:System.Web.UI.WebControls.XmlDataSource>のコントロールが同じ XML ファイルと変換<xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>ファイルから同じデータを読み込んだときに、同じキャッシュを使用できる可能性があり <xref:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy%2A> ます。を設定します。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.EnableCaching" />
+      </Docs>
+    </Member>
+    <Member MemberName="Data">
+      <MemberSignature Language="C#" Value="public virtual string Data { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Data" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.Data" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property Data As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ Data { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Data : string with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.Data" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue("")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ComponentModel.Editor("System.ComponentModel.Design.MultilineStringEditor,System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ComponentModel.TypeConverter("System.ComponentModel.MultilineStringConverter,System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Web.UI.PersistenceMode(System.Web.UI.PersistenceMode.InnerProperty)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.Editor("System.ComponentModel.Design.MultilineStringEditor,System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.TypeConverter("System.ComponentModel.MultilineStringConverter,System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>データ ソース コントロールのバインド先の XML データのブロックを取得または設定します。</summary>
+        <value><see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールのバインド先のインライン XML データの文字列。 既定値は <see cref="F:System.String.Empty" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 宣言型のシナリオ<xref:System.Web.UI.WebControls.XmlDataSource.Data%2A>では、プロパティは<xref:System.Web.UI.WebControls.XmlDataSource>オブジェクトの複数行の内部プロパティとして指定されます。 内部プロパティは XML データと互換性があります。これは、xml データを任意の方法で書式設定し、文字の埋め込みの問題 (引用符文字の埋め込みなど) を無視できるためです。  
+  
+ <xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A>プロパティと<xref:System.Web.UI.WebControls.XmlDataSource.Data%2A> プロパティの <xref:System.Web.UI.WebControls.XmlDataSource.Data%2A> 両方が設定されている場合は、プロパティが優先され、プロパティに指定されている xml データの代わりに xml ファイル内 <xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A> のデータが使用されます。  
+  
+ プロパティの値を変更すると、イベントが発生します。 <xref:System.Web.UI.IDataSource.DataSourceChanged>  <xref:System.Web.UI.WebControls.XmlDataSource.Data%2A> キャッシュが有効になっていて、の<xref:System.Web.UI.WebControls.XmlDataSource.Data%2A>値を変更した場合、キャッシュは無効になります。  
+  
+   
+  
+## Examples  
+ コントロールを使用<xref:System.Web.UI.WebControls.XmlDataSource>して、 <xref:System.Web.UI.WebControls.XmlDataSource.Data%2A>プロパティ<xref:System.Web.UI.WebControls.TreeView>に含まれるインライン XML データをコントロールに表示する方法を次のコード例に示します。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_10#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_10/CS/xmlds10cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_10#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_10/VB/xmlds10vb.aspx#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">ドキュメントが読み込まれています。</exception>
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency" />
+      </Docs>
+    </Member>
+    <Member MemberName="DataFile">
+      <MemberSignature Language="C#" Value="public virtual string DataFile { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string DataFile" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.DataFile" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property DataFile As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ DataFile { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.DataFile : string with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.DataFile" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue("")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ComponentModel.Editor("System.Web.UI.Design.XmlDataFileEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.Editor("System.Web.UI.Design.XmlDataFileEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>データ ソースのバインド先 XML ファイルの名前を指定します。</summary>
+        <value><see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールが表すデータを格納している XML ファイルの絶対物理パスまたは相対パス。 既定値は <see cref="F:System.String.Empty" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A>プロパティと<xref:System.Web.UI.WebControls.XmlDataSource.Data%2A> プロパティの <xref:System.Web.UI.WebControls.XmlDataSource.Data%2A> 両方が設定されている場合は、プロパティが優先され、プロパティに指定されている xml データの代わりに xml ファイル内 <xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A> のデータが使用されます。  
+  
+ プロパティの値を変更すると、イベントが発生します。 <xref:System.Web.UI.IDataSource.DataSourceChanged>  <xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A> キャッシュが有効になっていて、の<xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A>値を変更した場合、キャッシュは無効になります。  
+  
+   
+  
+## Examples  
+ 次のコード例は、コントロールを使用<xref:System.Web.UI.WebControls.XmlDataSource>し<xref:System.Web.UI.WebControls.TreeView>て、ファイルに含まれる XML データをコントロールで表示する方法を示しています。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_1#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_1/CS/xmlds1cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_1#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_1/VB/xmlds1vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<books>  
+   <computerbooks>  
+     <book title="Secrets of Silicon Valley" author="Sheryl Hunter"/>  
+     <book title="Straight Talk About Computers" author="Dean Straight"/>  
+     <book title="You Can Combat Computer Stress!" author="Marjorie Green"/>                  
+   </computerbooks>  
+   <cookbooks>  
+     <book title="Silicon Valley Gastronomic Treats" author="Innes del Castill"/>  
+   </cookbooks>  
+</books>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">ドキュメントが読み込まれています。</exception>
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.Data" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency" />
+      </Docs>
+    </Member>
+    <Member MemberName="EnableCaching">
+      <MemberSignature Language="C#" Value="public virtual bool EnableCaching { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool EnableCaching" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.EnableCaching" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property EnableCaching As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property bool EnableCaching { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.EnableCaching : bool with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.EnableCaching" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(true)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールでデータ キャッシュが有効かどうかを示す値を取得または設定します。</summary>
+        <value>データ ソース コントロールでデータ キャッシュが有効な場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 既定値は <see langword="true" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コントロール<xref:System.Web.UI.WebControls.XmlDataSource>は、プロパティがに設定<xref:System.Web.UI.WebControls.XmlDataSource.EnableCaching%2A>されている`true`場合、データを自動的にキャッシュします。 既定では、 <xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>プロパティは0に設定されます。これは無期限のキャッシュを示します。データソースは、依存する XML ファイルが変更されるまでデータをキャッシュします。 この<xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>プロパティを0より大きい値に設定すると、キャッシュには、新しいセットを取得する前にその数秒のデータが格納されます。  
+  
+ プロパティがに`true`設定されてい<xref:System.Web.UI.WebControls.XmlDataSource.TransformArgumentList%2A>て、プロパティが設定されている場合、変換の引数リストでパラメーターが変更されても、キャッシュエントリは自動的に無効になりません。 <xref:System.Web.UI.WebControls.XmlDataSource.EnableCaching%2A> その場合は、 <xref:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency%2A>プロパティを設定してキャッシュを無効にするコードを記述する必要があります。  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールを使用して XML ファイルに格納されているデータを表示するときに、キャッシュを有効にする方法を示しています。 キャッシュは、 <xref:System.Web.UI.WebControls.XmlDataSource.EnableCaching%2A>プロパティがに`true`設定され、 <xref:System.Web.UI.WebControls.XmlDataSource.CacheDuration%2A>がデータソースコントロールによってデータがキャッシュされる秒数に設定されている場合に有効になります。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_16#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_16/CS/xmlds16cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_16#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_16/VB/xmlds16vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<books>  
+   <computerbooks>  
+     <book title="Secrets of Silicon Valley" author="Sheryl Hunter"/>  
+     <book title="Straight Talk About Computers" author="Dean Straight"/>  
+     <book title="You Can Combat Computer Stress!" author="Marjorie Green"/>                  
+   </computerbooks>  
+   <cookbooks>  
+     <book title="Silicon Valley Gastronomic Treats" author="Innes del Castill"/>  
+   </cookbooks>  
+</books>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.CacheDuration" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.CacheExpirationPolicy" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetHierarchicalView">
+      <MemberSignature Language="C#" Value="protected override System.Web.UI.HierarchicalDataSourceView GetHierarchicalView (string viewPath);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance class System.Web.UI.HierarchicalDataSourceView GetHierarchicalView(string viewPath) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.XmlDataSource.GetHierarchicalView(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function GetHierarchicalView (viewPath As String) As HierarchicalDataSourceView" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override System::Web::UI::HierarchicalDataSourceView ^ GetHierarchicalView(System::String ^ viewPath);" />
+      <MemberSignature Language="F#" Value="override this.GetHierarchicalView : string -&gt; System.Web.UI.HierarchicalDataSourceView" Usage="xmlDataSource.GetHierarchicalView viewPath" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.UI.HierarchicalDataSourceView</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="viewPath" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="viewPath">現在の階層ビューを作成するためのノードを識別する XPath 式。</param>
+        <summary><see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールのデータ ソース ビュー オブジェクトを取得します。 <paramref name="viewPath" /> パラメーターは Xpath 式である場合もあります。</summary>
+        <returns><paramref name="viewPath" /> で識別されたデータ ノードで始まるデータの単一ビューを表す <see cref="T:System.Web.UI.WebControls.XmlHierarchicalDataSourceView" /> を返します。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Web.UI.WebControls.XmlDataSource.GetHierarchicalView%2A>メソッドを呼び出して、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールに関連<xref:System.Web.UI.WebControls.XmlHierarchicalDataSourceView>付けられたオブジェクトを取得できます。 Value を指定`viewPath`した場合<xref:System.Web.UI.WebControls.XmlDataSource> 、コントロールは、によって`viewPath`識別されるノード上のビューを表すデータソースビューオブジェクトを、そのすべての子ノードと共に返します。 `viewPath`をに<xref:System.String.Empty?displayProperty=nameWithType>設定すると、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールは<xref:System.Web.UI.WebControls.XmlDataSource.XPath%2A>プロパティをチェックして、データソースビューのビルド元のルートノードを決定します。 プロパティが設定されている<xref:System.Web.UI.WebControls.XmlDataSource>場合、コントロールはこのメソッドを使用して、式と`viewPath`同じ方法でデータソースビューを返します。 <xref:System.Web.UI.WebControls.XmlDataSource.XPath%2A> プロパティが設定されていない<xref:System.Web.UI.WebControls.XmlDataSource>場合、コントロールは XML データ内のすべてのデータノードのビューを返します。 <xref:System.Web.UI.WebControls.XmlDataSource.XPath%2A>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetXmlDocument">
+      <MemberSignature Language="C#" Value="public System.Xml.XmlDocument GetXmlDocument ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Xml.XmlDocument GetXmlDocument() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.XmlDataSource.GetXmlDocument" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetXmlDocument () As XmlDocument" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Xml::XmlDocument ^ GetXmlDocument();" />
+      <MemberSignature Language="F#" Value="member this.GetXmlDocument : unit -&gt; System.Xml.XmlDocument" Usage="xmlDataSource.GetXmlDocument " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Xml.XmlDocument</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>XML データを、基になるデータ ストレージから直接メモリに読み込むか、キャッシュからメモリに読み込むことにより、それを <see cref="T:System.Xml.XmlDataDocument" /> オブジェクトの形式で返します。</summary>
+        <returns><see cref="T:System.Xml.XmlDataDocument" /> プロパティで指定された XML、または、<see cref="P:System.Web.UI.WebControls.XmlDataSource.Data" /> プロパティで指定されたファイル内の XML を表す <see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> オブジェクト。変換および <see cref="P:System.Web.UI.WebControls.XmlDataSource.XPath" /> クエリはすべて適用された状態で返されます。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 基に<xref:System.Web.UI.WebControls.XmlDataSource.GetXmlDocument%2A>なる XML データのメモリ内表現に直接アクセスするには、メソッドを使用します。  
+  
+ 返さ<xref:System.Xml.XmlDataDocument>れたオブジェクトを操作し、を<xref:System.Web.UI.WebControls.XmlDataSource.Save%2A>呼び出して、 <xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A>プロパティによって指定された XML ファイルへの変更を保持できます。 オブジェクトを正常に保存するに<xref:System.Xml.XmlDataDocument>は、いくつかの要件が満たされている必要があります。 詳細については、<xref:System.Web.UI.WebControls.XmlDataSource.Save%2A> メソッドを参照してください。  
+  
+   
+  
+## Examples  
+ このセクションには、2 つのコード例が含まれています。 最初の例では、コントロール<xref:System.Web.UI.WebControls.XmlDataSource> <xref:System.Web.UI.WebControls.TreeView>とコントロールを使用して、xml ファイルに含まれている xml データを表示および編集する方法を示します。 2番目の例では、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールとテンプレート<xref:System.Web.UI.WebControls.Repeater>化されたコントロールを使用して、xml ファイルに含まれる xml データを表示および編集する方法を示します。  
+  
+ 次のコード例は、コントロール<xref:System.Web.UI.WebControls.XmlDataSource> <xref:System.Web.UI.WebControls.TreeView>とコントロールを使用して、xml ファイルに含まれている xml データを表示および編集する方法を示しています。 データは、 <xref:System.Web.UI.WebControls.TreeView>ノードを選択するたび<xref:System.Web.UI.WebControls.XmlDataSource.GetXmlDocument%2A>にメソッドを使用してメモリ内で操作され、XML ファイルに保存されます。 最後に<xref:System.Web.UI.WebControls.BaseDataBoundControl.DataBind%2A> 、 <xref:System.Web.UI.WebControls.TreeView>コントロールに対してが呼び出され、表示されるデータを更新します。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_17#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_17/CS/xmlds17cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_17#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_17/VB/xmlds17vb.aspx#1)]  
+  
+ 次のコード例では、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールとテンプレート<xref:System.Web.UI.WebControls.Repeater>化されたコントロールを使用して、xml ファイルに含まれる xml データを表示および編集する方法を示します。 前の例と同様に、データは、 <xref:System.Xml.XmlDataDocument> <xref:System.Web.UI.WebControls.XmlDataSource.GetXmlDocument%2A>メソッドによって取得されたを使用してメモリ内で操作されます。 最後に<xref:System.Web.UI.WebControls.BaseDataBoundControl.DataBind%2A> 、 <xref:System.Web.UI.WebControls.TreeView>コントロールに対してが呼び出され、表示されるデータを更新します。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_18#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_18/CS/xmlds18cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_18#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_18/VB/xmlds18vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<?xml version="1.0" encoding="utf-8"?>  
+ <bookstore xmlns:bk="urn:samples">  
+   <book genre="novel" publicationdate="1999" bk:ISBN="0000000000">  
+     <title>Secrets of Silicon Valley</title>  
+     <author>  
+       <first-name>Sheryl</first-name>  
+       <last-name>Hunter</last-name>  
+     </author>  
+     <price>24.95</price>"   
+     </book>  
+   <book genre="novel" publicationdate="1985" bk:ISBN="1111111111">  
+     <title>Straight Talk About Computers</title>  
+     <author>  
+       <first-name>Dean</first-name>  
+       <last-name>Straight</last-name>  
+     </author>  
+     <price>29.95</price>  
+   </book>  
+</bookstore>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException"><see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティに対して URL が指定されていますが、<see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールに、その Web リソースに対する適切なアクセス許可がありません。</exception>
+        <exception cref="T:System.NotSupportedException"><see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティに対して、HTTP ベースではない URL が指定されています。  
+  
+または 
+<see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールを使用する前に、デザイン時の相対パスがデザイナーによって正しく割り当てられていませんでした。  
+  
+- または - 
+キャッシュとクライアント偽装の両方が有効になっています。 <see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールは、クライアント偽装が有効になっているときはキャッシュをサポートしません。</exception>
+        <exception cref="T:System.Web.HttpException"><see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティで指定されたパスへのアクセスが拒否されました。</exception>
+        <altmember cref="M:System.Web.UI.WebControls.XmlDataSource.Save" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" />
+      </Docs>
+    </Member>
+    <Member MemberName="OnTransforming">
+      <MemberSignature Language="C#" Value="protected virtual void OnTransforming (EventArgs e);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void OnTransforming(class System.EventArgs e) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.XmlDataSource.OnTransforming(System.EventArgs)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub OnTransforming (e As EventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void OnTransforming(EventArgs ^ e);" />
+      <MemberSignature Language="F#" Value="abstract member OnTransforming : EventArgs -&gt; unit&#xA;override this.OnTransforming : EventArgs -&gt; unit" Usage="xmlDataSource.OnTransforming e" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="e" Type="System.EventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="e">イベント データを格納している <see cref="T:System.EventArgs" />。</param>
+        <summary><see cref="E:System.Web.UI.WebControls.XmlDataSource.Transforming" /> コントロールが XML データに対して XSLT 変換を実行する前に <see cref="T:System.Web.UI.WebControls.XmlDataSource" /> イベントを発生させます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ イベントを発生させると、イベント ハンドラーがデリゲートから呼び出されます。 イベントを処理する方法の詳細については、次を参照してください。[処理とイベントの発生](~/docs/standard/events/index.md)します。  
+  
+ <xref:System.Web.UI.WebControls.XmlDataSource.OnTransforming%2A> メソッドを使用すると、デリゲートを結び付けずに、派生クラスでイベントを処理することもできます。 派生クラスでイベントを処理する場合は、この手法をお勧めします。  
+  
+   
+  
+## Examples  
+ 次のコード例は、コントロール<xref:System.Web.UI.WebControls.XmlDataSource> <xref:System.Web.UI.WebControls.TreeView>とコントロールを使用して、変換された XML データを表示する方法を示しています。 XML 変換は、 <xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A>プロパティで指定されたスタイルシートを使用して実行されます。 また、スタイルシートでは、実行時に<xref:System.Xml.Xsl.XsltArgumentList>オブジェクトのデータソースコントロールに渡される変換引数が使用されます。 このコード例は、カスタムイベントハンドラー <xref:System.Xml.Xsl.XsltArgumentList>を使用してイベントを<xref:System.Web.UI.WebControls.XmlDataSource.Transforming>処理することによって、オブジェクトをデータソースコントロールに渡す方法を示しています。 <xref:System.Web.UI.WebControls.XmlDataSource.OnTransforming%2A>これは、メソッドに設定されたメソッドの名前で識別されます。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_9#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_9/CS/xmlds9cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_9#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_9/VB/xmlds9vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<bookstore>  
+   <genre name="fiction">  
+     <book ISBN="0000000000">  
+       <title>Secrets of Silicon Valley</title>  
+       <price>12.95</price>  
+       <chapters>  
+         <chapter num="1" name="Introduction" />             
+         <chapter num="2" name="Body" />            
+         <chapter num="3" name="Conclusion" />  
+       </chapters>  
+     </book>  
+   </genre>  
+   <genre name="novel">  
+     <book genre="novel" ISBN="1111111111">  
+       <title>Straight Talk About Computers</title>  
+       <price>24.95</price>  
+       <chapters>  
+         <chapter num="1" name="Introduction" />   
+         <chapter num="2" name="Body" />  
+         <chapter num="3" name="Conclusion" />  
+       </chapters>  
+     </book>  
+   </genre>  
+</bookstore>  
+```  
+  
+ XML 変換は、次のスタイルシートを使用して実行されます。  
+  
+```  
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">  
+ <xsl:param name="purchdate"/>  
+ <xsl:template match="bookstore">  
+   <bookstore>  
+     <xsl:apply-templates select="genre"/>  
+   </bookstore>  
+ </xsl:template>  
+ <xsl:template match="genre">  
+   <genre>  
+     <xsl:attribute name="name">  
+       <xsl:value-of select="@name"/>  
+     </xsl:attribute>  
+     <xsl:apply-templates select="book"/>  
+   </genre>  
+ </xsl:template>  
+ <xsl:template match="book">  
+   <book>  
+     <xsl:attribute name="ISBN">  
+       <xsl:value-of select="@ISBN"/>  
+     </xsl:attribute>  
+     <xsl:attribute name="title">  
+       <xsl:value-of select="title"/>  
+       Price: <xsl:value-of select="price"/>  
+           15% discount if purchased by: <xsl:value-of select="$purchdate"/>        
+     </xsl:attribute>  
+     <xsl:apply-templates select="chapters/chapter" />  
+   </book>  
+ </xsl:template>  
+ <xsl:template match="chapter">  
+   <chapter>  
+     <xsl:attribute name="num">  
+       <xsl:value-of select="@num"/>  
+     </xsl:attribute>  
+     <xsl:attribute name="name">  
+       <xsl:value-of select="@name"/>  
+     </xsl:attribute>  
+     <xsl:apply-templates/>  
+   </chapter>  
+ </xsl:template>  
+</xsl:stylesheet>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para>派生クラス<see cref="M:System.Web.UI.WebControls.XmlDataSource.OnTransforming(System.EventArgs)" />でをオーバーライドする場合は、登録され<see cref="M:System.Web.UI.WebControls.XmlDataSource.OnTransforming(System.EventArgs)" />ているデリゲートがイベントを受け取るように、基本クラスのメソッドを呼び出す必要があります。</para></block>
+        <altmember cref="E:System.Web.UI.WebControls.XmlDataSource.Transforming" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.Transform" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.TransformFile" />
+      </Docs>
+    </Member>
+    <Member MemberName="Save">
+      <MemberSignature Language="C#" Value="public void Save ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void Save() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.XmlDataSource.Save" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Save ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Save();" />
+      <MemberSignature Language="F#" Value="member this.Save : unit -&gt; unit" Usage="xmlDataSource.Save " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Web.UI.WebControls.XmlDataSource" /> プロパティが設定されている場合に、<see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> コントロールが現在メモリ内に保持している XML データをディスクに保存します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コントロールは通常、読み取り専用のデータバインディングのシナリオで使用されますが、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールを使用して、基になる xml データファイル内の xml データを編集することができます。 <xref:System.Web.UI.WebControls.XmlDataSource> これらのシナリオでは、xml データは<xref:System.Web.UI.WebControls.XmlDataSource>コントロールによって xml ファイルから読み込まれます。 メソッドを<xref:System.Web.UI.WebControls.XmlDataSource.Save%2A> <xref:System.Xml.XmlDataDocument> <xref:System.Web.UI.WebControls.XmlDataSource.GetXmlDocument%2A>使用してメモリ内のを変更し、メソッドを呼び出して XML データファイルに保存します。 この編集可能な XML シナリオは、次の条件が満たされている場合に使用できます。  
+  
+-   Xml データは、プロパティ<xref:System.Web.UI.WebControls.XmlDataSource.DataFile%2A> <xref:System.Web.UI.WebControls.XmlDataSource.Data%2A>で指定された xml ファイルから読み込まれます。プロパティで指定されたインライン xml データからは読み込まれません。  
+  
+-   または<xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A> <xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A>プロパティに XSLT 変換が指定されていません。  
+  
+ メソッド<xref:System.Web.UI.WebControls.XmlDataSource.Save%2A>は、異なる要求による同時保存操作を処理しません。 複数のユーザーがコントロールを使用し<xref:System.Web.UI.WebControls.XmlDataSource>て XML ファイルを編集している場合、すべてのユーザーが同じデータを操作しているという保証はありません。 また、 <xref:System.Web.UI.WebControls.XmlDataSource.Save%2A>同じ同時実行の問題が原因で操作が失敗する可能性もあります。  
+  
+   
+  
+## Examples  
+ このセクションには、2 つのコード例が含まれています。 最初のコード例では、コントロール<xref:System.Web.UI.WebControls.XmlDataSource> <xref:System.Web.UI.WebControls.TreeView>とコントロールを使用して、xml ファイルに含まれている xml データを表示および編集する方法を示します。 2番目のコード例では、 <xref:System.Web.UI.WebControls.XmlDataSource>テンプレート<xref:System.Web.UI.WebControls.Repeater>化されたコントロールでコントロールを使用して、xml ファイルに含まれる xml データを表示および編集する方法を示します。  
+  
+ 次のコード例は、コントロール<xref:System.Web.UI.WebControls.XmlDataSource> <xref:System.Web.UI.WebControls.TreeView>とコントロールを使用して、xml ファイルに含まれている xml データを表示および編集する方法を示しています。 データは、 <xref:System.Web.UI.WebControls.TreeView>ノードを選択するたび<xref:System.Web.UI.WebControls.XmlDataSource.GetXmlDocument%2A>にメソッドを使用してメモリ内で操作され、XML ファイルに保存されます。 最後に<xref:System.Web.UI.WebControls.BaseDataBoundControl.DataBind%2A> 、 <xref:System.Web.UI.WebControls.TreeView>コントロールに対してが呼び出され、表示されるデータを更新します。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_17#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_17/CS/xmlds17cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_17#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_17/VB/xmlds17vb.aspx#1)]  
+  
+ 次のコード例では、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールとテンプレート<xref:System.Web.UI.WebControls.Repeater>化されたコントロールを使用して、xml ファイルに含まれる xml データを表示および編集する方法を示します。 前の例と同様に、データは<xref:System.Xml.XmlDataDocument> <xref:System.Web.UI.WebControls.XmlDataSource.GetXmlDocument%2A>メソッドによって取得されたオブジェクトを使用してメモリ内で操作されます。 最後に<xref:System.Web.UI.WebControls.BaseDataBoundControl.DataBind%2A> 、 <xref:System.Web.UI.WebControls.TreeView>コントロールに対してが呼び出され、表示されるデータを更新します。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_18#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_18/CS/xmlds18cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_18#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_18/VB/xmlds18vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<?xml version="1.0" encoding="utf-8"?>  
+ <bookstore xmlns:bk="urn:samples">  
+   <book genre="novel" publicationdate="1999" bk:ISBN="0000000000">  
+     <title>Secrets of Silicon Valley</title>  
+     <author>  
+       <first-name>Sheryl</first-name>  
+       <last-name>Hunter</last-name>  
+     </author>  
+     <price>24.95</price>"   
+     </book>  
+   <book genre="novel" publicationdate="1985" bk:ISBN="1111111111">  
+     <title>Straight Talk About Computers</title>  
+     <author>  
+       <first-name>Dean</first-name>  
+       <last-name>Straight</last-name>  
+     </author>  
+     <price>29.95</price>  
+   </book>  
+</bookstore>  
+  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">XML データが、<see cref="P:System.Web.UI.WebControls.XmlDataSource.Data" /> プロパティではなく、<see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティを使って読み込まれています。  
+  
+- または - 
+<see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティに対して URL が指定されていますが、<see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールに、その Web リソースに対する適切なアクセス許可がありません。</exception>
+        <exception cref="T:System.NotSupportedException"><see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティに対して、HTTP ベースではない URL が指定されています。  
+  
+または 
+<see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールを使用する前に、デザイン時の相対パスがデザイナーによって正しく割り当てられていませんでした。</exception>
+        <exception cref="T:System.Web.HttpException"><see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティで指定されたパスへのアクセスが拒否されました。</exception>
+        <altmember cref="M:System.Web.UI.WebControls.XmlDataSource.GetXmlDocument" />
+      </Docs>
+    </Member>
+    <Member MemberName="System.ComponentModel.IListSource.ContainsListCollection">
+      <MemberSignature Language="C#" Value="bool System.ComponentModel.IListSource.ContainsListCollection { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool System.ComponentModel.IListSource.ContainsListCollection" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.System#ComponentModel#IListSource#ContainsListCollection" />
+      <MemberSignature Language="VB.NET" Value=" ReadOnly Property ContainsListCollection As Boolean Implements IListSource.ContainsListCollection" />
+      <MemberSignature Language="C++ CLI" Value="property bool System::ComponentModel::IListSource::ContainsListCollection { bool get(); };" />
+      <MemberSignature Language="F#" Usage="System.ComponentModel.IListSource.ContainsListCollection" />
+      <MemberType>Property</MemberType>
+      <Implements>
+        <InterfaceMember>P:System.ComponentModel.IListSource.ContainsListCollection</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>このメンバーの説明については、<see cref="P:System.ComponentModel.IListSource.ContainsListCollection" /> のトピックを参照してください。</summary>
+        <value>コレクションが <see cref="T:System.Collections.IList" /> オブジェクトのコレクションである場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメンバーは、明示的なインターフェイス メンバーの実装です。 このメソッドは、 <xref:System.Web.UI.WebControls.XmlDataSource>インスタンスが<xref:System.ComponentModel.IListSource>インターフェイスにキャストされている場合にのみ使用できます。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.ComponentModel.IListSource" />
+      </Docs>
+    </Member>
+    <Member MemberName="System.ComponentModel.IListSource.GetList">
+      <MemberSignature Language="C#" Value="System.Collections.IList IListSource.GetList ();" />
+      <MemberSignature Language="ILAsm" Value=".method hidebysig newslot virtual instance class System.Collections.IList System.ComponentModel.IListSource.GetList() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.XmlDataSource.System#ComponentModel#IListSource#GetList" />
+      <MemberSignature Language="VB.NET" Value="Function GetList () As IList Implements IListSource.GetList" />
+      <MemberSignature Language="C++ CLI" Value=" virtual System::Collections::IList ^ System.ComponentModel.IListSource.GetList() = System::ComponentModel::IListSource::GetList;" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.ComponentModel.IListSource.GetList</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.IList</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>このメンバーの説明については、<see cref="M:System.ComponentModel.IListSource.GetList" /> のトピックを参照してください。</summary>
+        <returns>データ ソースにバインドできる <see cref="T:System.Collections.IList" /> を実装するオブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメンバーは、明示的なインターフェイス メンバーの実装です。 このメソッドは、 <xref:System.Web.UI.WebControls.XmlDataSource>インスタンスが<xref:System.ComponentModel.IListSource>インターフェイスにキャストされている場合にのみ使用できます。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.ComponentModel.IListSource" />
+      </Docs>
+    </Member>
+    <Member MemberName="System.Web.UI.IDataSource.DataSourceChanged">
+      <MemberSignature Language="C#" Value="event EventHandler System.Web.UI.IDataSource.DataSourceChanged;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler System.Web.UI.IDataSource.DataSourceChanged" />
+      <MemberSignature Language="DocId" Value="E:System.Web.UI.WebControls.XmlDataSource.System#Web#UI#IDataSource#DataSourceChanged" />
+      <MemberSignature Language="VB.NET" Value="Custom Event DataSourceChanged As EventHandler Implements System.Web.UI.IDataSource" />
+      <MemberType>Event</MemberType>
+      <Implements>
+        <InterfaceMember>E:System.Web.UI.IDataSource.DataSourceChanged</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.EventHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>このメンバーの説明については、<see cref="E:System.Web.UI.IDataSource.DataSourceChanged" /> のトピックを参照してください。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメンバーは、明示的なインターフェイス メンバーの実装です。 このメソッドは、 <xref:System.Web.UI.WebControls.XmlDataSource>インスタンスが<xref:System.Web.UI.IDataSource>インターフェイスにキャストされている場合にのみ使用できます。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Web.UI.IDataSource" />
+      </Docs>
+    </Member>
+    <Member MemberName="System.Web.UI.IDataSource.GetView">
+      <MemberSignature Language="C#" Value="System.Web.UI.DataSourceView IDataSource.GetView (string viewName);" />
+      <MemberSignature Language="ILAsm" Value=".method hidebysig newslot virtual instance class System.Web.UI.DataSourceView System.Web.UI.IDataSource.GetView(string viewName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.XmlDataSource.System#Web#UI#IDataSource#GetView(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Function GetView (viewName As String) As DataSourceView Implements IDataSource.GetView" />
+      <MemberSignature Language="C++ CLI" Value=" virtual System::Web::UI::DataSourceView ^ System.Web.UI.IDataSource.GetView(System::String ^ viewName) = System::Web::UI::IDataSource::GetView;" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Web.UI.IDataSource.GetView(System.String)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.UI.DataSourceView</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="viewName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="viewName">取得するビューの名前。 <see cref="F:System.String.Empty" /> を指定した場合、<see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールの既定のビューが取得されます。</param>
+        <summary>データ ソース コントロールに関連付けられた名前付きデータ ソース ビューを取得します。</summary>
+        <returns><see cref="T:System.Web.UI.WebControls.XmlDataSourceView" /> コントロールに関連付けられている名前付きの <see cref="T:System.Web.UI.WebControls.XmlDataSource" /> オブジェクトを返します。</returns>
+        <remarks>To be added.</remarks>
+        <altmember cref="M:System.Web.UI.IDataSource.GetViewNames" />
+      </Docs>
+    </Member>
+    <Member MemberName="System.Web.UI.IDataSource.GetViewNames">
+      <MemberSignature Language="C#" Value="System.Collections.ICollection IDataSource.GetViewNames ();" />
+      <MemberSignature Language="ILAsm" Value=".method hidebysig newslot virtual instance class System.Collections.ICollection System.Web.UI.IDataSource.GetViewNames() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.WebControls.XmlDataSource.System#Web#UI#IDataSource#GetViewNames" />
+      <MemberSignature Language="VB.NET" Value="Function GetViewNames () As ICollection Implements IDataSource.GetViewNames" />
+      <MemberSignature Language="C++ CLI" Value=" virtual System::Collections::ICollection ^ System.Web.UI.IDataSource.GetViewNames() = System::Web::UI::IDataSource::GetViewNames;" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Web.UI.IDataSource.GetViewNames</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.ICollection</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>このメンバーの説明については、<see cref="M:System.Web.UI.IDataSource.GetViewNames" /> のトピックを参照してください。</summary>
+        <returns><see cref="T:System.Collections.ICollection" /> オブジェクトに関連付けられたビュー オブジェクトのリストを表す名前を格納する <see cref="T:System.Web.UI.IDataSource" /> を実装するオブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメンバーは、明示的なインターフェイス メンバーの実装です。 このメソッドは、 <xref:System.Web.UI.WebControls.XmlDataSource>インスタンスが<xref:System.Web.UI.IDataSource>インターフェイスにキャストされている場合にのみ使用できます。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Web.UI.IDataSource" />
+      </Docs>
+    </Member>
+    <Member MemberName="Transform">
+      <MemberSignature Language="C#" Value="public virtual string Transform { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Transform" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.Transform" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property Transform As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ Transform { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Transform : string with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.Transform" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue("")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ComponentModel.Editor("System.ComponentModel.Design.MultilineStringEditor,System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ComponentModel.TypeConverter("System.ComponentModel.MultilineStringConverter,System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Web.UI.PersistenceMode(System.Web.UI.PersistenceMode.InnerProperty)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.Editor("System.ComponentModel.Design.MultilineStringEditor,System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.TypeConverter("System.ComponentModel.MultilineStringConverter,System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールで管理されている XML データに対して実行される XSLT 変換を定義する拡張スタイルシート言語 (XSL) データのブロックを取得または設定します。</summary>
+        <value><see cref="P:System.Web.UI.WebControls.XmlDataSource.Data" /> プロパティまたは <see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティのデータに対して実行される XML 変換を定義したインライン XSL 文字列。 既定値は <see cref="F:System.String.Empty" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 宣言型のシナリオ<xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A>では、プロパティは<xref:System.Web.UI.WebControls.XmlDataSource>オブジェクトの複数行の内部プロパティとして指定されます。 内部プロパティは、スタイルシートを任意の方法で書式設定し、引用符文字の埋め込みなどの文字の埋め込みの問題を無視できるため、XSL スタイルシートデータと互換性があります。  
+  
+ <xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A>プロパティと<xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A> プロパティの <xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A> 両方が設定されている場合は、プロパティが優先され、プロパティに指定されているスタイルシート要素の代わりに xsl スタイルシートファイル (.xsl) <xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A> のデータが使用されます。 XPath 式が<xref:System.Web.UI.WebControls.XmlDataSource.XPath%2A>プロパティを使用して設定されている場合は、XML データが変換された後に適用されます。  
+  
+ プロパティの値を変更すると、イベントが発生します。 <xref:System.Web.UI.IDataSource.DataSourceChanged>  <xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A> キャッシュが有効になっていて、の<xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A>値を変更した場合、キャッシュは無効になります。  
+  
+> [!NOTE]
+>  クラス<xref:System.Web.UI.WebControls.XmlDataSource>は、非推奨<xref:System.Xml.Xsl.XslTransform>のクラスを使用して XSL 変換を実行します。 クラスの<xref:System.Xml.Xsl.XslTransform>非推奨となった後に導入されたスタイルシートの機能を使用する場合は、 <xref:System.Xml.Xsl.XslCompiledTransform>クラスを使用して変換を手動で適用します。  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールとテンプレート<xref:System.Web.UI.WebControls.Repeater>化されたコントロールを使用して、変換された XML データを表示する方法を示しています。 変換を実行するスタイルシートは、データソースコントロールの<xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A>プロパティによってインラインで定義されます。  
+  
+  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<?xml version="1.0" encoding="iso-8859-1"?>  
+ <orders>  
+   <order>  
+     <customer id="12345" />  
+     <customername>  
+         <firstn>Todd</firstn>  
+         <lastn>Rowe</lastn>  
+     </customername>  
+     <transaction id="12345" />  
+     <shipaddress>  
+         <address1>1234 Tenth Avenue</address1>  
+         <city>Bellevue</city>  
+         <state>Washington</state>  
+         <zip>98001</zip>  
+     </shipaddress>  
+     <summary>  
+         <item dept="tools">screwdriver</item>  
+         <item dept="tools">hammer</item>  
+         <item dept="plumbing">fixture</item>  
+     </summary>  
+   </order>  
+</orders>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">ドキュメントが読み込まれています。</exception>
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.TransformFile" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency" />
+      </Docs>
+    </Member>
+    <Member MemberName="TransformArgumentList">
+      <MemberSignature Language="C#" Value="public virtual System.Xml.Xsl.XsltArgumentList TransformArgumentList { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Xml.Xsl.XsltArgumentList TransformArgumentList" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.TransformArgumentList" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property TransformArgumentList As XsltArgumentList" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Xml::Xsl::XsltArgumentList ^ TransformArgumentList { System::Xml::Xsl::XsltArgumentList ^ get(); void set(System::Xml::Xsl::XsltArgumentList ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.TransformArgumentList : System.Xml.Xsl.XsltArgumentList with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.TransformArgumentList" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.Browsable(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Xml.Xsl.XsltArgumentList</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>XSLT 引数リストを提供します。この引数リストは、XML データに対する変換を実行するために、<see cref="P:System.Web.UI.WebControls.XmlDataSource.Transform" /> プロパティまたは <see cref="P:System.Web.UI.WebControls.XmlDataSource.TransformFile" /> プロパティで定義されたスタイル シートと組み合わせて使用されます。</summary>
+        <value><see cref="T:System.Xml.Xsl.XsltArgumentList" /> コントロールが XML データを読み込むときに適用される XSLT パラメーターおよびオブジェクトを保持する <see cref="T:System.Web.UI.WebControls.XmlDataSource" /> オブジェクト。 既定値は <see langword="null" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Xslt 変換<xref:System.Web.UI.WebControls.XmlDataSource.TransformArgumentList%2A>が XML データ<xref:System.Web.UI.WebControls.XmlDataSource.Transforming>に適用されるときに xslt パラメーターを使用できるようにするには、イベントが発生したときにプロパティを設定します。  
+  
+ プロパティがに`true`設定されてい<xref:System.Web.UI.WebControls.XmlDataSource.TransformArgumentList%2A>て、プロパティが設定されている場合、変換の引数リストでパラメーターが変更されても、キャッシュエントリは自動的に無効になりません。 <xref:System.Web.UI.WebControls.XmlDataSource.EnableCaching%2A> その場合は、 <xref:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency%2A>プロパティを設定してキャッシュを無効にするコードを記述する必要があります。  
+  
+   
+  
+## Examples  
+ 次のコード例は、を<xref:System.Web.UI.WebControls.XmlDataSource> <xref:System.Web.UI.WebControls.TreeView>コントロールと共に使用して、変換された XML データを表示する方法を示しています。 XML 変換は、 <xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A>プロパティで指定されたスタイルシートを使用して実行されます。 また、スタイルシートでは、実行時に<xref:System.Xml.Xsl.XsltArgumentList>オブジェクトのデータソースコントロールに渡される変換引数が使用されます。 このコード例では、カスタムイベント<xref:System.Xml.Xsl.XsltArgumentList>ハンドラーを使用して<xref:System.Web.UI.WebControls.XmlDataSource.Transforming>イベントを処理することにより、をデータソースコントロールに渡す方法を示します。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_9#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_9/CS/xmlds9cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_9#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_9/VB/xmlds9vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<bookstore>  
+   <genre name="fiction">  
+     <book ISBN="0000000000">  
+       <title>Secrets of Silicon Valley</title>  
+       <price>12.95</price>  
+       <chapters>  
+         <chapter num="1" name="Introduction" />             
+         <chapter num="2" name="Body" />            
+         <chapter num="3" name="Conclusion" />  
+       </chapters>  
+     </book>  
+   </genre>  
+   <genre name="novel">  
+     <book genre="novel" ISBN="1111111111">  
+       <title>Straight Talk About Computers</title>  
+       <price>24.95</price>  
+       <chapters>  
+         <chapter num="1" name="Introduction" />   
+         <chapter num="2" name="Body" />  
+         <chapter num="3" name="Conclusion" />  
+       </chapters>  
+     </book>  
+   </genre>  
+</bookstore>  
+```  
+  
+ XML データの変換は、次のスタイルシートを使用して実行されます。  
+  
+```  
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">  
+ <xsl:param name="purchdate"/>  
+ <xsl:template match="bookstore">  
+   <bookstore>  
+     <xsl:apply-templates select="genre"/>  
+   </bookstore>  
+ </xsl:template>  
+ <xsl:template match="genre">  
+   <genre>  
+     <xsl:attribute name="name">  
+       <xsl:value-of select="@name"/>  
+     </xsl:attribute>  
+     <xsl:apply-templates select="book"/>  
+   </genre>  
+ </xsl:template>  
+ <xsl:template match="book">  
+   <book>  
+     <xsl:attribute name="ISBN">  
+       <xsl:value-of select="@ISBN"/>  
+     </xsl:attribute>  
+     <xsl:attribute name="title">  
+       <xsl:value-of select="title"/>  
+       Price: <xsl:value-of select="price"/>  
+           15% discount if purchased by: <xsl:value-of select="$purchdate"/>        
+     </xsl:attribute>  
+     <xsl:apply-templates select="chapters/chapter" />  
+   </book>  
+ </xsl:template>  
+ <xsl:template match="chapter">  
+   <chapter>  
+     <xsl:attribute name="num">  
+       <xsl:value-of select="@num"/>  
+     </xsl:attribute>  
+     <xsl:attribute name="name">  
+       <xsl:value-of select="@name"/>  
+     </xsl:attribute>  
+     <xsl:apply-templates/>  
+   </chapter>  
+ </xsl:template>  
+</xsl:stylesheet>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="E:System.Web.UI.WebControls.XmlDataSource.Transforming" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.Transform" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.TransformFile" />
+      </Docs>
+    </Member>
+    <Member MemberName="TransformFile">
+      <MemberSignature Language="C#" Value="public virtual string TransformFile { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string TransformFile" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.TransformFile" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property TransformFile As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ TransformFile { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.TransformFile : string with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.TransformFile" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue("")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.ComponentModel.Editor("System.Web.UI.Design.XslTransformFileEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5">
+          <AttributeName>System.ComponentModel.Editor("System.Web.UI.Design.XslTransformFileEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Web.UI.WebControls.XmlDataSource" /> コントロールで管理されている XML データに対して実行される XSLT 変換を定義する拡張スタイルシート言語 (XSL) ファイル (.xsl) のファイル名を指定します。</summary>
+        <value><see cref="P:System.Web.UI.WebControls.XmlDataSource.Data" /> プロパティまたは <see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティのデータに対して実行される XML 変換を定義した XSL スタイル シート ファイルの絶対物理パスまたは相対パス。 既定値は <see cref="F:System.String.Empty" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A>プロパティと<xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A> プロパティの <xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A> 両方が設定されている場合は、プロパティが優先され、プロパティに指定されているスタイルシート要素の代わりに xsl スタイルシートファイル (.xsl) <xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A> のデータが使用されます。 XPath 式が<xref:System.Web.UI.WebControls.XmlDataSource.XPath%2A>プロパティを使用して設定されている場合は、XML データが変換された後に適用されます。  
+  
+ プロパティの値を変更すると、イベントが発生します。 <xref:System.Web.UI.IDataSource.DataSourceChanged>  <xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A> キャッシュが有効になっていて、の<xref:System.Web.UI.WebControls.XmlDataSource.Transform%2A>値を変更した場合、キャッシュは無効になります。  
+  
+> [!NOTE]
+>  クラス<xref:System.Web.UI.WebControls.XmlDataSource>は、非推奨<xref:System.Xml.Xsl.XslTransform>のクラスを使用して XSL 変換を実行します。 クラスの<xref:System.Xml.Xsl.XslTransform>非推奨となった後に導入されたスタイルシートの機能を使用する場合は、 <xref:System.Xml.Xsl.XslCompiledTransform>クラスを使用して変換を手動で適用します。  
+  
+   
+  
+## Examples  
+ 次のコード例では、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロール<xref:System.Web.UI.WebControls.TreeView>とコントロールを使用して、変換された XML データを Web フォームに表示する方法を示します。 変換は、 <xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A>プロパティで指定されたスタイルシートを使用して実行されます。 必要に応じて、 <xref:System.Xml.Xsl.XsltArgumentList>を使用してスタイルシートに変換引数を指定できます。 詳細については、<xref:System.Web.UI.WebControls.XmlDataSource.TransformArgumentList%2A> プロパティを参照してください。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_5#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_5/CS/xmlds5cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_5#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_5/VB/xmlds5vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<bookstore>  
+   <genre name="fiction">  
+     <book ISBN="0000000000">  
+       <title>Secrets of Silicon Valley</title>  
+       <price>12.95</price>  
+       <chapters>  
+         <chapter num="1" name="Introduction" />             
+         <chapter num="2" name="Body" />            
+         <chapter num="3" name="Conclusion" />  
+       </chapters>  
+     </book>  
+   </genre>  
+   <genre name="novel">  
+     <book genre="novel" ISBN="1111111111">  
+       <title>Straight Talk About Computers</title>  
+       <price>24.95</price>  
+       <chapters>  
+         <chapter num="1" name="Introduction" />   
+         <chapter num="2" name="Body" />  
+         <chapter num="3" name="Conclusion" />  
+       </chapters>  
+     </book>  
+   </genre>  
+</bookstore>  
+```  
+  
+ XML 変換を実行する XSL スタイルシートの構造は次のとおりです。  
+  
+```  
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">  
+ <xsl:template match="bookstore">  
+   <bookstore>  
+     <xsl:apply-templates select="genre"/>  
+   </bookstore>  
+ </xsl:template>  
+ <xsl:template match="genre">  
+   <genre>  
+     <xsl:attribute name="name">  
+       <xsl:value-of select="@name"/>  
+     </xsl:attribute>  
+     <xsl:apply-templates select="book"/>  
+   </genre>  
+ </xsl:template>  
+ <xsl:template match="book">  
+   <book>  
+     <xsl:attribute name="ISBN">  
+       <xsl:value-of select="@ISBN"/>  
+     </xsl:attribute>  
+     <xsl:attribute name="title">  
+       <xsl:value-of select="title"/>  
+     </xsl:attribute>  
+     <xsl:attribute name="price">  
+       <xsl:value-of select="price"/>  
+     </xsl:attribute>  
+     <xsl:apply-templates select="chapters/chapter" />  
+   </book>  
+ </xsl:template>  
+ <xsl:template match="chapter">  
+   <chapter>  
+     <xsl:attribute name="num">  
+       <xsl:value-of select="@num"/>  
+     </xsl:attribute>  
+     <xsl:attribute name="name">  
+       <xsl:value-of select="@name"/>  
+     </xsl:attribute>  
+     <xsl:apply-templates/>  
+   </chapter>  
+ </xsl:template>  
+</xsl:stylesheet>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">ドキュメントが読み込まれています。</exception>
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.Transform" />
+        <altmember cref="P:System.Web.UI.WebControls.XmlDataSource.CacheKeyDependency" />
+      </Docs>
+    </Member>
+    <Member MemberName="Transforming">
+      <MemberSignature Language="C#" Value="public event EventHandler Transforming;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler Transforming" />
+      <MemberSignature Language="DocId" Value="E:System.Web.UI.WebControls.XmlDataSource.Transforming" />
+      <MemberSignature Language="VB.NET" Value="Public Custom Event Transforming As EventHandler " />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; event EventHandler ^ Transforming;" />
+      <MemberSignature Language="F#" Value="member this.Transforming : EventHandler " Usage="member this.Transforming : System.EventHandler " />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.EventHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Web.UI.WebControls.XmlDataSource.Transform" /> プロパティで定義されたスタイル シート、または <see cref="P:System.Web.UI.WebControls.XmlDataSource.TransformFile" /> プロパティで指定されたスタイル シートが XML データに適用される前に発生します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ イベントを<xref:System.Web.UI.WebControls.XmlDataSource.Transforming>処理して、 <xref:System.Web.UI.WebControls.XmlDataSource.TransformArgumentList%2A>コントロールが<xref:System.Web.UI.WebControls.XmlDataSource> XML <xref:System.Xml.Xsl.XsltArgumentList>変換を実行する前に、オブジェクトを使用してプロパティを設定します。  
+  
+ イベントを処理する方法の詳細については、次を参照してください。[処理とイベントの発生](~/docs/standard/events/index.md)します。  
+  
+   
+  
+## Examples  
+ 次のコード例は、コントロール<xref:System.Web.UI.WebControls.XmlDataSource> <xref:System.Web.UI.WebControls.TreeView>とコントロールを使用して、変換された XML データを表示する方法を示しています。 XML 変換は、 <xref:System.Web.UI.WebControls.XmlDataSource.TransformFile%2A>プロパティで指定されたスタイルシートを使用して実行されます。 また、スタイルシートでは、実行時に内の<xref:System.Xml.Xsl.XsltArgumentList>データソースコントロールに渡される変換引数が使用されます。 このコード例は、カスタムイベントハンドラー <xref:System.Xml.Xsl.XsltArgumentList>を使用して<xref:System.Web.UI.WebControls.XmlDataSource.Transforming>イベントを処理することによって、オブジェクトをデータソースコントロールに渡す方法を示しています。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_9#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_9/CS/xmlds9cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_9#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_9/VB/xmlds9vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<bookstore>  
+   <genre name="fiction">  
+     <book ISBN="0000000000">  
+       <title>Secrets of Silicon Valley</title>  
+       <price>12.95</price>  
+       <chapters>  
+         <chapter num="1" name="Introduction" />             
+         <chapter num="2" name="Body" />            
+         <chapter num="3" name="Conclusion" />  
+       </chapters>  
+     </book>  
+   </genre>  
+   <genre name="novel">  
+     <book genre="novel" ISBN="1111111111">  
+       <title>Straight Talk About Computers</title>  
+       <price>24.95</price>  
+       <chapters>  
+         <chapter num="1" name="Introduction" />   
+         <chapter num="2" name="Body" />  
+         <chapter num="3" name="Conclusion" />  
+       </chapters>  
+     </book>  
+   </genre>  
+</bookstore>  
+```  
+  
+ XML データの変換は、次のスタイルシートを使用して実行されます。  
+  
+```  
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">  
+ <xsl:param name="purchdate"/>  
+ <xsl:template match="bookstore">  
+   <bookstore>  
+     <xsl:apply-templates select="genre"/>  
+   </bookstore>  
+ </xsl:template>  
+ <xsl:template match="genre">  
+   <genre>  
+     <xsl:attribute name="name">  
+       <xsl:value-of select="@name"/>  
+     </xsl:attribute>  
+     <xsl:apply-templates select="book"/>  
+   </genre>  
+ </xsl:template>  
+ <xsl:template match="book">  
+   <book>  
+     <xsl:attribute name="ISBN">  
+       <xsl:value-of select="@ISBN"/>  
+     </xsl:attribute>  
+     <xsl:attribute name="title">  
+       <xsl:value-of select="title"/>  
+       Price: <xsl:value-of select="price"/>  
+           15% discount if purchased by: <xsl:value-of select="$purchdate"/>        
+     </xsl:attribute>  
+     <xsl:apply-templates select="chapters/chapter" />  
+   </book>  
+ </xsl:template>  
+ <xsl:template match="chapter">  
+   <chapter>  
+     <xsl:attribute name="num">  
+       <xsl:value-of select="@num"/>  
+     </xsl:attribute>  
+     <xsl:attribute name="name">  
+       <xsl:value-of select="@name"/>  
+     </xsl:attribute>  
+     <xsl:apply-templates/>  
+   </chapter>  
+ </xsl:template>  
+</xsl:stylesheet>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Web.UI.WebControls.XmlDataSource.OnTransforming(System.EventArgs)" />
+      </Docs>
+    </Member>
+    <Member MemberName="XPath">
+      <MemberSignature Language="C#" Value="public virtual string XPath { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string XPath" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.WebControls.XmlDataSource.XPath" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Property XPath As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ XPath { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.XPath : string with get, set" Usage="System.Web.UI.WebControls.XmlDataSource.XPath" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue("")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Web.UI.WebControls.XmlDataSource.Data" /> プロパティに格納された XML データ、または、<see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティで指定された XML ファイル内の XML データに対して適用する XPath 式を指定します。</summary>
+        <value><see cref="P:System.Web.UI.WebControls.XmlDataSource.Data" /> プロパティに格納されたデータ、または、<see cref="P:System.Web.UI.WebControls.XmlDataSource.DataFile" /> プロパティで指定された XML ファイル内のデータをフィルター処理するための XPath 式を表す文字列。 既定値は <see cref="F:System.String.Empty" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ XPath データバインディング式の詳細については、「 [XmlDataSource コントロールへの表形式コントロールのバインド](https://msdn.microsoft.com/library/d6bf202f-6454-45fd-9424-e17f6c7eafe8)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次のコード例では、 <xref:System.Web.UI.WebControls.XmlDataSource>コントロールとテンプレート<xref:System.Web.UI.WebControls.Repeater>コントロールを使用して、XPath 式を使用してフィルター処理された XML データを表示する方法を示します。 この例では、データソースコントロールの<xref:System.Web.UI.WebControls.XmlDataSource.XPath%2A>プロパティが設定されている場合に XPath 構文を使用して xml データをフィルター処理し、さらに、 <xref:System.Web.UI.WebControls.Repeater>コントロールテンプレートの要素を xml データにバインドします。  
+  
+ [!code-aspx-csharp[System.Web.UI.WebControls.XmlDataSource_8#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_8/CS/xmlds8cs.aspx#1)]
+ [!code-aspx-vb[System.Web.UI.WebControls.XmlDataSource_8#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.UI.WebControls.XmlDataSource_8/VB/xmlds8vb.aspx#1)]  
+  
+ コード例の XML ファイルには、次のデータが含まれています。  
+  
+```  
+<bookstore>  
+   <genre name="fiction">  
+     <book ISBN="0000000000">  
+       <title>Secrets of Silicon Valley</title>  
+       <price>12.95</price>  
+       <chapters>  
+         <chapter num="1" name="Introduction" />             
+         <chapter num="2" name="Body" />            
+         <chapter num="3" name="Conclusion" />  
+       </chapters>  
+     </book>  
+   </genre>  
+   <genre name="novel">  
+     <book genre="novel" ISBN="1111111111">  
+       <title>Straight Talk About Computers</title>  
+       <price>24.95</price>  
+       <chapters>  
+         <chapter num="1" name="Introduction" />   
+         <chapter num="2" name="Body" />  
+         <chapter num="3" name="Conclusion" />  
+       </chapters>  
+     </book>  
+   </genre>  
+</bookstore>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException">ドキュメントが読み込まれています。</exception>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

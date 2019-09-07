@@ -1,0 +1,251 @@
+<Type Name="IAmbientProvider" FullName="System.Xaml.IAmbientProvider">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="676cec76c5e65ccbe563061adfe0bf5b84afefce" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70412238" /></Metadata><TypeSignature Language="C#" Value="public interface IAmbientProvider" />
+  <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract IAmbientProvider" />
+  <TypeSignature Language="DocId" Value="T:System.Xaml.IAmbientProvider" />
+  <TypeSignature Language="VB.NET" Value="Public Interface IAmbientProvider" />
+  <TypeSignature Language="C++ CLI" Value="public interface class IAmbientProvider" />
+  <TypeSignature Language="F#" Value="type IAmbientProvider = interface" />
+  <AssemblyInfo>
+    <AssemblyName>System.Xaml</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Interfaces />
+  <Docs>
+    <summary>型コンバーターおよびマークアップ拡張機能に、アンビエント プロパティまたはアンビエント型に関する情報アイテムを返すことのできるサービスを表します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このインターフェイスは、型コンバーターとマークアップ拡張機能を使用して XAML 型システム (<xref:System.Xaml.XamlMember>オブジェクト) のアンビエントプロパティ識別子を取得するために役立つサービスを表します。 サービスは、クラスからアンビエントプロパティの値を取得することもできます。 型はアンビエントでもかまいません。その型を値として使用するメンバーは、アンビエントと見なされる必要があります。  
+  
+ 通常、このサービスは、コンテキスト固有の<xref:System.IServiceProvider.GetService%2A>サービスプロバイダーに対して行われるの呼び出しによって返されます。 サービスプロバイダーは、それを必要とするコンテキスト (値コンバーターの実行コードなど) で一般公開されています。 詳細については、「 [XAML の型コンバーターとマークアップ拡張機能](~/docs/framework/xaml-services/type-converters-and-markup-extensions-for-xaml.md)」および「[型コンバーターとマークアップ拡張機能で使用できるサービスコンテキスト](~/docs/framework/xaml-services/service-contexts-available-to-type-converters-and-markup-extensions.md)」を参照してください。  
+  
+## <a name="about-ambient-properties"></a>アンビエントプロパティについて  
+ アンビエントプロパティは、XAML ノード構造およびそこから作成されたオブジェクトグラフに存在する型コンバーターおよびマークアップ拡張機能によって使用されるプロパティ値を持つプロパティです。 これは、読み込みパスのオブジェクト書き込みフェーズまたは保存パスのシリアル化フェーズ中に、XAML プロセッサに関連します。  
+  
+ 読み込みパスの場合、アンビエントプロパティの値は、XAML ノード構造の下位に存在する他のプロパティのオブジェクトグラフの値に影響を与える可能性があります。 アンビエント概念は、XAML ノードストリームとして処理されるときに、型コンバーターおよびマークアップ拡張機能でアンビエントプロパティ`StartObject`値`EndObject`をからに使用できるようにする必要があることを意味します。 同様に、保存パスに使用される型コンバーターは、アンビエントプロパティとその値の情報を使用できます。 したがって、生成される XAML はラウンドトリップ表現の方が適しています。  
+  
+ 一般に、メンバーの場合、XAML では、オブジェクトのメンバーを処理する順序を指定しません。 ただし、他のプロパティに含まれている型コンバーターおよびマークアップ拡張機能の使用が<xref:System.Xaml.IAmbientProvider>サービスを介してアクセスできるように、アンビエントプロパティ値は最初に XAML リーダーによって処理される必要があります。  
+  
+ <xref:System.Xaml.XamlMember.DependsOn%2A>は、XAML ノードの処理順序にも影響を与える同様の概念です。 ただし、 <xref:System.Xaml.XamlMember.DependsOn%2A>はピアメンバーとノードのリレーションシップにのみ使用でき、すべての子孫に影響を与えることはできません。 また、 <xref:System.Xaml.XamlMember.DependsOn%2A>は、オブジェクトグラフのプロパティ設定に直接影響します。一方、アンビエント手法は、型コンバーターまたはマークアップ拡張機能に依存します。 アンビエント手法では、アンビエントプロパティ値の解釈方法とオブジェクトへの適用方法を指定する、特定の型コンバーターまたはマークアップ拡張機能の定義も必要です。  
+  
+## <a name="wpf-usage-notes"></a>WPF の使用上の注意  
+ [!INCLUDE[TLA2#tla_winclient](~/includes/tla2sharptla-winclient-md.md)]機能セットに示されているアンビエントプロパティのシナリオは<xref:System.Windows.Style.TargetType%2A?displayProperty=nameWithType>、他の値に必要なプロパティ名の参照を修飾できるです。 この場合、値は<xref:System.Windows.Style.TargetType%2A?displayProperty=nameWithType> 、その下<xref:System.Windows.Setter.Property%2A?displayProperty=nameWithType>の XAML ノードに配置されている値を修飾します。 <xref:System.Windows.Setter.Property%2A?displayProperty=nameWithType>では、 <xref:System.Windows.DependencyProperty>型コンバーターの動作を使用します。 この動作では、 <xref:System.Windows.Style.TargetType%2A?displayProperty=nameWithType>型コンバーターおよび<xref:System.Xaml.IAmbientProvider.GetFirstAmbientValue%2A>マークアップ拡張機能で使用できるサービスコンテキストからクエリを実行することによって、アンビエント値にアクセスします。  
+  
+ WPF の機能セットに示されているアンビエント型のシナリオ<xref:System.Windows.ResourceDictionary>はです。 <xref:System.Windows.ResourceDictionary>には、マージする他の<xref:System.Windows.ResourceDictionary>オブジェクトを含めることができるプロパティがあります。マージされたシナリオでのリソース解決の目的の順序は、型が読み込まれた順序と競合します。 <xref:System.Windows.ResourceDictionary.MergedDictionaries%2A> <xref:System.Windows.ResourceDictionary>を<xref:System.Windows.Markup.AmbientAttribute>適用して、XAML プロセッサが、結合されたディクショナリ内の`StaticResource`参照を使用法と正しく処理できるようにします。 具体的に`StaticResource`は、はマークアップ拡張機能<xref:System.Xaml.IAmbientProvider.GetAllAmbientValues%2A>であり、を呼び出します。  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Xaml.AmbientPropertyValue" />
+  </Docs>
+  <Members>
+    <MemberGroup MemberName="GetAllAmbientValues">
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>要求されたスコープのアンビエント型またはアンビエント プロパティの情報アイテムの列挙可能なセットを返します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="GetAllAmbientValues">
+      <MemberSignature Language="C#" Value="public System.Collections.Generic.IEnumerable&lt;object&gt; GetAllAmbientValues (params System.Xaml.XamlType[] types);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Collections.Generic.IEnumerable`1&lt;object&gt; GetAllAmbientValues(class System.Xaml.XamlType[] types) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.IAmbientProvider.GetAllAmbientValues(System.Xaml.XamlType[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetAllAmbientValues (ParamArray types As XamlType()) As IEnumerable(Of Object)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Collections::Generic::IEnumerable&lt;System::Object ^&gt; ^ GetAllAmbientValues(... cli::array &lt;System::Xaml::XamlType ^&gt; ^ types);" />
+      <MemberSignature Language="F#" Value="abstract member GetAllAmbientValues : System.Xaml.XamlType[] -&gt; seq&lt;obj&gt;" Usage="iAmbientProvider.GetAllAmbientValues types" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerable&lt;System.Object&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="types" Type="System.Xaml.XamlType[]">
+          <Attributes>
+            <Attribute FrameworkAlternate="netcore-3.0">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="types">アンビエント型情報を取得する型のセット。</param>
+        <summary>要求された型に対する使用可能なアンビエント型のオブジェクト インスタンスの列挙可能なセットを返します。</summary>
+        <returns>要求した <see cref="T:System.Xaml.XamlType" /> 識別子のセットに対する値を表す列挙可能なオブジェクトのセット。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetAllAmbientValues">
+      <MemberSignature Language="C#" Value="public System.Collections.Generic.IEnumerable&lt;System.Xaml.AmbientPropertyValue&gt; GetAllAmbientValues (System.Collections.Generic.IEnumerable&lt;System.Xaml.XamlType&gt; ceilingTypes, params System.Xaml.XamlMember[] properties);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Collections.Generic.IEnumerable`1&lt;class System.Xaml.AmbientPropertyValue&gt; GetAllAmbientValues(class System.Collections.Generic.IEnumerable`1&lt;class System.Xaml.XamlType&gt; ceilingTypes, class System.Xaml.XamlMember[] properties) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.IAmbientProvider.GetAllAmbientValues(System.Collections.Generic.IEnumerable{System.Xaml.XamlType},System.Xaml.XamlMember[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetAllAmbientValues (ceilingTypes As IEnumerable(Of XamlType), ParamArray properties As XamlMember()) As IEnumerable(Of AmbientPropertyValue)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Collections::Generic::IEnumerable&lt;System::Xaml::AmbientPropertyValue ^&gt; ^ GetAllAmbientValues(System::Collections::Generic::IEnumerable&lt;System::Xaml::XamlType ^&gt; ^ ceilingTypes, ... cli::array &lt;System::Xaml::XamlMember ^&gt; ^ properties);" />
+      <MemberSignature Language="F#" Value="abstract member GetAllAmbientValues : seq&lt;System.Xaml.XamlType&gt; * System.Xaml.XamlMember[] -&gt; seq&lt;System.Xaml.AmbientPropertyValue&gt;" Usage="iAmbientProvider.GetAllAmbientValues (ceilingTypes, properties)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerable&lt;System.Xaml.AmbientPropertyValue&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ceilingTypes" Type="System.Collections.Generic.IEnumerable&lt;System.Xaml.XamlType&gt;" />
+        <Parameter Name="properties" Type="System.Xaml.XamlMember[]">
+          <Attributes>
+            <Attribute FrameworkAlternate="netcore-3.0">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="ceilingTypes">オブジェクト グラフの上方向の走査で検出された場合に評価を停止する 1 つ以上の型を指定します。 この型に目的のアンビエント プロパティが保持されています。 <see langword="null" /> でもかまいません。</param>
+        <param name="properties">アンビエントと見なされるプロパティを識別する 1 つ以上のプロパティ識別子オブジェクトを指定します。</param>
+        <summary>要求されたプロパティ セットに対するアンビエント プロパティ情報アイテムの列挙可能なセットを返します。</summary>
+        <returns>要求されたプロパティ セットに対するアンビエント プロパティ情報アイテムの列挙可能なセット。 返された各 <see cref="T:System.Xaml.AmbientPropertyValue" /> のプロパティ情報は、入力された <paramref name="properties" /> のいずれかに一致します。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 返さ<xref:System.Xaml.AmbientPropertyValue>れる各には、 <xref:System.Xaml.XamlMember>識別子とプロパティ値が含まれます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetAllAmbientValues">
+      <MemberSignature Language="C#" Value="public System.Collections.Generic.IEnumerable&lt;System.Xaml.AmbientPropertyValue&gt; GetAllAmbientValues (System.Collections.Generic.IEnumerable&lt;System.Xaml.XamlType&gt; ceilingTypes, bool searchLiveStackOnly, System.Collections.Generic.IEnumerable&lt;System.Xaml.XamlType&gt; types, params System.Xaml.XamlMember[] properties);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Collections.Generic.IEnumerable`1&lt;class System.Xaml.AmbientPropertyValue&gt; GetAllAmbientValues(class System.Collections.Generic.IEnumerable`1&lt;class System.Xaml.XamlType&gt; ceilingTypes, bool searchLiveStackOnly, class System.Collections.Generic.IEnumerable`1&lt;class System.Xaml.XamlType&gt; types, class System.Xaml.XamlMember[] properties) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.IAmbientProvider.GetAllAmbientValues(System.Collections.Generic.IEnumerable{System.Xaml.XamlType},System.Boolean,System.Collections.Generic.IEnumerable{System.Xaml.XamlType},System.Xaml.XamlMember[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetAllAmbientValues (ceilingTypes As IEnumerable(Of XamlType), searchLiveStackOnly As Boolean, types As IEnumerable(Of XamlType), ParamArray properties As XamlMember()) As IEnumerable(Of AmbientPropertyValue)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Collections::Generic::IEnumerable&lt;System::Xaml::AmbientPropertyValue ^&gt; ^ GetAllAmbientValues(System::Collections::Generic::IEnumerable&lt;System::Xaml::XamlType ^&gt; ^ ceilingTypes, bool searchLiveStackOnly, System::Collections::Generic::IEnumerable&lt;System::Xaml::XamlType ^&gt; ^ types, ... cli::array &lt;System::Xaml::XamlMember ^&gt; ^ properties);" />
+      <MemberSignature Language="F#" Value="abstract member GetAllAmbientValues : seq&lt;System.Xaml.XamlType&gt; * bool * seq&lt;System.Xaml.XamlType&gt; * System.Xaml.XamlMember[] -&gt; seq&lt;System.Xaml.AmbientPropertyValue&gt;" Usage="iAmbientProvider.GetAllAmbientValues (ceilingTypes, searchLiveStackOnly, types, properties)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerable&lt;System.Xaml.AmbientPropertyValue&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ceilingTypes" Type="System.Collections.Generic.IEnumerable&lt;System.Xaml.XamlType&gt;" />
+        <Parameter Name="searchLiveStackOnly" Type="System.Boolean" />
+        <Parameter Name="types" Type="System.Collections.Generic.IEnumerable&lt;System.Xaml.XamlType&gt;" />
+        <Parameter Name="properties" Type="System.Xaml.XamlMember[]">
+          <Attributes>
+            <Attribute FrameworkAlternate="netcore-3.0">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="ceilingTypes">オブジェクト グラフの上方向の走査で検出された場合に評価を停止する 1 つ以上の型を指定します。 この型に目的のアンビエント プロパティが保持されています。 <see langword="null" /> でもかまいません。</param>
+        <param name="searchLiveStackOnly">保存されたコンテキストを使用しない場合は <see langword="true" />。保存されたコンテキストを使用する場合は <see langword="false" />。 既定値は、<see langword="false" /> です。</param>
+        <param name="types">アンビエントと見なされる型を識別する 1 つ以上の型識別子オブジェクトを指定します。</param>
+        <param name="properties">アンビエントと見なされるプロパティを識別する 1 つ以上のプロパティ識別子オブジェクトを指定します。</param>
+        <summary>要求された型とプロパティのセットに対するアンビエント プロパティ情報項目の列挙可能なセットを返します。</summary>
+        <returns>要求された型とプロパティのセットに対するアンビエント プロパティ情報アイテムの列挙可能なセット。 返された各 <see cref="T:System.Xaml.AmbientPropertyValue" /> のプロパティ情報は、入力された <paramref name="types" /> または <paramref name="properties" /> のいずれかに一致します。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 返さ<xref:System.Xaml.AmbientPropertyValue>れる各には、 <xref:System.Xaml.XamlMember>識別子とプロパティ値が含まれます。  
+  
+ この特定<xref:System.Xaml.IAmbientProvider.GetAllAmbientValues%2A>のオーバーロードでは、同じパスでツリーを介してアンビエント型とアンビエントプロパティを検索できます。 このオーバーロードを使用する<xref:System.Xaml.IAmbientProvider.GetAllAmbientValues%28System.Collections.Generic.IEnumerable%7BSystem.Xaml.XamlType%7D%2CSystem.Xaml.XamlMember%5B%5D%29>と、またはと<xref:System.Xaml.IAmbientProvider.GetAllAmbientValues%28System.Xaml.XamlType%5B%5D%29>は異なる戻り値の項目が順序付けられます。  
+  
+ このオーバーロードでは、保存されているコンテキストを検索で使用できないようにすることもできます。 また<xref:System.Xaml.IAmbientProvider.GetAllAmbientValues%28System.Collections.Generic.IEnumerable%7BSystem.Xaml.XamlType%7D%2CSystem.Xaml.XamlMember%5B%5D%29>は<xref:System.Xaml.IAmbientProvider.GetAllAmbientValues%28System.Xaml.XamlType%5B%5D%29>のオーバーロードは、使用可能な場合は、保存されているコンテキストを暗黙的`searchLiveStackOnly`に使用`false`します (暗黙的なパラメーターがの場合と同じように動作します)。 保存されたコンテキストの概念は、特定の XAML スキーマコンテキスト、または XAML を組み込んだフレームワークによって処理される可能性があります。 WPF XAML 実装では、テンプレートの展開やその他の機能領域に対して、保存されたコンテキストが使用されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="GetFirstAmbientValue">
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>最初に検出されたプロパティに基づいて、要求されたセットから単一のアンビエント型またはアンビエント プロパティの情報アイテムを返します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="GetFirstAmbientValue">
+      <MemberSignature Language="C#" Value="public object GetFirstAmbientValue (params System.Xaml.XamlType[] types);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance object GetFirstAmbientValue(class System.Xaml.XamlType[] types) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.IAmbientProvider.GetFirstAmbientValue(System.Xaml.XamlType[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetFirstAmbientValue (ParamArray types As XamlType()) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Object ^ GetFirstAmbientValue(... cli::array &lt;System::Xaml::XamlType ^&gt; ^ types);" />
+      <MemberSignature Language="F#" Value="abstract member GetFirstAmbientValue : System.Xaml.XamlType[] -&gt; obj" Usage="iAmbientProvider.GetFirstAmbientValue types" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="types" Type="System.Xaml.XamlType[]">
+          <Attributes>
+            <Attribute FrameworkAlternate="netcore-3.0">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="types">アンビエント型情報を取得する型のセット。</param>
+        <summary>要求された型に対する使用可能なアンビエント型の最初に一致したオブジェクトを返します。</summary>
+        <returns>要求されたセットに対する最初の結果オブジェクト。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFirstAmbientValue">
+      <MemberSignature Language="C#" Value="public System.Xaml.AmbientPropertyValue GetFirstAmbientValue (System.Collections.Generic.IEnumerable&lt;System.Xaml.XamlType&gt; ceilingTypes, params System.Xaml.XamlMember[] properties);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Xaml.AmbientPropertyValue GetFirstAmbientValue(class System.Collections.Generic.IEnumerable`1&lt;class System.Xaml.XamlType&gt; ceilingTypes, class System.Xaml.XamlMember[] properties) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Xaml.IAmbientProvider.GetFirstAmbientValue(System.Collections.Generic.IEnumerable{System.Xaml.XamlType},System.Xaml.XamlMember[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetFirstAmbientValue (ceilingTypes As IEnumerable(Of XamlType), ParamArray properties As XamlMember()) As AmbientPropertyValue" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Xaml::AmbientPropertyValue ^ GetFirstAmbientValue(System::Collections::Generic::IEnumerable&lt;System::Xaml::XamlType ^&gt; ^ ceilingTypes, ... cli::array &lt;System::Xaml::XamlMember ^&gt; ^ properties);" />
+      <MemberSignature Language="F#" Value="abstract member GetFirstAmbientValue : seq&lt;System.Xaml.XamlType&gt; * System.Xaml.XamlMember[] -&gt; System.Xaml.AmbientPropertyValue" Usage="iAmbientProvider.GetFirstAmbientValue (ceilingTypes, properties)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Xaml</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Xaml.AmbientPropertyValue</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="ceilingTypes" Type="System.Collections.Generic.IEnumerable&lt;System.Xaml.XamlType&gt;" />
+        <Parameter Name="properties" Type="System.Xaml.XamlMember[]">
+          <Attributes>
+            <Attribute FrameworkAlternate="netcore-3.0">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="ceilingTypes">オブジェクト グラフの上方向の走査で検出された場合に評価を停止する 1 つ以上の型を指定します。 この型に目的のアンビエント プロパティが保持されています。</param>
+        <param name="properties">アンビエントと見なされるプロパティを識別する 1 つ以上のオブジェクトを指定します。</param>
+        <summary>最初に検出されたプロパティに基づいて、要求されたプロパティ セットから単一のアンビエント プロパティの情報アイテムを返します。</summary>
+        <returns><paramref name="properties" /> リストで最初に見つかったアンビエント プロパティ値の単一のアンビエント プロパティの情報アイテム。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 返さ<xref:System.Xaml.AmbientPropertyValue>れる各には、 <xref:System.Xaml.XamlMember>識別子とプロパティ値が含まれます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
