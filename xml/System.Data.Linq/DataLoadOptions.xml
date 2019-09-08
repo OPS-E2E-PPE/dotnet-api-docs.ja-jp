@@ -1,0 +1,361 @@
+<Type Name="DataLoadOptions" FullName="System.Data.Linq.DataLoadOptions">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="c7aa513988ea0a5a91f9a421524e885230400520" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70658004" /></Metadata><TypeSignature Language="C#" Value="public sealed class DataLoadOptions" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit DataLoadOptions extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Data.Linq.DataLoadOptions" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class DataLoadOptions" />
+  <TypeSignature Language="C++ CLI" Value="public ref class DataLoadOptions sealed" />
+  <TypeSignature Language="F#" Value="type DataLoadOptions = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Data.Linq</AssemblyName>
+    <AssemblyVersion>3.5.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>関連データの即時読み込みおよびフィルター処理を提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+## <a name="general"></a>全般  
+ オブジェクトに対してクエリを実行すると、要求したオブジェクトだけが実際に取得されます。 *関連*オブジェクトが自動で同時に取得されることはありません。 (詳細については、「[リレーションシップ間のクエリ](~/docs/framework/data/adonet/sql/linq/querying-across-relationships.md)」を参照してください)。  
+  
+ クラス<xref:System.Data.Linq.DataLoadOptions>には、指定された関連データをすぐに読み込むための2つのメソッドが用意されています。 メソッド<xref:System.Data.Linq.DataLoadOptions.LoadWith%2A>を使用すると、メインターゲットに関連するデータを即時に読み込むことができます。 メソッド<xref:System.Data.Linq.DataLoadOptions.AssociateWith%2A>を使用すると、関連するオブジェクトをフィルター処理できます。  
+  
+## <a name="rules"></a>ルール  
+ 使用状況に関する<xref:System.Data.Linq.DataLoadOptions>次の規則に注意してください。  
+  
+-   最初のクエリの<xref:System.Data.Linq.DataContext>実行後にをに割り当てると、例外が生成されます。 <xref:System.Data.Linq.DataLoadOptions>  
+  
+-   に割り当て<xref:System.Data.Linq.DataLoadOptions>られた後にを変更すると、例外が生成されます。 <xref:System.Data.Linq.DataContext>  
+  
+## <a name="cycle-handling"></a>サイクルの処理  
+ <xref:System.Data.Linq.DataLoadOptions.LoadWith%2A>ディレクティブ<xref:System.Data.Linq.DataLoadOptions.AssociateWith%2A>とディレクティブは、循環を作成できません。 このようなグラフの例を次に示します。  
+  
+-   例 1: 自己再帰的  
+  
+    -   `dlo.LoadWith<Employee>(e => e.Reports);`  
+  
+-   例 2: バックポインター  
+  
+    -   `dlo.LoadWith <Customer>(c => C.Orders);`  
+  
+    -   `dlo.LoadWith <Order>(o => o.Customer);`  
+  
+-   例 3: 長いサイクル  
+  
+     これは、適切に正規化されたモデルでは発生しませんが、可能です。  
+  
+    -   `dlo.LoadWith <A>(a => a.Bs);`  
+  
+    -   `dlo.LoadWith <B>(b => b.Cs);`  
+  
+    -   `dlo.LoadWith <C>(c => c.As);`  
+  
+-   例 4: 自己再帰的サブクエリ  
+  
+    -   `dlo.AssociateWith<A>(a=>a.As.Where(a=>a.Id=33));`  
+  
+-   例 5: 再帰的なサブクエリを長くする  
+  
+    -   `dlo.AssociateWith<A>(a=>a.Bs.Where(b=>b.Id==3));`  
+  
+    -   `dlo.AssociateWith<B>(b=>b.As.Where(a=>a.Id==3));`  
+  
+ これらのシナリオで何が起こるかを理解するのに役立つ一般的な規則を次に示します。  
+  
+ **LoadWith**への各<xref:System.Data.Linq.DataLoadOptions.LoadWith%2A>呼び出しは、グラフに循環が導入されているかどうかを確認します。 (例1、2、3など) がある場合は、例外がスローされます。  
+  
+ **AssociateWith**実行時のエンジンは、既存のサブクエリ句を式内のリレーションシップに適用しません。  
+  
+-   例 4 `Where`では、サブクエリ式自体に`A`よってサブフィルター処理されたものだけでなく、すべてに対して句が実行されます (再帰的になるため)。  
+  
+-   例5では、に`Where` `B`サブクエリがある場合で`B`も、1つ目の句がすべてのに適用されます。 に`A` `Where` サブクエリがある場合でも、2番目の句がすべてのに適用されます。 `A`  
+  
+   
+  
+## Examples  
+ Northwind サンプルデータベース`Customers`からを取得する場合、を使用<xref:System.Data.Linq.DataLoadOptions>しても取得`Orders`されることを指定できます。 取得するの`Orders`サブセットを指定することもできます。  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public DataLoadOptions ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.Linq.DataLoadOptions.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; DataLoadOptions();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Linq</AssemblyName>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Data.Linq.DataLoadOptions" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AssociateWith">
+      <MemberSignature Language="C#" Value="public void AssociateWith (System.Linq.Expressions.LambdaExpression expression);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void AssociateWith(class System.Linq.Expressions.LambdaExpression expression) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.Linq.DataLoadOptions.AssociateWith(System.Linq.Expressions.LambdaExpression)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub AssociateWith (expression As LambdaExpression)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void AssociateWith(System::Linq::Expressions::LambdaExpression ^ expression);" />
+      <MemberSignature Language="F#" Value="member this.AssociateWith : System.Linq.Expressions.LambdaExpression -&gt; unit" Usage="dataLoadOptions.AssociateWith expression" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Linq</AssemblyName>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="expression" Type="System.Linq.Expressions.LambdaExpression" />
+      </Parameters>
+      <Docs>
+        <param name="expression">特定の一対多のフィールドまたは一対多のプロパティで使用するクエリを識別します。 次の点に注意してください。  
+  
+ 式の先頭が一対多のリレーションシップを表すフィールドまたはプロパティでない場合は、例外がスローされます。  
+  
+ 式に有効な演算子ではない演算子がある場合は、例外がスローされます。 有効な演算子は次のとおりです。  
+  
+ Where  
+  
+ OrderBy  
+  
+ ThenBy  
+  
+ OrderByDescending  
+  
+ ThenByDescending  
+  
+ Take</param>
+        <summary>特定のリレーションシップについて取得するオブジェクトをフィルター処理します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 次の例では、内側のループは、現在`Orders`出荷されていないものに対してのみ反復処理を行います。  
+  
+   
+  
+## Examples  
+ [!code-csharp[System.Data.Linq.DataLoadOptions#1](~/samples/snippets/csharp/VS_Snippets_Data/system.data.linq.dataloadoptions/cs/program.cs#1)]
+ [!code-vb[System.Data.Linq.DataLoadOptions#1](~/samples/snippets/visualbasic/VS_Snippets_Data/system.data.linq.dataloadoptions/vb/module1.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AssociateWith&lt;T&gt;">
+      <MemberSignature Language="C#" Value="public void AssociateWith&lt;T&gt; (System.Linq.Expressions.Expression&lt;Func&lt;T,object&gt;&gt; expression);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void AssociateWith&lt;T&gt;(class System.Linq.Expressions.Expression`1&lt;class System.Func`2&lt;!!T, object&gt;&gt; expression) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.Linq.DataLoadOptions.AssociateWith``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})" />
+      <MemberSignature Language="VB.NET" Value="Public Sub AssociateWith(Of T) (expression As Expression(Of Func(Of T, Object)))" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA;generic &lt;typename T&gt;&#xA; void AssociateWith(System::Linq::Expressions::Expression&lt;Func&lt;T, System::Object ^&gt; ^&gt; ^ expression);" />
+      <MemberSignature Language="F#" Value="member this.AssociateWith : System.Linq.Expressions.Expression&lt;Func&lt;'T, obj&gt;&gt; -&gt; unit" Usage="dataLoadOptions.AssociateWith expression" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Linq</AssemblyName>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <TypeParameters>
+        <TypeParameter Name="T" />
+      </TypeParameters>
+      <Parameters>
+        <Parameter Name="expression" Type="System.Linq.Expressions.Expression&lt;System.Func&lt;T,System.Object&gt;&gt;" />
+      </Parameters>
+      <Docs>
+        <typeparam name="T">クエリする型。  
+  
+ 型が割り当てられていない場合、例外がスローされます。</typeparam>
+        <param name="expression">特定の一対多のフィールドまたは一対多のプロパティで使用するクエリを識別します。 次の点に注意してください。  
+  
+ 式の先頭が一対多のリレーションシップを表すフィールドまたはプロパティでない場合は、例外がスローされます。  
+  
+ 式に有効な演算子ではない演算子がある場合は、例外がスローされます。 有効な演算子は次のとおりです。  
+  
+ Where  
+  
+ OrderBy  
+  
+ ThenBy  
+  
+ OrderByDescending  
+  
+ ThenByDescending  
+  
+ Take</param>
+        <summary>特定のリレーションシップについて取得するオブジェクトをフィルター処理します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ サイクルを回避する方法の詳細につい<xref:System.Data.Linq.DataLoadOptions>ては、「」を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例では、内側のループは、現在`Orders`出荷されていないものに対してのみ反復処理を行います。  
+  
+ [!code-csharp[System.Data.Linq.DataLoadOptions#1](~/samples/snippets/csharp/VS_Snippets_Data/system.data.linq.dataloadoptions/cs/program.cs#1)]
+ [!code-vb[System.Data.Linq.DataLoadOptions#1](~/samples/snippets/visualbasic/VS_Snippets_Data/system.data.linq.dataloadoptions/vb/module1.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetAssociationCriteria">
+      <MemberSignature Language="C#" Value="public bool GetAssociationCriteria (System.Reflection.MemberInfo memberInfo, out System.Linq.Expressions.LambdaExpression associationCriteria);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool GetAssociationCriteria(class System.Reflection.MemberInfo memberInfo, [out] class System.Linq.Expressions.LambdaExpression&amp; associationCriteria) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.Linq.DataLoadOptions.GetAssociationCriteria(System.Reflection.MemberInfo,System.Linq.Expressions.LambdaExpression@)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool GetAssociationCriteria(System::Reflection::MemberInfo ^ memberInfo, [Runtime::InteropServices::Out] System::Linq::Expressions::LambdaExpression ^ % associationCriteria);" />
+      <MemberSignature Language="F#" Value="member this.GetAssociationCriteria : System.Reflection.MemberInfo *  -&gt; bool" Usage="dataLoadOptions.GetAssociationCriteria (memberInfo, associationCriteria)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Linq</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="memberInfo" Type="System.Reflection.MemberInfo" Index="0" FrameworkAlternate="xamarinmac-3.0" />
+        <Parameter Name="associationCriteria" Type="System.Linq.Expressions.LambdaExpression" RefType="out" Index="1" FrameworkAlternate="xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="memberInfo">To be added.</param>
+        <param name="associationCriteria">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsImmediate">
+      <MemberSignature Language="C#" Value="public bool IsImmediate (System.Reflection.MemberInfo memberInfo);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool IsImmediate(class System.Reflection.MemberInfo memberInfo) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.Linq.DataLoadOptions.IsImmediate(System.Reflection.MemberInfo)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool IsImmediate(System::Reflection::MemberInfo ^ memberInfo);" />
+      <MemberSignature Language="F#" Value="member this.IsImmediate : System.Reflection.MemberInfo -&gt; bool" Usage="dataLoadOptions.IsImmediate memberInfo" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Linq</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="memberInfo" Type="System.Reflection.MemberInfo" Index="0" FrameworkAlternate="xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="memberInfo">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LoadWith">
+      <MemberSignature Language="C#" Value="public void LoadWith (System.Linq.Expressions.LambdaExpression expression);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void LoadWith(class System.Linq.Expressions.LambdaExpression expression) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.Linq.DataLoadOptions.LoadWith(System.Linq.Expressions.LambdaExpression)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub LoadWith (expression As LambdaExpression)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void LoadWith(System::Linq::Expressions::LambdaExpression ^ expression);" />
+      <MemberSignature Language="F#" Value="member this.LoadWith : System.Linq.Expressions.LambdaExpression -&gt; unit" Usage="dataLoadOptions.LoadWith expression" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Linq</AssemblyName>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="expression" Type="System.Linq.Expressions.LambdaExpression" />
+      </Parameters>
+      <Docs>
+        <param name="expression">関連する素材を識別するラムダ式。</param>
+        <summary>ラムダ式を使用して、メイン ターゲットに関連する指定したデータを取得します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 次の例では、クエリを実行すると、ロンドンに住んでいるすべての `Orders` のすべての `Customers` が取得されます。 その結果、それ以降 `Orders` オブジェクトの `Customer` プロパティにアクセスしても、新しいデータベース クエリは実行されません。  
+  
+   
+  
+## Examples  
+ [!code-csharp[System.Data.Linq.DataLoadOptions#2](~/samples/snippets/csharp/VS_Snippets_Data/system.data.linq.dataloadoptions/cs/program.cs#2)]
+ [!code-vb[System.Data.Linq.DataLoadOptions#2](~/samples/snippets/visualbasic/VS_Snippets_Data/system.data.linq.dataloadoptions/vb/module1.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LoadWith&lt;T&gt;">
+      <MemberSignature Language="C#" Value="public void LoadWith&lt;T&gt; (System.Linq.Expressions.Expression&lt;Func&lt;T,object&gt;&gt; expression);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void LoadWith&lt;T&gt;(class System.Linq.Expressions.Expression`1&lt;class System.Func`2&lt;!!T, object&gt;&gt; expression) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.Linq.DataLoadOptions.LoadWith``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})" />
+      <MemberSignature Language="VB.NET" Value="Public Sub LoadWith(Of T) (expression As Expression(Of Func(Of T, Object)))" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA;generic &lt;typename T&gt;&#xA; void LoadWith(System::Linq::Expressions::Expression&lt;Func&lt;T, System::Object ^&gt; ^&gt; ^ expression);" />
+      <MemberSignature Language="F#" Value="member this.LoadWith : System.Linq.Expressions.Expression&lt;Func&lt;'T, obj&gt;&gt; -&gt; unit" Usage="dataLoadOptions.LoadWith expression" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Linq</AssemblyName>
+        <AssemblyVersion>3.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <TypeParameters>
+        <TypeParameter Name="T" />
+      </TypeParameters>
+      <Parameters>
+        <Parameter Name="expression" Type="System.Linq.Expressions.Expression&lt;System.Func&lt;T,System.Object&gt;&gt;" />
+      </Parameters>
+      <Docs>
+        <typeparam name="T">クエリする型。  
+  
+ この型が割り当てられていない場合、例外がスローされます。</typeparam>
+        <param name="expression">取得するフィールドまたはプロパティを識別します。  
+  
+ 一対一または一対多のリレーションシップを表すフィールドまたはプロパティが式で識別されない場合は、例外がスローされます。</param>
+        <summary>T 型のオブジェクトにクエリが送信されるときに取得するサブオブジェクトを指定します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 2つのレベルのリレーションシップ (など`Orders.OrderDetails`) の読み込みを指定することはできません。 これらのシナリオでは、2つ<xref:System.Data.Linq.DataLoadOptions.LoadWith%2A>の個別のメソッドを指定する必要があります。  
+  
+ サイクルを回避するには、「 <xref:System.Data.Linq.DataLoadOptions>」の「解説」を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例では、クエリを実行すると、ロンドンに住んでいるすべての `Orders` のすべての `Customers` が取得されます。 その結果、それ以降 `Orders` オブジェクトの `Customer` プロパティにアクセスしても、新しいデータベース クエリは実行されません。  
+  
+ [!code-csharp[System.Data.Linq.DataLoadOptions#2](~/samples/snippets/csharp/VS_Snippets_Data/system.data.linq.dataloadoptions/cs/program.cs#2)]
+ [!code-vb[System.Data.Linq.DataLoadOptions#2](~/samples/snippets/visualbasic/VS_Snippets_Data/system.data.linq.dataloadoptions/vb/module1.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
