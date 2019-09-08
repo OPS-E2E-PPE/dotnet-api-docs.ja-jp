@@ -1,0 +1,297 @@
+<Type Name="TtsEventId" FullName="System.Speech.Synthesis.TtsEngine.TtsEventId">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="d086651c4e8908832d504877447c6a2fa64b60b4" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70430478" /></Metadata><TypeSignature Language="C#" Value="public enum TtsEventId" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed TtsEventId extends System.Enum" />
+  <TypeSignature Language="DocId" Value="T:System.Speech.Synthesis.TtsEngine.TtsEventId" />
+  <TypeSignature Language="VB.NET" Value="Public Enum TtsEventId" />
+  <TypeSignature Language="C++ CLI" Value="public enum class TtsEventId" />
+  <TypeSignature Language="F#" Value="type TtsEventId = " />
+  <AssemblyInfo>
+    <AssemblyName>System.Speech</AssemblyName>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Enum</BaseTypeName>
+  </Base>
+  <Docs>
+    <summary>音声合成イベントの型を列挙します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ カスタム音声合成エンジンは、 <xref:System.Speech.Synthesis.TtsEngine.TtsEventId>を使用して speech プラットフォームのシンセサイザーインフラストラクチャに送信されるイベントの種類を定義します。  
+  
+ <xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo.EventId%2A>クラスの<xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml.Speak%2A> <xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo> <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite>メンバーに渡されたインスタンスのプロパティを設定することによって、カスタム音声エンジンでメソッドに渡されるインターフェイスを実装します。 <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.AddEvents%2A>の<xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml>実装。  
+  
+ Speech プラットフォームインフラストラクチャは、読み上げ実装に渡されたの<xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A> <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite>プロパティを通じて現在処理しているイベントの種類を示します。  
+  
+ の<xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A>値はビットマスクです。の<xref:System.Speech.Synthesis.TtsEngine.TtsEventId>メンバーは、イベントの種類に対応するビットの位置を定義します。 たとえば、WordBoundary の値は 5 (5) です。つまり、によって返される値の 5 <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A>番目のビットは、サイトがイベントの種類をサポートしているかどうかを示します。  
+  
+   
+  
+## Examples  
+ 次の例は、を<xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml>継承し、、、 <xref:System.Speech.Synthesis.TtsEngine.FragmentState>、および<xref:System.Speech.Synthesis.TtsEngine.TtsEventId>の各クラス<xref:System.Speech.Synthesis.TtsEngine.TextFragment>を使用<xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo>しているカスタム音声合成実装の一部です。
+  
+ の<xref:System.Speech.Synthesis.TtsEngine.TtsEngineSsml.Speak%2A?displayProperty=nameWithType>実装には、次の手順が含まれます。
+  
+1.  インスタンスの<xref:System.Speech.Synthesis.TtsEngine.TextFragment>配列を受け取り、基になる合成エンジン<xref:System.Speech.Synthesis.TtsEngine.TextFragment>の`Speak`メソッドに渡されるインスタンスの新しい配列を作成します。  
+  
+2.  <xref:System.Speech.Synthesis.TtsEngine.TtsEngineAction.Speak?displayProperty=nameWithType>各<xref:System.Speech.Synthesis.TtsEngine.FragmentState.Action%2A> インスタンス <xref:System.Speech.Synthesis.TtsEngine.TextFragment.State%2A?displayProperty=nameWithType> のプロパティがに等しい場合、コードは次のように実行します。
+  
+    - 読み上げられるテキストの米国英語から英国英語への変換を行います。
+  
+    - 実装に対して提供される`WordBoundary`  <xref:System.Speech.Synthesis.TtsEngine.SpeechEventInfo> プロパティがイベントの種類をサポートしている場合は、のインスタンスを使用して、シンセサイザーの進行状況メーターを作成するためのイベントを作成します。 <xref:System.Speech.Synthesis.TtsEngine.ITtsEngineSite.EventInterest%2A?displayProperty=nameWithType>  
+  
+3.  その後、変更<xref:System.Speech.Synthesis.TtsEngine.TextFragment>された配列を使用して音声レンダリングエンジンが呼び出されます。
+  
+```csharp
+private const int WordBoundaryFlag = 1 << (int)TtsEventId.WordBoundary;
+private readonly char[] spaces = new char[] { ' ', '\t', '\r', '\n' };
+internal struct UsVsUk
+{
+    internal string UK;
+    internal string US;
+}
+
+override public void Speak (TextFragment [] frags, IntPtr wfx, ITtsEngineSite site)
+{
+    TextFragment [] newFrags=new TextFragment[frags.Length];
+  
+    for (int i=0;i<frags.Length;i++)
+    {
+        newFrags[i].State=frags[i].State;
+        //truncate
+        newFrags[i].TextToSpeak = frags[i].TextToSpeak.Substring(frags[i].TextOffset,
+                                  frags[i].TextLength);
+        newFrags[i].TextLength = newFrags[i].TextToSpeak.Length;
+        newFrags[i].TextOffset = 0;
+        if (newFrags[i].State.Action == TtsEngineAction.Speak)
+        {
+            //US to UK conversion
+            foreach (UsVsUk term in TransList)
+            {
+              newFrags[i].TextToSpeak.Replace(term.US, term.UK);
+            }
+            //Generate progress meter events if supported
+            if ((site.EventInterest & WordBoundaryFlag) != 0)
+            {
+                string[] subs = newFrags[i].TextToSpeak.Split(spaces);
+
+                foreach (string s in subs)
+                {
+                    int offset = newFrags[i].TextOffset;
+                    SpeechEventInfo spEvent = new SpeechEventInfo((Int16)TtsEventId.WordBoundary,
+                        (Int16)EventParameterType.Undefined,
+                        s.Length, new IntPtr(offset));
+                    offset += s.Length;
+                    if (s.Trim().Length > 0)
+                    {
+                        SpeechEventInfo[] events = new SpeechEventInfo[1];
+                        events[0] = spEvent;
+                        site.AddEvents(events, 1);
+                    }
+                }
+            }
+        }
+    }
+
+    _baseSynthesize.Speak(newFrags, wfx, site);
+
+}
+```  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="AudioLevel">
+      <MemberSignature Language="C#" Value="AudioLevel" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype System.Speech.Synthesis.TtsEngine.TtsEventId AudioLevel = int32(9)" />
+      <MemberSignature Language="DocId" Value="F:System.Speech.Synthesis.TtsEngine.TtsEventId.AudioLevel" />
+      <MemberSignature Language="VB.NET" Value="AudioLevel" />
+      <MemberSignature Language="C++ CLI" Value="AudioLevel" />
+      <MemberSignature Language="F#" Value="AudioLevel = 9" Usage="System.Speech.Synthesis.TtsEngine.TtsEventId.AudioLevel" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Synthesis.TtsEngine.TtsEventId</ReturnType>
+      </ReturnValue>
+      <MemberValue>9</MemberValue>
+      <Docs>
+        <summary>音声合成エンジンが読み上げ時にオーディオ レベル変更を完了するときに生成されるイベントを識別します。</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="Bookmark">
+      <MemberSignature Language="C#" Value="Bookmark" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype System.Speech.Synthesis.TtsEngine.TtsEventId Bookmark = int32(4)" />
+      <MemberSignature Language="DocId" Value="F:System.Speech.Synthesis.TtsEngine.TtsEventId.Bookmark" />
+      <MemberSignature Language="VB.NET" Value="Bookmark" />
+      <MemberSignature Language="C++ CLI" Value="Bookmark" />
+      <MemberSignature Language="F#" Value="Bookmark = 4" Usage="System.Speech.Synthesis.TtsEngine.TtsEventId.Bookmark" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Synthesis.TtsEngine.TtsEventId</ReturnType>
+      </ReturnValue>
+      <MemberValue>4</MemberValue>
+      <Docs>
+        <summary>音声合成エンジンが読み上げ時にブックマークを検出するときに生成されるイベントを識別します。</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="EndInputStream">
+      <MemberSignature Language="C#" Value="EndInputStream" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype System.Speech.Synthesis.TtsEngine.TtsEventId EndInputStream = int32(2)" />
+      <MemberSignature Language="DocId" Value="F:System.Speech.Synthesis.TtsEngine.TtsEventId.EndInputStream" />
+      <MemberSignature Language="VB.NET" Value="EndInputStream" />
+      <MemberSignature Language="C++ CLI" Value="EndInputStream" />
+      <MemberSignature Language="F#" Value="EndInputStream = 2" Usage="System.Speech.Synthesis.TtsEngine.TtsEventId.EndInputStream" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Synthesis.TtsEngine.TtsEventId</ReturnType>
+      </ReturnValue>
+      <MemberValue>2</MemberValue>
+      <Docs>
+        <summary>音声合成エンジンが読み上げ時に入力ストリームの最後を検出するときに生成されるイベントを識別します。</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="Phoneme">
+      <MemberSignature Language="C#" Value="Phoneme" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype System.Speech.Synthesis.TtsEngine.TtsEventId Phoneme = int32(6)" />
+      <MemberSignature Language="DocId" Value="F:System.Speech.Synthesis.TtsEngine.TtsEventId.Phoneme" />
+      <MemberSignature Language="VB.NET" Value="Phoneme" />
+      <MemberSignature Language="C++ CLI" Value="Phoneme" />
+      <MemberSignature Language="F#" Value="Phoneme = 6" Usage="System.Speech.Synthesis.TtsEngine.TtsEventId.Phoneme" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Synthesis.TtsEngine.TtsEventId</ReturnType>
+      </ReturnValue>
+      <MemberValue>6</MemberValue>
+      <Docs>
+        <summary>音声合成エンジンが読み上げ時に音素を完了するときに生成されるイベントを識別します。</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="SentenceBoundary">
+      <MemberSignature Language="C#" Value="SentenceBoundary" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype System.Speech.Synthesis.TtsEngine.TtsEventId SentenceBoundary = int32(7)" />
+      <MemberSignature Language="DocId" Value="F:System.Speech.Synthesis.TtsEngine.TtsEventId.SentenceBoundary" />
+      <MemberSignature Language="VB.NET" Value="SentenceBoundary" />
+      <MemberSignature Language="C++ CLI" Value="SentenceBoundary" />
+      <MemberSignature Language="F#" Value="SentenceBoundary = 7" Usage="System.Speech.Synthesis.TtsEngine.TtsEventId.SentenceBoundary" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Synthesis.TtsEngine.TtsEventId</ReturnType>
+      </ReturnValue>
+      <MemberValue>7</MemberValue>
+      <Docs>
+        <summary>音声合成エンジンが読み上げ時に文章を完了するときに生成されるイベントを識別します。</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="StartInputStream">
+      <MemberSignature Language="C#" Value="StartInputStream" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype System.Speech.Synthesis.TtsEngine.TtsEventId StartInputStream = int32(1)" />
+      <MemberSignature Language="DocId" Value="F:System.Speech.Synthesis.TtsEngine.TtsEventId.StartInputStream" />
+      <MemberSignature Language="VB.NET" Value="StartInputStream" />
+      <MemberSignature Language="C++ CLI" Value="StartInputStream" />
+      <MemberSignature Language="F#" Value="StartInputStream = 1" Usage="System.Speech.Synthesis.TtsEngine.TtsEventId.StartInputStream" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Synthesis.TtsEngine.TtsEventId</ReturnType>
+      </ReturnValue>
+      <MemberValue>1</MemberValue>
+      <Docs>
+        <summary>音声合成エンジンが読み上げストリームを開始するときに生成されるイベントを識別します。</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="Viseme">
+      <MemberSignature Language="C#" Value="Viseme" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype System.Speech.Synthesis.TtsEngine.TtsEventId Viseme = int32(8)" />
+      <MemberSignature Language="DocId" Value="F:System.Speech.Synthesis.TtsEngine.TtsEventId.Viseme" />
+      <MemberSignature Language="VB.NET" Value="Viseme" />
+      <MemberSignature Language="C++ CLI" Value="Viseme" />
+      <MemberSignature Language="F#" Value="Viseme = 8" Usage="System.Speech.Synthesis.TtsEngine.TtsEventId.Viseme" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Synthesis.TtsEngine.TtsEventId</ReturnType>
+      </ReturnValue>
+      <MemberValue>8</MemberValue>
+      <Docs>
+        <summary>音声合成エンジンが読み上げ時に viseme を完了するときに生成されるイベントを識別します。</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="VoiceChange">
+      <MemberSignature Language="C#" Value="VoiceChange" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype System.Speech.Synthesis.TtsEngine.TtsEventId VoiceChange = int32(3)" />
+      <MemberSignature Language="DocId" Value="F:System.Speech.Synthesis.TtsEngine.TtsEventId.VoiceChange" />
+      <MemberSignature Language="VB.NET" Value="VoiceChange" />
+      <MemberSignature Language="C++ CLI" Value="VoiceChange" />
+      <MemberSignature Language="F#" Value="VoiceChange = 3" Usage="System.Speech.Synthesis.TtsEngine.TtsEventId.VoiceChange" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Synthesis.TtsEngine.TtsEventId</ReturnType>
+      </ReturnValue>
+      <MemberValue>3</MemberValue>
+      <Docs>
+        <summary>音声合成エンジンが読み上げ時に音声の変更を検出するときに生成されるイベントを識別します。</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="WordBoundary">
+      <MemberSignature Language="C#" Value="WordBoundary" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype System.Speech.Synthesis.TtsEngine.TtsEventId WordBoundary = int32(5)" />
+      <MemberSignature Language="DocId" Value="F:System.Speech.Synthesis.TtsEngine.TtsEventId.WordBoundary" />
+      <MemberSignature Language="VB.NET" Value="WordBoundary" />
+      <MemberSignature Language="C++ CLI" Value="WordBoundary" />
+      <MemberSignature Language="F#" Value="WordBoundary = 5" Usage="System.Speech.Synthesis.TtsEngine.TtsEventId.WordBoundary" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Synthesis.TtsEngine.TtsEventId</ReturnType>
+      </ReturnValue>
+      <MemberValue>5</MemberValue>
+      <Docs>
+        <summary>音声合成エンジンが読み上げ時に単語を完了するときに生成されるイベントを識別します。</summary>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
