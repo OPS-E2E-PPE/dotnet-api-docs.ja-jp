@@ -1,0 +1,505 @@
+<Type Name="XmlMessageFormatter" FullName="System.Messaging.XmlMessageFormatter">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="58acefaa17af0e32e633170df97b4698cbc735be" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70575773" /></Metadata><TypeSignature Language="C#" Value="public class XmlMessageFormatter : ICloneable, System.Messaging.IMessageFormatter" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit XmlMessageFormatter extends System.Object implements class System.ICloneable, class System.Messaging.IMessageFormatter" />
+  <TypeSignature Language="DocId" Value="T:System.Messaging.XmlMessageFormatter" />
+  <TypeSignature Language="VB.NET" Value="Public Class XmlMessageFormatter&#xA;Implements ICloneable, IMessageFormatter" />
+  <TypeSignature Language="C++ CLI" Value="public ref class XmlMessageFormatter : ICloneable, System::Messaging::IMessageFormatter" />
+  <TypeSignature Language="F#" Value="type XmlMessageFormatter = class&#xA;    interface IMessageFormatter&#xA;    interface ICloneable" />
+  <AssemblyInfo>
+    <AssemblyName>System.Messaging</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.ICloneable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.Messaging.IMessageFormatter</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Docs>
+    <summary><span data-ttu-id="2930d-101">XSD スキーマ定義の XML 書式を使用して、メッセージ本文との間でオブジェクトをシリアル化および逆シリアル化します。</span><span class="sxs-lookup"><span data-stu-id="2930d-101">Serializes and deserializes objects to or from the body of a message, using the XML format based on the XSD schema definition.</span></span></summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2930d-102">は、の<xref:System.Messaging.MessageQueue>インスタンスがキューに書き込まれたメッセージをシリアル化するために使用する既定のフォーマッタです。 <xref:System.Messaging.XmlMessageFormatter></span><span class="sxs-lookup"><span data-stu-id="2930d-102">The <xref:System.Messaging.XmlMessageFormatter> is the default formatter that an instance of <xref:System.Messaging.MessageQueue> uses to serialize messages written to the queue.</span></span> <span data-ttu-id="2930d-103">の<xref:System.Messaging.MessageQueue>インスタンスを作成すると、の<xref:System.Messaging.XmlMessageFormatter>インスタンスが作成され、に関連付けら<xref:System.Messaging.MessageQueue>れます。</span><span class="sxs-lookup"><span data-stu-id="2930d-103">When you create an instance of <xref:System.Messaging.MessageQueue>, an instance of <xref:System.Messaging.XmlMessageFormatter> is created for you and associated with the <xref:System.Messaging.MessageQueue>.</span></span> <span data-ttu-id="2930d-104"><xref:System.Messaging.MessageQueue.Formatter%2A> 別 <xref:System.Messaging.MessageQueue> のフォーマッタを指定するには、コードで作成し、それをのプロパティに割り当てます。</span><span class="sxs-lookup"><span data-stu-id="2930d-104">You can specify a different formatter by creating it in your code and assigning it to the <xref:System.Messaging.MessageQueue.Formatter%2A> property of your <xref:System.Messaging.MessageQueue>.</span></span>  
+  
+ <span data-ttu-id="2930d-105">キューの既定<xref:System.Messaging.XmlMessageFormatter>のインスタンスを使用してキューに書き込むことができますが、フォーマッタでプロパティ<xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>またはプロパティを設定するまで、キュー <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>からの読み取りには使用できません。</span><span class="sxs-lookup"><span data-stu-id="2930d-105">A queue's default <xref:System.Messaging.XmlMessageFormatter> instance can be used to write to the queue, but it cannot be used to read from the queue until you set either the <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> or <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> property on the formatter.</span></span> <span data-ttu-id="2930d-106">これらの値の一方または両方を既定のフォーマッタインスタンスに設定することも、フォーマッタの新しいインスタンスを作成し、それらを引数として適切な<xref:System.Messaging.XmlMessageFormatter.%23ctor%2A>コンストラクターに渡すことによって値を自動的に設定することもできます。</span><span class="sxs-lookup"><span data-stu-id="2930d-106">You can either set one or both of these values on the default formatter instance, or you can create a new instance of the formatter and set the values automatically by passing them as arguments into the appropriate <xref:System.Messaging.XmlMessageFormatter.%23ctor%2A> constructor.</span></span>  
+  
+ <span data-ttu-id="2930d-107">では<xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>なくを指定すると、読み取り時間ではなくコンパイル時に型の存在がチェックされるため、エラーの可能性が減少します。 <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A></span><span class="sxs-lookup"><span data-stu-id="2930d-107">When specifying <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> rather than <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>, type existence is checked at compile time rather than read time, reducing possibility for error.</span></span> <span data-ttu-id="2930d-108"><xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>すべてのエントリが完全に修飾され、アセンブリ名を指定する必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-108"><xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> requires every entry to be fully qualified, specifying its assembly name.</span></span> <span data-ttu-id="2930d-109">さらに、複数の同時実行バージョンを使用する場合は、ターゲットの型名にもバージョン番号を追加する必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-109">Further, when working with multiple concurrent versions, the version number must also be appended to the target type name as well.</span></span>  
+  
+ <span data-ttu-id="2930d-110">プロパティ<xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> と <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> プロパティは、メッセージを逆シリアル化するときに一致させるスキーマをフォーマッタに指示します。</span><span class="sxs-lookup"><span data-stu-id="2930d-110">The <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message.</span></span> <span data-ttu-id="2930d-111">これにより、フォーマッタがメッセージ本文を解釈できるようになります。</span><span class="sxs-lookup"><span data-stu-id="2930d-111">This allows the formatter to interpret the message body.</span></span>  
+  
+ <span data-ttu-id="2930d-112">メッセージ本文でシリアル化されるインスタンスは、型配列で表されるスキーマのいずれかに準拠している必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-112">The instance serialized in the message body must comply with one of the schemas represented in the type array.</span></span> <span data-ttu-id="2930d-113"><xref:System.Messaging.MessageQueue.Receive%2A>メソッドを使用してメッセージを読み取ると、メソッドによって、識別されたスキーマに対応する型のオブジェクトが作成され、そのオブジェクトにメッセージ本文が読み取られます。</span><span class="sxs-lookup"><span data-stu-id="2930d-113">When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.</span></span>  
+  
+ <span data-ttu-id="2930d-114">キューから読み取る場合は、2つのプロパティのうち1つだけを設定する必要がありますが、両方を設定できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-114">Only one of the two properties needs to be set when reading from the queue, but you can set both.</span></span> <span data-ttu-id="2930d-115">一連の型は、2つのプロパティの組み合わせセットです。</span><span class="sxs-lookup"><span data-stu-id="2930d-115">The set of types is the combined set from the two properties.</span></span> <span data-ttu-id="2930d-116">使用するプロパティの決定は、アプリケーションに固有のものです。</span><span class="sxs-lookup"><span data-stu-id="2930d-116">The decision of which property to use is specific to your application.</span></span> <span data-ttu-id="2930d-117">メッセージ本文に、いずれかのプロパティの配列内のいずれの型とも一致しないスキーマを持つ型が含まれている場合、メッセージが読み取られると例外がスローされます。</span><span class="sxs-lookup"><span data-stu-id="2930d-117">If the message body contains a type whose schema does not match any of the types in the array for either property, an exception will be thrown when the message is read.</span></span>  
+  
+ <span data-ttu-id="2930d-118">は<xref:System.Messaging.XmlMessageFormatter> 、疎結合の XML ベースのメッセージングの重要なコンポーネントです。</span><span class="sxs-lookup"><span data-stu-id="2930d-118">The <xref:System.Messaging.XmlMessageFormatter> is a crucial component of loosely coupled XML-based messaging.</span></span> <span data-ttu-id="2930d-119">XSD.EXE ユーティリティでは、xml 形式を使用して XML スキーマを生成します。たとえば、ユーティリティを使用してアプリケーションで使用されるクラスをシリアル化する場合などです。</span><span class="sxs-lookup"><span data-stu-id="2930d-119">The XSD.exe utility uses the XML format is used to generate XML schema, such as when you use the utility to serialize a class used by your application.</span></span> <span data-ttu-id="2930d-120">このクラスには、パラメーターなしのコンストラクターが含まれている必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-120">The class must have a parameterless constructor.</span></span>  
+  
+ <span data-ttu-id="2930d-121">この形式は、クラスデータを記述するために配布するスキーマに基づいてクラスを生成するときに、逆プロセスで再び使用されます。</span><span class="sxs-lookup"><span data-stu-id="2930d-121">The format is used again in the reverse process when the utility generates a class based on the schema you distribute to describe your class data.</span></span> <span data-ttu-id="2930d-122">ユーティリティおよび生成された XML スキーマを使用すると、クラスの実装が変更された後でクラスを再コンパイルするたびに .dll ファイルの再配布を避けることができます。</span><span class="sxs-lookup"><span data-stu-id="2930d-122">The use of the utility and the XML schema it generates enables you to avoid redistributing.dll files every time you recompile a class after the implementation of your class has changed.</span></span> <span data-ttu-id="2930d-123">スキーマがクライアントまたはサーバーで変更されていない限り、どちらか一方に加えられた変更は他方には影響しません。</span><span class="sxs-lookup"><span data-stu-id="2930d-123">As long as the schema does not change on the client or the server, other changes on either side do not affect the other.</span></span>  
+  
+   
+  
+## Examples  
+ <span data-ttu-id="2930d-124">次のコード例には、サーバーコンポーネント、注文クラス、およびクライアントコードの3つのコードが含まれています。</span><span class="sxs-lookup"><span data-stu-id="2930d-124">The following code example includes three pieces of code: a server component, an order class, and client code.</span></span> <span data-ttu-id="2930d-125">Order クラスを XSD.EXE ユーティリティで使用して、サーバーが受信メッセージ内で認識するスキーマを生成できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-125">The order class can be used by the XSD.exe utility to generate schema that the server recognizes within incoming messages.</span></span> <span data-ttu-id="2930d-126">スキーマは、クラスの "形状" を記述する XML 形式のファイルです。</span><span class="sxs-lookup"><span data-stu-id="2930d-126">The schema is an XML formatted file that describes the "shape" of the class.</span></span> <span data-ttu-id="2930d-127">その後、このスキーマをクライアント側で使用して、サーバークラスと同じスキーマを共有するクライアント固有の順序クラスを生成できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-127">This schema can then be used on the client side to generate a client-specific order class that shares the same schema as the server class.</span></span>  
+  
+ <span data-ttu-id="2930d-128">次のコード例は、メッセージキューを介して注文を受信するサーバーコンポーネントを表しています。</span><span class="sxs-lookup"><span data-stu-id="2930d-128">The following code example represents a server component that receives orders through a message queue.</span></span> <span data-ttu-id="2930d-129">メッセージの本文は、次の Order.cs クラスと一致するスキーマを持つ order オブジェクトである必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-129">The body of the message should be an order object whose schema matches the Order.cs class below.</span></span> <span data-ttu-id="2930d-130">サーバープロセスまたはアプリケーションは、注文を逆シリアル化します。</span><span class="sxs-lookup"><span data-stu-id="2930d-130">The server process or application deserializes the order.</span></span>  
+  
+ [!code-cpp[Classic XmlMessageFormatter Example#1](~/samples/snippets/cpp/VS_Snippets_Remoting/Classic XmlMessageFormatter Example/CPP/source.cpp#1)]
+ [!code-csharp[Classic XmlMessageFormatter Example#1](~/samples/snippets/csharp/VS_Snippets_Remoting/Classic XmlMessageFormatter Example/CS/source.cs#1)]
+ [!code-vb[Classic XmlMessageFormatter Example#1](~/samples/snippets/visualbasic/VS_Snippets_Remoting/Classic XmlMessageFormatter Example/VB/source.vb#1)]  
+  
+ <span data-ttu-id="2930d-131">次のコード例は、サーバー上のアプリケーションが受信して逆シリアル化する order オブジェクトのスキーマを提供する order クラスを表しています。</span><span class="sxs-lookup"><span data-stu-id="2930d-131">The following code example represents the order class that provides a schema for the order objects that the application on the server receives and deserializes.</span></span>  
+  
+ [!code-cpp[Classic XmlMessageFormatter Example#2](~/samples/snippets/cpp/VS_Snippets_Remoting/Classic XmlMessageFormatter Example/CPP/source2.cpp#2)]
+ [!code-csharp[Classic XmlMessageFormatter Example#2](~/samples/snippets/csharp/VS_Snippets_Remoting/Classic XmlMessageFormatter Example/CS/source2.cs#2)]
+ [!code-vb[Classic XmlMessageFormatter Example#2](~/samples/snippets/visualbasic/VS_Snippets_Remoting/Classic XmlMessageFormatter Example/VB/source2.vb#2)]  
+  
+ <span data-ttu-id="2930d-132">サーバー上のアプリケーションと対話するすべてのクライアントアプリケーションは、ローカルに定義された order クラスの情報をメッセージ本文にシリアル化することによって、サーバーにメッセージを送信する必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-132">Any client application that interacts with the application on the server must send messages to the server by serializing information in a locally defined order class into the message body.</span></span> <span data-ttu-id="2930d-133">ローカルに定義された order クラスは、サーバー定義の order クラスと同じスキーマを持つ必要があります。このクラスは、サーバー上のアプリケーションがメッセージ本文を逆シリアル化しようとします。</span><span class="sxs-lookup"><span data-stu-id="2930d-133">The locally defined order class must have the same schema as the server-defined order class into which the application on the server will attempt to deserialize the message body.</span></span> <span data-ttu-id="2930d-134">XSD.EXE ユーティリティを使用すると、サーバー上のアプリケーションのマネージャーは、サーバーに送信されるメッセージをシリアル化するためにクライアントが使用する必要のあるスキーマを作成および配布できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-134">The XSD.exe utility lets the manager of the application on the server create and distribute the schema the client must use to serialize messages going to the server.</span></span>  
+  
+ <span data-ttu-id="2930d-135">クライアントアプリケーションのマネージャーが order クラスのスキーマを受け取ると、XSD.EXE ユーティリティを再度使用して、スキーマからクライアント固有の順序クラスを生成します。</span><span class="sxs-lookup"><span data-stu-id="2930d-135">When the manager of the client application receives the schema for the order class, the XSD.exe utility is used again to generate a client-specific order class from the schema.</span></span> <span data-ttu-id="2930d-136">このクラスは、サーバーの order クラスではなく、次のクライアントコード例で使用されています (XSD.EXE ユーティリティによって、スキーマによって生成されたクラスは元のクラスと同じ名前になります)。</span><span class="sxs-lookup"><span data-stu-id="2930d-136">It is this class that is used in the client code example below, not the server's order class (the XSD.exe utility causes the schema-generated class to have the same name as the original class).</span></span> <span data-ttu-id="2930d-137">この新しい order クラスは、注文をメッセージ本文にシリアル化するために使用されます。</span><span class="sxs-lookup"><span data-stu-id="2930d-137">This new order class is used to serialize the order into the message body.</span></span>  
+  
+ <span data-ttu-id="2930d-138">次のコード例は、注文をシリアル化し、注文に関連付けられた情報をキューに送信するために使用されるクライアント側の処理です。</span><span class="sxs-lookup"><span data-stu-id="2930d-138">The following code example is the client-side processing, used to serialize an order and send the information associated with the order to a queue.</span></span> <span data-ttu-id="2930d-139">このコードは、XSD.EXE ユーティリティによって Order.cs クラス用に生成されたスキーマの要素に、項目、数量、および住所の情報を関連付けます。</span><span class="sxs-lookup"><span data-stu-id="2930d-139">The code associates Item, Quantity, and Address information with elements of the schema that were generated for the Order.cs class by the XSD.exe utility.</span></span> <span data-ttu-id="2930d-140">注文がローカルコンピューターの Orders キューに送信されます。</span><span class="sxs-lookup"><span data-stu-id="2930d-140">An order is sent to the Orders queue on the local computer.</span></span>  
+  
+ [!code-cpp[Classic XmlMessageFormatter Example#3](~/samples/snippets/cpp/VS_Snippets_Remoting/Classic XmlMessageFormatter Example/CPP/source3.cpp#3)]
+ [!code-csharp[Classic XmlMessageFormatter Example#3](~/samples/snippets/csharp/VS_Snippets_Remoting/Classic XmlMessageFormatter Example/CS/source3.cs#3)]
+ [!code-vb[Classic XmlMessageFormatter Example#3](~/samples/snippets/visualbasic/VS_Snippets_Remoting/Classic XmlMessageFormatter Example/VB/source3.vb#3)]  
+  
+ <span data-ttu-id="2930d-141">サーバー上の order クラスからスキーマが生成された後、クラスを変更できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-141">After the schema is generated from the order class on the server, you can modify the class.</span></span> <span data-ttu-id="2930d-142">スキーマが変更されない限り、スキーマを再配布する必要はありません。</span><span class="sxs-lookup"><span data-stu-id="2930d-142">Unless the schema changes, you do not need to redistribute the schema.</span></span> <span data-ttu-id="2930d-143">スキーマを配布し、クライアント側の順序クラスを生成した後は、スキーマ自体が変更されていない限り、そのクライアントクラスをサーバーの order クラスとは別に変更することもできます。</span><span class="sxs-lookup"><span data-stu-id="2930d-143">After you have distributed the schema and generated a client-side order class, that client class can also be modified independently of the server's order class, as long as the schema itself is not modified.</span></span> <span data-ttu-id="2930d-144">この2つのクラスは疎結合になっています。</span><span class="sxs-lookup"><span data-stu-id="2930d-144">The two classes have become loosely coupled.</span></span>  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Messaging.MessageQueue" />
+    <altmember cref="T:System.Messaging.ActiveXMessageFormatter" />
+    <altmember cref="T:System.Messaging.BinaryMessageFormatter" />
+    <altmember cref="T:System.Messaging.IMessageFormatter" />
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Messaging</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><span data-ttu-id="2930d-145"><see cref="T:System.Messaging.XmlMessageFormatter" /> クラスの新しいインスタンスを初期化します。</span><span class="sxs-lookup"><span data-stu-id="2930d-145">Initializes a new instance of the <see cref="T:System.Messaging.XmlMessageFormatter" /> class.</span></span></summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XmlMessageFormatter ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Messaging.XmlMessageFormatter.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XmlMessageFormatter();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Messaging</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><span data-ttu-id="2930d-146">対象の型を設定せずに、<see cref="T:System.Messaging.XmlMessageFormatter" /> クラスの新しいインスタンスを初期化します。</span><span class="sxs-lookup"><span data-stu-id="2930d-146">Initializes a new instance of the <see cref="T:System.Messaging.XmlMessageFormatter" /> class, without target types set.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2930d-147">コンストラクターのこのオーバーロードは、書き込み時にターゲットの型が不要であるため、キューへの書き込み時に最も頻繁に使用されます。</span><span class="sxs-lookup"><span data-stu-id="2930d-147">This overload of the constructor is used most frequently when writing to the queue, as target types are not required when writing.</span></span>  
+  
+ <span data-ttu-id="2930d-148">このコンストラクターを使用して作成されたの<xref:System.Messaging.XmlMessageFormatter>インスタンスを使用してキューからメッセージを<xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>読み取る<xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>には、またはプロパティを設定して、フォーマッタが逆シリアル化を試みる型を認識できるようにする必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-148">To read a message from a queue using an instance of <xref:System.Messaging.XmlMessageFormatter> created using this constructor, you must set the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> or <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties so the formatter knows what types to attempt to deserialize.</span></span>  
+  
+ <span data-ttu-id="2930d-149">新しい<xref:System.Messaging.MessageQueue>を作成すると、対象の<xref:System.Messaging.XmlMessageFormatter>型が設定されずに、既定のインスタンスが作成されます。</span><span class="sxs-lookup"><span data-stu-id="2930d-149">When you create a new <xref:System.Messaging.MessageQueue>, a default <xref:System.Messaging.XmlMessageFormatter> instance is created, without the target types set.</span></span> <span data-ttu-id="2930d-150">このコンストラクターを使用して作成されたフォーマッタと同様に、キューから読み取る場合は、そのフォーマッタインスタンスのターゲット型を設定する必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-150">As with a formatter created using this constructor, you must set target types for that formatter instance if you want to read from the queue.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XmlMessageFormatter (string[] targetTypeNames);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string[] targetTypeNames) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Messaging.XmlMessageFormatter.#ctor(System.String[])" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (targetTypeNames As String())" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XmlMessageFormatter(cli::array &lt;System::String ^&gt; ^ targetTypeNames);" />
+      <MemberSignature Language="F#" Value="new System.Messaging.XmlMessageFormatter : string[] -&gt; System.Messaging.XmlMessageFormatter" Usage="new System.Messaging.XmlMessageFormatter targetTypeNames" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Messaging</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="targetTypeNames" Type="System.String[]" />
+      </Parameters>
+      <Docs>
+        <param name="targetTypeNames"><span data-ttu-id="2930d-151">フォーマッタでメッセージから逆シリアル化できる型のセットを指定する <see cref="T:System.String" /> 型の配列。</span><span class="sxs-lookup"><span data-stu-id="2930d-151">An array of type <see cref="T:System.String" /> that specifies the set of possible types that will be deserialized by the formatter from the message provided.</span></span> <span data-ttu-id="2930d-152">これらの値は、たとえば "MyNamespace.MyOrders, MyOrdersAssemblyName" のように完全に限定されている必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-152">These values must be fully qualified, for example, "MyNamespace.MyOrders, MyOrdersAssemblyName".</span></span></param>
+        <summary><span data-ttu-id="2930d-153"><see cref="T:System.Messaging.XmlMessageFormatter" /> クラスの新しいインスタンスを初期化し、完全限定型の文字列値の配列として渡された対象の型を設定します。</span><span class="sxs-lookup"><span data-stu-id="2930d-153">Initializes a new instance of the <see cref="T:System.Messaging.XmlMessageFormatter" /> class, setting target types passed in as an array of (fully qualified) string values.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2930d-154">ターゲット型パラメーターを持つコンストラクターは、キューから読み取るときに最も頻繁に使用されます。</span><span class="sxs-lookup"><span data-stu-id="2930d-154">The constructors with target type parameters are most frequently used when reading from the queue.</span></span> <span data-ttu-id="2930d-155">書き込み時には、対象の型を指定する必要はありません。</span><span class="sxs-lookup"><span data-stu-id="2930d-155">When writing, it is not necessary to specify target types.</span></span>  
+  
+ <span data-ttu-id="2930d-156">コンストラクターのこのオーバーロード<xref:System.Messaging.XmlMessageFormatter.%23ctor%2A>は、 `targetTypeNames`パラメーター <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>を通じて渡された配列値にプロパティを設定します。</span><span class="sxs-lookup"><span data-stu-id="2930d-156">This overload of the <xref:System.Messaging.XmlMessageFormatter.%23ctor%2A> constructor sets the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> property to the array values passed in through the `targetTypeNames` parameter.</span></span> <span data-ttu-id="2930d-157">このプロパティを設定する<xref:System.Messaging.MessageQueue>と、 <xref:System.Messaging.XmlMessageFormatter>このインスタンスを使用して、指定された型のオブジェクトを含むメッセージを読み取ることができます。</span><span class="sxs-lookup"><span data-stu-id="2930d-157">Setting this property enables a <xref:System.Messaging.MessageQueue> using this <xref:System.Messaging.XmlMessageFormatter> instance to read messages containing objects of given types.</span></span>  
+  
+ <span data-ttu-id="2930d-158">プロパティと<xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>プロパティはどちらも、メッセージを逆シリアル化するときにどのスキーマを照合するかをフォーマッタに指示します。</span><span class="sxs-lookup"><span data-stu-id="2930d-158">Both the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message.</span></span> <span data-ttu-id="2930d-159">これにより、フォーマッタがメッセージ本文を解釈できるようになります。</span><span class="sxs-lookup"><span data-stu-id="2930d-159">This allows the formatter to interpret the message body.</span></span>  
+  
+ <span data-ttu-id="2930d-160">メッセージ本文でシリアル化されるインスタンスは、型配列で表されるスキーマのいずれかに準拠している必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-160">The instance serialized in the message body must comply with one of the schemas represented in the type array.</span></span> <span data-ttu-id="2930d-161"><xref:System.Messaging.MessageQueue.Receive%2A>メソッドを使用してメッセージを読み取ると、メソッドによって、識別されたスキーマに対応する型のオブジェクトが作成され、そのオブジェクトにメッセージ本文が読み取られます。</span><span class="sxs-lookup"><span data-stu-id="2930d-161">When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.</span></span>  
+  
+ <span data-ttu-id="2930d-162">キューから読み取る場合は、2つのプロパティのうち1つだけを設定する必要がありますが、両方を設定できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-162">Only one of the two properties needs to be set when reading from the queue, but you can set both.</span></span> <span data-ttu-id="2930d-163">一連の型は、2つのプロパティの組み合わせセットです。</span><span class="sxs-lookup"><span data-stu-id="2930d-163">The set of types is the combined set from the two properties.</span></span> <span data-ttu-id="2930d-164">どちらを使用するかは、アプリケーションによって異なります。</span><span class="sxs-lookup"><span data-stu-id="2930d-164">The decision of which one to use is specific to your application.</span></span> <span data-ttu-id="2930d-165">いずれかのプロパティの配列内のいずれの型とも一致しないスキーマを持つ型がメッセージ本文に含まれている場合は、読み取り時に例外がスローされます。</span><span class="sxs-lookup"><span data-stu-id="2930d-165">If the message body contains a type whose schema does not match any of the types in the array for either property, an exception will be thrown at read time.</span></span>  
+  
+   
+  
+## Examples  
+ [!code-cpp[Message.Body#1](~/samples/snippets/cpp/VS_Snippets_Remoting/Message.Body/CPP/message_sendreceive.cpp#1)]
+ [!code-csharp[Message.Body#1](~/samples/snippets/csharp/VS_Snippets_Remoting/Message.Body/CS/message_sendreceive.cs#1)]
+ [!code-vb[Message.Body#1](~/samples/snippets/visualbasic/VS_Snippets_Remoting/Message.Body/VB/message_sendreceive.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="2930d-166"><paramref name="targetTypeNames" /> パラメーターが <see langword="null" /> です。</span><span class="sxs-lookup"><span data-stu-id="2930d-166">The <paramref name="targetTypeNames" /> parameter is <see langword="null" />.</span></span></exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XmlMessageFormatter (Type[] targetTypes);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Type[] targetTypes) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Messaging.XmlMessageFormatter.#ctor(System.Type[])" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (targetTypes As Type())" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XmlMessageFormatter(cli::array &lt;Type ^&gt; ^ targetTypes);" />
+      <MemberSignature Language="F#" Value="new System.Messaging.XmlMessageFormatter : Type[] -&gt; System.Messaging.XmlMessageFormatter" Usage="new System.Messaging.XmlMessageFormatter targetTypes" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Messaging</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="targetTypes" Type="System.Type[]" />
+      </Parameters>
+      <Docs>
+        <param name="targetTypes"><span data-ttu-id="2930d-167">フォーマッタでメッセージから逆シリアル化できる型のセットを指定する <see cref="T:System.Type" /> 型の配列。</span><span class="sxs-lookup"><span data-stu-id="2930d-167">An array of type <see cref="T:System.Type" /> that specifies the set of possible types that will be deserialized by the formatter from the message provided.</span></span></param>
+        <summary><span data-ttu-id="2930d-168"><see cref="T:System.Messaging.XmlMessageFormatter" /> クラスの新しいインスタンスを初期化し、オブジェクト型の配列として渡された対象の型を設定します。</span><span class="sxs-lookup"><span data-stu-id="2930d-168">Initializes a new instance of the <see cref="T:System.Messaging.XmlMessageFormatter" /> class, setting target types passed in as an array of object types.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2930d-169">ターゲット型パラメーターを持つコンストラクターは、キューから読み取るときに最も頻繁に使用されます。</span><span class="sxs-lookup"><span data-stu-id="2930d-169">The constructors with target type parameters are most frequently used when reading from the queue.</span></span> <span data-ttu-id="2930d-170">書き込み時には、対象の型を指定する必要はありません。</span><span class="sxs-lookup"><span data-stu-id="2930d-170">When writing, it is not necessary to specify target types.</span></span>  
+  
+ <span data-ttu-id="2930d-171">コンストラクターのこのオーバーロード<xref:System.Messaging.XmlMessageFormatter.%23ctor%2A>は、 `targetTypes`パラメーター <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>を通じて渡された配列値にプロパティを設定します。</span><span class="sxs-lookup"><span data-stu-id="2930d-171">This overload of the <xref:System.Messaging.XmlMessageFormatter.%23ctor%2A> constructor sets the <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> property to the array values passed in through the `targetTypes` parameter.</span></span> <span data-ttu-id="2930d-172">このプロパティを設定する<xref:System.Messaging.MessageQueue>と、 <xref:System.Messaging.XmlMessageFormatter>このインスタンスを使用して、指定された型のオブジェクトを含むメッセージを読み取ることができます。</span><span class="sxs-lookup"><span data-stu-id="2930d-172">Setting this property enables a <xref:System.Messaging.MessageQueue> using this <xref:System.Messaging.XmlMessageFormatter> instance to read messages containing objects of the given types.</span></span>  
+  
+ <span data-ttu-id="2930d-173">プロパティと<xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>プロパティはどちらも、メッセージを逆シリアル化するときにどのスキーマを照合するかをフォーマッタに指示します。</span><span class="sxs-lookup"><span data-stu-id="2930d-173">Both the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message.</span></span> <span data-ttu-id="2930d-174">これにより、フォーマッタがメッセージ本文を解釈できるようになります。</span><span class="sxs-lookup"><span data-stu-id="2930d-174">This allows the formatter to interpret the message body.</span></span>  
+  
+ <span data-ttu-id="2930d-175">メッセージ本文でシリアル化されるインスタンスは、型配列で表されるスキーマのいずれかに準拠している必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-175">The instance serialized in the message body must comply with one of the schemas represented in the type array.</span></span> <span data-ttu-id="2930d-176"><xref:System.Messaging.MessageQueue.Receive%2A>メソッドを使用してメッセージを読み取ると、メソッドによって、識別されたスキーマに対応する型のオブジェクトが作成され、そのオブジェクトにメッセージ本文が読み取られます。</span><span class="sxs-lookup"><span data-stu-id="2930d-176">When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.</span></span>  
+  
+ <span data-ttu-id="2930d-177">キューから読み取る場合は、2つのプロパティのうち1つだけを設定する必要がありますが、両方を設定できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-177">Only one of the two properties needs to be set when reading from the queue, but you can set both.</span></span> <span data-ttu-id="2930d-178">一連の型は、2つのプロパティの組み合わせセットです。</span><span class="sxs-lookup"><span data-stu-id="2930d-178">The set of types is the combined set from the two properties.</span></span> <span data-ttu-id="2930d-179">どちらを使用するかは、アプリケーションによって異なります。</span><span class="sxs-lookup"><span data-stu-id="2930d-179">The decision of which one to use is specific to your application.</span></span> <span data-ttu-id="2930d-180">いずれかのプロパティの配列内のいずれの型とも一致しないスキーマを持つ型がメッセージ本文に含まれている場合は、読み取り時に例外がスローされます。</span><span class="sxs-lookup"><span data-stu-id="2930d-180">If the message body contains a type whose schema does not match any of the types in the array for either property, an exception will be thrown at read time.</span></span>  
+  
+ <span data-ttu-id="2930d-181">では<xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>なくを指定すると、読み取り時間ではなくコンパイル時に型の存在がチェックされるため、エラーの可能性が減少します。 <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A></span><span class="sxs-lookup"><span data-stu-id="2930d-181">When specifying <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> rather than <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>, type existence is checked at compile time rather than read time, reducing possibility for error.</span></span> <span data-ttu-id="2930d-182"><xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>すべてのエントリが完全に修飾され、アセンブリ名を指定する必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-182"><xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> requires every entry to be fully qualified, specifying its assembly name.</span></span> <span data-ttu-id="2930d-183">さらに、複数の同時実行バージョンを使用する場合は、ターゲットの型名にもバージョン番号を追加する必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-183">Further, when working with multiple concurrent versions, the version number must also be appended to the target type name as well.</span></span>  
+  
+ <span data-ttu-id="2930d-184">を使用<xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>する場合は、次C#のコードで示すよう`MyClass`に、各オブジェクト (たとえば、) を一覧に追加できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-184">When using <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>, you can add each object (for example, `MyClass`) to the list in a way demonstrated by the following C# code.</span></span>  
+  
+```  
+TargetTypes = new Type[]{typeof(MyClass)}  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="2930d-185"><paramref name="targetTypes" /> パラメーターが <see langword="null" /> です。</span><span class="sxs-lookup"><span data-stu-id="2930d-185">The <paramref name="targetTypes" /> parameter is <see langword="null" />.</span></span></exception>
+      </Docs>
+    </Member>
+    <Member MemberName="CanRead">
+      <MemberSignature Language="C#" Value="public bool CanRead (System.Messaging.Message message);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool CanRead(class System.Messaging.Message message) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Messaging.XmlMessageFormatter.CanRead(System.Messaging.Message)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual bool CanRead(System::Messaging::Message ^ message);" />
+      <MemberSignature Language="F#" Value="abstract member CanRead : System.Messaging.Message -&gt; bool&#xA;override this.CanRead : System.Messaging.Message -&gt; bool" Usage="xmlMessageFormatter.CanRead message" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Messaging.IMessageFormatter.CanRead(System.Messaging.Message)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Messaging</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="message" Type="System.Messaging.Message" />
+      </Parameters>
+      <Docs>
+        <param name="message"><span data-ttu-id="2930d-186">検査対象の <see cref="T:System.Messaging.Message" />。</span><span class="sxs-lookup"><span data-stu-id="2930d-186">The <see cref="T:System.Messaging.Message" /> to inspect.</span></span></param>
+        <summary><span data-ttu-id="2930d-187">フォーマッタがメッセージを逆シリアル化できるかどうかを判断します。</span><span class="sxs-lookup"><span data-stu-id="2930d-187">Determines whether the formatter can deserialize the message.</span></span></summary>
+        <returns><span data-ttu-id="2930d-188">XML フォーマッタがメッセージを逆シリアル化できる場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</span><span class="sxs-lookup"><span data-stu-id="2930d-188"><see langword="true" /> if the XML formatter can deserialize the message; otherwise, <see langword="false" />.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2930d-189">が<xref:System.Messaging.XmlMessageFormatter.CanRead%2A>呼び出されると、フォーマッタは、メッセージの内容が逆シリアル化できるものかどうかを判断しようとします。</span><span class="sxs-lookup"><span data-stu-id="2930d-189">When <xref:System.Messaging.XmlMessageFormatter.CanRead%2A> is called, the formatter attempts to determine if the contents of the message are something it can deserialize.</span></span> <span data-ttu-id="2930d-190">フォーマッタがメッセージを逆シリアル化できるのは、メッセージ本文の型のスキーマが、プロパティ<xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>と<xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>プロパティで表される配列内の型の1つと同じ場合のみです。</span><span class="sxs-lookup"><span data-stu-id="2930d-190">The formatter can only deserialize the message if the type in the message body has the same schema as one of the types in the array represented by the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties.</span></span> <span data-ttu-id="2930d-191"><xref:System.Messaging.XmlMessageFormatter.CanRead%2A>は`false` 、次の2つの状況下でを返します。</span><span class="sxs-lookup"><span data-stu-id="2930d-191"><xref:System.Messaging.XmlMessageFormatter.CanRead%2A> returns `false` under the following two circumstances:</span></span>  
+  
+-   <span data-ttu-id="2930d-192">メッセージは、 <xref:System.Messaging.XmlMessageFormatter>を使用して書式設定されませんでした。</span><span class="sxs-lookup"><span data-stu-id="2930d-192">The message was not formatted using the <xref:System.Messaging.XmlMessageFormatter>.</span></span>  
+  
+-   <span data-ttu-id="2930d-193">メッセージ本文のスキーマは、プロパティ<xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>または<xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>プロパティのいずれにも含まれていません。</span><span class="sxs-lookup"><span data-stu-id="2930d-193">The schema of the message body is not among those listed in either the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> or <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> property.</span></span>  
+  
+ <span data-ttu-id="2930d-194">プロパティ<xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> と <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> プロパティは、逆シリアル化できる必要があるオブジェクトの種類をフォーマッタに指示します。</span><span class="sxs-lookup"><span data-stu-id="2930d-194">The <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what types of objects it must be able to deserialize.</span></span> <span data-ttu-id="2930d-195">リストに存在しない型がメッセージ<xref:System.Messaging.XmlMessageFormatter.CanRead%2A>内で見つかった場合、はを返し`false`ます。</span><span class="sxs-lookup"><span data-stu-id="2930d-195">If any type is missing from the list, yet is found within the message, <xref:System.Messaging.XmlMessageFormatter.CanRead%2A> returns `false`.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException"><span data-ttu-id="2930d-196"><see cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" /> プロパティも <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" /> プロパティも設定されていません。</span><span class="sxs-lookup"><span data-stu-id="2930d-196">Neither the <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" /> nor <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" /> property has been set.</span></span></exception>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="2930d-197"><paramref name="message" /> パラメーターが <see langword="null" /> です。</span><span class="sxs-lookup"><span data-stu-id="2930d-197">The <paramref name="message" /> parameter is <see langword="null" />.</span></span></exception>
+        <altmember cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" />
+        <altmember cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" />
+        <altmember cref="T:System.Messaging.BinaryMessageFormatter" />
+        <altmember cref="T:System.Messaging.ActiveXMessageFormatter" />
+      </Docs>
+    </Member>
+    <Member MemberName="Clone">
+      <MemberSignature Language="C#" Value="public object Clone ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance object Clone() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Messaging.XmlMessageFormatter.Clone" />
+      <MemberSignature Language="VB.NET" Value="Public Function Clone () As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Object ^ Clone();" />
+      <MemberSignature Language="F#" Value="abstract member Clone : unit -&gt; obj&#xA;override this.Clone : unit -&gt; obj" Usage="xmlMessageFormatter.Clone " />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.ICloneable.Clone</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Messaging</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><span data-ttu-id="2930d-198">現在の <see cref="T:System.Messaging.XmlMessageFormatter" /> インスタンスと同じ読み取り/書き込みプロパティ (対象の型のセット) の <see cref="T:System.Messaging.XmlMessageFormatter" /> クラスのインスタンスを作成します。</span><span class="sxs-lookup"><span data-stu-id="2930d-198">Creates an instance of the <see cref="T:System.Messaging.XmlMessageFormatter" /> class whose read/write properties (the sets of target types) are the same as the current <see cref="T:System.Messaging.XmlMessageFormatter" /> instance.</span></span></summary>
+        <returns><span data-ttu-id="2930d-199">この <see cref="T:System.Messaging.XmlMessageFormatter" /> インスタンスのプロパティと同一のプロパティだが、メタデータでフォーマッタ クラス インスタンスであることが指定されていないオブジェクト。</span><span class="sxs-lookup"><span data-stu-id="2930d-199">An object whose properties are identical to those of this <see cref="T:System.Messaging.XmlMessageFormatter" /> instance, but whose metadata does not specify it to be a formatter class instance.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2930d-200">このメソッドは、フォーマッタのコピーを作成し、そのすべてのプロパティをこの<xref:System.Messaging.XmlMessageFormatter>オブジェクトの値に初期化します。</span><span class="sxs-lookup"><span data-stu-id="2930d-200">This method creates a copy of the formatter and initializes all its properties to the values of this <xref:System.Messaging.XmlMessageFormatter> object.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Messaging.IMessageFormatter" />
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public object Read (System.Messaging.Message message);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance object Read(class System.Messaging.Message message) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Messaging.XmlMessageFormatter.Read(System.Messaging.Message)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Object ^ Read(System::Messaging::Message ^ message);" />
+      <MemberSignature Language="F#" Value="abstract member Read : System.Messaging.Message -&gt; obj&#xA;override this.Read : System.Messaging.Message -&gt; obj" Usage="xmlMessageFormatter.Read message" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Messaging.IMessageFormatter.Read(System.Messaging.Message)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Messaging</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="message" Type="System.Messaging.Message" />
+      </Parameters>
+      <Docs>
+        <param name="message"><span data-ttu-id="2930d-201">逆シリアル化する XML 形式の <see cref="T:System.Messaging.Message" />。</span><span class="sxs-lookup"><span data-stu-id="2930d-201">The <see cref="T:System.Messaging.Message" />, in XML format, to deserialize.</span></span></param>
+        <summary><span data-ttu-id="2930d-202">指定されたメッセージからコンテンツを読み取り、逆シリアル化されたメッセージを含むオブジェクトを作成します。</span><span class="sxs-lookup"><span data-stu-id="2930d-202">Reads the contents from the given message and creates an object that contains the deserialized message.</span></span></summary>
+        <returns><span data-ttu-id="2930d-203">逆シリアル化されたメッセージ。</span><span class="sxs-lookup"><span data-stu-id="2930d-203">The deserialized message.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2930d-204">プロパティと<xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>プロパティはどちらも、メッセージを逆シリアル化するときにどのスキーマを照合するかをフォーマッタに指示します。</span><span class="sxs-lookup"><span data-stu-id="2930d-204">Both the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message.</span></span> <span data-ttu-id="2930d-205">これらのプロパティの1つは、メッセージを逆シリアル化する前に設定する必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-205">One of these properties must be set before the message can be deserialized.</span></span>  
+  
+ <span data-ttu-id="2930d-206">メッセージ本文でシリアル化されるインスタンスは、型配列で表されるスキーマのいずれかに準拠している必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-206">The instance serialized in the message body must comply with one of the schemas represented in the type array.</span></span> <span data-ttu-id="2930d-207"><xref:System.Messaging.MessageQueue.Receive%2A>メソッドを使用してメッセージを読み取ると、メソッドによって、識別されたスキーマに対応する型のオブジェクトが作成され、そのオブジェクトにメッセージ本文が読み取られます。</span><span class="sxs-lookup"><span data-stu-id="2930d-207">When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.</span></span>  
+  
+ <span data-ttu-id="2930d-208">キューに書き込むために、対象の型を指定する必要はありません。</span><span class="sxs-lookup"><span data-stu-id="2930d-208">The target types do not have to be specified in order to write to the queue.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException"><span data-ttu-id="2930d-209"><see cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" /> プロパティも <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" /> プロパティも設定されていません。</span><span class="sxs-lookup"><span data-stu-id="2930d-209">Neither the <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" /> nor <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" /> property has been set.</span></span>  
+  
+<span data-ttu-id="2930d-210">- または -</span><span class="sxs-lookup"><span data-stu-id="2930d-210">-or-</span></span> 
+<span data-ttu-id="2930d-211">メッセージ本文でシリアル化されるインスタンスが、<see cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" /> プロパティおよび <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" /> プロパティの型で表されたスキーマに従っていません。</span><span class="sxs-lookup"><span data-stu-id="2930d-211">The instance serialized in the message body does not comply with any of the schemas represented by the types in the <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" /> and <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" /> properties.</span></span></exception>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="2930d-212"><paramref name="message" /> パラメーターが <see langword="null" /> です。</span><span class="sxs-lookup"><span data-stu-id="2930d-212">The <paramref name="message" /> parameter is <see langword="null" />.</span></span></exception>
+        <altmember cref="M:System.Messaging.XmlMessageFormatter.CanRead(System.Messaging.Message)" />
+        <altmember cref="M:System.Messaging.XmlMessageFormatter.Write(System.Messaging.Message,System.Object)" />
+        <altmember cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" />
+        <altmember cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" />
+        <altmember cref="T:System.Messaging.Message" />
+      </Docs>
+    </Member>
+    <Member MemberName="TargetTypeNames">
+      <MemberSignature Language="C#" Value="public string[] TargetTypeNames { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string[] TargetTypeNames" />
+      <MemberSignature Language="DocId" Value="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" />
+      <MemberSignature Language="VB.NET" Value="Public Property TargetTypeNames As String()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property cli::array &lt;System::String ^&gt; ^ TargetTypeNames { cli::array &lt;System::String ^&gt; ^ get(); void set(cli::array &lt;System::String ^&gt; ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.TargetTypeNames : string[] with get, set" Usage="System.Messaging.XmlMessageFormatter.TargetTypeNames" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Messaging</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Messaging.MessagingDescription("XmlMsgTargetTypeNames")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String[]</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="2930d-213">提供されたメッセージからフォーマッタで逆シリアル化できる型のセットを指定します。</span><span class="sxs-lookup"><span data-stu-id="2930d-213">Specifies the set of possible types that will be deserialized by the formatter from the message provided.</span></span></summary>
+        <value><span data-ttu-id="2930d-214">メッセージの読み取り時に、メッセージ本文から逆シリアル化されるオブジェクトの型を指定する <see cref="T:System.String" /> 型の配列。</span><span class="sxs-lookup"><span data-stu-id="2930d-214">An array of type <see cref="T:System.String" /> that specifies the types of objects to deserialize from the message body when reading the message.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2930d-215">プロパティと<xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>プロパティはどちらも、メッセージを逆シリアル化するときにどのスキーマを照合するかをフォーマッタに指示します。</span><span class="sxs-lookup"><span data-stu-id="2930d-215">Both the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message.</span></span> <span data-ttu-id="2930d-216">これにより、フォーマッタがメッセージ本文を解釈できるようになります。</span><span class="sxs-lookup"><span data-stu-id="2930d-216">This allows the formatter to interpret the message body.</span></span>  
+  
+ <span data-ttu-id="2930d-217">メッセージ本文でシリアル化されるインスタンスは、型配列で表されるスキーマのいずれかに準拠している必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-217">The instance serialized in the message body must comply with one of the schemas represented in the type array.</span></span> <span data-ttu-id="2930d-218"><xref:System.Messaging.MessageQueue.Receive%2A>メソッドを使用してメッセージを読み取ると、メソッドによって、識別されたスキーマに対応する型のオブジェクトが作成され、そのオブジェクトにメッセージ本文が読み取られます。</span><span class="sxs-lookup"><span data-stu-id="2930d-218">When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.</span></span>  
+  
+ <span data-ttu-id="2930d-219">キューから読み取る場合は、2つのプロパティのうち1つだけを設定する必要がありますが、両方を設定できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-219">Only one of the two properties needs to be set when reading from the queue, but you can set both.</span></span> <span data-ttu-id="2930d-220">一連の型は、2つのプロパティの組み合わせセットです。</span><span class="sxs-lookup"><span data-stu-id="2930d-220">The set of types is the combined set from the two properties.</span></span> <span data-ttu-id="2930d-221">使用するプロパティの決定は、アプリケーションに固有のものです。</span><span class="sxs-lookup"><span data-stu-id="2930d-221">The decision of which property to use is specific to your application.</span></span> <span data-ttu-id="2930d-222">メッセージ本文に、いずれかのプロパティの配列内のいずれの型とも一致しないスキーマを持つ型が含まれている場合、メッセージが読み取られると例外がスローされます。</span><span class="sxs-lookup"><span data-stu-id="2930d-222">If the message body contains a type whose schema does not match any of the types in the array for either property, an exception will be thrown when the message is read.</span></span>  
+  
+ <span data-ttu-id="2930d-223"><xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>すべてのエントリが完全に修飾され、アセンブリ名を指定する必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-223"><xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> requires every entry to be fully qualified, specifying its assembly name.</span></span> <span data-ttu-id="2930d-224">さらに、複数の同時実行バージョンを使用する場合は、ターゲットの型名にもバージョン番号を追加する必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-224">Further, when working with multiple concurrent versions, the version number must also be appended to the target type name as well.</span></span>  
+  
+ <span data-ttu-id="2930d-225">対象の型は、キューから読み取る場合にのみ必要です。</span><span class="sxs-lookup"><span data-stu-id="2930d-225">The target types are only required when reading from the queue.</span></span> <span data-ttu-id="2930d-226"><xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> および <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> プロパティは、キューに書き込むように設定する必要はありません。</span><span class="sxs-lookup"><span data-stu-id="2930d-226">The <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties do not need to be set to write to the queue.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="2930d-227"><see cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" /> プロパティが <see langword="null" /> である。</span><span class="sxs-lookup"><span data-stu-id="2930d-227">The <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" /> property is <see langword="null" />.</span></span></exception>
+        <altmember cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" />
+        <altmember cref="M:System.Messaging.XmlMessageFormatter.CanRead(System.Messaging.Message)" />
+        <altmember cref="M:System.Messaging.XmlMessageFormatter.#ctor" />
+      </Docs>
+    </Member>
+    <Member MemberName="TargetTypes">
+      <MemberSignature Language="C#" Value="public Type[] TargetTypes { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Type[] TargetTypes" />
+      <MemberSignature Language="DocId" Value="P:System.Messaging.XmlMessageFormatter.TargetTypes" />
+      <MemberSignature Language="VB.NET" Value="Public Property TargetTypes As Type()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property cli::array &lt;Type ^&gt; ^ TargetTypes { cli::array &lt;Type ^&gt; ^ get(); void set(cli::array &lt;Type ^&gt; ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.TargetTypes : Type[] with get, set" Usage="System.Messaging.XmlMessageFormatter.TargetTypes" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Messaging</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.ComponentModel.Browsable(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Messaging.MessagingDescription("XmlMsgTargetTypes")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Type[]</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="2930d-228">提供されたメッセージからフォーマッタで逆シリアル化できる型のセットを指定します。</span><span class="sxs-lookup"><span data-stu-id="2930d-228">Specifies the set of possible types that will be deserialized by the formatter from the message provided.</span></span></summary>
+        <value><span data-ttu-id="2930d-229">メッセージの読み取り時に、メッセージ本文から逆シリアル化されるオブジェクトの型を指定する <see cref="T:System.Type" /> 型の配列。</span><span class="sxs-lookup"><span data-stu-id="2930d-229">An array of type <see cref="T:System.Type" /> that specifies the types of objects to deserialize from the message body when reading the message.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2930d-230">プロパティと<xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>プロパティはどちらも、メッセージを逆シリアル化するときにどのスキーマを照合するかをフォーマッタに指示します。</span><span class="sxs-lookup"><span data-stu-id="2930d-230">Both the <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties tell the formatter what schemas to attempt to match when deserializing a message.</span></span> <span data-ttu-id="2930d-231">これにより、フォーマッタがメッセージ本文を解釈できるようになります。</span><span class="sxs-lookup"><span data-stu-id="2930d-231">This allows the formatter to interpret the message body.</span></span>  
+  
+ <span data-ttu-id="2930d-232">メッセージ本文でシリアル化されるインスタンスは、型配列で表されるスキーマのいずれかに準拠している必要があります。</span><span class="sxs-lookup"><span data-stu-id="2930d-232">The instance serialized in the message body must comply with one of the schemas represented in the type array.</span></span> <span data-ttu-id="2930d-233"><xref:System.Messaging.MessageQueue.Receive%2A>メソッドを使用してメッセージを読み取ると、メソッドによって、識別されたスキーマに対応する型のオブジェクトが作成され、そのオブジェクトにメッセージ本文が読み取られます。</span><span class="sxs-lookup"><span data-stu-id="2930d-233">When you read the message using the <xref:System.Messaging.MessageQueue.Receive%2A> method, the method creates an object of the type that corresponds to the schema identified and reads the message body into it.</span></span>  
+  
+ <span data-ttu-id="2930d-234">キューから読み取る場合は、2つのプロパティのうち1つだけを設定する必要がありますが、両方を設定できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-234">Only one of the two properties needs to be set when reading from the queue, but you can set both.</span></span> <span data-ttu-id="2930d-235">一連の型は、2つのプロパティの組み合わせセットです。</span><span class="sxs-lookup"><span data-stu-id="2930d-235">The set of types is the combined set from the two properties.</span></span> <span data-ttu-id="2930d-236">使用するプロパティの決定は、アプリケーションに固有のものです。</span><span class="sxs-lookup"><span data-stu-id="2930d-236">The decision of which property to use is specific to your application.</span></span> <span data-ttu-id="2930d-237">メッセージ本文に、いずれかのプロパティの配列内のいずれの型とも一致しないスキーマを持つ型が含まれている場合、メッセージが読み取られると例外がスローされます。</span><span class="sxs-lookup"><span data-stu-id="2930d-237">If the message body contains a type whose schema does not match any of the types in the array for either property, an exception will be thrown when the message is read.</span></span>  
+  
+ <span data-ttu-id="2930d-238">対象の型は、キューから読み取る場合にのみ必要です。</span><span class="sxs-lookup"><span data-stu-id="2930d-238">The target types are only required when reading from the queue.</span></span> <span data-ttu-id="2930d-239"><xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> および <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> プロパティは、キューに書き込むように設定する必要はありません。</span><span class="sxs-lookup"><span data-stu-id="2930d-239">The <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> and <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> properties do not need to be set to write to the queue.</span></span>  
+  
+ <span data-ttu-id="2930d-240">では<xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>なくを指定すると、読み取り時間ではなくコンパイル時に型の存在がチェックされるため、エラーの可能性が減少します。 <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A></span><span class="sxs-lookup"><span data-stu-id="2930d-240">When specifying <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> rather than <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A>, type existence is checked at compile time rather than read time, reducing possibility for error.</span></span>  
+  
+ <span data-ttu-id="2930d-241">を使用<xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>する場合C# 、コード`TargetTypes = new Type[]{typeof(MyClass), typeof (MyOtherClass)};`で示すように、各`MyClass`オブジェクト (たとえば、) を一覧に追加できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-241">When using <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>, you can add each object (for example, `MyClass`) to the list in a way demonstrated by the C# code `TargetTypes = new Type[]{typeof(MyClass), typeof (MyOtherClass)};`.</span></span>  
+  
+   
+  
+## Examples  
+ <span data-ttu-id="2930d-242">次のコード例では、キューとの間で注文を含むメッセージを送受信します。</span><span class="sxs-lookup"><span data-stu-id="2930d-242">The following code example sends and receives a message that contains an order to and from a queue.</span></span>  
+  
+ [!code-cpp[Message.Body#1](~/samples/snippets/cpp/VS_Snippets_Remoting/Message.Body/CPP/message_sendreceive.cpp#1)]
+ [!code-csharp[Message.Body#1](~/samples/snippets/csharp/VS_Snippets_Remoting/Message.Body/CS/message_sendreceive.cs#1)]
+ [!code-vb[Message.Body#1](~/samples/snippets/visualbasic/VS_Snippets_Remoting/Message.Body/VB/message_sendreceive.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="2930d-243"><see cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" /> プロパティが <see langword="null" /> である。</span><span class="sxs-lookup"><span data-stu-id="2930d-243">The <see cref="P:System.Messaging.XmlMessageFormatter.TargetTypes" /> property is <see langword="null" />.</span></span></exception>
+        <altmember cref="P:System.Messaging.XmlMessageFormatter.TargetTypeNames" />
+        <altmember cref="M:System.Messaging.XmlMessageFormatter.CanRead(System.Messaging.Message)" />
+        <altmember cref="M:System.Messaging.XmlMessageFormatter.#ctor" />
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public void Write (System.Messaging.Message message, object obj);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Write(class System.Messaging.Message message, object obj) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Messaging.XmlMessageFormatter.Write(System.Messaging.Message,System.Object)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void Write(System::Messaging::Message ^ message, System::Object ^ obj);" />
+      <MemberSignature Language="F#" Value="abstract member Write : System.Messaging.Message * obj -&gt; unit&#xA;override this.Write : System.Messaging.Message * obj -&gt; unit" Usage="xmlMessageFormatter.Write (message, obj)" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Messaging.IMessageFormatter.Write(System.Messaging.Message,System.Object)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Messaging</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="message" Type="System.Messaging.Message" />
+        <Parameter Name="obj" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="message"><span data-ttu-id="2930d-244"><see cref="P:System.Messaging.Message.Body" /> プロパティにシリアル化されたオブジェクトが含まれる <see cref="T:System.Messaging.Message" />。</span><span class="sxs-lookup"><span data-stu-id="2930d-244">The <see cref="T:System.Messaging.Message" /> whose <see cref="P:System.Messaging.Message.Body" /> property will contain the serialized object.</span></span></param>
+        <param name="obj"><span data-ttu-id="2930d-245">メッセージの本文にシリアル化される <see cref="T:System.Object" />。</span><span class="sxs-lookup"><span data-stu-id="2930d-245">The <see cref="T:System.Object" /> to be serialized into the message body.</span></span></param>
+        <summary><span data-ttu-id="2930d-246">メッセージ本文にオブジェクトをシリアル化します。</span><span class="sxs-lookup"><span data-stu-id="2930d-246">Serializes an object into the body of the message.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2930d-247">キューへの書き込みを行うには、対象の型を指定する必要があります。この場合、読み取り時に必要になります。</span><span class="sxs-lookup"><span data-stu-id="2930d-247">The target types need not be specified to write to the queue as they must be when reading.</span></span> <span data-ttu-id="2930d-248">プロパティまたは<xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A>プロパティは、メッセージを逆シリアル化するときにのみ、フォーマッタによって使用されます。 <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A></span><span class="sxs-lookup"><span data-stu-id="2930d-248">The <xref:System.Messaging.XmlMessageFormatter.TargetTypeNames%2A> or <xref:System.Messaging.XmlMessageFormatter.TargetTypes%2A> property is used by the formatter only when deserializing a message.</span></span>  
+  
+ <span data-ttu-id="2930d-249">は<xref:System.Messaging.XmlMessageFormatter> 、シリアル化できる<xref:System.Xml.Serialization.XmlSerializer>内容を定義するクラスを使用します。</span><span class="sxs-lookup"><span data-stu-id="2930d-249">The <xref:System.Messaging.XmlMessageFormatter> makes use of the <xref:System.Xml.Serialization.XmlSerializer> class, which defines what can be serialized.</span></span> <span data-ttu-id="2930d-250">シリアル化できるのは、パブリックフィールドとパブリックプロパティだけです。</span><span class="sxs-lookup"><span data-stu-id="2930d-250">Only public fields and public properties can be serialized.</span></span> <span data-ttu-id="2930d-251">SOAP プロトコルでエンコードされたスタイルを使用しない限り、構造体、配列を含む構造体、および構造体の配列はすべてシリアル化できます。</span><span class="sxs-lookup"><span data-stu-id="2930d-251">Structures, structures with arrays, and arrays of structures are all serializable, as long as they do not use the encoded style with the SOAP protocol.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="2930d-252"><paramref name="message" /> パラメーターが <see langword="null" /> です。</span><span class="sxs-lookup"><span data-stu-id="2930d-252">The <paramref name="message" /> parameter is <see langword="null" />.</span></span>  
+  
+<span data-ttu-id="2930d-253">または</span><span class="sxs-lookup"><span data-stu-id="2930d-253">-or-</span></span> 
+<span data-ttu-id="2930d-254"><paramref name="obj" /> パラメーターが <see langword="null" /> です。</span><span class="sxs-lookup"><span data-stu-id="2930d-254">The <paramref name="obj" /> parameter is <see langword="null" />.</span></span></exception>
+        <altmember cref="M:System.Messaging.XmlMessageFormatter.Read(System.Messaging.Message)" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>
