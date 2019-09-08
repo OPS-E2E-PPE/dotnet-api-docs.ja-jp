@@ -1,0 +1,402 @@
+<Type Name="BufferedWebEventProvider" FullName="System.Web.Management.BufferedWebEventProvider">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="94952e779791a42da78f0daf427b12fd7d2ac034" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70635234" /></Metadata><TypeSignature Language="C#" Value="public abstract class BufferedWebEventProvider : System.Web.Management.WebEventProvider" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit BufferedWebEventProvider extends System.Web.Management.WebEventProvider" />
+  <TypeSignature Language="DocId" Value="T:System.Web.Management.BufferedWebEventProvider" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class BufferedWebEventProvider&#xA;Inherits WebEventProvider" />
+  <TypeSignature Language="C++ CLI" Value="public ref class BufferedWebEventProvider abstract : System::Web::Management::WebEventProvider" />
+  <TypeSignature Language="F#" Value="type BufferedWebEventProvider = class&#xA;    inherit WebEventProvider" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Web.Management.WebEventProvider</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>バッファリングを必要とするイベント プロバイダーを作成するための基本機能を提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ASP.NET の正常性の監視により、運用スタッフと運用スタッフは、デプロイされた Web アプリケーションを管理できます。 名前<xref:System.Web.Management>空間には、アプリケーションの正常性状態データのパッケージ化を担当する正常性イベントの種類と、このデータの処理を担当するプロバイダーの種類が含まれています。 また、正常性イベントの管理に役立つサポート型も含まれています。  
+  
+ 正常性イベントの処理をカスタマイズする場合は、 <xref:System.Web.Management.BufferedWebEventProvider>クラスから派生させて、独自のカスタムバッファープロバイダーを作成することができます。  
+  
+> [!NOTE]
+>  ほとんどの場合、ASP.NET の正常性監視の種類を実装として使用できます。また、 `healthMonitoring`構成セクションで値を指定することによって、正常性監視システムを制御します。 また、正常性監視型から派生して、独自のカスタムイベントおよびプロバイダーを作成することもできます。 カスタムプロバイダーを作成する例については、「[方法: 正常性監視カスタムプロバイダーの実装例](https://msdn.microsoft.com/library/bbb1c959-e6e4-42b2-be62-49b7ca5ab72c)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次のコード例では、 <xref:System.Web.Management.BufferedWebEventProvider>クラスから派生させて、適切なアクセス権を付与する必要のあるローカルファイルに構成されたイベントを書き込むカスタムプロバイダーを作成する方法を示します。  
+  
+ [!code-csharp[System.Web.Management.BufferedWebEventProvider#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/CS/bufferedwebeventprovider.cs#1)]
+ [!code-vb[System.Web.Management.BufferedWebEventProvider#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/VB/bufferedwebeventprovider.vb#1)]  
+  
+ 次の構成ファイルの抜粋は`healthMonitoring` 、ASP.NET が上で定義したカスタムプロバイダーを使用してすべての正常性監視イベントを処理できるようにする構成セクションを示しています。  
+  
+```  
+<healthMonitoring    
+  heartBeatInterval="0" enabled="true">  
+  
+  <bufferModes>  
+    <add name ="Custom Notification"  
+      maxBufferSize="10"  
+      maxFlushSize="5"  
+      urgentFlushThreshold="10"  
+      regularFlushInterval="Infinite"  
+      urgentFlushInterval="00:00:30"  
+      maxBufferThreads="1"  
+/>  
+  </bufferModes>  
+  
+  <providers>  
+    <clear/>  
+    <add name="SampleBufferedWebEventProvider"   
+      type="SamplesAspNet.SampleBufferedWebEventProvider, bufferedwebeventprovider, Version=1.0.1785.14700, Culture=neutral, PublicKeyToken=d31491bf33b55954, processorArchitecture=MSIL"   
+      buffer="true"  
+      bufferMode="Custom Notification"  
+/>  
+  </providers>  
+  
+  <profiles>  
+    <add name="Custom"   
+      minInstances="1"   
+      maxLimit="Infinite"   
+      minInterval="00:00:00" />  
+  </profiles>  
+  
+  <rules>  
+    <clear />  
+      <add name="Custom Buffered Web Event Provider"   
+        eventName="All Events"  
+        provider="SampleBufferedWebEventProvider"   
+        profile="Custom" />  
+  </rules>  
+  
+</healthMonitoring>  
+```  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Web.Management.WebEventBufferFlushInfo" />
+    <related type="Article" href="https://msdn.microsoft.com/library/ab894e83-7e2f-4af8-a116-b1bff8f815b2">ASP.NET プロバイダーのインストールと構成</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected BufferedWebEventProvider ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Management.BufferedWebEventProvider.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; BufferedWebEventProvider();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Web.Management.BufferedWebEventProvider" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このコンストラクターは、ASP.NET health 監視システムによって内部的に使用されます。 このクラスを使用して<xref:System.Web.Management.TraceWebEventProvider>オブジェクトをインスタンス化することはありませんが、このクラスから継承する独自のプロバイダーの型を実装するときに、このコンストラクターを呼び出すことができます。  
+  
+   
+  
+## Examples  
+ 次のコード例は、カスタムイベントプロバイダーでこのコンストラクターを使用する方法を示しています。  
+  
+ [!code-csharp[System.Web.Management.BufferedWebEventProvider#8](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/CS/bufferedwebeventprovider.cs#8)]
+ [!code-vb[System.Web.Management.BufferedWebEventProvider#8](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/VB/bufferedwebeventprovider.vb#8)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="BufferMode">
+      <MemberSignature Language="C#" Value="public string BufferMode { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string BufferMode" />
+      <MemberSignature Language="DocId" Value="P:System.Web.Management.BufferedWebEventProvider.BufferMode" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property BufferMode As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ BufferMode { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.BufferMode : string" Usage="System.Web.Management.BufferedWebEventProvider.BufferMode" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>プロバイダーが使用するバッファリング モードを示す値を取得します。</summary>
+        <value>バッファリング モードの名前。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティ<xref:System.Web.Management.BufferedWebEventProvider.BufferMode%2A>は`providers` 、セクション `healthMonitoring` の要素の`bufferMode`属性によって定義された値を格納します。  
+  
+ 次の構成ファイルの抜粋は、 `healthMonitoring`セクションでバッファーモードの名前を定義する方法を示しています。  
+  
+```  
+<bufferModes>  
+  <add name ="Custom Notification" />  
+</bufferModes>  
+```  
+  
+   
+  
+## Examples  
+ 次のコード例は、<xref:System.Web.Management.BufferedWebEventProvider.BufferMode%2A> プロパティの使用方法を示しています。  
+  
+ [!code-csharp[System.Web.Management.BufferedWebEventProvider#4](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/CS/bufferedwebeventprovider.cs#4)]
+ [!code-vb[System.Web.Management.BufferedWebEventProvider#4](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/VB/bufferedwebeventprovider.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Flush">
+      <MemberSignature Language="C#" Value="public override void Flush ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Flush() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Management.BufferedWebEventProvider.Flush" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Flush ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Flush();" />
+      <MemberSignature Language="F#" Value="override this.Flush : unit -&gt; unit" Usage="bufferedWebEventProvider.Flush " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>イベントをプロバイダーのバッファーからイベント ログに移動します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドが呼び出されると、最後の書き込みからの経過時間またはバッファー内のイベントの数に関係なく、バッファー内のすべてのイベントがバッファーからログに直ちに移動されます。 最後の書き込み時刻は、フラッシュ操作の時刻にリセットされます。  
+  
+   
+  
+## Examples  
+ <xref:System.Web.Management.BufferedWebEventProvider.Flush%2A> メソッドを使用するコード例を次に示します。  
+  
+ [!code-csharp[System.Web.Management.BufferedWebEventProvider#9](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/CS/bufferedwebeventprovider.cs#9)]
+ [!code-vb[System.Web.Management.BufferedWebEventProvider#9](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/VB/bufferedwebeventprovider.vb#9)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Initialize">
+      <MemberSignature Language="C#" Value="public override void Initialize (string name, System.Collections.Specialized.NameValueCollection config);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Initialize(string name, class System.Collections.Specialized.NameValueCollection config) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Management.BufferedWebEventProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Initialize (name As String, config As NameValueCollection)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Initialize(System::String ^ name, System::Collections::Specialized::NameValueCollection ^ config);" />
+      <MemberSignature Language="F#" Value="override this.Initialize : string * System.Collections.Specialized.NameValueCollection -&gt; unit" Usage="bufferedWebEventProvider.Initialize (name, config)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="config" Type="System.Collections.Specialized.NameValueCollection" />
+      </Parameters>
+      <Docs>
+        <param name="name">このプロバイダーを識別するために構成ファイルで使用する名前。</param>
+        <param name="config">構成ファイルでこのプロバイダーに割り当てられる属性を指定する <see cref="T:System.Collections.Specialized.NameValueCollection" />。</param>
+        <summary>このオブジェクトの初期値を設定します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ASP.NET は、 <xref:System.Web.Management.BufferedWebEventProvider.Initialize%2A>コンストラクターを<xref:System.Web.Management.BufferedWebEventProvider.%23ctor%2A>呼び出した後にメソッドを呼び出します。 このメソッドは、構成設定と<xref:System.Web.Management.BufferedWebEventProvider>構成ファイルで指定された名前を使用してを初期化するために呼び出されます。  
+  
+   
+  
+## Examples  
+ <xref:System.Web.Management.BufferedWebEventProvider.Initialize%2A> メソッドを使用するコード例を次に示します。  
+  
+ [!code-csharp[System.Web.Management.BufferedWebEventProvider#2](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/CS/bufferedwebeventprovider.cs#2)]
+ [!code-vb[System.Web.Management.BufferedWebEventProvider#2](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/VB/bufferedwebeventprovider.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ProcessEvent">
+      <MemberSignature Language="C#" Value="public override void ProcessEvent (System.Web.Management.WebBaseEvent eventRaised);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void ProcessEvent(class System.Web.Management.WebBaseEvent eventRaised) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Management.BufferedWebEventProvider.ProcessEvent(System.Web.Management.WebBaseEvent)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub ProcessEvent (eventRaised As WebBaseEvent)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void ProcessEvent(System::Web::Management::WebBaseEvent ^ eventRaised);" />
+      <MemberSignature Language="F#" Value="override this.ProcessEvent : System.Web.Management.WebBaseEvent -&gt; unit" Usage="bufferedWebEventProvider.ProcessEvent eventRaised" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="eventRaised" Type="System.Web.Management.WebBaseEvent" />
+      </Parameters>
+      <Docs>
+        <param name="eventRaised">処理対象の <see cref="T:System.Web.Management.WebBaseEvent" /> オブジェクト。</param>
+        <summary>プロバイダーに渡されたイベントを処理します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ これは、イベントの処理を開始するために、正常性監視の呼び出しを ASP.NET するメソッドです。 バッファリングが有効になっている場合、イベント情報はバッファーされます。それ以外の場合は、現在のログメカニズムにディスパッチされます。  
+  
+   
+  
+## Examples  
+ 次のコード例は、<xref:System.Web.Management.BufferedWebEventProvider.ProcessEvent%2A> メソッドを実装する方法を示しています。  
+  
+ [!code-csharp[System.Web.Management.BufferedWebEventProvider#5](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/CS/bufferedwebeventprovider.cs#5)]
+ [!code-vb[System.Web.Management.BufferedWebEventProvider#5](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/VB/bufferedwebeventprovider.vb#5)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ProcessEventFlush">
+      <MemberSignature Language="C#" Value="public abstract void ProcessEventFlush (System.Web.Management.WebEventBufferFlushInfo flushInfo);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void ProcessEventFlush(class System.Web.Management.WebEventBufferFlushInfo flushInfo) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Management.BufferedWebEventProvider.ProcessEventFlush(System.Web.Management.WebEventBufferFlushInfo)" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Sub ProcessEventFlush (flushInfo As WebEventBufferFlushInfo)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract void ProcessEventFlush(System::Web::Management::WebEventBufferFlushInfo ^ flushInfo);" />
+      <MemberSignature Language="F#" Value="abstract member ProcessEventFlush : System.Web.Management.WebEventBufferFlushInfo -&gt; unit" Usage="bufferedWebEventProvider.ProcessEventFlush flushInfo" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="flushInfo" Type="System.Web.Management.WebEventBufferFlushInfo" />
+      </Parameters>
+      <Docs>
+        <param name="flushInfo">バッファー情報を格納する <see cref="T:System.Web.Management.WebEventBufferFlushInfo" />。</param>
+        <summary>バッファーされたイベントを処理します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Web.Management.BufferedWebEventProvider.ProcessEventFlush%2A>は、バッファリングされたメッセージを処理します。 ASP.NET の正常性の監視では、バッファーのフラッシュが必要なときにメソッドを呼び出します。 フラッシュが必要な間隔は、 `bufferMode` `healthMonitoring`構成セクションの`providers`要素の属性のパラメーター値によって決まります。  
+  
+   
+  
+## Examples  
+ 次のコード例は、<xref:System.Web.Management.BufferedWebEventProvider.ProcessEventFlush%2A> メソッドを実装する方法を示しています。  
+  
+ [!code-csharp[System.Web.Management.BufferedWebEventProvider#6](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/CS/bufferedwebeventprovider.cs#6)]
+ [!code-vb[System.Web.Management.BufferedWebEventProvider#6](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/VB/bufferedwebeventprovider.vb#6)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Shutdown">
+      <MemberSignature Language="C#" Value="public override void Shutdown ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Shutdown() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Management.BufferedWebEventProvider.Shutdown" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Shutdown ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Shutdown();" />
+      <MemberSignature Language="F#" Value="override this.Shutdown : unit -&gt; unit" Usage="bufferedWebEventProvider.Shutdown " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>プロバイダーのシャットダウンに関連するタスクを実行します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ASP.NET は、 <xref:System.Web.Management.BufferedWebEventProvider.Shutdown%2A> Web アプリケーションをホストしているアプリケーションドメインが終了したときにメソッドを呼び出します。 メソッドは、リソースの終了など、アプリケーションが適切に終了できるようにするタスクを実行するために呼び出されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="UseBuffering">
+      <MemberSignature Language="C#" Value="public bool UseBuffering { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool UseBuffering" />
+      <MemberSignature Language="DocId" Value="P:System.Web.Management.BufferedWebEventProvider.UseBuffering" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property UseBuffering As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool UseBuffering { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.UseBuffering : bool" Usage="System.Web.Management.BufferedWebEventProvider.UseBuffering" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>プロバイダーがバッファー モードかどうかを示す値を取得します。</summary>
+        <value>プロバイダーがバッファー モードの場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 既定値は、<see langword="true" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティ<xref:System.Web.Management.BufferedWebEventProvider.UseBuffering%2A>は`providers` 、セクション `healthMonitoring` の要素の`buffer`属性によって定義された値を格納します。  
+  
+   
+  
+## Examples  
+ 次のコード例は、<xref:System.Web.Management.BufferedWebEventProvider.UseBuffering%2A> プロパティの使用方法を示しています。  
+  
+ [!code-csharp[System.Web.Management.BufferedWebEventProvider#3](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/CS/bufferedwebeventprovider.cs#3)]
+ [!code-vb[System.Web.Management.BufferedWebEventProvider#3](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.BufferedWebEventProvider/VB/bufferedwebeventprovider.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
