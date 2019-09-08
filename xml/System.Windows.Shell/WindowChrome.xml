@@ -1,0 +1,815 @@
+<Type Name="WindowChrome" FullName="System.Windows.Shell.WindowChrome">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="14e9a2b90ef7b92a87ed16dda0d9c379c641d0f6" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70581883" /></Metadata><TypeSignature Language="C#" Value="public class WindowChrome : System.Windows.Freezable" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit WindowChrome extends System.Windows.Freezable" />
+  <TypeSignature Language="DocId" Value="T:System.Windows.Shell.WindowChrome" />
+  <TypeSignature Language="VB.NET" Value="Public Class WindowChrome&#xA;Inherits Freezable" />
+  <TypeSignature Language="C++ CLI" Value="public ref class WindowChrome : System::Windows::Freezable" />
+  <TypeSignature Language="F#" Value="type WindowChrome = class&#xA;    inherit Freezable" />
+  <AssemblyInfo>
+    <AssemblyName>PresentationFramework</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Windows.Freezable</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>ウィンドウの非クライアント領域へのカスタマイズ設定を説明するオブジェクトを表します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Windows.Shell.WindowChrome>クラスを使用すると、Windows Presentation Foundation (WPF) コンテンツを、通常はオペレーティングシステムのウィンドウマネージャー用に予約されているウィンドウの非クライアント領域に拡張できます。  
+  
+## <a name="standard-windows"></a>標準ウィンドウ  
+ 標準ウィンドウは、2つの重なり合う四角形で構成されます。 外側の四角形は*非クライアント領域*です。これは、" *chrome*" と呼ばれることがよくあります。 オペレーティングシステムのウィンドウマネージャーによって描画および管理されます。 このディメンションは、標準のオペレーティングシステム設定によって決定されます。 非クライアントフレームは、標準的なウィンドウの機能と動作を提供します。 これには、キャプションボタン (最小化、最大化、閉じる)、ウィンドウの境界線、サイズ変更と移動の動作、アプリケーションアイコンとタイトル、およびシステムメニューが含まれます。 内側の四角形は*クライアント領域*です。 アプリケーションのコンテンツが含まれ、アプリケーションによって描画および管理されます。 WPF アプリケーションのウィンドウの詳細については、「 [Wpf ウィンドウの概要](~/docs/framework/wpf/app-development/wpf-windows-overview.md)」を参照してください。  
+  
+ 次の図は、標準ウィンドウの各部分を示しています。  
+  
+ ![ウィンドウ要素](~/add/media/windowoverviewfigure1.PNG "ウィンドウ要素")  
+  
+## <a name="custom-windows"></a>カスタムウィンドウ  
+ ウィンドウの境界線をカスタマイズするには<xref:System.Windows.Window.WindowStyle%2A?displayProperty=nameWithType> 、プロパティ<xref:System.Windows.WindowStyle.None>をに設定する<xref:System.Windows.Shell.WindowChrome>か、クラスを使用します。  
+  
+### <a name="windowstylenone"></a>System.windows.window.windowstyle  
+ WPF アプリケーションウィンドウの外観をカスタマイズする方法の1つは、 <xref:System.Windows.Window.WindowStyle%2A?displayProperty=nameWithType>プロパティをに<xref:System.Windows.WindowStyle.None>設定することです。 これにより、クライアント以外のフレームはウィンドウから削除され、クライアント領域だけが残ります。この場合、カスタムスタイルを適用できます。 ただし、非クライアントフレームが削除されると、キャプションボタンやウィンドウサイズ変更など、提供されているシステムの機能や動作も失われます。 もう1つの副作用は、ウィンドウが最大化されたときに Windows タスクバーがカバーされることです。 を<xref:System.Windows.WindowStyle.None?displayProperty=nameWithType>設定すると、完全にカスタムアプリケーションを作成できますが、標準ウィンドウの動作をエミュレートするには、アプリケーションにカスタムロジックを実装する必要もあります。  
+  
+### <a name="windowchrome"></a>WindowChrome  
+ 標準機能を保持したままウィンドウをカスタマイズするには、 <xref:System.Windows.Shell.WindowChrome>クラスを使用します。 クラス<xref:System.Windows.Shell.WindowChrome>は、ウィンドウフレームの機能をビジュアルから切り離し、アプリケーションウィンドウのクライアント領域と非クライアント領域の間の境界を制御できるようにします。 クラス<xref:System.Windows.Shell.WindowChrome>を使用すると、クライアント領域を非クライアント領域に対応するように拡張することで、WPF コンテンツをウィンドウフレームに配置できます。 同時に、2つの非表示領域によってシステムの動作が維持されます。*サイズ変更境界*と*キャプション*領域。  
+  
+ クラスを使用してカスタムウィンドウを作成するには<xref:System.Windows.Shell.WindowChrome> 、主に2つの部分があります。 最初に、 <xref:System.Windows.Shell.WindowChrome>オブジェクトで公開されているプロパティを設定して、ウィンドウの非クライアント部分をカスタマイズします。 次に、非クライアント領域に拡張されるアプリケーションの一部を定義する、ウィンドウのテンプレートを指定します。<xref:System.Windows.Shell.WindowChrome>オブジェクトで公開されるプロパティは<xref:System.Windows.Shell.WindowChrome.ResizeBorderThickness%2A>、 <xref:System.Windows.Shell.WindowChrome.CaptionHeight%2A> <xref:System.Windows.Shell.WindowChrome.CornerRadius%2A>、、、 <xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>およびです。  
+  
+ プロパティ<xref:System.Windows.Shell.WindowChrome.ResizeBorderThickness%2A>は、ユーザーがウィンドウのサイズを変更するためにクリックしてドラッグできる、アプリケーションウィンドウの外側にある非表示の境界線を指定します。  
+  
+ プロパティ<xref:System.Windows.Shell.WindowChrome.CaptionHeight%2A>は、ウィンドウの上部に表示されない領域を指定します。この領域は、通常、タイトルバーに関連付けられているシステムの動作を有効にします。 次のような動作があります。クリックしてドラッグしてウィンドウを移動し、ダブルクリックしてウィンドウを最大化し、右クリックして [システム] メニューを表示します。  
+  
+ サイズ変更境界とキャプション領域には、ビジュアル要素はありません。入力に応答し、システムによって提供される標準のウィンドウ動作を有効にする領域のみを定義します。  
+  
+ プロパティ<xref:System.Windows.Shell.WindowChrome.CornerRadius%2A>は、ウィンドウの角を丸める量を指定します。 グラスフレームがウィンドウに対して有効になっている場合、このプロパティは効果がありません。  
+  
+ プロパティ<xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>は、ウィンドウの周囲のグラスフレームの幅を指定します。 既定では、 <xref:System.Windows.SystemParameters.WindowNonClientFrameThickness%2A>プロパティによって指定されたシステム値を使用して、標準ウィンドウの外観をエミュレートします。 グラスフレームを使用すると、最小化、最大化、および閉じるのキャプションボタンが表示され、対話型になります。 アプリケーションは、アプリケーションアイコンとキャプションテキストを表示する役割を担います。 <xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>プロパティを設定することにより、グラスフレームを既定値よりも広くしたり狭くしたりすることができます。  
+  
+> [!CAUTION]
+>  キャプションボタンのサイズは、 <xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>プロパティが変更されても変更されません。 グラスフレームの上部の高さがキャプションボタンの高さよりも小さい場合、キャプションボタンは完全には表示されません。  
+  
+ グラスフレームを持たないカスタムウィンドウを作成するには、 <xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>プロパティを均一の値0に設定します。 これにより、標準のキャプションボタンが無効になり、非表示になります。  
+  
+ ウィンドウ全体をカバーするようにグラスフレームを拡張するに<xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>は、プロパティを任意の辺の負の値に設定します。 プロパティが<xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>いずれかの辺に対して負の値に設定されている場合、 <xref:System.Windows.Shell.WindowChrome.GlassFrameCompleteThickness%2A>その値はと等しくなります。  
+  
+> [!NOTE]
+>  Aero は、Windows Vista で導入された Windows デスクトップの外観と機能を視覚的に拡張したものです。 Aero の視覚的に明らかな特徴の1つは、半透明なグラスウィンドウの境界線です。 Windows Aero は、デスクトップウィンドウマネージャー (DWM) のデスクトップコンポジション機能によって有効になっています。  
+  
+ Windows Aero グラス効果は、すべてのオペレーティングシステムでサポートされているわけではなく、サポートされているオペレーティングシステムでは無効にすることができます。 Windows Aero を使用できない場合、 <xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>プロパティ値に関係なくグラスフレームは表示されません。 このプロパティで指定された境界領域は、代わりに黒で表示されます。プロパティを<xref:System.Windows.SystemParameters.IsGlassEnabled%2A>チェックして、Windows Aero グラス効果が使用可能であることを確認します。 ガラス効果を使用できない場合は、ガラスフレームを使用しない代替のウィンドウスタイルを指定するか、ウィンドウのスタイルを null に設定して標準ウィンドウを使用する必要があります。  
+  
+ フレームコンテンツの外観と動作を定義する ControlTemplate を指定することによって、WPF コンテンツをウィンドウフレームに拡張します。 ControlTemplate の TargetType は、カスタマイズするウィンドウの種類に設定します。  
+  
+```xaml
+<ControlTemplate TargetType="{x:Type local:MainWindow}">  
+```  
+  
+ 既定では、ウィンドウの非クライアント領域内にあるビジュアル要素の部分は対話型ではありません。 非クライアント領域で対話型要素を有効にするには、IsHitTestVisibleInChrome 添付プロパティを要素にアタッチし、true に設定します。  
+  
+ 次の XAML マークアップは、WindowChrome クラスを使用してウィンドウをカスタマイズするために必要な主要要素を示しています。  
+  
+```xaml
+<Style x:Key="StandardStyle" TargetType="{x:Type local:MainWindow}">  
+    <Setter Property="shell:WindowChrome.WindowChrome">  
+        <Setter.Value>  
+            <shell:WindowChrome />  
+        </Setter.Value>  
+    </Setter>  
+    <Setter Property="Template">  
+        <Setter.Value>  
+            <ControlTemplate TargetType="{x:Type local:MainWindow}">  
+                <Grid>  
+                    <Border Background="White"  
+                            Margin="{Binding Source={x:Static shell:SystemParameters2.Current}, Path=WindowNonClientFrameThickness}">  
+                        <ContentPresenter Content="{TemplateBinding Content}" />  
+                    </Border>  
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}"   
+                               VerticalAlignment="Top" HorizontalAlignment="Left"   
+                               Margin="36,8,0,0"/>  
+                    <Image Source="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Icon}"  
+                           VerticalAlignment="Top" HorizontalAlignment="Left"  
+                           Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(shell:WindowChrome.WindowChrome).ResizeBorderThickness}"   
+                           Width="{Binding Source={x:Static shell:SystemParameters2.Current}, Path=SmallIconSize.Width}"  
+                           shell:WindowChrome.IsHitTestVisibleInChrome="True"/>  
+                </Grid>  
+            </ControlTemplate>  
+        </Setter.Value>  
+    </Setter>  
+</Style>  
+```  
+  
+ 最初の setter は、ウィンドウに WindowChrome をアタッチします。 WindowChrome プロパティのすべての既定値を使用します。これにより、ウィンドウが標準ウィンドウのようになります。  
+  
+```xaml
+<Setter Property="shell:WindowChrome.WindowChrome">  
+    <Setter.Value>  
+        <shell:WindowChrome />  
+    </Setter.Value>  
+</Setter>  
+```  
+  
+ ウィンドウテンプレートでは、アプリケーションで指定されたウィンドウの内容を表示するコンテンツプレゼンターを指定する必要があります。 既定では、WindowChrome クラスによってクライアント領域が拡張され、非クライアント境界がカバーされます。 グラスフレームを発見するには、ContentPresenter の周りに余白を指定する必要があります。 このマークアップは、標準ウィンドウの外観をエミュレートするために、コンテンツプレゼンターの周りに白い背景を持つ境界線を指定します。 また、Windownonclientframe width プロパティにバインドされる余白を指定します。このプロパティは、フレームの既定のシステム幅を取得します。  
+  
+```xaml
+<Border Background="White"  
+    Margin="{Binding Source={x:Static shell:SystemParameters2.Current}, Path=WindowNonClientFrameThickness}">  
+    <ContentPresenter Content="{TemplateBinding Content}" />  
+</Border>  
+```  
+  
+ アプリケーションアイコンとタイトルは、WindowChrome クラスによって表示されません。カスタムコンテンツとして、境界線に追加する必要があります。 次の XAML は、アイコンとタイトルを表示するためのイメージと textblock を追加します。 両方の要素は、ウィンドウの対応するプロパティにバインドされます。 画像の幅は、アイコンの既定のシステムサイズを取得する SmallIconSize width にバインドされます。 IsHitTestVisibleInChrome 添付プロパティは、マウスイベントを受け取ることができるように、画像に設定されます。  
+  
+```xaml
+<Image Source="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Icon}"  
+       VerticalAlignment="Top" HorizontalAlignment="Left"  
+       Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(shell:WindowChrome.WindowChrome).ResizeBorderThickness}"   
+       Width="{Binding Source={x:Static shell:SystemParameters2.Current}, Path=SmallIconSize.Width}"  
+       shell:WindowChrome.IsHitTestVisibleInChrome="True"/>  
+  
+<TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}"   
+           VerticalAlignment="Top" HorizontalAlignment="Left"   
+           Margin="36,8,0,0"/>  
+```  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public WindowChrome ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Shell.WindowChrome.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; WindowChrome();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Windows.Shell.WindowChrome" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CaptionHeight">
+      <MemberSignature Language="C#" Value="public double CaptionHeight { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance float64 CaptionHeight" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Shell.WindowChrome.CaptionHeight" />
+      <MemberSignature Language="VB.NET" Value="Public Property CaptionHeight As Double" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property double CaptionHeight { double get(); void set(double value); };" />
+      <MemberSignature Language="F#" Value="member this.CaptionHeight : double with get, set" Usage="System.Windows.Shell.WindowChrome.CaptionHeight" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ウィンドウ上部のキャプション領域の高さを取得または設定します。</summary>
+        <value>キャプション領域の高さ。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Windows.Shell.WindowChrome.CaptionHeight%2A>プロパティを設定して、タイトルバーに関連付けられているシステム動作を有効にするウィンドウの上部にある領域を指定します。 これらの動作では、ダブルクリックしてウィンドウを最大化し、右クリックして [システム] メニューを開き、[-] をクリックしてウィンドウを移動します。 このプロパティは、負でない double 値に設定できます。  
+  
+ <xref:System.Windows.Shell.WindowChrome.CaptionHeight%2A>プロパティによって定義される領域は、上部のサイズ変更境界線の下端から開始し、指定した量だけ下に拡張します。 右側と左側のサイズ変更境界内のウィンドウの幅にまたがります。 この領域には、ビジュアル要素が関連付けられていません。タイトルバーの動作に応答する領域を定義するためにのみ使用されます。 既定では、ウィンドウのキャプション領域内にあるすべてのビジュアル要素の部分は対話型ではありません。 キャプション領域で対話型要素を有効にするには<xref:System.Windows.Shell.WindowChrome.IsHitTestVisibleInChrome%2A> 、添付プロパティを要素にアタッチし、 `true`それをに設定します。  
+  
+<a name="dependencyPropertyInfo_CaptionHeight"></a>   
+## <a name="dependency-property-information"></a>依存プロパティ情報  
+  
+|||  
+|-|-|  
+|識別子フィールド|<xref:System.Windows.Shell.WindowChrome.CaptionHeightProperty>|  
+|メタデータプロパティがに設定される`true`|None|  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CaptionHeightProperty">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.DependencyProperty CaptionHeightProperty;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.DependencyProperty CaptionHeightProperty" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Shell.WindowChrome.CaptionHeightProperty" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly CaptionHeightProperty As DependencyProperty " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::DependencyProperty ^ CaptionHeightProperty;" />
+      <MemberSignature Language="F#" Value=" staticval mutable CaptionHeightProperty : System.Windows.DependencyProperty" Usage="System.Windows.Shell.WindowChrome.CaptionHeightProperty" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.DependencyProperty</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Shell.WindowChrome.CaptionHeight" /> 依存関係プロパティを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CornerRadius">
+      <MemberSignature Language="C#" Value="public System.Windows.CornerRadius CornerRadius { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Windows.CornerRadius CornerRadius" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Shell.WindowChrome.CornerRadius" />
+      <MemberSignature Language="VB.NET" Value="Public Property CornerRadius As CornerRadius" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::CornerRadius CornerRadius { System::Windows::CornerRadius get(); void set(System::Windows::CornerRadius value); };" />
+      <MemberSignature Language="F#" Value="member this.CornerRadius : System.Windows.CornerRadius with get, set" Usage="System.Windows.Shell.WindowChrome.CornerRadius" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.CornerRadius</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ウィンドウの角を丸める量を示す値を取得または設定します。</summary>
+        <value>角の丸みの量を示す値。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ウィンドウの<xref:System.Windows.Shell.WindowChrome.CornerRadius%2A>角の丸みの量を指定するには、プロパティを設定します。 このプロパティは、負でない double 値に設定できます。 値は一様でない場合があります。  
+  
+ このプロパティは、Windows Aero グラスフレームを持つ最大ウィンドウまたはウィンドウには影響しません。 Windows Aero (デスクトップウィンドウマネージャーとも呼ばれます) が有効になっていない場合<xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A> 、またはプロパティが0に設定されている場合にのみ効果があります。 非クライアント領域のヒットテストでは、マウスがサイズ<xref:System.Windows.Shell.WindowChrome.CornerRadius%2A>変更境界上にあるかどうかを判断するときに、が考慮されません。 半径がに<xref:System.Windows.Shell.WindowChrome.ResizeBorderThickness%2A>対して大きすぎる場合、ユーザーはマウスを使用して対角線のサイズ変更を実行できない可能性があります。  
+  
+<a name="dependencyPropertyInfo_CornerRadius"></a>   
+## <a name="dependency-property-information"></a>依存プロパティ情報  
+  
+|||  
+|-|-|  
+|識別子フィールド|<xref:System.Windows.Shell.WindowChrome.CornerRadiusProperty>|  
+|メタデータプロパティがに設定される`true`|None|  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CornerRadiusProperty">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.DependencyProperty CornerRadiusProperty;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.DependencyProperty CornerRadiusProperty" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Shell.WindowChrome.CornerRadiusProperty" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly CornerRadiusProperty As DependencyProperty " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::DependencyProperty ^ CornerRadiusProperty;" />
+      <MemberSignature Language="F#" Value=" staticval mutable CornerRadiusProperty : System.Windows.DependencyProperty" Usage="System.Windows.Shell.WindowChrome.CornerRadiusProperty" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.DependencyProperty</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Shell.WindowChrome.CornerRadius" /> 依存関係プロパティを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CreateInstanceCore">
+      <MemberSignature Language="C#" Value="protected override System.Windows.Freezable CreateInstanceCore ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance class System.Windows.Freezable CreateInstanceCore() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Shell.WindowChrome.CreateInstanceCore" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function CreateInstanceCore () As Freezable" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override System::Windows::Freezable ^ CreateInstanceCore();" />
+      <MemberSignature Language="F#" Value="override this.CreateInstanceCore : unit -&gt; System.Windows.Freezable" Usage="windowChrome.CreateInstanceCore " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Freezable</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Windows.Shell.WindowChrome" /> クラスの新しいインスタンスを作成します。</summary>
+        <returns>このクラスの新しいインスタンス。</returns>
+        <remarks>To be added.</remarks>
+        <altmember cref="M:System.Windows.Freezable.CreateInstanceCore" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetIsHitTestVisibleInChrome">
+      <MemberSignature Language="C#" Value="public static bool GetIsHitTestVisibleInChrome (System.Windows.IInputElement inputElement);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool GetIsHitTestVisibleInChrome(class System.Windows.IInputElement inputElement) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Shell.WindowChrome.GetIsHitTestVisibleInChrome(System.Windows.IInputElement)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetIsHitTestVisibleInChrome (inputElement As IInputElement) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool GetIsHitTestVisibleInChrome(System::Windows::IInputElement ^ inputElement);" />
+      <MemberSignature Language="F#" Value="static member GetIsHitTestVisibleInChrome : System.Windows.IInputElement -&gt; bool" Usage="System.Windows.Shell.WindowChrome.GetIsHitTestVisibleInChrome inputElement" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="inputElement" Type="System.Windows.IInputElement" />
+      </Parameters>
+      <Docs>
+        <param name="inputElement">プロパティ値の読み取り元の入力要素。</param>
+        <summary>指定した入力要素から <see cref="P:System.Windows.Shell.WindowChrome.IsHitTestVisibleInChrome" /> 添付プロパティの値を取得します。</summary>
+        <returns><see cref="P:System.Windows.Shell.WindowChrome.IsHitTestVisibleInChrome" /> 添付プロパティの値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="inputElement" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="inputElement" /> が <see cref="T:System.Windows.DependencyObject" /> ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetResizeGripDirection">
+      <MemberSignature Language="C#" Value="public static System.Windows.Shell.ResizeGripDirection GetResizeGripDirection (System.Windows.IInputElement inputElement);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.Windows.Shell.ResizeGripDirection GetResizeGripDirection(class System.Windows.IInputElement inputElement) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Shell.WindowChrome.GetResizeGripDirection(System.Windows.IInputElement)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetResizeGripDirection (inputElement As IInputElement) As ResizeGripDirection" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Windows::Shell::ResizeGripDirection GetResizeGripDirection(System::Windows::IInputElement ^ inputElement);" />
+      <MemberSignature Language="F#" Value="static member GetResizeGripDirection : System.Windows.IInputElement -&gt; System.Windows.Shell.ResizeGripDirection" Usage="System.Windows.Shell.WindowChrome.GetResizeGripDirection inputElement" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Shell.ResizeGripDirection</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="inputElement" Type="System.Windows.IInputElement" />
+      </Parameters>
+      <Docs>
+        <param name="inputElement">プロパティ値の読み取り元の入力要素。</param>
+        <summary>指定した入力要素から <see cref="P:System.Windows.Shell.WindowChrome.ResizeGripDirection" /> 添付プロパティの値を取得します。</summary>
+        <returns><see cref="P:System.Windows.Shell.WindowChrome.ResizeGripDirection" /> 添付プロパティの値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="inputElement" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="inputElement" /> が <see cref="T:System.Windows.DependencyObject" /> ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetWindowChrome">
+      <MemberSignature Language="C#" Value="public static System.Windows.Shell.WindowChrome GetWindowChrome (System.Windows.Window window);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Windows.Shell.WindowChrome GetWindowChrome(class System.Windows.Window window) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Shell.WindowChrome.GetWindowChrome(System.Windows.Window)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Windows::Shell::WindowChrome ^ GetWindowChrome(System::Windows::Window ^ window);" />
+      <MemberSignature Language="F#" Value="static member GetWindowChrome : System.Windows.Window -&gt; System.Windows.Shell.WindowChrome" Usage="System.Windows.Shell.WindowChrome.GetWindowChrome window" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Shell.WindowChrome</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="window" Type="System.Windows.Window" />
+      </Parameters>
+      <Docs>
+        <param name="window">プロパティ値の読み取り元の <see cref="T:System.Windows.Window" />。</param>
+        <summary>指定された <see cref="P:System.Windows.Shell.WindowChrome.WindowChrome" /> から <see cref="T:System.Windows.Window" /> 添付プロパティの値を取得します。</summary>
+        <returns>指定された <see cref="T:System.Windows.Shell.WindowChrome" /> にアタッチされている <see cref="T:System.Windows.Window" /> のインスタンス。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="window" /> は <see langword="null" />です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GlassFrameCompleteThickness">
+      <MemberSignature Language="C#" Value="public static System.Windows.Thickness GlassFrameCompleteThickness { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property valuetype System.Windows.Thickness GlassFrameCompleteThickness" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Shell.WindowChrome.GlassFrameCompleteThickness" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly Property GlassFrameCompleteThickness As Thickness" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static property System::Windows::Thickness GlassFrameCompleteThickness { System::Windows::Thickness get(); };" />
+      <MemberSignature Language="F#" Value="member this.GlassFrameCompleteThickness : System.Windows.Thickness" Usage="System.Windows.Shell.WindowChrome.GlassFrameCompleteThickness" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Thickness</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>-1 の均一な厚みを取得します。</summary>
+        <value>常に -1 の均一な厚み。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Windows.Shell.WindowChrome.GlassFrameCompleteThickness%2A>プロパティは、ガラスフレームの太さを名前付きプロパティに設定できるようにするためのユーティリティとして提供されます。 <xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>プロパティをに<xref:System.Windows.Shell.WindowChrome.GlassFrameCompleteThickness%2A>設定すると、ウィンドウ全体にグラスフレームが拡張されます。 プロパティが<xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>いずれかの側で負の値に設定されている場合、その値<xref:System.Windows.Shell.WindowChrome.GlassFrameCompleteThickness%2A>はと等しくなります。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GlassFrameThickness">
+      <MemberSignature Language="C#" Value="public System.Windows.Thickness GlassFrameThickness { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Windows.Thickness GlassFrameThickness" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Shell.WindowChrome.GlassFrameThickness" />
+      <MemberSignature Language="VB.NET" Value="Public Property GlassFrameThickness As Thickness" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::Thickness GlassFrameThickness { System::Windows::Thickness get(); void set(System::Windows::Thickness value); };" />
+      <MemberSignature Language="F#" Value="member this.GlassFrameThickness : System.Windows.Thickness with get, set" Usage="System.Windows.Shell.WindowChrome.GlassFrameThickness" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Thickness</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ウィンドウの周囲のグラス境界線の幅を示す値を取得または設定します。</summary>
+        <value>ウィンドウの周りのグラス境界線の幅。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>プロパティを設定して、ウィンドウのクライアント領域に Windows Aero グラスフレームを拡張する量を指定します。 既定では、グラスフレームはシステム値を使用して標準ウィンドウの外観をエミュレートします。 Windows Aero が有効になっている場合、標準のキャプションボタン (最大化、最小化、閉じる) が有効になり、対話型になります。 グラスフレームを持たないカスタムウィンドウを作成するには、この太さを均一の値0に設定します。 これにより、標準のキャプションボタンが無効になります。  
+  
+ ウィンドウ全体をカバーするようにグラスフレームを拡張するに<xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>は、プロパティを任意の辺の負の値に設定します。 プロパティが<xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>いずれかの側で負の値に設定されている場合、その値<xref:System.Windows.Shell.WindowChrome.GlassFrameCompleteThickness%2A>はと等しくなります。 <xref:System.Windows.Shell.WindowChrome.GlassFrameCompleteThickness%2A>プロパティは、ウィンドウ全体でグラスを拡張する名前付きプロパティにグラスフレームの太さを設定できるようにするためのユーティリティとして提供されます。  
+  
+ Windows Aero グラス効果は、すべてのオペレーティングシステムでサポートされているわけではなく、サポートされているオペレーティングシステムでは無効にすることができます。 Windows Aero を使用できない場合、 <xref:System.Windows.Shell.WindowChrome.GlassFrameThickness%2A>プロパティ値に関係なくグラスフレームは表示されません。 Windows Aero グラス効果<xref:System.Windows.SystemParameters.IsGlassEnabled%2A>が使用可能であることを確認するには、プロパティを確認する必要があります。 ガラス効果を使用できない場合は、グラスフレームを使用しない代替ウィンドウスタイルを指定する必要があります。  
+  
+<a name="dependencyPropertyInfo_GlassFrameThickness"></a>   
+## <a name="dependency-property-information"></a>依存プロパティ情報  
+  
+|||  
+|-|-|  
+|識別子フィールド|<xref:System.Windows.Shell.WindowChrome.GlassFrameThicknessProperty>|  
+|メタデータプロパティがに設定される`true`|None|  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GlassFrameThicknessProperty">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.DependencyProperty GlassFrameThicknessProperty;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.DependencyProperty GlassFrameThicknessProperty" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Shell.WindowChrome.GlassFrameThicknessProperty" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly GlassFrameThicknessProperty As DependencyProperty " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::DependencyProperty ^ GlassFrameThicknessProperty;" />
+      <MemberSignature Language="F#" Value=" staticval mutable GlassFrameThicknessProperty : System.Windows.DependencyProperty" Usage="System.Windows.Shell.WindowChrome.GlassFrameThicknessProperty" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.DependencyProperty</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Shell.WindowChrome.GlassFrameThickness" /> 依存関係プロパティを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsHitTestVisibleInChromeProperty">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.DependencyProperty IsHitTestVisibleInChromeProperty;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.DependencyProperty IsHitTestVisibleInChromeProperty" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Shell.WindowChrome.IsHitTestVisibleInChromeProperty" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly IsHitTestVisibleInChromeProperty As DependencyProperty " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::DependencyProperty ^ IsHitTestVisibleInChromeProperty;" />
+      <MemberSignature Language="F#" Value=" staticval mutable IsHitTestVisibleInChromeProperty : System.Windows.DependencyProperty" Usage="System.Windows.Shell.WindowChrome.IsHitTestVisibleInChromeProperty" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.DependencyProperty</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Shell.WindowChrome.IsHitTestVisibleInChrome" /> 依存関係プロパティを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="NonClientFrameEdges">
+      <MemberSignature Language="C#" Value="public System.Windows.Shell.NonClientFrameEdges NonClientFrameEdges { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Windows.Shell.NonClientFrameEdges NonClientFrameEdges" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Shell.WindowChrome.NonClientFrameEdges" />
+      <MemberSignature Language="VB.NET" Value="Public Property NonClientFrameEdges As NonClientFrameEdges" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::Shell::NonClientFrameEdges NonClientFrameEdges { System::Windows::Shell::NonClientFrameEdges get(); void set(System::Windows::Shell::NonClientFrameEdges value); };" />
+      <MemberSignature Language="F#" Value="member this.NonClientFrameEdges : System.Windows.Shell.NonClientFrameEdges with get, set" Usage="System.Windows.Shell.WindowChrome.NonClientFrameEdges" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Shell.NonClientFrameEdges</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ウィンドウ フレームのどの外枠がクライアントによって所有されないかを示す値を取得または設定します。</summary>
+        <value>フレームのどの外枠がクライアントによって所有されないかを指定する列挙値のビットごとの組み合わせ。  
+  
+登録済みの既定値は <see cref="F:System.Windows.Shell.NonClientFrameEdges.None" /> です。 この値に影響する可能性があるものの詳細については、「 [依存関係プロパティ値の優先順位](~/docs/framework/wpf/advanced/dependency-property-value-precedence.md)」を参照してください。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+<a name="dependencyPropertyInfo_NonClientFrameEdges"></a>   
+## <a name="dependency-property-information"></a>依存プロパティ情報  
+  
+|||  
+|-|-|  
+|識別子フィールド|<xref:System.Windows.Shell.WindowChrome.NonClientFrameEdgesProperty>|  
+|メタデータプロパティがに設定される`true`|None|  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">"Left"、"Right"、"Top"、"Bottom" は、有効な値ではありません。 少なくとも 1 つのエッジがクライアントに属している必要があります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="NonClientFrameEdgesProperty">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.DependencyProperty NonClientFrameEdgesProperty;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.DependencyProperty NonClientFrameEdgesProperty" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Shell.WindowChrome.NonClientFrameEdgesProperty" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly NonClientFrameEdgesProperty As DependencyProperty " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::DependencyProperty ^ NonClientFrameEdgesProperty;" />
+      <MemberSignature Language="F#" Value=" staticval mutable NonClientFrameEdgesProperty : System.Windows.DependencyProperty" Usage="System.Windows.Shell.WindowChrome.NonClientFrameEdgesProperty" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.DependencyProperty</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Shell.WindowChrome.NonClientFrameEdges" /> 依存関係プロパティを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ResizeBorderThickness">
+      <MemberSignature Language="C#" Value="public System.Windows.Thickness ResizeBorderThickness { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Windows.Thickness ResizeBorderThickness" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Shell.WindowChrome.ResizeBorderThickness" />
+      <MemberSignature Language="VB.NET" Value="Public Property ResizeBorderThickness As Thickness" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::Thickness ResizeBorderThickness { System::Windows::Thickness get(); void set(System::Windows::Thickness value); };" />
+      <MemberSignature Language="F#" Value="member this.ResizeBorderThickness : System.Windows.Thickness with get, set" Usage="System.Windows.Shell.WindowChrome.ResizeBorderThickness" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Thickness</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ウィンドウのサイズ変更に使用する境界線の幅を示す値を取得または設定します。</summary>
+        <value>ウィンドウのサイズ変更に使用する境界線の幅。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Windows.Shell.WindowChrome.ResizeBorderThickness%2A>プロパティを設定して、ユーザーがウィンドウのサイズを変更するためにクリックしてドラッグできる領域の幅を指定します。 マウスポインターをサイズ変更境界線の上に移動すると、マウスポインターがサイズ変更矢印に変わります。  
+  
+ このプロパティは、負でない double 値に設定できます。 値は一様でない場合があります。 既定では、サイズ変更の境界線はシステム値を使用して、標準ウィンドウの動作をエミュレートします。  
+  
+ この領域は、ウィンドウのサイズを変更するために使用される領域を定義するためにのみ使用されます。これには、関連付けられたビジュアル要素はありません。 ただし、サイズ変更境界内の要素のレイアウトには影響します。  
+  
+<a name="dependencyPropertyInfo_ResizeBorderThickness"></a>   
+## <a name="dependency-property-information"></a>依存プロパティ情報  
+  
+|||  
+|-|-|  
+|識別子フィールド|<xref:System.Windows.Shell.WindowChrome.ResizeBorderThicknessProperty>|  
+|メタデータプロパティがに設定される`true`|None|  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ResizeBorderThicknessProperty">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.DependencyProperty ResizeBorderThicknessProperty;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.DependencyProperty ResizeBorderThicknessProperty" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Shell.WindowChrome.ResizeBorderThicknessProperty" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly ResizeBorderThicknessProperty As DependencyProperty " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::DependencyProperty ^ ResizeBorderThicknessProperty;" />
+      <MemberSignature Language="F#" Value=" staticval mutable ResizeBorderThicknessProperty : System.Windows.DependencyProperty" Usage="System.Windows.Shell.WindowChrome.ResizeBorderThicknessProperty" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.DependencyProperty</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Shell.WindowChrome.ResizeBorderThickness" /> 依存関係プロパティを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ResizeGripDirectionProperty">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.DependencyProperty ResizeGripDirectionProperty;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.DependencyProperty ResizeGripDirectionProperty" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Shell.WindowChrome.ResizeGripDirectionProperty" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly ResizeGripDirectionProperty As DependencyProperty " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::DependencyProperty ^ ResizeGripDirectionProperty;" />
+      <MemberSignature Language="F#" Value=" staticval mutable ResizeGripDirectionProperty : System.Windows.DependencyProperty" Usage="System.Windows.Shell.WindowChrome.ResizeGripDirectionProperty" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.DependencyProperty</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Shell.WindowChrome.ResizeGripDirection" /> 依存関係プロパティを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetIsHitTestVisibleInChrome">
+      <MemberSignature Language="C#" Value="public static void SetIsHitTestVisibleInChrome (System.Windows.IInputElement inputElement, bool hitTestVisible);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void SetIsHitTestVisibleInChrome(class System.Windows.IInputElement inputElement, bool hitTestVisible) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Shell.WindowChrome.SetIsHitTestVisibleInChrome(System.Windows.IInputElement,System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub SetIsHitTestVisibleInChrome (inputElement As IInputElement, hitTestVisible As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void SetIsHitTestVisibleInChrome(System::Windows::IInputElement ^ inputElement, bool hitTestVisible);" />
+      <MemberSignature Language="F#" Value="static member SetIsHitTestVisibleInChrome : System.Windows.IInputElement * bool -&gt; unit" Usage="System.Windows.Shell.WindowChrome.SetIsHitTestVisibleInChrome (inputElement, hitTestVisible)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="inputElement" Type="System.Windows.IInputElement" />
+        <Parameter Name="hitTestVisible" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="inputElement"><see cref="P:System.Windows.Shell.WindowChrome.IsHitTestVisibleInChrome" /> 添付プロパティを設定する要素。</param>
+        <param name="hitTestVisible">設定するプロパティ値。</param>
+        <summary>指定された入力要素の <see cref="P:System.Windows.Shell.WindowChrome.IsHitTestVisibleInChrome" /> 添付プロパティの値を設定します。</summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="inputElement" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="inputElement" /> が <see cref="T:System.Windows.DependencyObject" /> ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="SetResizeGripDirection">
+      <MemberSignature Language="C#" Value="public static void SetResizeGripDirection (System.Windows.IInputElement inputElement, System.Windows.Shell.ResizeGripDirection direction);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void SetResizeGripDirection(class System.Windows.IInputElement inputElement, valuetype System.Windows.Shell.ResizeGripDirection direction) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Shell.WindowChrome.SetResizeGripDirection(System.Windows.IInputElement,System.Windows.Shell.ResizeGripDirection)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub SetResizeGripDirection (inputElement As IInputElement, direction As ResizeGripDirection)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void SetResizeGripDirection(System::Windows::IInputElement ^ inputElement, System::Windows::Shell::ResizeGripDirection direction);" />
+      <MemberSignature Language="F#" Value="static member SetResizeGripDirection : System.Windows.IInputElement * System.Windows.Shell.ResizeGripDirection -&gt; unit" Usage="System.Windows.Shell.WindowChrome.SetResizeGripDirection (inputElement, direction)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="inputElement" Type="System.Windows.IInputElement" />
+        <Parameter Name="direction" Type="System.Windows.Shell.ResizeGripDirection" />
+      </Parameters>
+      <Docs>
+        <param name="inputElement"><see cref="P:System.Windows.Shell.WindowChrome.ResizeGripDirection" /> 添付プロパティを設定する要素。</param>
+        <param name="direction">設定するプロパティ値。</param>
+        <summary>指定された入力要素の <see cref="P:System.Windows.Shell.WindowChrome.ResizeGripDirection" /> 添付プロパティの値を設定します。</summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="inputElement" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="inputElement" /> が <see cref="T:System.Windows.DependencyObject" /> ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="SetWindowChrome">
+      <MemberSignature Language="C#" Value="public static void SetWindowChrome (System.Windows.Window window, System.Windows.Shell.WindowChrome chrome);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void SetWindowChrome(class System.Windows.Window window, class System.Windows.Shell.WindowChrome chrome) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Shell.WindowChrome.SetWindowChrome(System.Windows.Window,System.Windows.Shell.WindowChrome)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void SetWindowChrome(System::Windows::Window ^ window, System::Windows::Shell::WindowChrome ^ chrome);" />
+      <MemberSignature Language="F#" Value="static member SetWindowChrome : System.Windows.Window * System.Windows.Shell.WindowChrome -&gt; unit" Usage="System.Windows.Shell.WindowChrome.SetWindowChrome (window, chrome)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="window" Type="System.Windows.Window" />
+        <Parameter Name="chrome" Type="System.Windows.Shell.WindowChrome" />
+      </Parameters>
+      <Docs>
+        <param name="window"><see cref="T:System.Windows.Window" /> 添付プロパティの設定先の <see cref="P:System.Windows.Shell.WindowChrome.WindowChrome" />。</param>
+        <param name="chrome">設定する <see cref="T:System.Windows.Shell.WindowChrome" /> のインスタンス。</param>
+        <summary>指定した <see cref="P:System.Windows.Shell.WindowChrome.WindowChrome" /> の <see cref="T:System.Windows.Window" /> 添付プロパティの値を設定します。</summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="window" /> は <see langword="null" />です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="UseAeroCaptionButtons">
+      <MemberSignature Language="C#" Value="public bool UseAeroCaptionButtons { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool UseAeroCaptionButtons" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Shell.WindowChrome.UseAeroCaptionButtons" />
+      <MemberSignature Language="VB.NET" Value="Public Property UseAeroCaptionButtons As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool UseAeroCaptionButtons { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.UseAeroCaptionButtons : bool with get, set" Usage="System.Windows.Shell.WindowChrome.UseAeroCaptionButtons" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Windows Aero のキャプション ボタンでヒット テストが有効になっているかどうかを示す値を取得または設定します。</summary>
+        <value>ヒット テストがキャプション ボタンで有効な場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 登録済みの既定値は <see langword="true" /> です。 この値に影響する可能性があるものの詳細については、「 [依存関係プロパティ値の優先順位](~/docs/framework/wpf/advanced/dependency-property-value-precedence.md)」を参照してください。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 既定の Windows Aero キャプションボタンは、Close、最大化/復元、および最小化です。 Windows Aero の [キャプション] ボタンを使用しない場合は、ユーザーがこれらのタスクを実行するための別の方法を提供する必要があります。  
+  
+<a name="dependencyPropertyInfo_UseAeroCaptionButtons"></a>   
+## <a name="dependency-property-information"></a>依存プロパティ情報  
+  
+|||  
+|-|-|  
+|識別子フィールド|<xref:System.Windows.Shell.WindowChrome.UseAeroCaptionButtonsProperty>|  
+|メタデータプロパティがに設定される`true`|None|  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Windows.SystemCommands.CloseWindow(System.Windows.Window)" />
+        <altmember cref="M:System.Windows.SystemCommands.MaximizeWindow(System.Windows.Window)" />
+        <altmember cref="M:System.Windows.SystemCommands.MinimizeWindow(System.Windows.Window)" />
+        <altmember cref="M:System.Windows.SystemCommands.RestoreWindow(System.Windows.Window)" />
+      </Docs>
+    </Member>
+    <Member MemberName="UseAeroCaptionButtonsProperty">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.DependencyProperty UseAeroCaptionButtonsProperty;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.DependencyProperty UseAeroCaptionButtonsProperty" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Shell.WindowChrome.UseAeroCaptionButtonsProperty" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly UseAeroCaptionButtonsProperty As DependencyProperty " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::DependencyProperty ^ UseAeroCaptionButtonsProperty;" />
+      <MemberSignature Language="F#" Value=" staticval mutable UseAeroCaptionButtonsProperty : System.Windows.DependencyProperty" Usage="System.Windows.Shell.WindowChrome.UseAeroCaptionButtonsProperty" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.DependencyProperty</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Shell.WindowChrome.UseAeroCaptionButtons" /> 依存関係プロパティを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WindowChrome">
+      <MemberSignature Language="C#" Value="see GetWindowChrome, and SetWindowChrome" />
+      <MemberSignature Language="ILAsm" Value="see GetWindowChrome, and SetWindowChrome" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Shell.WindowChrome.WindowChrome" />
+      <MemberSignature Language="VB.NET" Value="see GetWindowChrome, and SetWindowChrome" />
+      <MemberSignature Language="F#" Value="see GetWindowChrome, and SetWindowChrome" Usage="see GetWindowChrome, and SetWindowChrome" />
+      <MemberType>AttachedProperty</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>ウィンドウにアタッチされた <see cref="T:System.Windows.Shell.WindowChrome" /> のインスタンスを取得または設定します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+<a name="dependencyPropertyInfo_WindowChrome"></a>   
+## <a name="dependency-property-information"></a>依存プロパティ情報  
+  
+|||  
+|-|-|  
+|識別子フィールド|<xref:System.Windows.Shell.WindowChrome.WindowChromeProperty>|  
+|メタデータプロパティがに設定される`true`|None|  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WindowChromeProperty">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.DependencyProperty WindowChromeProperty;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.DependencyProperty WindowChromeProperty" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Shell.WindowChrome.WindowChromeProperty" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly WindowChromeProperty As DependencyProperty " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::DependencyProperty ^ WindowChromeProperty;" />
+      <MemberSignature Language="F#" Value=" staticval mutable WindowChromeProperty : System.Windows.DependencyProperty" Usage="System.Windows.Shell.WindowChrome.WindowChromeProperty" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.DependencyProperty</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Shell.WindowChrome.WindowChrome" /> 依存関係プロパティを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
