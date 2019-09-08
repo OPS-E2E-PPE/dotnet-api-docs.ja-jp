@@ -1,0 +1,237 @@
+<Type Name="SecurityState" FullName="System.Security.SecurityState">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="011df8cd5a661c18666906f987afb474f35269bc" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70599123" /></Metadata><TypeSignature Language="C#" Value="public abstract class SecurityState" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit SecurityState extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Security.SecurityState" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class SecurityState" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SecurityState abstract" />
+  <TypeSignature Language="F#" Value="type SecurityState = class" />
+  <AssemblyInfo>
+    <AssemblyName>mscorlib</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Security.Permissions</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.1.0</AssemblyVersion>
+    <AssemblyVersion>4.0.2.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+      <AttributeName>System.Security.SecurityCritical</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary><see cref="T:System.AppDomainManager" /> オブジェクトからアクションのセキュリティ ステータスを要求するための基本クラスを提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 実行するセキュリティを重視したアクションを指定するプロパティを含むクラスを提供するには、このクラスから継承する必要があります。 派生クラスからインスタンス化された<xref:System.AppDomainManager.CheckSecuritySettings%2A?displayProperty=nameWithType> オブジェクトは、そのアクションの実行をホストで許可するかどうかを判断するためにメソッドに渡されます。 <xref:System.Security.SecurityState> <xref:System.AppDomainManager.CheckSecuritySettings%2A>メソッドの既定の実装は、常`false`にを返します。  許可されているアクションを検出するには、メソッドをオーバーライドする必要があります。  
+  
+ たとえば、ライブラリコード内の web カメラにアクセスする場合は、オブジェクトを`WebcamSecurityState`作成し、 <xref:System.Security.SecurityState.EnsureState%2A>メソッドを呼び出して、次の例に示すように、ホストが web カメラへのアクセスを許可しているかどうかを判断します。  (のコードについ`WebcamSecurityState`ては、「例」を参照してください)。  
+  
+```  
+WebcamSecurityState securityState = new WebcamSecurityState("Safe access to Webcam", WebcamSecurityOptions.SafeAccess);  
+try  
+{  
+   securityState.EnsureState();  
+   // Allocate memory.  
+   }  
+catch (ApplicationException e)  
+{  
+    // Handle any exception that is thrown.  
+    System.Diagnostics.Debug.WriteLine(e.Message);  
+}  
+```  
+  
+ この呼び出しを処理する<xref:System.AppDomainManager>には、次の`WebcamSecurityState`例に示すように<xref:System.AppDomainManager.CheckSecuritySettings%2A?displayProperty=nameWithType> 、メソッドのオーバーライドによってが認識されている必要があります。  
+  
+```  
+[SecurityCritical]  
+public override bool CheckSecuritySettings(System.Security.SecurityState securityState)  
+{  
+   switch (securityState.ToString())  
+   {  
+      case "WebcamSecurityState":  
+      {  
+          if ((securityState as WebcamSecurityState).Options == WebcamSecurityOptions.SafeAccess)  
+              return PromptUser((securityState as WebcamSecurityState).Description);  
+           return false;  
+      }  
+   }  
+      return false;  
+}  
+private bool PromptUser(string text)  
+{  
+   // Replace the OpenFileDialog with a custom user prompt.  
+   OpenFileDialog o = new OpenFileDialog();  
+   o.Title = text;  
+   if (o.ShowDialog() == DialogResult.OK)  
+      return true;  
+   else  
+      return false;  
+}  
+  
+```  
+  
+   
+  
+## Examples  
+ <xref:System.Security.SecurityState>クラスをオーバーライドする方法を次の例に示します。  
+  
+```  
+[SecurityCritical]  
+public enum WebcamSecurityOptions  
+    {  
+        SafeAccess,  
+        FullAccess  
+    }  
+[SecurityCritical]  
+public class WebcamSecurityState : SecurityState  
+{  
+    public WebcamSecurityState(string description, WebcamSecurityOptions options)  
+    {  
+        Options = options;  
+        Description = description;  
+    }  
+    public WebcamSecurityOptions Options { get; set; }  
+    public string Description { get; set; }  
+    public override void EnsureState()  
+    {  
+       if (!IsStateAvailable())  
+           throw new ApplicationException("WebcamSecurityState not available");  
+    }  
+ }  
+  
+```  
+  
+ ]]></format>
+    </remarks>
+    <permission cref="T:System.Security.SecurityCriticalAttribute">直前の呼び出し元に完全信頼が必要です。 このクラスは、部分的に信頼されているコードまたは透過的なコードでは使用できません。</permission>
+    <permission cref="F:System.Security.Permissions.SecurityAction.InheritanceDemand">継承者に対する完全な信頼の場合。 このクラスを、部分的に信頼されているコードが継承することはできません。</permission>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected SecurityState ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.SecurityState.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; SecurityState();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Permissions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Security.SecurityState" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+        <permission cref="T:System.Security.SecurityCriticalAttribute">直前の呼び出し元に完全信頼が必要です。 このメンバーは、部分的に信頼されているコードまたは透過的なコードでは使用できません。</permission>
+      </Docs>
+    </Member>
+    <Member MemberName="EnsureState">
+      <MemberSignature Language="C#" Value="public abstract void EnsureState ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void EnsureState() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.SecurityState.EnsureState" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Sub EnsureState ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract void EnsureState();" />
+      <MemberSignature Language="F#" Value="abstract member EnsureState : unit -&gt; unit" Usage="securityState.EnsureState " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Permissions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>派生クラスでオーバーライドしたとき、<see cref="T:System.Security.SecurityState" /> で表される状態をホストで確実に使用できるようにします。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドの実装は、次の例のようになります。  
+  
+```  
+public override void EnsureState()  
+{  
+    if (!IsStateAvailable())  
+          throw new ApplicationException("WebcamSecurityState not available");  
+}  
+  
+```  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsStateAvailable">
+      <MemberSignature Language="C#" Value="public bool IsStateAvailable ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool IsStateAvailable() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.SecurityState.IsStateAvailable" />
+      <MemberSignature Language="VB.NET" Value="Public Function IsStateAvailable () As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool IsStateAvailable();" />
+      <MemberSignature Language="F#" Value="member this.IsStateAvailable : unit -&gt; bool" Usage="securityState.IsStateAvailable " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Permissions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.1.0</AssemblyVersion>
+        <AssemblyVersion>4.0.2.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Security.SecurityState" /> クラスの実装の状態が現在のホストで使用できるかどうかを示す値を取得します。</summary>
+        <returns>状態が使用可能な場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Security.SecurityState.IsStateAvailable%2A><xref:System.AppDomainManager.CheckSecuritySettings%2A?displayProperty=nameWithType>メソッドを呼び出して、このクラスによって表される状態がホストで使用可能かどうかを確認します。  
+  
+ メソッドの実装例については、 <xref:System.Security.SecurityState>クラスを参照してください。 <xref:System.AppDomainManager.CheckSecuritySettings%2A>  
+  
+ ]]></format>
+        </remarks>
+        <permission cref="T:System.Security.SecurityCriticalAttribute">直前の呼び出し元に完全信頼が必要です。 このメンバーは、部分的に信頼されているコードまたは透過的なコードでは使用できません。</permission>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

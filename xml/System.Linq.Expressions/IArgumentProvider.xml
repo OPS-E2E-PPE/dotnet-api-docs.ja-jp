@@ -1,0 +1,124 @@
+<Type Name="IArgumentProvider" FullName="System.Linq.Expressions.IArgumentProvider">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="4abd0b0508fdc62e37d2117e5823a54dfc7dfdce" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70580563" /></Metadata><TypeSignature Language="C#" Value="public interface IArgumentProvider" />
+  <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract IArgumentProvider" />
+  <TypeSignature Language="DocId" Value="T:System.Linq.Expressions.IArgumentProvider" />
+  <TypeSignature Language="VB.NET" Value="Public Interface IArgumentProvider" />
+  <TypeSignature Language="C++ CLI" Value="public interface class IArgumentProvider" />
+  <TypeSignature Language="F#" Value="type IArgumentProvider = interface" />
+  <AssemblyInfo>
+    <AssemblyName>System.Linq.Expressions</AssemblyName>
+    <AssemblyVersion>4.0.10.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Core</AssemblyName>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Interfaces />
+  <Docs>
+    <summary>複数のツリー ノード (DynamicExpression、ElementInit、MethodCallExpression、InvocationExpression、NewExpression および IndexExpression) の引数にアクセスするための内部インターフェイスを提供します。  この API は、内部でだけ使用します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[
+      
+## Remarks
+
+この API を使用しないでください。  これは、アセンブリのリファクタリングによってのみ公開され、内部パフォーマンスの最適化のためだけに存在します。 これにより、ツリーのサイズを縮小する2つの最適化が可能になります。
+  
+1. これにより、ノードが<xref:System.Collections.Generic.IList%601> <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>の代わりにを保持できるようになります。  これにより、各ノードに読み取り専用コレクションを割り当てるコストが削減されます。
+  
+2. これにより、特定の数の引数を保持する特殊なサブクラスを作成できます`Block2`( `Block2`たとえば`Block4`、、、)。  そのため、これらのノードは、 <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>要素を格納するためのと配列の両方を割り当てないようにして、ノードごとに32バイトを節約します。  この手法は<xref:System.Linq.Expressions.BlockExpression>、、 <xref:System.Linq.Expressions.InvocationExpression> <xref:System.Linq.Expressions.MethodCallExpression>、などのさまざまなノードで使用されます。
+            
+式ツリーノードは、オブジェクトの元の<xref:System.Collections.ObjectModel.ReadOnlyCollection%601> LINQ プロパティを引き続き公開します。 これを行うには、配列または配列に通常格納される要素の両方を格納するためのフィールドを再利用します。
+            
+配列の場合、コレクションはでは<xref:System.Collections.Generic.IList%601> <xref:System.Collections.ObjectModel.ReadOnlyCollection%601>なくに型指定されます。 ノードが最初に構築されるときには、配列になります。  このライブラリ内のコンパイラまたはユーティリティは、このインターフェイスを介して要素にアクセスします。 配列要素にアクセスすると<xref:System.Collections.ObjectModel.ReadOnlyCollection%601>、配列がに昇格されます。
+            
+オブジェクトの場合、最初の引数はに<xref:System.Object>型指定されたフィールドに格納されます。 ノードが最初に構築されるときに、この<xref:System.Linq.Expressions.Expression>フィールドには最初の引数のが格納されます。  このライブラリ内のコンパイラとユーティリティが引数にアクセスすると、このインターフェイスを再び使用します。最初の引数のアクセサーは`Expression.ReturnObject<T>(System.Object)` 、内部ヘルパーメソッドを使用して、 <xref:System.Linq.Expressions.Expression>また<xref:System.Collections.ObjectModel.ReadOnlyCollection%601>はのケースを処理するオブジェクトを返します。 ユーザーがに<xref:System.Collections.ObjectModel.ReadOnlyCollection%601>アクセスすると、オブジェクトフィールドが更新され、に直接<xref:System.Collections.ObjectModel.ReadOnlyCollection%601>保持されます。
+            
+プロパティが常に<xref:System.Linq.Expressions.Expression>同じ<xref:System.Collections.ObjectModel.ReadOnlyCollection%601>を返すことが重要です。 それ以外の場合、式の訪問者によって使用されるリライターツリーウォーカーは中断されます。 これは、同じ<xref:System.Collections.ObjectModel.ReadOnlyCollection%601> <xref:System.Linq.Expressions.Expression>ノードとは異なる結果を返す LINQ v1 からの互換性に影響する変更点です。 現時点では、ユーザーはオブジェクト id に依存して、ノードが変更されたかどうかを判断できます。  をオーバーロード<xref:System.Collections.ObjectModel.ReadOnlyCollection%601>されたフィールドに格納すると、メモリの使用量が減少し、パブリック API の互換性が維持されます。
+
+      ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="ArgumentCount">
+      <MemberSignature Language="C#" Value="public int ArgumentCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 ArgumentCount" />
+      <MemberSignature Language="DocId" Value="P:System.Linq.Expressions.IArgumentProvider.ArgumentCount" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property ArgumentCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int ArgumentCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.ArgumentCount : int" Usage="System.Linq.Expressions.IArgumentProvider.ArgumentCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Linq.Expressions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>式ツリー ノードに引数の数を返します。 この API は、内部でだけ使用します。</summary>
+        <value><see cref="T:System.Int32" /> として式ツリー ノードに引数の数を返します。</value>
+        <remarks>この API を使用しないでください。 これは、アセンブリのリファクタリングによってのみ公開され、パフォーマンスの最適化のために内部的に使用されます。</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetArgument">
+      <MemberSignature Language="C#" Value="public System.Linq.Expressions.Expression GetArgument (int index);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Linq.Expressions.Expression GetArgument(int32 index) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Linq.Expressions.IArgumentProvider.GetArgument(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetArgument (index As Integer) As Expression" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Linq::Expressions::Expression ^ GetArgument(int index);" />
+      <MemberSignature Language="F#" Value="abstract member GetArgument : int -&gt; System.Linq.Expressions.Expression" Usage="iArgumentProvider.GetArgument index" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Linq.Expressions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Core</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Linq.Expressions.Expression</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="index" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="index">引数のインデックス。</param>
+        <summary><paramref name="index" /> の引数を返し、<paramref name="index" /> が範囲外にある場合にスローします。 この API は、内部でだけ使用します。</summary>
+        <returns>インデックスの引数。</returns>
+        <remarks>この API を使用しないでください。  これは、アセンブリ リファクタリングのためパブリックのみで、パフォーマンスの最適化のために内部で使用されます。</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
