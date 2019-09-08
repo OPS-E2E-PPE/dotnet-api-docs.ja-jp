@@ -1,0 +1,2384 @@
+<Type Name="BlockingCollection&lt;T&gt;" FullName="System.Collections.Concurrent.BlockingCollection&lt;T&gt;">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="e3ea593421aaf22b6f254263a0f565777f59b24a" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70512223" /></Metadata><TypeSignature Language="C#" Value="public class BlockingCollection&lt;T&gt; : IDisposable, System.Collections.Generic.IEnumerable&lt;T&gt;, System.Collections.Generic.IReadOnlyCollection&lt;T&gt;, System.Collections.ICollection" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit BlockingCollection`1&lt;T&gt; extends System.Object implements class System.Collections.Generic.IEnumerable`1&lt;!T&gt;, class System.Collections.Generic.IReadOnlyCollection`1&lt;!T&gt;, class System.Collections.ICollection, class System.Collections.IEnumerable, class System.IDisposable" />
+  <TypeSignature Language="DocId" Value="T:System.Collections.Concurrent.BlockingCollection`1" />
+  <TypeSignature Language="VB.NET" Value="Public Class BlockingCollection(Of T)&#xA;Implements ICollection, IDisposable, IEnumerable(Of T), IReadOnlyCollection(Of T)" />
+  <TypeSignature Language="C++ CLI" Value="generic &lt;typename T&gt;&#xA;public ref class BlockingCollection : IDisposable, System::Collections::Generic::IEnumerable&lt;T&gt;, System::Collections::Generic::IReadOnlyCollection&lt;T&gt;, System::Collections::ICollection" />
+  <TypeSignature Language="F#" Value="type BlockingCollection&lt;'T&gt; = class&#xA;    interface seq&lt;'T&gt;&#xA;    interface ICollection&#xA;    interface IDisposable&#xA;    interface IReadOnlyCollection&lt;'T&gt;&#xA;    interface IEnumerable" />
+  <AssemblyInfo>
+    <AssemblyName>System.Collections.Concurrent</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.10.0</AssemblyVersion>
+    <AssemblyVersion>4.0.14.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System</AssemblyName>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <TypeParameters>
+    <TypeParameter Name="T" />
+  </TypeParameters>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.Collections.Generic.IEnumerable&lt;T&gt;</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.Collections.Generic.IReadOnlyCollection&lt;T&gt;</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.Collections.ICollection</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.Collections.IEnumerable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.IDisposable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+      <AttributeName>System.Diagnostics.DebuggerDisplay("Count = {Count}, Type = {m_collection}")</AttributeName>
+    </Attribute>
+    <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+      <AttributeName>System.Diagnostics.DebuggerTypeProxy(typeof(System.Collections.Concurrent.SystemThreadingCollections_BlockingCollectionDebugView`1))</AttributeName>
+    </Attribute>
+    <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+      <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <typeparam name="T">コレクション内の要素の型。</typeparam>
+    <summary><see cref="T:System.Collections.Concurrent.IProducerConsumerCollection`1" /> を実装するスレッド セーフなコレクションに、ブロッキングと範囲指定の機能を提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Collections.Concurrent.BlockingCollection%601>は、次の機能を提供するスレッドセーフなコレクションクラスです。  
+  
+-   プロデューサー/コンシューマーパターンの実装。<xref:System.Collections.Concurrent.BlockingCollection%601>は、 <xref:System.Collections.Concurrent.IProducerConsumerCollection%601> インターフェイスのラッパーです。  
+  
+-   メソッドと<xref:System.Collections.Concurrent.BlockingCollection%601.Add%2A> <xref:System.Collections.Concurrent.BlockingCollection%601.Take%2A>メソッドを使用して、複数のスレッドから項目を同時に追加または削除します。  
+  
+-   コレクションがいっぱいになっ<xref:System.Collections.Concurrent.BlockingCollection%601.Add%2A>た<xref:System.Collections.Concurrent.BlockingCollection%601.Take%2A>場合や、コレクションが空の場合に操作をブロックする、制限されたコレクション。  
+  
+-   メソッドまた<xref:System.Collections.Concurrent.BlockingCollection%601.Add%2A> <xref:System.Collections.Concurrent.BlockingCollection%601.TryAdd%2A>は<xref:System.Threading.CancellationToken> <xref:System.Collections.Concurrent.BlockingCollection%601.Take%2A> メソッド <xref:System.Collections.Concurrent.BlockingCollection%601.TryTake%2A> のオブジェクトを使用した、または操作の取り消し。  
+  
+> [!IMPORTANT]
+>  この型は <xref:System.IDisposable> インターフェイスを実装します。 型の使用が完了したら、直接的または間接的に型を破棄する必要があります。 直接的に型を破棄するには、`try` / `catch` ブロック内で <xref:System.IDisposable.Dispose%2A> メソッドを呼び出します。 間接的に型を破棄するには、`using` (C# の場合) または `Using` (Visual Basic 言語) などの言語構成要素を使用します。 詳細については、<xref:System.IDisposable> インターフェイスに関するトピック内の「IDisposable を実装するオブジェクトの使用」セクションを参照してください。 また、 <xref:System.Collections.Concurrent.BlockingCollection%601.Dispose>メソッドはスレッドセーフではないことに注意してください。 の他のすべての<xref:System.Collections.Concurrent.BlockingCollection%601>パブリックメンバーとプロテクトメンバーは、スレッドセーフであり、複数のスレッドから同時に使用することができます。  
+  
+ <xref:System.Collections.Concurrent.IProducerConsumerCollection%601>データのスレッドセーフな追加と削除を可能にするコレクションを表します。 <xref:System.Collections.Concurrent.BlockingCollection%601>は、 <xref:System.Collections.Concurrent.IProducerConsumerCollection%601>インスタンスのラッパーとして使用され、データを削除できるようになるまでコレクションからの削除試行をブロックすることを許可します。 同様に、を<xref:System.Collections.Concurrent.BlockingCollection%601>作成して、 <xref:System.Collections.Concurrent.IProducerConsumerCollection%601>で許可されるデータ要素の数に上限を適用することもできます。追加された項目を格納するための領域が使用できるようになるまで、コレクションに対する追加の試行がブロックされる可能性があります。 このように、 <xref:System.Collections.Concurrent.BlockingCollection%601>は、基になるデータストレージメカニズムが<xref:System.Collections.Concurrent.IProducerConsumerCollection%601>として抽象化される点を除いて、従来のブロッキングキューデータ構造に似ています。  
+  
+ <xref:System.Collections.Concurrent.BlockingCollection%601> はバインドとブロックに対応しています。 境界は、コレクションの最大容量を設定できることを意味します。 境界は、特定のシナリオで重要です。これにより、メモリ内のコレクションの最大サイズを制御できるようになり、生成しているスレッドが、消費スレッドよりも先に進んでしまうのを防ぐことができます。複数のスレッドまたはタスクでコレクションに項目を同時に追加できます。コレクションが指定された最大容量に達すると、生成したスレッドは項目が削除されるまでブロックされます。 複数の cosumer が同時に項目を削除できます。コレクションが空になった場合、consumer スレッドは、producer が項目を追加するまでブロックします。 生成スレッドは、メソッドを<xref:System.Collections.Concurrent.BlockingCollection%601.CompleteAdding%2A>呼び出して、それ以上項目が追加されないことを示すことができます。 consumer では、<xref:System.Collections.Concurrent.BlockingCollection%601.IsCompleted%2A> プロパティを監視して、コレクションが空になったときや、それ以上の項目は追加されないことになったときを把握できます。  
+  
+ <xref:System.Collections.Concurrent.BlockingCollection%601.Add%2A>通常<xref:System.Collections.Concurrent.BlockingCollection%601.Take%2A> 、操作はループで実行されます。 ループ<xref:System.Threading.CancellationToken>をキャンセルするに<xref:System.Collections.Concurrent.BlockingCollection%601.TryAdd%2A>は、オブジェクトをメソッドまたは<xref:System.Collections.Concurrent.BlockingCollection%601.TryTake%2A>メソッドに渡し、各反復処理でトークンの<xref:System.Threading.CancellationToken.IsCancellationRequested%2A>プロパティの値を確認します。 値が`true`の場合は、リソースをクリーンアップしてループを終了することで、キャンセル要求に応答することになります。  
+  
+ <xref:System.Collections.Concurrent.BlockingCollection%601>オブジェクトを作成するときに、制限された容量だけでなく、使用するコレクションの種類を指定することもできます。 たとえば、先入れ先出し法 (FIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentQueue%601> オブジェクトを指定し、後入れ先出し法 (LIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentStack%601> オブジェクトを指定できます。 <xref:System.Collections.Concurrent.IProducerConsumerCollection%601> インターフェイスを実装する任意のコレクション クラスを使用できます。 <xref:System.Collections.Concurrent.BlockingCollection%601> の既定のコレクション型は <xref:System.Collections.Concurrent.ConcurrentQueue%601> です。  
+  
+ 基になるコレクションを直接変更しないでください。 メソッド<xref:System.Collections.Concurrent.BlockingCollection%601>を使用して、要素を追加または削除します。 基<xref:System.Collections.Concurrent.BlockingCollection%601>になるコレクションを直接変更すると、オブジェクトが破損する可能性があります。  
+  
+   
+  
+## Examples  
+ 次の例は、ブロッキングコレクションから項目を同時に追加して取得する方法を示しています。  
+  
+ [!code-csharp[System.Collections.Concurrent.BlockingCollection#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.collections.concurrent.blockingcollection/cs/blockingcoll.cs#1)]
+ [!code-vb[System.Collections.Concurrent.BlockingCollection#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.collections.concurrent.blockingcollection/vb/blockingcoll.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe>Dispose メソッドはスレッドセーフではありません。 の他のすべての<see cref="T:System.Collections.Concurrent.BlockingCollection`1" />パブリックメンバーとプロテクトメンバーは、スレッドセーフであり、複数のスレッドから同時に使用することができます。</threadsafe>
+    <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/4c2492de-3876-4873-b5a1-000bb404d770">方法: 境界ブロッキング機能をコレクションクラスに追加する</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>上限を指定せずに、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> クラスの新しいインスタンスを初期化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public BlockingCollection ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; BlockingCollection();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>上限を指定せずに、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 既定の基になるコレクション<xref:System.Collections.Concurrent.ConcurrentQueue%601>は、先入れ先出し (FIFO) の動作を提供するオブジェクトです。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public BlockingCollection (System.Collections.Concurrent.IProducerConsumerCollection&lt;T&gt; collection);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Collections.Concurrent.IProducerConsumerCollection`1&lt;!T&gt; collection) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.#ctor(System.Collections.Concurrent.IProducerConsumerCollection{`0})" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (collection As IProducerConsumerCollection(Of T))" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; BlockingCollection(System::Collections::Concurrent::IProducerConsumerCollection&lt;T&gt; ^ collection);" />
+      <MemberSignature Language="F#" Value="new System.Collections.Concurrent.BlockingCollection&lt;'T&gt; : System.Collections.Concurrent.IProducerConsumerCollection&lt;'T&gt; -&gt; System.Collections.Concurrent.BlockingCollection&lt;'T&gt;" Usage="new System.Collections.Concurrent.BlockingCollection&lt;'T&gt; collection" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="collection" Type="System.Collections.Concurrent.IProducerConsumerCollection&lt;T&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="collection">基になるデータ ストアとして使用するコレクション。</param>
+        <summary>上限を指定せずに、指定した <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> を基になるデータ ストアとして使用して、<see cref="T:System.Collections.Concurrent.IProducerConsumerCollection`1" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collection" /> 引数が null です。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public BlockingCollection (int boundedCapacity);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(int32 boundedCapacity) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.#ctor(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (boundedCapacity As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; BlockingCollection(int boundedCapacity);" />
+      <MemberSignature Language="F#" Value="new System.Collections.Concurrent.BlockingCollection&lt;'T&gt; : int -&gt; System.Collections.Concurrent.BlockingCollection&lt;'T&gt;" Usage="new System.Collections.Concurrent.BlockingCollection&lt;'T&gt; boundedCapacity" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="boundedCapacity" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="boundedCapacity">コレクションのサイズの制限。</param>
+        <summary>上限を指定して、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 基になる既定のコレクション<xref:System.Collections.Concurrent.ConcurrentQueue%601>はです。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="boundedCapacity" /> は正の値ではありません。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public BlockingCollection (System.Collections.Concurrent.IProducerConsumerCollection&lt;T&gt; collection, int boundedCapacity);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Collections.Concurrent.IProducerConsumerCollection`1&lt;!T&gt; collection, int32 boundedCapacity) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.#ctor(System.Collections.Concurrent.IProducerConsumerCollection{`0},System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (collection As IProducerConsumerCollection(Of T), boundedCapacity As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; BlockingCollection(System::Collections::Concurrent::IProducerConsumerCollection&lt;T&gt; ^ collection, int boundedCapacity);" />
+      <MemberSignature Language="F#" Value="new System.Collections.Concurrent.BlockingCollection&lt;'T&gt; : System.Collections.Concurrent.IProducerConsumerCollection&lt;'T&gt; * int -&gt; System.Collections.Concurrent.BlockingCollection&lt;'T&gt;" Usage="new System.Collections.Concurrent.BlockingCollection&lt;'T&gt; (collection, boundedCapacity)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="collection" Type="System.Collections.Concurrent.IProducerConsumerCollection&lt;T&gt;" />
+        <Parameter Name="boundedCapacity" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="collection">基になるデータ ストアとして使用するコレクション。</param>
+        <param name="boundedCapacity">コレクションのサイズの制限。</param>
+        <summary>上限を指定し、指定した <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> を基になるデータ ストアとして使用して、<see cref="T:System.Collections.Concurrent.IProducerConsumerCollection`1" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collection" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="boundedCapacity" /> は正の値ではありません。</exception>
+        <exception cref="T:System.ArgumentException">指定された <paramref name="collection" /> に、<paramref name="boundedCapacity" /> によって許可されているよりも多い値が含まれています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Add">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> に項目を追加します。</summary>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Add">
+      <MemberSignature Language="C#" Value="public void Add (T item);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void Add(!T item) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.Add(`0)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Add (item As T)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Add(T item);" />
+      <MemberSignature Language="F#" Value="member this.Add : 'T -&gt; unit" Usage="blockingCollection.Add item" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="T" />
+      </Parameters>
+      <Docs>
+        <param name="item">コレクションに追加する項目。 この値は null 参照でもかまいません。</param>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> に項目を追加します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ のこのインスタンスが初期化されたときに<xref:System.Collections.Concurrent.BlockingCollection%601> 、容量が制限されている場合は、指定された項目を格納するための領域が使用可能になるまで、Add の呼び出しがブロックされることがあります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <exception cref="T:System.InvalidOperationException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は、追加に関して完了としてマークされました。  
+  
+または 
+基になるコレクションが項目を受け入れませんでした。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Add">
+      <MemberSignature Language="C#" Value="public void Add (T item, System.Threading.CancellationToken cancellationToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void Add(!T item, valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.Add(`0,System.Threading.CancellationToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Add(T item, System::Threading::CancellationToken cancellationToken);" />
+      <MemberSignature Language="F#" Value="member this.Add : 'T * System.Threading.CancellationToken -&gt; unit" Usage="blockingCollection.Add (item, cancellationToken)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="T" />
+        <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
+      </Parameters>
+      <Docs>
+        <param name="item">コレクションに追加する項目。 この値は null 参照でもかまいません。</param>
+        <param name="cancellationToken">観察するキャンセル トークン。</param>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> に項目を追加します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ のこのインスタンスが初期化されたときに<xref:System.Collections.Concurrent.BlockingCollection%601>容量が制限されて<xref:System.Collections.Concurrent.BlockingCollection%601.Add%2A>いる場合、指定された項目を格納するための領域が使用できるようになるまで、の呼び出しがブロックされることがあります。  
+  
+ `cancellationToken`が取り消され<xref:System.OperationCanceledException>た場合、このメソッドはを使用して早期に戻ることができます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.OperationCanceledException"><see cref="T:System.Threading.CancellationToken" /> が取り消されている場合。</exception>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> が破棄されているか、<paramref name="cancellationToken" /> を所有する <see cref="T:System.Threading.CancellationTokenSource" /> が破棄されています。</exception>
+        <exception cref="T:System.InvalidOperationException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は、追加に関して完了としてマークされました。  
+  
+または 
+基になるコレクションが項目を受け入れませんでした。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="AddToAny">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスに、指定した項目を追加します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="AddToAny">
+      <MemberSignature Language="C#" Value="public static int AddToAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, T item);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 AddToAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, !T item) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.AddToAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function AddToAny (collections As BlockingCollection(Of T)(), item As T) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int AddToAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, T item);" />
+      <MemberSignature Language="F#" Value="static member AddToAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] * 'T -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.AddToAny (collections, item)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションに追加する項目。</param>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスに、指定した項目を追加します。</summary>
+        <returns>項目が追加された <paramref name="collections" /> 配列内のコレクションのインデックス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ すべての<xref:System.Collections.Concurrent.BlockingCollection%601>インスタンスが初期化されたときに制限された容量が指定された場合、指定された項目を格納するために、いずれかのコレクションで使用できるようになるまで、addtoany を呼び出すことができます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれます。または 1 つ以上のコレクションが追加完了としてマークされています。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションで項目が受け入れられませんでした。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="AddToAny">
+      <MemberSignature Language="C#" Value="public static int AddToAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, T item, System.Threading.CancellationToken cancellationToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 AddToAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, !T item, valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.AddToAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0,System.Threading.CancellationToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int AddToAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, T item, System::Threading::CancellationToken cancellationToken);" />
+      <MemberSignature Language="F#" Value="static member AddToAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] * 'T * System.Threading.CancellationToken -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.AddToAny (collections, item, cancellationToken)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" />
+        <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションに追加する項目。</param>
+        <param name="cancellationToken">観察するキャンセル トークン。</param>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスに、指定した項目を追加します。</summary>
+        <returns>項目が追加された <paramref name="collections" /> 配列内のコレクションのインデックス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ すべての<xref:System.Collections.Concurrent.BlockingCollection%601>インスタンスが初期化されたときに制限された容量が指定された場合、指定された項目を格納するために、いずれかのコレクションで使用できるようになるまで、addtoany を呼び出すことができます。 領域が使用可能になる前にが取り消された場合、 `cancellationToken`このメソッドは、項目がコレクションに追加される前にを返すことがあります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.OperationCanceledException"><see cref="T:System.Threading.CancellationToken" /> が取り消されている場合。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションで項目が受け入れられませんでした。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれます。または 1 つ以上のコレクションが追加完了としてマークされています。</exception>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されているか、<paramref name="cancellationToken" /> を作成した <see cref="T:System.Threading.CancellationTokenSource" /> が破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="BoundedCapacity">
+      <MemberSignature Language="C#" Value="public int BoundedCapacity { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 BoundedCapacity" />
+      <MemberSignature Language="DocId" Value="P:System.Collections.Concurrent.BlockingCollection`1.BoundedCapacity" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property BoundedCapacity As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int BoundedCapacity { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.BoundedCapacity : int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.BoundedCapacity" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>この <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスの容量の上限。</summary>
+        <value>このコレクションの容量の上限。上限が指定されていない場合は int.MaxValue。</value>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="CompleteAdding">
+      <MemberSignature Language="C#" Value="public void CompleteAdding ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void CompleteAdding() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.CompleteAdding" />
+      <MemberSignature Language="VB.NET" Value="Public Sub CompleteAdding ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void CompleteAdding();" />
+      <MemberSignature Language="F#" Value="member this.CompleteAdding : unit -&gt; unit" Usage="blockingCollection.CompleteAdding " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>それ以上追加を受け入れないように、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスをマークします。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コレクションが追加完了としてマークされた後、コレクションへの追加は許可されず、コレクションから削除しようとしても、コレクションが空の場合は待機しません。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="CopyTo">
+      <MemberSignature Language="C#" Value="public void CopyTo (T[] array, int index);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void CopyTo(!T[] array, int32 index) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.CopyTo(`0[],System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub CopyTo (array As T(), index As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void CopyTo(cli::array &lt;T&gt; ^ array, int index);" />
+      <MemberSignature Language="F#" Value="member this.CopyTo : 'T[] * int -&gt; unit" Usage="blockingCollection.CopyTo (array, index)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="array" Type="T[]" />
+        <Parameter Name="index" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="array"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスから要素がコピーされる 1 次元配列。 配列には、0 から始まるインデックスが設定されている必要があります。</param>
+        <param name="index">コピーの開始位置とする <paramref name="array" /> のインデックス (0 から始まる)。</param>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンス内のすべての項目を、互換性のある 1 次元配列にコピーします。コピー操作は、コピー先の配列の、指定したインデックスから始まります。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ CopyTo は、正確な時点におけるコレクションのスナップショットを表します。 CopyTo の実行中に他のスレッドが項目を追加または削除している場合、CopyTo によって返される要素は、コレクションの状態を表していない可能性があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="array" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> 引数は 0 未満です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="index" /> 引数は <paramref name="array" /> の長さ以上です。  
+  
+目的の配列は小さすぎるため、すべての BlockingCollection 要素を保持できません。  
+  
+配列ランクが一致しません。  
+  
+配列型は BlockingCollection 要素の型と互換性がありません。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Count">
+      <MemberSignature Language="C#" Value="public int Count { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 Count" />
+      <MemberSignature Language="DocId" Value="P:System.Collections.Concurrent.BlockingCollection`1.Count" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Count As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int Count { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.Count : int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.Count" />
+      <MemberType>Property</MemberType>
+      <Implements>
+        <InterfaceMember>P:System.Collections.ICollection.Count</InterfaceMember>
+        <InterfaceMember>P:System.Collections.Generic.IReadOnlyCollection`1.Count</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> に格納されている項目の数を取得します。</summary>
+        <value><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> に格納されている項目の数。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Count プロパティにアクセスしているときに BlockingCollection 内のいずれかのメソッドが実行されている場合、戻り値は概数です。 Count には、BlockingCollection 内の実際の項目数よりも大きいか小さい数値が反映される場合があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Dispose">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> クラスの現在のインスタンスによって使用されているすべてのリソースを解放します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="public void Dispose ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Dispose() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.Dispose" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Dispose ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void Dispose();" />
+      <MemberSignature Language="F#" Value="abstract member Dispose : unit -&gt; unit&#xA;override this.Dispose : unit -&gt; unit" Usage="blockingCollection.Dispose " />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.IDisposable.Dispose</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> クラスの現在のインスタンスによって使用されているすべてのリソースを解放します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `Dispose`メソッドはスレッドセーフではありません。  
+  
+ <xref:System.Collections.Concurrent.BlockingCollection%601> を使い終わったら、`Dispose`を呼び出します。 `Dispose`メソッドによって、<xref:System.Collections.Concurrent.BlockingCollection%601> は使用不可の状態になります。 `Dispose`呼び出し後は、<xref:System.Collections.Concurrent.BlockingCollection%601>によって占有されていたメモリをガベージ コレクターがクリアできるよう、<xref:System.Collections.Concurrent.BlockingCollection%601> へのすべての参照を解放する必要があります。  
+  
+ 詳細については、[アンマネージ リソースのクリーンアップ](~/docs/standard/garbage-collection/unmanaged.md)および[Dispose メソッドの実装](~/docs/standard/garbage-collection/implementing-dispose.md)を参照してください。  
+  
+> [!NOTE]
+>  <xref:System.Collections.Concurrent.BlockingCollection%601>への最後の参照を解放する前に、必ず`Dispose`を呼び出してください。 そうしないと、ガベージ コレクターが <xref:System.Collections.Concurrent.BlockingCollection%601> オブジェクトの `Finalize` メソッドを呼び出すまで、使用されているリソースは解放されません。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="protected virtual void Dispose (bool disposing);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void Dispose(bool disposing) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.Dispose(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overridable Sub Dispose (disposing As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual void Dispose(bool disposing);" />
+      <MemberSignature Language="F#" Value="abstract member Dispose : bool -&gt; unit&#xA;override this.Dispose : bool -&gt; unit" Usage="blockingCollection.Dispose disposing" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="disposing" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="disposing">明示的に破棄される場合は true、ファイナライザーによる場合は false。</param>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスによって使用されているリソースを解放します。</summary>
+        <remarks>To be added.</remarks>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="GetConsumingEnumerable">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>コレクション内の項目を取り出す <see cref="T:System.Collections.Generic.IEnumerator`1" /> を提供します。</summary>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="GetConsumingEnumerable">
+      <MemberSignature Language="C#" Value="public System.Collections.Generic.IEnumerable&lt;T&gt; GetConsumingEnumerable ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Collections.Generic.IEnumerable`1&lt;!T&gt; GetConsumingEnumerable() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.GetConsumingEnumerable" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetConsumingEnumerable () As IEnumerable(Of T)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Collections::Generic::IEnumerable&lt;T&gt; ^ GetConsumingEnumerable();" />
+      <MemberSignature Language="F#" Value="member this.GetConsumingEnumerable : unit -&gt; seq&lt;'T&gt;" Usage="blockingCollection.GetConsumingEnumerable " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerable&lt;T&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>コレクション内の項目を取り出す <see cref="T:System.Collections.Generic.IEnumerator`1" /> を提供します。</summary>
+        <returns>コレクションから項目を削除して返す <see cref="T:System.Collections.Generic.IEnumerable`1" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ 次の例は、メソッドの<xref:System.Collections.Concurrent.BlockingCollection%601.GetConsumingEnumerable%2A>使用方法を示しています。  
+  
+ [!code-csharp[System.Collections.Concurrent.BlockingCollection#4](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.collections.concurrent.blockingcollection/cs/blockingcoll.cs#4)]
+ [!code-vb[System.Collections.Concurrent.BlockingCollection#4](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.collections.concurrent.blockingcollection/vb/blockingcoll.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetConsumingEnumerable">
+      <MemberSignature Language="C#" Value="public System.Collections.Generic.IEnumerable&lt;T&gt; GetConsumingEnumerable (System.Threading.CancellationToken cancellationToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Collections.Generic.IEnumerable`1&lt;!T&gt; GetConsumingEnumerable(valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.GetConsumingEnumerable(System.Threading.CancellationToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Collections::Generic::IEnumerable&lt;T&gt; ^ GetConsumingEnumerable(System::Threading::CancellationToken cancellationToken);" />
+      <MemberSignature Language="F#" Value="member this.GetConsumingEnumerable : System.Threading.CancellationToken -&gt; seq&lt;'T&gt;" Usage="blockingCollection.GetConsumingEnumerable cancellationToken" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.6">
+          <AttributeName>System.Runtime.CompilerServices.IteratorStateMachine(typeof(System.Collections.Concurrent.BlockingCollection`1/&lt;GetConsumingEnumerable&gt;d__2))</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Runtime.CompilerServices.IteratorStateMachine(typeof(System.Collections.Concurrent.BlockingCollection`1/&lt;GetConsumingEnumerable&gt;d__68))</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerable&lt;T&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
+      </Parameters>
+      <Docs>
+        <param name="cancellationToken">観察するキャンセル トークン。</param>
+        <summary>コレクション内の項目を取り出す <see cref="T:System.Collections.Generic.IEnumerable`1" /> を提供します。</summary>
+        <returns>コレクションから項目を削除して返す <see cref="T:System.Collections.Generic.IEnumerable`1" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドを使用すると、クライアントコードは foreach ループ (Visual Basic 内の各に対して)、 <xref:System.Threading.Tasks.Parallel.ForEach%2A?displayProperty=nameWithType>または PLINQ クエリを使用して、コレクションから項目を削除できます。 列挙子は、が true を返すまで (存在する<xref:System.Collections.Concurrent.BlockingCollection%601.IsCompleted%2A>場合)、項目を提供し続けます。が false の場合<xref:System.Collections.Concurrent.BlockingCollection%601.IsCompleted%2A>は、項目が使用<xref:System.Threading.CancellationToken>可能になるまで、またはがキャンセルされるまで、ループはブロックされます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.OperationCanceledException"><see cref="T:System.Threading.CancellationToken" /> が取り消されている場合。</exception>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> が破棄されているか、<paramref name="cancellationToken" /> を作成した <see cref="T:System.Threading.CancellationTokenSource" /> が破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="IsAddingCompleted">
+      <MemberSignature Language="C#" Value="public bool IsAddingCompleted { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsAddingCompleted" />
+      <MemberSignature Language="DocId" Value="P:System.Collections.Concurrent.BlockingCollection`1.IsAddingCompleted" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property IsAddingCompleted As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsAddingCompleted { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.IsAddingCompleted : bool" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.IsAddingCompleted" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>この <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> が追加完了としてマークされているかどうかを取得します。</summary>
+        <value>このコレクションが追加完了としてマークされているかどうか。</value>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="IsCompleted">
+      <MemberSignature Language="C#" Value="public bool IsCompleted { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsCompleted" />
+      <MemberSignature Language="DocId" Value="P:System.Collections.Concurrent.BlockingCollection`1.IsCompleted" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property IsCompleted As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsCompleted { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.IsCompleted : bool" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.IsCompleted" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>この <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> が追加完了としてマークされていて、かつ空であるかどうかを取得します。</summary>
+        <value>このコレクションが追加完了としてマークされていて、かつ空であるかどうか。</value>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="System.Collections.Generic.IEnumerable&lt;T&gt;.GetEnumerator">
+      <MemberSignature Language="C#" Value="System.Collections.Generic.IEnumerator&lt;T&gt; IEnumerable&lt;T&gt;.GetEnumerator ();" />
+      <MemberSignature Language="ILAsm" Value=".method hidebysig newslot virtual instance class System.Collections.Generic.IEnumerator`1&lt;!T&gt; System.Collections.Generic.IEnumerable&lt;T&gt;.GetEnumerator() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.System#Collections#Generic#IEnumerable&lt;T&gt;#GetEnumerator" />
+      <MemberSignature Language="VB.NET" Value="Function GetEnumerator () As IEnumerator(Of T) Implements IEnumerable(Of T).GetEnumerator" />
+      <MemberSignature Language="C++ CLI" Value=" virtual System::Collections::Generic::IEnumerator&lt;T&gt; ^ System.Collections.Generic.IEnumerable&lt;T&gt;.GetEnumerator() = System::Collections::Generic::IEnumerable&lt;T&gt;::GetEnumerator;" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Collections.Generic.IEnumerable`1.GetEnumerator</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerator&lt;T&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>コレクション内の項目に対する <see cref="T:System.Collections.Generic.IEnumerator`1" /> を提供します。</summary>
+        <returns>コレクション内の項目に対する <see cref="T:System.Collections.Generic.IEnumerator`1" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ と<xref:System.Collections.Concurrent.BlockingCollection%601.GetConsumingEnumerable%2A>異なり<xref:System.Collections.Concurrent.BlockingCollection%601.System%23Collections%23Generic%23IEnumerable%7BT%7D%23GetEnumerator%2A?displayProperty=nameWithType> 、は、基になるコレクションを変更しない標準列挙子を返します。 GetEnumerator が呼び出されたときに、他のスレッドが要素を同時に追加または削除している場合、列挙子によって返される要素は、コレクションの現在の状態を表していない可能性があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="System.Collections.ICollection.CopyTo">
+      <MemberSignature Language="C#" Value="void ICollection.CopyTo (Array array, int index);" />
+      <MemberSignature Language="ILAsm" Value=".method hidebysig newslot virtual instance void System.Collections.ICollection.CopyTo(class System.Array array, int32 index) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.System#Collections#ICollection#CopyTo(System.Array,System.Int32)" />
+      <MemberSignature Language="C++ CLI" Value=" virtual void System.Collections.ICollection.CopyTo(Array ^ array, int index) = System::Collections::ICollection::CopyTo;" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Collections.ICollection.CopyTo(System.Array,System.Int32)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="array" Type="System.Array" />
+        <Parameter Name="index" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="array"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスから要素がコピーされる 1 次元配列。 配列には、0 から始まるインデックスが設定されている必要があります。</param>
+        <param name="index">コピーの開始位置とする <paramref name="array" /> のインデックス (0 から始まる)。</param>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンス内のすべての項目を、互換性のある 1 次元配列にコピーします。コピー操作は、コピー先の配列の、指定したインデックスから始まります。</summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="array" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> 引数は 0 未満です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="index" /> 引数が <paramref name="array" /> の長さ以上か、配列が多次元か、またはコレクションの型パラメーターを自動的にコピー先の配列の型にキャストできません。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="System.Collections.ICollection.IsSynchronized">
+      <MemberSignature Language="C#" Value="bool System.Collections.ICollection.IsSynchronized { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool System.Collections.ICollection.IsSynchronized" />
+      <MemberSignature Language="DocId" Value="P:System.Collections.Concurrent.BlockingCollection`1.System#Collections#ICollection#IsSynchronized" />
+      <MemberSignature Language="VB.NET" Value=" ReadOnly Property IsSynchronized As Boolean Implements ICollection.IsSynchronized" />
+      <MemberSignature Language="C++ CLI" Value="property bool System::Collections::ICollection::IsSynchronized { bool get(); };" />
+      <MemberSignature Language="F#" Usage="System.Collections.ICollection.IsSynchronized" />
+      <MemberType>Property</MemberType>
+      <Implements>
+        <InterfaceMember>P:System.Collections.ICollection.IsSynchronized</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Collections.ICollection" /> へのアクセスが同期されている (スレッド セーフである) かどうかを示す値を取得します。</summary>
+        <value>アクセスが<see langword="false" />同期されていないことを示すために、常にを返します。</value>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="System.Collections.ICollection.SyncRoot">
+      <MemberSignature Language="C#" Value="object System.Collections.ICollection.SyncRoot { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object System.Collections.ICollection.SyncRoot" />
+      <MemberSignature Language="DocId" Value="P:System.Collections.Concurrent.BlockingCollection`1.System#Collections#ICollection#SyncRoot" />
+      <MemberSignature Language="VB.NET" Value=" ReadOnly Property SyncRoot As Object Implements ICollection.SyncRoot" />
+      <MemberSignature Language="C++ CLI" Value="property System::Object ^ System::Collections::ICollection::SyncRoot { System::Object ^ get(); };" />
+      <MemberSignature Language="F#" Usage="System.Collections.ICollection.SyncRoot" />
+      <MemberType>Property</MemberType>
+      <Implements>
+        <InterfaceMember>P:System.Collections.ICollection.SyncRoot</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Collections.ICollection" /> へのアクセスを同期するために使用できるオブジェクトを取得します。 このプロパティはサポートされていません。</summary>
+        <value>null を返します。</value>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.NotSupportedException">SyncRoot プロパティはサポートされていません。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="System.Collections.IEnumerable.GetEnumerator">
+      <MemberSignature Language="C#" Value="System.Collections.IEnumerator IEnumerable.GetEnumerator ();" />
+      <MemberSignature Language="ILAsm" Value=".method hidebysig newslot virtual instance class System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.System#Collections#IEnumerable#GetEnumerator" />
+      <MemberSignature Language="VB.NET" Value="Function GetEnumerator () As IEnumerator Implements IEnumerable.GetEnumerator" />
+      <MemberSignature Language="C++ CLI" Value=" virtual System::Collections::IEnumerator ^ System.Collections.IEnumerable.GetEnumerator() = System::Collections::IEnumerable::GetEnumerator;" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Collections.IEnumerable.GetEnumerator</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.IEnumerator</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>コレクション内の項目に対する <see cref="T:System.Collections.IEnumerator" /> を提供します。</summary>
+        <returns>コレクション内の項目に対する <see cref="T:System.Collections.IEnumerator" />。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Take">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> から項目を削除します。</summary>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Take">
+      <MemberSignature Language="C#" Value="public T Take ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance !T Take() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.Take" />
+      <MemberSignature Language="VB.NET" Value="Public Function Take () As T" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; T Take();" />
+      <MemberSignature Language="F#" Value="member this.Take : unit -&gt; 'T" Usage="blockingCollection.Take " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>T</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> から項目を削除します。</summary>
+        <returns>コレクションから削除される項目。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ を呼び出す<xref:System.Collections.Concurrent.BlockingCollection%601.Take%2A>と、項目を削除できるようになるまでブロックされる可能性があります。  
+  
+ 項目が削除される順序は、<xref:System.Collections.Concurrent.BlockingCollection%601> インスタンスの作成に使用されたコレクションの型によって異なります。 <xref:System.Collections.Concurrent.BlockingCollection%601> オブジェクトを作成すると、使用するコレクションの型を指定できます。 たとえば、先入れ先出し法 (FIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentQueue%601> オブジェクトを指定し、後入れ先出し法 (LIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentStack%601> オブジェクトを指定できます。 <xref:System.Collections.Concurrent.IProducerConsumerCollection%601> インターフェイスを実装する任意のコレクション クラスを使用できます。 <xref:System.Collections.Concurrent.BlockingCollection%601> の既定のコレクション型は <xref:System.Collections.Concurrent.ConcurrentQueue%601> です。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <exception cref="T:System.InvalidOperationException">基になるコレクションがこの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスの外で変更されました。または、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> が空で、コレクションが追加完了としてマークされています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+        <exception cref="T:System.OperationCanceledException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は空であり、追加に関して完了としてマークされました。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Take">
+      <MemberSignature Language="C#" Value="public T Take (System.Threading.CancellationToken cancellationToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance !T Take(valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.Take(System.Threading.CancellationToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; T Take(System::Threading::CancellationToken cancellationToken);" />
+      <MemberSignature Language="F#" Value="member this.Take : System.Threading.CancellationToken -&gt; 'T" Usage="blockingCollection.Take cancellationToken" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>T</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
+      </Parameters>
+      <Docs>
+        <param name="cancellationToken">取得操作を取り消すために使用できるオブジェクト。</param>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> から項目を削除します。</summary>
+        <returns>コレクションから削除される項目。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ を<xref:System.Collections.Concurrent.BlockingCollection%601.Take%2A>呼び出すと、項目が削除されるか、トークンが取り消されるまでブロックされることがあります。  
+  
+ 項目が削除される順序は、<xref:System.Collections.Concurrent.BlockingCollection%601> インスタンスの作成に使用されたコレクションの型によって異なります。 <xref:System.Collections.Concurrent.BlockingCollection%601> オブジェクトを作成すると、使用するコレクションの型を指定できます。 たとえば、先入れ先出し法 (FIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentQueue%601> オブジェクトを指定し、後入れ先出し法 (LIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentStack%601> オブジェクトを指定できます。 <xref:System.Collections.Concurrent.IProducerConsumerCollection%601> インターフェイスを実装する任意のコレクション クラスを使用できます。 <xref:System.Collections.Concurrent.BlockingCollection%601> の既定のコレクション型は <xref:System.Collections.Concurrent.ConcurrentQueue%601> です。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.OperationCanceledException"><see cref="T:System.Threading.CancellationToken" /> は取り消されます。</exception>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> が破棄されているか、トークンを作成した <see cref="T:System.Threading.CancellationTokenSource" /> が取り消されています。</exception>
+        <exception cref="T:System.InvalidOperationException">基になるコレクションがこの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスの外で変更されたか、BlockingCollection が追加完了としてマークされているか、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> が空です。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TakeFromAny">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスから項目を取得します。</summary>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TakeFromAny">
+      <MemberSignature Language="C#" Value="public static int TakeFromAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, out T item);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 TakeFromAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, [out] !T&amp; item) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TakeFromAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TakeFromAny (collections As BlockingCollection(Of T)(), ByRef item As T) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int TakeFromAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, [Runtime::InteropServices::Out] T % item);" />
+      <MemberSignature Language="F#" Value="static member TakeFromAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] *  -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.TakeFromAny (collections, item)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" RefType="out" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションから削除される項目。</param>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスから項目を取得します。</summary>
+        <returns>項目が削除された <paramref name="collections" /> 配列内のコレクションのインデックス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 項目を削除できるようになるまで、の呼び出しがブロックされる可能性があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれています。または、<see cref="M:System.Collections.Concurrent.BlockingCollection`1.CompleteAdding" /> がコレクションで呼び出されました。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションが <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンス以外で変更されました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TakeFromAny">
+      <MemberSignature Language="C#" Value="public static int TakeFromAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, out T item, System.Threading.CancellationToken cancellationToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 TakeFromAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, [out] !T&amp; item, valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TakeFromAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0@,System.Threading.CancellationToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int TakeFromAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, [Runtime::InteropServices::Out] T % item, System::Threading::CancellationToken cancellationToken);" />
+      <MemberSignature Language="F#" Value="static member TakeFromAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] *  * System.Threading.CancellationToken -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.TakeFromAny (collections, item, cancellationToken)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" RefType="out" />
+        <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションから削除される項目。</param>
+        <param name="cancellationToken">観察するキャンセル トークン。</param>
+        <summary>指定したキャンセル トークンを観察しながら、指定した <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスのいずれかから項目を取得します。</summary>
+        <returns>項目が削除された <paramref name="collections" /> 配列内のコレクションのインデックス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 項目を削除できるようになるまで、の呼び出しがブロックされる可能性があります。 トークンが取り消された場合、メソッドは OperationCanceledException を使用して早期に戻ります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.OperationCanceledException"><see cref="T:System.Threading.CancellationToken" /> が取り消されている場合。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションが <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンス以外で変更されました。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれています。または、<see cref="M:System.Collections.Concurrent.BlockingCollection`1.CompleteAdding" /> がコレクションで呼び出されました。</exception>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="ToArray">
+      <MemberSignature Language="C#" Value="public T[] ToArray ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance !T[] ToArray() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.ToArray" />
+      <MemberSignature Language="VB.NET" Value="Public Function ToArray () As T()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; cli::array &lt;T&gt; ^ ToArray();" />
+      <MemberSignature Language="F#" Value="member this.ToArray : unit -&gt; 'T[]" Usage="blockingCollection.ToArray " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>T[]</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスの項目を新しい配列にコピーします。</summary>
+        <returns>コレクションの要素のコピーを格納する配列。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コピーした要素は、コレクションから削除されません。  
+  
+ ToArray メソッドの実行中に BlockingCollection 内のいずれかのメソッドが実行されている場合、戻り値は概数です。 ToArray には、既に削除されている項目を含めることも、既に挿入されている項目を除外することもできます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TryAdd">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> に対して、指定した項目の追加を試みます。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TryAdd">
+      <MemberSignature Language="C#" Value="public bool TryAdd (T item);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryAdd(!T item) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryAdd(`0)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryAdd (item As T) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryAdd(T item);" />
+      <MemberSignature Language="F#" Value="member this.TryAdd : 'T -&gt; bool" Usage="blockingCollection.TryAdd item" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="T" />
+      </Parameters>
+      <Docs>
+        <param name="item">コレクションに追加する項目。</param>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> に対して、指定した項目の追加を試みます。</summary>
+        <returns><paramref name="item" /> を追加できる場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 項目が重複しており、基になるコレクションが項目の重複を受け入れない場合は、<see cref="T:System.InvalidOperationException" /> がスローされます。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コレクションが制限付きコレクションであり、いっぱいの場合、このメソッドは項目を追加せずに、直ちに false を返します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <exception cref="T:System.InvalidOperationException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は、追加に関して完了としてマークされました。  
+  
+- または - 
+基になるコレクションが項目を受け入れませんでした。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryAdd">
+      <MemberSignature Language="C#" Value="public bool TryAdd (T item, int millisecondsTimeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryAdd(!T item, int32 millisecondsTimeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryAdd(`0,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryAdd (item As T, millisecondsTimeout As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryAdd(T item, int millisecondsTimeout);" />
+      <MemberSignature Language="F#" Value="member this.TryAdd : 'T * int -&gt; bool" Usage="blockingCollection.TryAdd (item, millisecondsTimeout)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="T" />
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="item">コレクションに追加する項目。</param>
+        <param name="millisecondsTimeout">待機するミリ秒数。無制限に待機する場合は <see cref="F:System.Threading.Timeout.Infinite" /> (-1)。</param>
+        <summary>指定した期間内に、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> に対して指定した項目の追加を試みます。</summary>
+        <returns>指定した時間内にコレクションに <paramref name="item" /> を追加できた場合は true。それ以外の場合は false。 項目が重複しており、基になるコレクションが項目の重複を受け入れない場合は、<see cref="T:System.InvalidOperationException" /> がスローされます。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout" /> は無限のタイムアウトを表す -1 以外の負の数です。</exception>
+        <exception cref="T:System.InvalidOperationException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は、追加に関して完了としてマークされました。  
+  
+- または - 
+基になるコレクションが項目を受け入れませんでした。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryAdd">
+      <MemberSignature Language="C#" Value="public bool TryAdd (T item, TimeSpan timeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryAdd(!T item, valuetype System.TimeSpan timeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryAdd(`0,System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryAdd (item As T, timeout As TimeSpan) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryAdd(T item, TimeSpan timeout);" />
+      <MemberSignature Language="F#" Value="member this.TryAdd : 'T * TimeSpan -&gt; bool" Usage="blockingCollection.TryAdd (item, timeout)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="T" />
+        <Parameter Name="timeout" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="item">コレクションに追加する項目。</param>
+        <param name="timeout">待機するミリ秒数を表す <see cref="T:System.TimeSpan" />。無制限に待機する場合は、-1 ミリ秒を表す <see cref="T:System.TimeSpan" />。</param>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> に対して、指定した項目の追加を試みます。</summary>
+        <returns>指定した期間内にコレクションに <paramref name="item" /> を追加できた場合は true。それ以外の場合は false。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="timeout" /> が -1 ミリ秒以外の負数です。-1 は無制限のタイムアウトを表します。または、タイムアウトが <see cref="F:System.Int32.MaxValue" /> を超えています。</exception>
+        <exception cref="T:System.InvalidOperationException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は、追加に関して完了としてマークされました。  
+  
+または 
+基になるコレクションが項目を受け入れませんでした。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryAdd">
+      <MemberSignature Language="C#" Value="public bool TryAdd (T item, int millisecondsTimeout, System.Threading.CancellationToken cancellationToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryAdd(!T item, int32 millisecondsTimeout, valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryAdd(`0,System.Int32,System.Threading.CancellationToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryAdd(T item, int millisecondsTimeout, System::Threading::CancellationToken cancellationToken);" />
+      <MemberSignature Language="F#" Value="member this.TryAdd : 'T * int * System.Threading.CancellationToken -&gt; bool" Usage="blockingCollection.TryAdd (item, millisecondsTimeout, cancellationToken)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="T" />
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+        <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
+      </Parameters>
+      <Docs>
+        <param name="item">コレクションに追加する項目。</param>
+        <param name="millisecondsTimeout">待機するミリ秒数。無制限に待機する場合は <see cref="F:System.Threading.Timeout.Infinite" /> (-1)。</param>
+        <param name="cancellationToken">観察するキャンセル トークン。</param>
+        <summary>キャンセル トークンを観察しながら、指定した期間内に、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> に対して指定した項目の追加を試みます。</summary>
+        <returns>指定した時間内にコレクションに <paramref name="item" /> を追加できた場合は true。それ以外の場合は false。 項目が重複しており、基になるコレクションが項目の重複を受け入れない場合は、<see cref="T:System.InvalidOperationException" /> がスローされます。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.OperationCanceledException"><see cref="T:System.Threading.CancellationToken" /> が取り消されている場合。</exception>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> が破棄されているか、または基になっている <see cref="T:System.Threading.CancellationTokenSource" /> が破棄されています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout" /> は無限のタイムアウトを表す -1 以外の負の数です。</exception>
+        <exception cref="T:System.InvalidOperationException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は、追加に関して完了としてマークされました。  
+  
+- または - 
+基になるコレクションが項目を受け入れませんでした。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TryAddToAny">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスに対して、指定した項目の追加を試みます。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TryAddToAny">
+      <MemberSignature Language="C#" Value="public static int TryAddToAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, T item);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 TryAddToAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, !T item) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryAddToAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryAddToAny (collections As BlockingCollection(Of T)(), item As T) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int TryAddToAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, T item);" />
+      <MemberSignature Language="F#" Value="static member TryAddToAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] * 'T -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.TryAddToAny (collections, item)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションに追加する項目。</param>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスに対して、指定した項目の追加を試みます。</summary>
+        <returns><paramref name="collections" /> 配列内の、項目が追加されたコレクションのインデックス。項目を追加できなかった場合は -1。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれます。または 1 つ以上のコレクションが追加完了としてマークされています。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションで項目が受け入れられませんでした。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryAddToAny">
+      <MemberSignature Language="C#" Value="public static int TryAddToAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, T item, int millisecondsTimeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 TryAddToAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, !T item, int32 millisecondsTimeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryAddToAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryAddToAny (collections As BlockingCollection(Of T)(), item As T, millisecondsTimeout As Integer) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int TryAddToAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, T item, int millisecondsTimeout);" />
+      <MemberSignature Language="F#" Value="static member TryAddToAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] * 'T * int -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.TryAddToAny (collections, item, millisecondsTimeout)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" />
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションに追加する項目。</param>
+        <param name="millisecondsTimeout">待機するミリ秒数。無制限に待機する場合は <see cref="F:System.Threading.Timeout.Infinite" /> (-1)。</param>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスに対して、指定した項目の追加を試みます。</summary>
+        <returns><paramref name="collections" /> 配列内の、項目が追加されたコレクションのインデックス。項目を追加できなかった場合は -1。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout" /> は無限のタイムアウトを表す -1 以外の負の数です。 
+または 
+<paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれます。または 1 つ以上のコレクションが追加完了としてマークされています。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションで項目が受け入れられませんでした。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryAddToAny">
+      <MemberSignature Language="C#" Value="public static int TryAddToAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, T item, TimeSpan timeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 TryAddToAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, !T item, valuetype System.TimeSpan timeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryAddToAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0,System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryAddToAny (collections As BlockingCollection(Of T)(), item As T, timeout As TimeSpan) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int TryAddToAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, T item, TimeSpan timeout);" />
+      <MemberSignature Language="F#" Value="static member TryAddToAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] * 'T * TimeSpan -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.TryAddToAny (collections, item, timeout)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" />
+        <Parameter Name="timeout" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションに追加する項目。</param>
+        <param name="timeout">待機するミリ秒数を表す <see cref="T:System.TimeSpan" />。無制限に待機する場合は、-1 ミリ秒を表す <see cref="T:System.TimeSpan" />。</param>
+        <summary>指定したキャンセル トークンを観察しながら、指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスに対して指定した項目の追加を試みます。</summary>
+        <returns><paramref name="collections" /> 配列内の、項目が追加されたコレクションのインデックス。項目を追加できなかった場合は -1。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、追加操作の領域が使用可能になる前に cancellationToken がキャンセルされた場合に、早期に戻ることができます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンス、または <paramref name="cancellationToken" /> を作成した <see cref="T:System.Threading.CancellationTokenSource" /> が破棄されています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="timeout" /> が -1 ミリ秒以外の負数です。-1 は無制限のタイムアウトを表します。または、タイムアウトが <see cref="F:System.Int32.MaxValue" /> を超えています。  
+  
+- または - 
+<paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれます。または 1 つ以上のコレクションが追加完了としてマークされています。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションで項目が受け入れられませんでした。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryAddToAny">
+      <MemberSignature Language="C#" Value="public static int TryAddToAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, T item, int millisecondsTimeout, System.Threading.CancellationToken cancellationToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 TryAddToAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, !T item, int32 millisecondsTimeout, valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryAddToAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0,System.Int32,System.Threading.CancellationToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int TryAddToAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, T item, int millisecondsTimeout, System::Threading::CancellationToken cancellationToken);" />
+      <MemberSignature Language="F#" Value="static member TryAddToAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] * 'T * int * System.Threading.CancellationToken -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.TryAddToAny (collections, item, millisecondsTimeout, cancellationToken)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" />
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+        <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションに追加する項目。</param>
+        <param name="millisecondsTimeout">待機するミリ秒数。無制限に待機する場合は <see cref="F:System.Threading.Timeout.Infinite" /> (-1)。</param>
+        <param name="cancellationToken">観察するキャンセル トークン。</param>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスに対して、指定した項目の追加を試みます。</summary>
+        <returns><paramref name="collections" /> 配列内の、項目が追加されたコレクションのインデックス。項目を追加できなかった場合は -1。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.OperationCanceledException"><see cref="T:System.Threading.CancellationToken" /> が取り消されている場合。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションで項目が受け入れられませんでした。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout" /> は無限のタイムアウトを表す -1 以外の負の数です。 
+- または - 
+<paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれます。または 1 つ以上のコレクションが追加完了としてマークされています。</exception>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TryTake">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> から項目の削除を試みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ <xref:System.Collections.Concurrent.BlockingCollection%601.TryTake%2A> メソッドを使用する方法の例を次に示します。  
+  
+ [!code-csharp[System.Collections.Concurrent.BlockingCollection#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.collections.concurrent.blockingcollection/cs/blockingcoll.cs#2)]
+ [!code-vb[System.Collections.Concurrent.BlockingCollection#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.collections.concurrent.blockingcollection/vb/blockingcoll.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TryTake">
+      <MemberSignature Language="C#" Value="public bool TryTake (out T item);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryTake([out] !T&amp; item) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryTake(`0@)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryTake (ByRef item As T) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryTake([Runtime::InteropServices::Out] T % item);" />
+      <MemberSignature Language="F#" Value="member this.TryTake :  -&gt; bool" Usage="blockingCollection.TryTake item" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="T" RefType="out" />
+      </Parameters>
+      <Docs>
+        <param name="item">コレクションから削除される項目。</param>
+        <summary><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> から項目の削除を試みます。</summary>
+        <returns>項目を削除できた場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コレクションが空の場合、このメソッドは直ちに false を返します。  
+  
+ 項目が削除される順序は、<xref:System.Collections.Concurrent.BlockingCollection%601> インスタンスの作成に使用されたコレクションの型によって異なります。 <xref:System.Collections.Concurrent.BlockingCollection%601> オブジェクトを作成すると、使用するコレクションの型を指定できます。 たとえば、先入れ先出し法 (FIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentQueue%601> オブジェクトを指定し、後入れ先出し法 (LIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentStack%601> オブジェクトを指定できます。 <xref:System.Collections.Concurrent.IProducerConsumerCollection%601> インターフェイスを実装する任意のコレクション クラスを使用できます。 <xref:System.Collections.Concurrent.BlockingCollection%601> の既定のコレクション型は <xref:System.Collections.Concurrent.ConcurrentQueue%601> です。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <exception cref="T:System.InvalidOperationException">基になるコレクションが <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスの外部で変更されました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryTake">
+      <MemberSignature Language="C#" Value="public bool TryTake (out T item, int millisecondsTimeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryTake([out] !T&amp; item, int32 millisecondsTimeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryTake(`0@,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryTake (ByRef item As T, millisecondsTimeout As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryTake([Runtime::InteropServices::Out] T % item, int millisecondsTimeout);" />
+      <MemberSignature Language="F#" Value="member this.TryTake :  * int -&gt; bool" Usage="blockingCollection.TryTake (item, millisecondsTimeout)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="T" RefType="out" />
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="item">コレクションから削除される項目。</param>
+        <param name="millisecondsTimeout">待機するミリ秒数。無制限に待機する場合は <see cref="F:System.Threading.Timeout.Infinite" /> (-1)。</param>
+        <summary>指定した期間内に、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> から項目の削除を試みます。</summary>
+        <returns>指定した時間内にコレクションから項目を削除できた場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 項目が削除される順序は、<xref:System.Collections.Concurrent.BlockingCollection%601> インスタンスの作成に使用されたコレクションの型によって異なります。 を作成<xref:System.Collections.Concurrent.BlockingCollection%601>するときに、使用するコレクションの種類を指定できます。 たとえば、先入れ先出し法 (FIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentQueue%601> オブジェクトを指定し、後入れ先出し法 (LIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentStack%601> オブジェクトを指定できます。 <xref:System.Collections.Concurrent.IProducerConsumerCollection%601> インターフェイスを実装する任意のコレクション クラスを使用できます。 <xref:System.Collections.Concurrent.BlockingCollection%601> の既定のコレクション型は <xref:System.Collections.Concurrent.ConcurrentQueue%601> です。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout" /> は無限のタイムアウトを表す -1 以外の負の数です。</exception>
+        <exception cref="T:System.InvalidOperationException">基になるコレクションが <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスの外部で変更されました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryTake">
+      <MemberSignature Language="C#" Value="public bool TryTake (out T item, TimeSpan timeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryTake([out] !T&amp; item, valuetype System.TimeSpan timeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryTake(`0@,System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryTake (ByRef item As T, timeout As TimeSpan) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryTake([Runtime::InteropServices::Out] T % item, TimeSpan timeout);" />
+      <MemberSignature Language="F#" Value="member this.TryTake :  * TimeSpan -&gt; bool" Usage="blockingCollection.TryTake (item, timeout)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="T" RefType="out" />
+        <Parameter Name="timeout" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="item">コレクションから削除される項目。</param>
+        <param name="timeout">待機するミリ秒数を表すオブジェクト。無制限に待機する場合は、-1 ミリ秒を表すオブジェクト。</param>
+        <summary>指定した期間内に、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> から項目の削除を試みます。</summary>
+        <returns>指定した時間内にコレクションから項目を削除できた場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 項目が削除される順序は、<xref:System.Collections.Concurrent.BlockingCollection%601> インスタンスの作成に使用されたコレクションの型によって異なります。 <xref:System.Collections.Concurrent.BlockingCollection%601> オブジェクトを作成すると、使用するコレクションの型を指定できます。 たとえば、先入れ先出し法 (FIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentQueue%601> オブジェクトを指定し、後入れ先出し法 (LIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentStack%601> オブジェクトを指定できます。 <xref:System.Collections.Concurrent.IProducerConsumerCollection%601> インターフェイスを実装する任意のコレクション クラスを使用できます。 <xref:System.Collections.Concurrent.BlockingCollection%601> の既定のコレクション型は <xref:System.Collections.Concurrent.ConcurrentQueue%601> です。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> は破棄されています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="timeout" /> は無限のタイムアウトを表す -1 ミリ秒以外の負の数です。 
+または 
+ <paramref name="timeout" /> が <see cref="F:System.Int32.MaxValue" /> より大きくなっています。</exception>
+        <exception cref="T:System.InvalidOperationException">基になるコレクションが <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスの外部で変更されました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryTake">
+      <MemberSignature Language="C#" Value="public bool TryTake (out T item, int millisecondsTimeout, System.Threading.CancellationToken cancellationToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryTake([out] !T&amp; item, int32 millisecondsTimeout, valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryTake(`0@,System.Int32,System.Threading.CancellationToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryTake([Runtime::InteropServices::Out] T % item, int millisecondsTimeout, System::Threading::CancellationToken cancellationToken);" />
+      <MemberSignature Language="F#" Value="member this.TryTake :  * int * System.Threading.CancellationToken -&gt; bool" Usage="blockingCollection.TryTake (item, millisecondsTimeout, cancellationToken)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="T" RefType="out" />
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+        <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
+      </Parameters>
+      <Docs>
+        <param name="item">コレクションから削除される項目。</param>
+        <param name="millisecondsTimeout">待機するミリ秒数。無制限に待機する場合は <see cref="F:System.Threading.Timeout.Infinite" /> (-1)。</param>
+        <param name="cancellationToken">観察するキャンセル トークン。</param>
+        <summary>キャンセル トークンを観察しながら、指定した期間内に、<see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> から項目の削除を試みます。</summary>
+        <returns>指定した時間内にコレクションから項目を削除できた場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 項目が削除される順序は、<xref:System.Collections.Concurrent.BlockingCollection%601> インスタンスの作成に使用されたコレクションの型によって異なります。 <xref:System.Collections.Concurrent.BlockingCollection%601> オブジェクトを作成すると、使用するコレクションの型を指定できます。 たとえば、先入れ先出し法 (FIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentQueue%601> オブジェクトを指定し、後入れ先出し法 (LIFO) の動作には <xref:System.Collections.Concurrent.ConcurrentStack%601> オブジェクトを指定できます。 <xref:System.Collections.Concurrent.IProducerConsumerCollection%601> インターフェイスを実装する任意のコレクション クラスを使用できます。 <xref:System.Collections.Concurrent.BlockingCollection%601> の既定のコレクション型は <xref:System.Collections.Concurrent.ConcurrentQueue%601> です。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.OperationCanceledException"><see cref="T:System.Threading.CancellationToken" /> は取り消されました。</exception>
+        <exception cref="T:System.ObjectDisposedException"><see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> が破棄されているか、または基になっている <see cref="T:System.Threading.CancellationTokenSource" /> が破棄されています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout" /> は無限のタイムアウトを表す -1 以外の負の数です。</exception>
+        <exception cref="T:System.InvalidOperationException">基になるコレクションがこの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスの外部で変更されました 。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TryTakeFromAny">
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスから項目の削除を試みます。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TryTakeFromAny">
+      <MemberSignature Language="C#" Value="public static int TryTakeFromAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, out T item);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 TryTakeFromAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, [out] !T&amp; item) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryTakeFromAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryTakeFromAny (collections As BlockingCollection(Of T)(), ByRef item As T) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int TryTakeFromAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, [Runtime::InteropServices::Out] T % item);" />
+      <MemberSignature Language="F#" Value="static member TryTakeFromAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] *  -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.TryTakeFromAny (collections, item)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" RefType="out" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションから削除される項目。</param>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスから項目の削除を試みます。</summary>
+        <returns><paramref name="collections" /> 配列内の、項目が削除されたコレクションのインデックス。項目を削除できなかった場合は -1。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ TryTakeFromAny を呼び出すと、項目を削除できるようになるまでブロックされる可能性があります。  
+  
+   
+  
+## Examples  
+ 次の例は、メソッドの<xref:System.Collections.Concurrent.BlockingCollection%601.TryTakeFromAny%2A?displayProperty=nameWithType>使用方法を示しています。  
+  
+ [!code-csharp[System.Collections.Concurrent.BlockingCollection#3](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.collections.concurrent.blockingcollection/cs/blockingcoll.cs#3)]
+ [!code-vb[System.Collections.Concurrent.BlockingCollection#3](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.collections.concurrent.blockingcollection/vb/blockingcoll.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれています。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションが <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンス以外で変更されました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryTakeFromAny">
+      <MemberSignature Language="C#" Value="public static int TryTakeFromAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, out T item, int millisecondsTimeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 TryTakeFromAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, [out] !T&amp; item, int32 millisecondsTimeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryTakeFromAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0@,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryTakeFromAny (collections As BlockingCollection(Of T)(), ByRef item As T, millisecondsTimeout As Integer) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int TryTakeFromAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, [Runtime::InteropServices::Out] T % item, int millisecondsTimeout);" />
+      <MemberSignature Language="F#" Value="static member TryTakeFromAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] *  * int -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.TryTakeFromAny (collections, item, millisecondsTimeout)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" RefType="out" />
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションから削除される項目。</param>
+        <param name="millisecondsTimeout">待機するミリ秒数。無制限に待機する場合は <see cref="F:System.Threading.Timeout.Infinite" /> (-1)。</param>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスから項目の削除を試みます。</summary>
+        <returns><paramref name="collections" /> 配列内の、項目が削除されたコレクションのインデックス。項目を削除できなかった場合は -1。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ TryTakeFromAny を呼び出すと、項目を削除できるようになるまでブロックされる可能性があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout" /> は無限のタイムアウトを表す -1 以外の負の数です。 
+- または - 
+<paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれています。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションが <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンス以外で変更されました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryTakeFromAny">
+      <MemberSignature Language="C#" Value="public static int TryTakeFromAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, out T item, TimeSpan timeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 TryTakeFromAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, [out] !T&amp; item, valuetype System.TimeSpan timeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryTakeFromAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0@,System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryTakeFromAny (collections As BlockingCollection(Of T)(), ByRef item As T, timeout As TimeSpan) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int TryTakeFromAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, [Runtime::InteropServices::Out] T % item, TimeSpan timeout);" />
+      <MemberSignature Language="F#" Value="static member TryTakeFromAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] *  * TimeSpan -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.TryTakeFromAny (collections, item, timeout)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" RefType="out" />
+        <Parameter Name="timeout" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションから削除される項目。</param>
+        <param name="timeout">待機するミリ秒数を表す <see cref="T:System.TimeSpan" />。無制限に待機する場合は、-1 ミリ秒を表す <see cref="T:System.TimeSpan" />。</param>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスから項目の削除を試みます。</summary>
+        <returns><paramref name="collections" /> 配列内の、項目が削除されたコレクションのインデックス。項目を削除できなかった場合は -1。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ TryTakeFromAny を呼び出すと、項目を削除できるようになるまでブロックされる可能性があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="timeout" /> が -1 ミリ秒以外の負数です。-1 は無制限のタイムアウトを表します。または、タイムアウトが <see cref="F:System.Int32.MaxValue" /> を超えています。  
+  
+- または - 
+<paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれています。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションが <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンス以外で変更されました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryTakeFromAny">
+      <MemberSignature Language="C#" Value="public static int TryTakeFromAny (System.Collections.Concurrent.BlockingCollection&lt;T&gt;[] collections, out T item, int millisecondsTimeout, System.Threading.CancellationToken cancellationToken);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 TryTakeFromAny(class System.Collections.Concurrent.BlockingCollection`1&lt;!T&gt;[] collections, [out] !T&amp; item, int32 millisecondsTimeout, valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Collections.Concurrent.BlockingCollection`1.TryTakeFromAny(System.Collections.Concurrent.BlockingCollection{`0}[],`0@,System.Int32,System.Threading.CancellationToken)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int TryTakeFromAny(cli::array &lt;System::Collections::Concurrent::BlockingCollection&lt;T&gt; ^&gt; ^ collections, [Runtime::InteropServices::Out] T % item, int millisecondsTimeout, System::Threading::CancellationToken cancellationToken);" />
+      <MemberSignature Language="F#" Value="static member TryTakeFromAny : System.Collections.Concurrent.BlockingCollection&lt;'T&gt;[] *  * int * System.Threading.CancellationToken -&gt; int" Usage="System.Collections.Concurrent.BlockingCollection&lt;'T&gt;.TryTakeFromAny (collections, item, millisecondsTimeout, cancellationToken)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Collections.Concurrent</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.0.14.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="collections" Type="System.Collections.Concurrent.BlockingCollection&lt;T&gt;[]" />
+        <Parameter Name="item" Type="T" RefType="out" />
+        <Parameter Name="millisecondsTimeout" Type="System.Int32" />
+        <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
+      </Parameters>
+      <Docs>
+        <param name="collections">コレクションの配列。</param>
+        <param name="item">いずれかのコレクションから削除される項目。</param>
+        <param name="millisecondsTimeout">待機するミリ秒数。無制限に待機する場合は <see cref="F:System.Threading.Timeout.Infinite" /> (-1)。</param>
+        <param name="cancellationToken">観察するキャンセル トークン。</param>
+        <summary>指定したいずれかの <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスから項目の削除を試みます。</summary>
+        <returns><paramref name="collections" /> 配列内の、項目が削除されたコレクションのインデックス。項目を削除できなかった場合は -1。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ TryTakeFromAny を呼び出すと、項目を削除できるようになるまでブロックされる可能性があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.OperationCanceledException"><see cref="T:System.Threading.CancellationToken" /> が取り消されている場合。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つ以上の基になるコレクションが <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンス以外で変更されました。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="collections" /> 引数が null です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="millisecondsTimeout" /> は無限のタイムアウトを表す -1 以外の負の数です。 
+- または - 
+<paramref name="collections" /> の数が STA および MTA の最大サイズ (STA の場合は 62、MTA の場合は 63) を超えています。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="collections" /> 引数が長さ 0 の配列であるか、NULL 要素がこの引数に含まれています。</exception>
+        <exception cref="T:System.ObjectDisposedException">1 つ以上の <see cref="T:System.Collections.Concurrent.BlockingCollection`1" /> インスタンスが破棄されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/2e7ca21f-786c-4367-96be-0cf3f3dcc6bd">スレッド セーフなコレクション</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/987ea3d7-0ad5-4238-8b64-331ce4eb3f0b">BlockingCollection の概要</related>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

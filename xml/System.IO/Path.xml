@@ -1,0 +1,2783 @@
+<Type Name="Path" FullName="System.IO.Path">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="c49f34d43b8049bbea6e90d9efb9417549ffc5dc" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70521703" /></Metadata><TypeSignature Language="C#" Value="public static class Path" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed Path extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.IO.Path" />
+  <TypeSignature Language="VB.NET" Value="Public Class Path" />
+  <TypeSignature Language="C++ CLI" Value="public ref class Path abstract sealed" />
+  <TypeSignature Language="F#" Value="type Path = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Runtime.Extensions</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.10.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>mscorlib</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+      <AttributeName>System.Runtime.InteropServices.ComVisible(true)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>ファイルまたはディレクトリのパス情報を格納する <see cref="T:System.String" /> インスタンスで操作を実行します。 これらの操作は、プラットフォーム間で実行されます。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+ パスは、ファイルまたはディレクトリの場所を提供する文字列です。 パスがディスク上の場所を指しているとは限りません。たとえば、パスは、メモリ内またはデバイス上の場所にマップされる場合があります。 パスの正確な形式は、現在のプラットフォームによって決まります。 たとえば、一部のシステムでは、パスはドライブまたはボリューム文字で開始できますが、この要素は他のシステムには存在しません。 一部のシステムでは、ファイルパスに拡張子を含めることができます。拡張子は、ファイルに格納されている情報の種類を示します。 ファイル名拡張子の形式はプラットフォームに依存します。たとえば、一部のシステムでは拡張機能を3文字に制限していますが、そうでない場合もあります。 また、現在のプラットフォームでは、パスの要素を区切るために使用する文字セットと、パスを指定するときに使用できない文字のセットも決定されます。 これらの違いにより、クラスの`Path`フィールドと、 `Path`クラスの一部のメンバーの正確な動作は、プラットフォームに依存します。  
+  
+ パスには、絶対または相対位置情報を含めることができます。 絶対パスは、場所を完全に指定します。ファイルまたはディレクトリは、現在の場所に関係なく一意に識別できます。 相対パスは、部分的な場所を指定します。相対パスで指定されたファイルを検索するときに、現在の場所が開始点として使用されます。 現在のディレクトリを確認するに<xref:System.IO.Directory.GetCurrentDirectory%2A?displayProperty=nameWithType>は、を呼び出します。  
+
+ .NET Core 1.1 以降のバージョンと .NET Framework 4.6.2 以降のバージョンでは、"? \c:\\\"" などのデバイス名であるファイルシステムオブジェクトへのアクセスもサポートされています。
+
+Windows でのファイルパス形式の詳細については、「 [windows システムでのファイルパス形式](~/docs/standard/io/file-path-formats.md)」を参照してください。
+
+ `Path`クラスのほとんどのメンバーは、ファイルシステムとはやり取りせず、パス文字列によって指定されたファイルが存在するかどうかを検証しません。 `Path`パス文字列を変更するクラスメンバー (など) <xref:System.IO.Path.ChangeExtension%2A>は、ファイルシステム内のファイルの名前には影響しません。 `Path`ただし、メンバーは、指定されたパス文字列の内容を検証し、 <xref:System.ArgumentException> <xref:System.IO.Path.GetInvalidPathChars%2A>メソッドから返された文字に定義されているように、パス文字列に無効な文字が含まれている場合は例外をスローします。 たとえば、Windows ベースのデスクトッププラットフォームでは、無効なパス文字に引用符 (")、小なり (\<)、より大きい (>)、パイプ (&#124;)、バックスペース (\b)、null (\ 0)、Unicode 文字の 16 ~ 18 および 20 ~ 25 を含めることができます。  
+  
+ `Path`クラスのメンバーを使用すると、ファイル名拡張子がパスの一部であるかどうかを判断したり、2つの文字列を1つのパス名に結合したりするなど、一般的な操作をすばやく簡単に実行できます。  
+  
+ `Path`クラスのすべてのメンバーは静的であるため、パスのインスタンスを使用せずに呼び出すことができます。  
+  
+> [!NOTE]
+>  パスを入力文字列として受け取るメンバーでは、そのパスは適切な形式である必要があります。そうでない場合、例外が発生します。 たとえば、パスが完全修飾されていても、スペースで始まる場合は、クラスのメソッドでパスがトリムされません。 そのため、パスの形式が正しくないため、例外が発生します。 同様に、パスまたはパスの組み合わせを2回完全に修飾することはできません。 たとえば、"c:\temp c:\windows" は、ほとんどの場合に例外を発生させます。 パス文字列を受け取るメソッドを使用する場合は、パスが適切な形式であることを確認します。  
+  
+ パスを受け入れるメンバーでは、ファイルまたはディレクトリのみを参照できます。 指定されたパスは、サーバーと共有名の相対パスまたは UNC (汎用名前付け規則) パスを参照することもできます。 たとえば、次のすべてが許容されるパスです。  
+  
+-   Visual Basic の "\\c\\: \MyDir \MyFile.txt C#" または "c:\MyDir\MyFile.txt"。  
+  
+-   Visual Basic の "\\c: \MyDir C#" または "c:\MyDir"。  
+  
+-   Visual Basic の "\\mydir \MySubdir C#"、または "MyDir\MySubDir"。  
+  
+-   \\ C#Visual Basic の "\ MyServer \\ \MyShare" または\\"「\myserver\myshare」"。\\\\  
+  
+ これらのすべての操作は文字列に対して実行されるため、結果がすべてのシナリオで有効であることを確認することはできません。 たとえば、メソッドは<xref:System.IO.Path.GetExtension%2A> 、渡された文字列を解析し、その文字列から拡張を返します。 ただし、その拡張子を持つファイルがディスク上に存在することを意味するわけではありません。  
+  
+ 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。   
+  
+## Examples  
+ `Path`クラスの主なメンバーの一部を次の例に示します。  
+  
+ [!code-cpp[path class#1](~/samples/snippets/cpp/VS_Snippets_CLR/Path Class/CPP/path class.cpp#1)]
+ [!code-csharp[path class#1](~/samples/snippets/csharp/VS_Snippets_CLR/Path Class/CS/path class.cs#1)]
+ [!code-vb[path class#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/Path Class/VB/path class.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+    <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+    <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+    <related type="Article" href="~/docs/standard/io/how-to-read-and-write-to-a-newly-created-data-file.md">方法 : 新しく作成されたデータ ファイルに対して読み書きする</related>
+    <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+  </Docs>
+  <Members>
+    <Member MemberName="AltDirectorySeparatorChar">
+      <MemberSignature Language="C#" Value="public static readonly char AltDirectorySeparatorChar;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly char AltDirectorySeparatorChar" />
+      <MemberSignature Language="DocId" Value="F:System.IO.Path.AltDirectorySeparatorChar" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly AltDirectorySeparatorChar As Char " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly char AltDirectorySeparatorChar;" />
+      <MemberSignature Language="F#" Value=" staticval mutable AltDirectorySeparatorChar : char" Usage="System.IO.Path.AltDirectorySeparatorChar" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Char</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>階層ファイル システム編成を反映するパス文字列の、ディレクトリ レベルを区切るために使用する、プラットフォーム固有の代替文字を提供します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 
+このフィールドは、と<xref:System.IO.Path.DirectorySeparatorChar>同じ値を持つことができます。 `AltDirectorySeparatorChar`と<xref:System.IO.Path.DirectorySeparatorChar>はどちらも、パス文字列内のディレクトリレベルを区切るために有効です。  
+  
+このフィールドの値は、Windows と Unix ベースの両方のオペレーティングシステムのスラッシュ ('/') です。  
+  
+## Examples  
+
+次の例で<xref:System.IO.Path>は、Windows および Unix ベースのシステムでのフィールド値を表示します。 Windows では、( <xref:System.IO.Path.AltDirectorySeparatorChar>フィールドによって返される) スラッシュまたは円記号 ( <xref:System.IO.Path.DirectorySeparatorChar>フィールドによって返される) がパス区切り文字としてサポートされていますが、Unix ベースのシステムではスラッシュのみがサポートされています。
+
+[!code-csharp[DirectorySeparatorChar](~/samples/snippets/csharp/api/system.io/path/directoryseparatorchar/program.cs)]
+[!code-vb[DirectorySeparatorChar](~/samples/snippets/visualbasic/api/system.io/path/directoryseparatorchar/program.vb)]
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="ChangeExtension">
+      <MemberSignature Language="C#" Value="public static string ChangeExtension (string path, string extension);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string ChangeExtension(string path, string extension) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.ChangeExtension(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function ChangeExtension (path As String, extension As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ ChangeExtension(System::String ^ path, System::String ^ extension);" />
+      <MemberSignature Language="F#" Value="static member ChangeExtension : string * string -&gt; string" Usage="System.IO.Path.ChangeExtension (path, extension)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+        <Parameter Name="extension" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="path">変更するパス情報。 パスに、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義された文字を含めることはできません。</param>
+        <param name="extension">新しい拡張子 (先行ピリオド付き、またはなし)。 <see langword="null" /> を指定して、<paramref name="path" /> から既存の拡張子を削除します。</param>
+        <summary>パス文字列の拡張子を変更します。</summary>
+        <returns>変更されたパス情報。  
+  
+Windows ベースのデスクトップ プラットフォームでは、<paramref name="path" /> が <see langword="null" /> または空の文字列 ("") の場合、パス情報は変更されずに返されます。 <paramref name="extension" /> が <see langword="null" /> の場合は、返される文字列に、削除した拡張子が付いた指定したパスが含まれます。 <paramref name="path" /> に拡張子がなく、<paramref name="extension" /> が <see langword="null" /> でない場合は、返されるパス文字列に <paramref name="path" /> の末尾に追加される <paramref name="extension" /> が含まれます。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ との`path`どちら`extension`にもピリオド (.) が`ChangeExtension`含まれていない場合は、期間が追加されます。  
+  
+ パラメーター `extension`には、複数のピリオドと有効なパス文字を含めることができ、任意の長さを指定できます。 が`extension` `path`の場合、返される文字列には、最後の期間に続くの内容と、その後のすべての文字が含まれます。 `null`  
+  
+ が`extension`空の文字列の場合、返されるパス文字列には、 `path`最後の期間が削除された後の文字を含むの内容が含まれます。  
+  
+ に`path` `null` `path` `extension`拡張子がなく、がでない場合、返される文字列にはが続きます。 `extension`  
+  
+ が`extension`では`null`なく、先頭のピリオドが含まれていない場合は、期間が追加されます。  
+  
+ に`path`複数のピリオドで区切られた複数の拡張機能が含まれている`path`場合、返される文字列には、最後のピリオド`extension`とそれに続くすべての文字がで置き換えられたの内容が含まれます。 たとえば、が " `path` \Dir1\examples\pathtests.csx.txt `extension` " で、が "cs" の場合、変更されたパスは "\Dir1\examples\pathtests.csx.cs" になります。  
+  
+ 返された結果がすべてのシナリオで有効であることを確認することはできません。 たとえば、が`extension`空`path`の場合、が追加されます。  
+  
+ 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例は、 `ChangeExtension`メソッドの使用方法を示しています。  
+  
+ [!code-cpp[System.IO.Path Members#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#1)]
+ [!code-csharp[System.IO.Path Members#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#1)]
+ [!code-vb[System.IO.Path Members#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> が、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。</exception>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Combine">
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>複数の文字列を 1 つのパスに結合します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+ 
+## Remarks  
+
+このメソッドは、個々の文字列を、ファイルパスを表す1つの文字列に連結することを目的としています。 ただし、最初の以外の引数にルート化されたパスが含まれている場合、前のパスコンポーネントは無視され、返された文字列はルートパスコンポーネントで始まります。 `Combine`メソッドの代わりに、メソッドまたは<xref:System.IO.Path.TryJoin%2A>メソッドの<xref:System.IO.Path.Join%2A>使用を検討してください。
+
+> [!IMPORTANT]
+> このメソッドは、最初の引数が絶対パスであり、次の引数が相対パスであることを前提としています。 そうでない場合、特に後続の引数がユーザーによって入力された文字列の場合<xref:System.IO.Path.Join%2A>は<xref:System.IO.Path.TryJoin%2A> 、代わりにメソッドまたはメソッドを呼び出します。
+
+ ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Combine">
+      <MemberSignature Language="C#" Value="public static string Combine (params string[] paths);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Combine(string[] paths) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Combine(System.String[])" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Combine (ParamArray paths As String()) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Combine(... cli::array &lt;System::String ^&gt; ^ paths);" />
+      <MemberSignature Language="F#" Value="static member Combine : string[] -&gt; string" Usage="System.IO.Path.Combine paths" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="paths" Type="System.String[]" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0">
+          <Attributes>
+            <Attribute FrameworkAlternate="dotnet-uwp-10.0">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="paths">パスの構成要素の配列。</param>
+        <summary>文字列の配列を 1 つのパスに結合します。</summary>
+        <returns>結合されたパス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks
+
+`paths`は、結合するパスの部分の配列である必要があります。 後続のパスのいずれかが絶対パスの場合、結合操作はその絶対パスで開始され、前に結合されたすべてのパスを破棄してリセットされます。  
+
+の`paths`いずれかの要素が、最後の要素がドライブではなく、 <xref:System.IO.Path.DirectorySeparatorChar>または<xref:System.IO.Path.AltDirectorySeparatorChar>のいずれかの文字で`Combine`終了しない<xref:System.IO.Path.DirectorySeparatorChar>場合、メソッドはその要素と次の要素の間に文字を追加します。 要素がターゲットプラットフォームに適していないパス区切り文字で終了した場合、メソッドは`Combine`元のパス区切り文字を保持し、サポートされているものを追加します。 次の例では、円記号がパスの区切り文字として使用されている場合に、Windows と Unix ベースのシステムの結果を比較します。
+
+[!code-csharp[Combine and path separator characters](~/samples/snippets/csharp/api/system.io/path/combine/program.cs#1)]
+[!code-vb[Combine and path separator characters](~/samples/snippets/visualbasic/api/system.io/path/combine/program.vb#1)]  
+
+ 長さ0の文字列は、組み合わせたパスから省略されます。  
+  
+ 空白の場合、パラメーターは解析されません。  
+  
+ 検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Combine`名とファイル名に無効な文字が含まれることはありません。 たとえば、では`Path.Combine("c:\\", "*.txt")` 、ファイルを作成するときには無効になる場合があります。これは、検索文字列として有効です。 このため、 `Combine`メソッドによって正常に解釈されます。  
+  
+## Examples  
+ 次の例では、文字列の配列を1つのパスに結合します。  
+  
+ [!code-csharp[System.IO.Path.Combine#3](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.io.path.combine/cs/program.cs#3)]
+ [!code-vb[System.IO.Path.Combine#3](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.io.path.combine/vb/program.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException">配列内の文字列の 1 つが、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義された無効な文字を 1 つ以上含んでいます。</exception>
+        <exception cref="T:System.ArgumentNullException">配列内の文字列の 1 つが <see langword="null" /> です。</exception>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Combine">
+      <MemberSignature Language="C#" Value="public static string Combine (string path1, string path2);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Combine(string path1, string path2) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Combine(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Combine (path1 As String, path2 As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Combine(System::String ^ path1, System::String ^ path2);" />
+      <MemberSignature Language="F#" Value="static member Combine : string * string -&gt; string" Usage="System.IO.Path.Combine (path1, path2)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="path2" Type="System.String" Index="1" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する 1 番目のパス。</param>
+        <param name="path2">結合する 2 番目のパス。</param>
+        <summary>2 つの文字列を 1 つのパスに結合します。</summary>
+        <returns>結合されたパス。 指定したパスの 1 つが長さ 0 の文字列の場合、このメソッドは別のパスを返します。 <paramref name="path2" /> に絶対パスが含まれる場合、このメソッドは <paramref name="path2" /> を返します。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ が`path1`ドライブ参照 (つまり、"C:" または "D:") ではなく、が、 <xref:System.IO.Path.AltDirectorySeparatorChar>、または<xref:System.IO.Path.DirectorySeparatorChar> <xref:System.IO.Path.DirectorySeparatorChar> <xref:System.IO.Path.VolumeSeparatorChar>で定義されている有効な区切り文字で終了し`path1`ない場合は、連結前にがに追加されます。 がターゲットプラットフォーム`path1`に適していないパス区切り文字で終了する場合、メソッドは`Combine`元のパス区切り文字を保持し、サポートされているものを追加します。 次の例では、円記号がパスの区切り文字として使用されている場合に、Windows と Unix ベースのシステムの結果を比較します。  
+  
+[!code-csharp[Combine and path separator characters](~/samples/snippets/csharp/api/system.io/path/combine/program.cs#2)]
+[!code-vb[Combine and path separator characters](~/samples/snippets/visualbasic/api/system.io/path/combine/program.vb#2)]  
+
+ に`path2`ルートが含まれていない場合 (たとえば`path2` 、が区切り文字またはドライブ指定で始まらない場合)、結果は2つのパスを連結したものになります。 に`path2`ルートが含まれ`path2`ている場合は、が返されます。  
+  
+ 空白の場合、パラメーターは解析されません。 したがって、 `path2`に空白が含まれている場合 (たとえば、"\file.txt <xref:System.IO.Path.Combine%2A> ")、 `path1`メソッドはを返す`path2`のではなく、にを追加`path2`します。  
+  
+ 検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Combine`名とファイル名に無効な文字が含まれることはありません。 たとえば、では`Path.Combine("c:\\", "*.txt")` 、ファイルを作成するときには無効になる場合があります。これは、検索文字列として有効です。 このため、 `Combine`メソッドによって正常に解釈されます。  
+  
+ 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例は、Windows `Combine`ベースのデスクトッププラットフォームでのメソッドの使用方法を示しています。  
+  
+ [!code-cpp[pathcombine#1](~/samples/snippets/cpp/VS_Snippets_CLR/pathcombine/CPP/pathcombine.cpp#1)]
+ [!code-csharp[pathcombine#1](~/samples/snippets/csharp/VS_Snippets_CLR/pathcombine/CS/pathcombine.cs#1)]
+ [!code-vb[pathcombine#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/pathcombine/VB/pathcombine.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path1" /> または <paramref name="path2" /> が、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="path1" /> または <paramref name="path2" /> が <see langword="null" /> です。</exception>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Combine">
+      <MemberSignature Language="C#" Value="public static string Combine (string path1, string path2, string path3);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Combine(string path1, string path2, string path3) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Combine(System.String,System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Combine (path1 As String, path2 As String, path3 As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Combine(System::String ^ path1, System::String ^ path2, System::String ^ path3);" />
+      <MemberSignature Language="F#" Value="static member Combine : string * string * string -&gt; string" Usage="System.IO.Path.Combine (path1, path2, path3)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="path2" Type="System.String" Index="1" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="path3" Type="System.String" Index="2" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する 1 番目のパス。</param>
+        <param name="path2">結合する 2 番目のパス。</param>
+        <param name="path3">結合する 3 番目のパス。</param>
+        <summary>3 つの文字列を 1 つのパスに結合します。</summary>
+        <returns>結合されたパス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `path1`絶対パスを指定する必要があります (たとえば、"d:\archives\\" または "\archives\public")。 `path2` また `path3` はが絶対パスの場合、結合操作は、以前に結合されたすべてのパスを破棄し、その絶対パスにリセットします。  
+  
+ 長さ0の文字列は、組み合わせたパスから省略されます。  
+  
+ また`path1` <xref:System.IO.Path.DirectorySeparatorChar> <xref:System.IO.Path.DirectorySeparatorChar> <xref:System.IO.Path.AltDirectorySeparatorChar> `path1` <xref:System.IO.Path.VolumeSeparatorChar>はがドライブ参照 (つまり "C:" または "D:") ではなく、が、、またはで定義されている有効な区切り文字で終了しない場合、はまたはに追加されます。 `path2` `path2`連結前。 または`path1` `path2`がターゲットプラットフォームに適していないパス区切り文字である場合、メソッドは`Combine`元のパス区切り文字を保持し、サポートされているものを追加します。 次の例では、円記号がパスの区切り文字として使用されている場合に、Windows と Unix ベースのシステムの結果を比較します。 
+
+[!code-csharp[Combine and path separator characters](~/samples/snippets/csharp/api/system.io/path/combine/program.cs#3)]
+[!code-vb[Combine and path separator characters](~/samples/snippets/visualbasic/api/system.io/path/combine/program.vb#3)]  
+
+ に`path2`ルートが含まれていない場合 (たとえば`path2` 、が区切り文字またはドライブ指定で始まらない場合)、結果は2つのパスを連結したものになります。 に`path2`ルートが含まれ`path2`ている場合は、が返されます。  
+  
+ 空白の場合、パラメーターは解析されません。 したがって、 `path2`に空白が含まれている場合 (たとえば、"\file.txt <xref:System.IO.Path.Combine%2A> ")、 `path1`メソッドはにを追加`path2`します。  
+  
+ 検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Combine`名とファイル名に無効な文字が含まれることはありません。 たとえば、では`Path.Combine("c:\\", "*.txt")` 、ファイルを作成するときには無効になる場合があります。これは、検索文字列として有効です。 このため、 `Combine`メソッドによって正常に解釈されます。  
+  
+   
+  
+## Examples  
+ 次の例では、3つのパスを結合します。  
+  
+ [!code-csharp[System.IO.Path.Combine#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.io.path.combine/cs/program.cs#1)]
+ [!code-vb[System.IO.Path.Combine#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.io.path.combine/vb/program.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path1" />、<paramref name="path2" />、または <paramref name="path3" /> が、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="path1" />、<paramref name="path2" />、または <paramref name="path3" /> が <see langword="null" /> です。</exception>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Combine">
+      <MemberSignature Language="C#" Value="public static string Combine (string path1, string path2, string path3, string path4);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Combine(string path1, string path2, string path3, string path4) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Combine(System.String,System.String,System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Combine (path1 As String, path2 As String, path3 As String, path4 As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Combine(System::String ^ path1, System::String ^ path2, System::String ^ path3, System::String ^ path4);" />
+      <MemberSignature Language="F#" Value="static member Combine : string * string * string * string -&gt; string" Usage="System.IO.Path.Combine (path1, path2, path3, path4)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.String" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="path2" Type="System.String" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="path3" Type="System.String" Index="2" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="path4" Type="System.String" Index="3" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する 1 番目のパス。</param>
+        <param name="path2">結合する 2 番目のパス。</param>
+        <param name="path3">結合する 3 番目のパス。</param>
+        <param name="path4">結合する 4 番目のパス。</param>
+        <summary>4 つの文字列を 1 つのパスに結合します。</summary>
+        <returns>結合されたパス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `path1`絶対パスを指定する必要があります (たとえば、"d:\archives\\" または "\archives\public")。後続のパスのいずれかが絶対パスでもある場合、結合操作は以前に結合されたすべてのパスを破棄し、その絶対パスにリセットします。  
+  
+ 長さ0の文字列は、組み合わせたパスから省略されます。  
+  
+ 、 `path1` <xref:System.IO.Path.VolumeSeparatorChar> <xref:System.IO.Path.DirectorySeparatorChar> <xref:System.IO.Path.DirectorySeparatorChar> <xref:System.IO.Path.AltDirectorySeparatorChar>、または`path3`がドライブ参照 (つまり "C:" または "D:") ではなく、かつ、、、またはで定義されている有効な区切り文字で終了しない場合、が追加されます。 `path2`連結前。 、 `path1` `Combine` 、または `path3` がターゲットプラットフォームに適していないパス区切り文字で終了する場合、メソッドは元のパス区切り文字を保持し、サポートされているものを追加します。 `path2` 次の例では、円記号がパスの区切り文字として使用されている場合に、Windows と Unix ベースのシステムの結果を比較します。 
+
+[!code-csharp[Combine and path separator characters](~/samples/snippets/csharp/api/system.io/path/combine/program.cs#4)]
+[!code-vb[Combine and path separator characters](~/samples/snippets/visualbasic/api/system.io/path/combine/program.vb#4)]   
+  
+ に`path2`ルートが含まれていない場合 (たとえば`path2` 、が区切り文字またはドライブ指定で始まらない場合)、結果は2つのパスを連結したものになります。 に`path2`ルートが含まれ`path2`ている場合は、が返されます。  
+  
+ 空白の場合、パラメーターは解析されません。 したがって、 `path2`に空白が含まれている場合 (たとえば、"\file.txt <xref:System.IO.Path.Combine%2A> ")、 `path1`メソッドはにを追加`path2`します。  
+  
+ 検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Combine`名とファイル名に無効な文字が含まれることはありません。 たとえば、では`Path.Combine("c:\\", "*.txt")` 、ファイルを作成するときには無効になる場合があります。これは、検索文字列として有効です。 このため、 `Combine`メソッドによって正常に解釈されます。  
+  
+   
+  
+## Examples  
+ 次の例では、4つのパスを結合します。  
+  
+ [!code-csharp[System.IO.Path.Combine#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.io.path.combine/cs/program.cs#2)]
+ [!code-vb[System.IO.Path.Combine#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.io.path.combine/vb/program.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path1" />、<paramref name="path2" />、<paramref name="path3" />、または <paramref name="path4" /> が、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="path1" />、<paramref name="path2" />、<paramref name="path3" />、または <paramref name="path4" /> が <see langword="null" /> です。</exception>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="DirectorySeparatorChar">
+      <MemberSignature Language="C#" Value="public static readonly char DirectorySeparatorChar;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly char DirectorySeparatorChar" />
+      <MemberSignature Language="DocId" Value="F:System.IO.Path.DirectorySeparatorChar" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly DirectorySeparatorChar As Char " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly char DirectorySeparatorChar;" />
+      <MemberSignature Language="F#" Value=" staticval mutable DirectorySeparatorChar : char" Usage="System.IO.Path.DirectorySeparatorChar" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Char</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>階層ファイル システム編成を反映するパス文字列の、ディレクトリ レベルを区切るために使用する、プラットフォーム固有の文字を提供します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks
+
+<xref:System.IO.Path.AltDirectorySeparatorChar>と`DirectorySeparatorChar`はどちらも、パス文字列内のディレクトリレベルを区切るために有効です。  
+  
+.NET Core を使用して、複数のプラットフォームで実行されるアプリケーションを開発する場合は、次のようにします。
+
+- ディレクトリの区切り記号をハードコーディングする場合は、スラッシュ (`/`) 文字を使用する必要があります。 Unix システムで認識されているディレクトリの区切り文字は、この例の出力に示されている<xref:System.IO.Path.AltDirectorySeparatorChar>もののみで、は Windows 上のです。
+
+- 実行時にパスの区切り文字を動的に取得し、ファイルシステムパスに組み込むには、文字列の連結を使用します。 たとえば、オブジェクトに適用された 
+
+   ```csharp
+   separator = Path.DirectorySeparatorChar;
+   path = $"{separator}users{separator}user1{separator}";
+   ```
+
+   ```vb
+   separator = Path.DirectorySeparatorChar
+   path = $"{separator}users{separator}user1{separator}"
+   ``` 
+
+   また、 <xref:System.IO.Path.AltDirectorySeparatorChar>プロパティから値を取得することもできます。これは、Windows と Unx ベースのシステムの両方で同じであるためです。
+
+- プロパティを<xref:System.IO.Path.AltDirectorySeparatorChar>取得する
+
+アプリケーションがクロスプラットフォームでない場合は、システムに適した区切り記号を使用できます。
+
+## Examples  
+
+次の例で<xref:System.IO.Path>は、Windows および Unix ベースのシステムでのフィールド値を表示します。 Windows では、( <xref:System.IO.Path.AltDirectorySeparatorChar>フィールドによって返される) スラッシュまたは円記号 ( <xref:System.IO.Path.DirectorySeparatorChar>フィールドによって返される) がパス区切り文字としてサポートされていますが、Unix ベースのシステムではスラッシュのみがサポートされています。  
+
+[!code-csharp[DirectorySeparatorChar](~/samples/snippets/csharp/api/system.io/path/directoryseparatorchar/program.cs)]
+[!code-vb[DirectorySeparatorChar](~/samples/snippets/visualbasic/api/system.io/path/directoryseparatorchar/program.vb)]
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="EndsInDirectorySeparator">
+      <MemberSignature Language="C#" Value="public static bool EndsInDirectorySeparator (ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool EndsInDirectorySeparator(valuetype System.ReadOnlySpan`1&lt;char&gt; path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.EndsInDirectorySeparator(System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function EndsInDirectorySeparator (path As ReadOnlySpan(Of Char)) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool EndsInDirectorySeparator(ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="F#" Value="static member EndsInDirectorySeparator : ReadOnlySpan&lt;char&gt; -&gt; bool" Usage="System.IO.Path.EndsInDirectorySeparator path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path">分析するパス。</param>
+        <summary>読み取り専用スパンとして指定されているパスが、ディレクトリ区切り記号で終了するかどうかを示す値を返します。</summary>
+        <returns>パスがディレクトリ区切り記号で終わる場合は、<see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EndsInDirectorySeparator">
+      <MemberSignature Language="C#" Value="public static bool EndsInDirectorySeparator (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool EndsInDirectorySeparator(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.EndsInDirectorySeparator(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function EndsInDirectorySeparator (path As String) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool EndsInDirectorySeparator(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member EndsInDirectorySeparator : string -&gt; bool" Usage="System.IO.Path.EndsInDirectorySeparator path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" Index="0" FrameworkAlternate="netcore-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path">分析するパス。</param>
+        <summary>指定されているパスが、ディレクトリ区切り記号で終了するかどうかを示す値を返します。</summary>
+        <returns>パスがディレクトリ区切り記号で終わる場合は、<see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDirectoryName">
+      <MemberSignature Language="C#" Value="public static ReadOnlySpan&lt;char&gt; GetDirectoryName (ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.ReadOnlySpan`1&lt;char&gt; GetDirectoryName(valuetype System.ReadOnlySpan`1&lt;char&gt; path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetDirectoryName(System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetDirectoryName (path As ReadOnlySpan(Of Char)) As ReadOnlySpan(Of Char)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static ReadOnlySpan&lt;char&gt; GetDirectoryName(ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="F#" Value="static member GetDirectoryName : ReadOnlySpan&lt;char&gt; -&gt; ReadOnlySpan&lt;char&gt;" Usage="System.IO.Path.GetDirectoryName path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.ReadOnlySpan&lt;System.Char&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path">ディレクトリ情報を取得するパス。</param>
+        <summary>文字範囲で表された、指定されたパスのディレクトリ情報を返します。</summary>
+        <returns><paramref name="path" /> のディレクトリ情報。<paramref name="path" /> が <see langword="null" />、空の範囲、またはルート (\, C:、または \\server\share) の場合は空の範囲。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+文字列のオーバーロードとは異なり、このメソッドはディレクトリの区切り記号を正規化しません。
+
+          ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDirectoryName">
+      <MemberSignature Language="C#" Value="public static string GetDirectoryName (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetDirectoryName(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetDirectoryName(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetDirectoryName (path As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetDirectoryName(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member GetDirectoryName : string -&gt; string" Usage="System.IO.Path.GetDirectoryName path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="path">ファイルまたはディレクトリのパス。</param>
+        <summary>指定したパス文字列のディレクトリ情報を返します。</summary>
+        <returns><paramref name="path" /> のディレクトリ情報。<paramref name="path" /> がルート ディレクトリを示しているか null である場合は <see langword="null" />。 <paramref name="path" /> にディレクトリ情報が含まれていない場合は、<see cref="F:System.String.Empty" /> を返します。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ほとんどの場合、このメソッドによって返される文字列は、パス内のすべての文字で構成され<xref:System.IO.Path.DirectorySeparatorChar>ます<xref:System.IO.Path.AltDirectorySeparatorChar>が、最後のまたはは含まれません。 パスがルートディレクトリ ("c:\\" など) で構成されている場合は、null が返されます。 このメソッドは、"file:" を使用したパスをサポートしていないことに注意してください。 返されるパスに<xref:System.IO.Path.DirectorySeparatorChar>はまたは<xref:System.IO.Path.AltDirectorySeparatorChar>が含まれていないため、 <xref:System.IO.Path.GetDirectoryName%2A>返されたパスをメソッドに渡すと、結果の文字列の後続の呼び出しごとに1つのフォルダーレベルが切り捨てられます。 たとえば、パス "C:\Directory\SubDirectory\test.txt" を<xref:System.IO.Path.GetDirectoryName%2A>メソッドに渡すと、"C:\Directory\SubDirectory" が返されます。 その文字列 "C:\Directory\SubDirectory" をに<xref:System.IO.Path.GetDirectoryName%2A>渡すと、"c:\ ディレクトリ" になります。  
+  
+ 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例は、Windows `GetDirectoryName`ベースのデスクトッププラットフォームでのメソッドの使用方法を示しています。  
+  
+ [!code-cpp[System.IO.Path Members#3](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#3)]
+ [!code-csharp[System.IO.Path Members#3](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#3)]
+ [!code-vb[System.IO.Path Members#3](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> パラメーターは正しくない文字を含んでおり、空か、空白のみで構成されています。</exception>
+        <exception cref="T:System.IO.PathTooLongException"><block subset="none" type="note">
+            <para>  
+ <see href="https://go.microsoft.com/fwlink/?LinkID=247912">Windows ストア アプリ用 .NET</see> または<see href="https://docs.microsoft.com/dotnet/standard/cross-platform/cross-platform-development-with-the-portable-class-library">ポータブル クラス ライブラリ</see>では、基本クラスの例外である <see cref="T:System.IO.IOException" /> を代わりにキャッチします。  
+  
+</para>
+          </block>  
+  
+ <paramref name="path" /> パラメーターは、システムで定義された最大長を超えています。</exception>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetExtension">
+      <MemberSignature Language="C#" Value="public static ReadOnlySpan&lt;char&gt; GetExtension (ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.ReadOnlySpan`1&lt;char&gt; GetExtension(valuetype System.ReadOnlySpan`1&lt;char&gt; path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetExtension(System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetExtension (path As ReadOnlySpan(Of Char)) As ReadOnlySpan(Of Char)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static ReadOnlySpan&lt;char&gt; GetExtension(ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="F#" Value="static member GetExtension : ReadOnlySpan&lt;char&gt; -&gt; ReadOnlySpan&lt;char&gt;" Usage="System.IO.Path.GetExtension path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.ReadOnlySpan&lt;System.Char&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path">拡張子の取得元のファイル パス。</param>
+        <summary>読み取り専用の文字範囲で表されたファイル パスの拡張子を返します。</summary>
+        <returns>指定されたパスの拡張子 (ピリオド "." を含む)。<paramref name="path" /> に拡張子情報が含まれていない場合は <see cref="P:System.ReadOnlySpan`1.Empty" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+
+このメソッドは、ピリオド ( `path` ". `path` ") を検索することによっての拡張を取得します。これは、読み取り専用の範囲の最後の文字から始まり、その最初の文字に向かって進みます。 <xref:System.IO.Path.DirectorySeparatorChar>また<xref:System.ReadOnlySpan%601.Empty?displayProperty=nameWithType>は<xref:System.IO.Path.AltDirectorySeparatorChar>文字の前にピリオドがある場合、返される読み取り専用スパンにはピリオドとその後の文字が含まれます。それ以外の場合はが返されます。  
+
+         ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetExtension">
+      <MemberSignature Language="C#" Value="public static string GetExtension (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetExtension(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetExtension(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetExtension (path As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetExtension(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member GetExtension : string -&gt; string" Usage="System.IO.Path.GetExtension path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="path">拡張子の取得元のパス文字列。</param>
+        <summary>指定のパス文字列の拡張子 (ピリオド "." を含む) を返します。</summary>
+        <returns>指定したパスの拡張子 (ピリオド "." を含む)、<see langword="null" />、または <see cref="F:System.String.Empty" />。 <paramref name="path" /> が <see langword="null" /> の場合、<see cref="M:System.IO.Path.GetExtension(System.String)" /> は <see langword="null" /> を返します。 <paramref name="path" /> が拡張子情報を持たない場合、<see cref="M:System.IO.Path.GetExtension(System.String)" /> は <see cref="F:System.String.Empty" /> を返します。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+このメソッドは、の最後`path`の文字`path` `path`から始まり、最初の文字の前に続くピリオド (.) を検索することによって、の拡張を取得します。 <xref:System.IO.Path.DirectorySeparatorChar>また<xref:System.String.Empty?displayProperty=nameWithType>は<xref:System.IO.Path.AltDirectorySeparatorChar>文字の前にピリオドがある場合、返される文字列にはピリオドとその後の文字が含まれます。それ以外の場合は、が返されます。  
+  
+ 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。
+ 
+## Examples  
+ 次の例は、Windows `GetExtension`ベースのデスクトッププラットフォームでのメソッドの使用方法を示しています。  
+  
+ [!code-cpp[System.IO.Path Members#4](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#4)]
+ [!code-csharp[System.IO.Path Members#4](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#4)]
+ [!code-vb[System.IO.Path Members#4](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> が、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。</exception>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFileName">
+      <MemberSignature Language="C#" Value="public static ReadOnlySpan&lt;char&gt; GetFileName (ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.ReadOnlySpan`1&lt;char&gt; GetFileName(valuetype System.ReadOnlySpan`1&lt;char&gt; path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetFileName(System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetFileName (path As ReadOnlySpan(Of Char)) As ReadOnlySpan(Of Char)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static ReadOnlySpan&lt;char&gt; GetFileName(ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="F#" Value="static member GetFileName : ReadOnlySpan&lt;char&gt; -&gt; ReadOnlySpan&lt;char&gt;" Usage="System.IO.Path.GetFileName path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.ReadOnlySpan&lt;System.Char&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path">ファイル名と拡張子の取得元のパスを含む読み取り専用の範囲。</param>
+        <summary>読み取り専用の文字範囲で表されたファイル パスのファイル名と拡張子を返します。</summary>
+        <returns><paramref name="path" /> の最後のディレクトリ区切り文字の後の文字。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+
+返される読み取り専用スパンには、の最後の区切り記号`path`に続くパスの文字が含まれます。 の`path`最後の文字がボリュームまたはディレクトリの区切り文字の場合、メソッド<xref:System.ReadOnlySpan%601.Empty?displayProperty=nameWithType>はを返します。 に`path`区切り文字が含まれていない`path`場合、メソッドはを返します。
+
+         ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFileName">
+      <MemberSignature Language="C#" Value="public static string GetFileName (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetFileName(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetFileName(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetFileName (path As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetFileName(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member GetFileName : string -&gt; string" Usage="System.IO.Path.GetFileName path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="path">ファイル名と拡張子の取得元のパス文字列。</param>
+        <summary>指定したパス文字列のファイル名と拡張子を返します。</summary>
+        <returns><paramref name="path" /> の最後のディレクトリ区切り文字の後の文字。 <paramref name="path" /> の最後の文字がディレクトリ区切り記号またはボリューム区切り記号の場合、このメソッドは <see cref="F:System.String.Empty" /> を返します。 <paramref name="path" /> が <see langword="null" /> の場合、このメソッドは <see langword="null" /> を返します。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+ファイルパスが`null`の`null`場合、戻り値はです。  
+  
+ファイル名<xref:System.IO.Path.DirectorySeparatorChar>の先頭を決定するために使用される区切り文字<xref:System.IO.Path.AltDirectorySeparatorChar>は、とです。  
+
+は*\\* unix 上の有効なファイル名で`GetFileName`あるため、unix ベースのプラットフォームで実行されている場合、 *C:\\mydir\\myfile.txt. ext*の`GetFileName`ような Windows ベースのパスからファイル名を正しく返すことはできません。Windows ベースのプラットフォームで実行すると、 */tmp/myfile.ext*のような unix ベースのパスからファイル名を正しく返すことができ`GetFileName`ます。そのため、unix ベースおよび Windows ベースのプラットフォームでは、メソッドの動作は厳密には同じではありません。
+
+共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例は、Windows ベースの`GetFileName`デスクトッププラットフォームでのメソッドの動作を示しています。  
+  
+ [!code-cpp[System.IO.Path Members#5](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#5)]
+ [!code-csharp[System.IO.Path Members#5](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#5)]
+ [!code-vb[System.IO.Path Members#5](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#5)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> が、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。</exception>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFileNameWithoutExtension">
+      <MemberSignature Language="C#" Value="public static ReadOnlySpan&lt;char&gt; GetFileNameWithoutExtension (ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.ReadOnlySpan`1&lt;char&gt; GetFileNameWithoutExtension(valuetype System.ReadOnlySpan`1&lt;char&gt; path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetFileNameWithoutExtension(System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetFileNameWithoutExtension (path As ReadOnlySpan(Of Char)) As ReadOnlySpan(Of Char)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static ReadOnlySpan&lt;char&gt; GetFileNameWithoutExtension(ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="F#" Value="static member GetFileNameWithoutExtension : ReadOnlySpan&lt;char&gt; -&gt; ReadOnlySpan&lt;char&gt;" Usage="System.IO.Path.GetFileNameWithoutExtension path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.ReadOnlySpan&lt;System.Char&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path">拡張子のないファイル名の取得元のパスを含む読み取り専用の範囲。</param>
+        <summary>読み取り専用の文字範囲で表されたファイル パスの拡張子のないファイル名を返します。</summary>
+        <returns><see cref="M:System.IO.Path.GetFileName(System.ReadOnlySpan{System.Char})" /> によって返された読み取り専用の範囲内の文字 (最後のピリオド (.) と、その後に続くすべての文字を除く)。</returns>
+        <remarks>To be added.</remarks>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFileNameWithoutExtension">
+      <MemberSignature Language="C#" Value="public static string GetFileNameWithoutExtension (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetFileNameWithoutExtension(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetFileNameWithoutExtension(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetFileNameWithoutExtension (path As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetFileNameWithoutExtension(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member GetFileNameWithoutExtension : string -&gt; string" Usage="System.IO.Path.GetFileNameWithoutExtension path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="path">ファイルのパス。</param>
+        <summary>指定したパス文字列のファイル名を拡張子を付けずに返します。</summary>
+        <returns><see cref="M:System.IO.Path.GetFileName(System.ReadOnlySpan{System.Char})" /> によって返された文字列 (最後のピリオド (.) と、その後ろのすべての文字を除く)。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドでは、パスまたはファイル名が存在するかどうかは検証されません。  
+  
+ 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例は、 `GetFileNameWithoutExtension`メソッドの使用方法を示しています。  
+  
+ [!code-cpp[System.IO.Path Members#6](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#6)]
+ [!code-csharp[System.IO.Path Members#6](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#6)]
+ [!code-vb[System.IO.Path Members#6](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#6)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> が、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。</exception>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFullPath">
+      <MemberSignature Language="C#" Value="public static string GetFullPath (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetFullPath(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetFullPath(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetFullPath (path As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetFullPath(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member GetFullPath : string -&gt; string" Usage="System.IO.Path.GetFullPath path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path">絶対パス情報を取得する対象のファイルまたはディレクトリ。</param>
+        <summary>指定したパス文字列の絶対パスを返します。</summary>
+        <returns>"C:\MyFile.txt" など、<paramref name="path" /> の完全修飾位置。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+ 絶対パスには、システム上のファイルまたはディレクトリを検索するために必要なすべての情報が含まれています。  
+  
+ によって指定され`path`たファイルまたはディレクトリが存在している必要はありません。 たとえば、 *c:\temp\newdir*が現在のディレクトリである場合、 `GetFullPath` *test.txt*などのファイル名でを呼び出すと*c:\temp\newdir\test.txt*が返されます。 ファイルは存在していない必要があります。  
+
+> [!IMPORTANT]
+> が`path`相対パスの場合、このオーバーロードは、現在のドライブと現在のディレクトリに基づいている可能性がある絶対パスを返します。 現在のドライブと現在のディレクトリは、アプリケーションの実行時にいつでも変更できます。 このため、このオーバーロードによって返されるパスは事前に決定できません。 決定的パスを返すには、 <xref:System.IO.Path.GetFullPath(System.String,System.String)>オーバーロードを呼び出します。 <xref:System.IO.Path.IsPathFullyQualified%2A>メソッドを呼び出して、パスが完全に修飾されているか、相対パスであるか、 `GetFullPath`およびの呼び出しが必要かどうかを確認することもできます。
+
+ ただし、が`path`存在する場合、呼び出し元はのパス情報を取得する`path`ためのアクセス許可を持っている必要があります。 <xref:System.IO.Path>クラスのほとんどのメンバーとは異なり、このメソッドはファイルシステムにアクセスします。  
+  
+ このメソッドは、現在のディレクトリと現在のボリューム情報を`path`使用して完全修飾します。 で`path`のみファイル名を指定した場合`GetFullPath` 、は現在のディレクトリの絶対パスを返します。  
+  
+ 短いファイル名を渡すと、長いファイル名に拡張されます。  
+  
+ パスに有意な文字が含まれていない場合、1つ以上の "." 文字の後に任意の数の空白が続くと無効になります。次に、"." または ".." として解析されます。  
+
+.NET Core 1.1 以降のバージョンと .NET Framework 4.6.2 以降のバージョンでは、"? \c:\\\"" などのデバイス名を含むパスもサポートしています。
+
+Windows でのファイルパス形式の詳細については、「 [windows システムでのファイルパス形式](~/docs/standard/io/file-path-formats.md)」を参照してください。 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。
+  
+## Examples  
+ 次の例は、 `GetFullPath` Windows ベースのデスクトッププラットフォームでのメソッドを示しています。  
+  
+ [!code-cpp[System.IO.Path Members#7](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#7)]
+ [!code-csharp[System.IO.Path Members#7](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#7)]
+ [!code-vb[System.IO.Path Members#7](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#7)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> が、長さが 0 の文字列であるか、空白しか含んでいないか、または <see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。  
+  
+または 
+システムが絶対パスを取得できませんでした。</exception>
+        <exception cref="T:System.Security.SecurityException">呼び出し元に、必要なアクセス許可がありません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.NotSupportedException"><paramref name="path" /> に、ボリュームの識別子 ("C:\\") の一部ではないコロン (:) が含まれています。</exception>
+        <exception cref="T:System.IO.PathTooLongException">指定したパス、ファイル名、またはその両方がシステム定義の最大長を超えています。</exception>
+        <permission cref="T:System.Security.Permissions.FileIOPermission">パスへのアクセスに使用します。</permission>
+        <related type="Article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFullPath">
+      <MemberSignature Language="C#" Value="public static string GetFullPath (string path, string basePath);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetFullPath(string path, string basePath) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetFullPath(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetFullPath (path As String, basePath As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetFullPath(System::String ^ path, System::String ^ basePath);" />
+      <MemberSignature Language="F#" Value="static member GetFullPath : string * string -&gt; string" Usage="System.IO.Path.GetFullPath (path, basePath)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="basePath" Type="System.String" Index="1" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path"><paramref name="basePath" /> に連結する相対パス。</param>
+        <param name="basePath">完全修飾パスの先頭。</param>
+        <summary>完全修飾ベース パスと相対パスから絶対パスを返します。</summary>
+        <returns>絶対パス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+が`path`空のパスの場合、メソッドは`basePath`を返します。 が`path`完全修飾パスの場合、メソッドは<xref:System.IO.Path.GetFullPath(System.String)>メソッド`path`にを渡し、結果を返します。
+
+相対パスを使用している場合は、このメソッドを使用して、指定したボリュームおよびルート化されたディレクトリに基づいて決定論的パスを返します。 現在のドライブ`basePath`ディレクトリに基づく定義済みのを使用するのではなく、現在のドライブとディレクトリで予期しない変更が発生したことが原因で、望ましくないファイルパスに対して保護されます。 
+
+## <a name="example"></a>例
+
+次の例では、アプリケーション`basePath`の現在のディレクトリを表す変数を定義します。 次に、それを`GetFullPath`メソッドに渡して、アプリケーションのデータディレクトリへの完全修飾パスを取得します。
+
+[!code-csharp[Path.GetFullPath(String,String)](~/samples/snippets/csharp/api/system.io/path/getfullpath/program.cs)] 
+[!code-vb[Path.GetFullPath(String,String)](~/samples/snippets/visualbasic/api/system.io/path/getfullpath/program.vb)] 
+
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> または <paramref name="basePath" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="basePath" /> が完全修飾パスではありません。
+
+- または -
+
+<paramref name="path" /> または <paramref name="basePath" /> に無効なパス文字 (U+0000 など) が含まれています。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetInvalidFileNameChars">
+      <MemberSignature Language="C#" Value="public static char[] GetInvalidFileNameChars ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig char[] GetInvalidFileNameChars() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetInvalidFileNameChars" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetInvalidFileNameChars () As Char()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static cli::array &lt;char&gt; ^ GetInvalidFileNameChars();" />
+      <MemberSignature Language="F#" Value="static member GetInvalidFileNameChars : unit -&gt; char[]" Usage="System.IO.Path.GetInvalidFileNameChars " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Char[]</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>ファイル名に使用できない文字を含む配列を取得します。</summary>
+        <returns>ファイル名に使用できない文字を含む配列。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドから返される配列には、ファイル名とディレクトリ名で無効な文字の完全なセットが含まれているとは限りません。 無効な文字の完全なセットは、ファイルシステムによって異なる場合があります。 たとえば、Windows ベースのデスクトッププラットフォームでは、無効なパス文字には、ASCII/Unicode 文字の 1 ~ 31 のほか、引用符 (")、小\<なり ()、より大きい (>)、&#124;パイプ ()、バックスペース (\b)、null (\ 0)、およびタブ (\t) が含まれます。  
+  
+   
+  
+## Examples  
+ <xref:System.IO.Path.GetInvalidFileNameChars%2A> メソッド <xref:System.IO.Path.GetInvalidPathChars%2A> とメソッドを使用して無効な文字を取得する例を次に示します。  
+  
+ [!code-cpp[IO.Path.GetInvalidFile-PathChars#1](~/samples/snippets/cpp/VS_Snippets_CLR/IO.Path.GetInvalidFile-PathChars/cpp/example.cpp#1)]
+ [!code-csharp[IO.Path.GetInvalidFile-PathChars#1](~/samples/snippets/csharp/VS_Snippets_CLR/IO.Path.GetInvalidFile-PathChars/CS/example.cs#1)]
+ [!code-vb[IO.Path.GetInvalidFile-PathChars#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/IO.Path.GetInvalidFile-PathChars/VB/example.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetInvalidPathChars">
+      <MemberSignature Language="C#" Value="public static char[] GetInvalidPathChars ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig char[] GetInvalidPathChars() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetInvalidPathChars" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetInvalidPathChars () As Char()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static cli::array &lt;char&gt; ^ GetInvalidPathChars();" />
+      <MemberSignature Language="F#" Value="static member GetInvalidPathChars : unit -&gt; char[]" Usage="System.IO.Path.GetInvalidPathChars " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Char[]</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>パス名に使用できない文字を含む配列を取得します。</summary>
+        <returns>パス名に使用できない文字を含む配列。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドから返される配列には、ファイル名とディレクトリ名で無効な文字の完全なセットが含まれているとは限りません。 無効な文字の完全なセットは、ファイルシステムによって異なる場合があります。 たとえば、Windows ベースのデスクトッププラットフォームでは、無効なパス文字には、ASCII/Unicode 文字の 1 ~ 31 のほか、引用符 (")、小\<なり ()、より大きい (>)、&#124;パイプ ()、バックスペース (\b)、null (\ 0)、およびタブ (\t) が含まれます。  
+  
+   
+  
+## Examples  
+ <xref:System.IO.Path.GetInvalidFileNameChars%2A> メソッド <xref:System.IO.Path.GetInvalidPathChars%2A> とメソッドを使用して無効な文字を取得する例を次に示します。  
+  
+ [!code-cpp[IO.Path.GetInvalidFile-PathChars#1](~/samples/snippets/cpp/VS_Snippets_CLR/IO.Path.GetInvalidFile-PathChars/cpp/example.cpp#1)]
+ [!code-csharp[IO.Path.GetInvalidFile-PathChars#1](~/samples/snippets/csharp/VS_Snippets_CLR/IO.Path.GetInvalidFile-PathChars/CS/example.cs#1)]
+ [!code-vb[IO.Path.GetInvalidFile-PathChars#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/IO.Path.GetInvalidFile-PathChars/VB/example.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetPathRoot">
+      <MemberSignature Language="C#" Value="public static ReadOnlySpan&lt;char&gt; GetPathRoot (ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.ReadOnlySpan`1&lt;char&gt; GetPathRoot(valuetype System.ReadOnlySpan`1&lt;char&gt; path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetPathRoot(System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetPathRoot (path As ReadOnlySpan(Of Char)) As ReadOnlySpan(Of Char)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static ReadOnlySpan&lt;char&gt; GetPathRoot(ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="F#" Value="static member GetPathRoot : ReadOnlySpan&lt;char&gt; -&gt; ReadOnlySpan&lt;char&gt;" Usage="System.IO.Path.GetPathRoot path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.ReadOnlySpan&lt;System.Char&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path">ルート ディレクトリ情報を取得する対象のパス。</param>
+        <summary>指定した文字範囲に含まれるパスから、ルート ディレクトリ情報を取得します。</summary>
+        <returns>`path` のルート ディレクトリを含む文字範囲。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+文字列のオーバーロードとは異なり、このメソッドはディレクトリの区切り記号を正規化しません。
+
+          ]]></format>
+        </remarks>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetPathRoot">
+      <MemberSignature Language="C#" Value="public static string GetPathRoot (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetPathRoot(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetPathRoot(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetPathRoot (path As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetPathRoot(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member GetPathRoot : string -&gt; string" Usage="System.IO.Path.GetPathRoot path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="path">ルート ディレクトリ情報を取得する対象のパス。</param>
+        <summary>指定したパスのルート ディレクトリ情報を取得します。</summary>
+        <returns><paramref name="path" /> のルート ディレクトリ。<paramref name="path" /> が <see langword="null" /> の場合は <see langword="null" />。<paramref name="path" /> にルート ディレクトリ情報が含まれていない場合は空の文字列。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドでは、パスまたはファイル名が存在するかどうかは検証されません。  
+  
+ このメソッドによって返される文字列には、次のようなパターンがあります。  
+  
+- 空の文字列 (`path`現在のドライブまたはボリューム上の相対パスを指定)。  
+  
+- "\"  ( `path` 現在のドライブの絶対パスを指定します)。  
+  
+- "X:" (`path`ドライブの相対パスを指定します。 x はドライブまたはボリューム文字を表します)。  
+  
+- "X:\" (`path`指定されたドライブの絶対パス)。  
+  
+- "\\\ Computer\ sharedfolder" (UNC パス)。  
+  
+- "\\\C:" \? (DOS デバイスパス。 .net Core 1.1 以降のバージョンでサポートされており、.NET Framework 4.6.2 以降のバージョンでサポートされています)\\
+   
+ Windows 上のファイルパスの詳細については、「 [windows システムでのファイルパス形式](~/docs/standard/io/file-path-formats.md)」を参照してください。 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。  
+  
+## Examples  
+ 次の例は、 `GetPathRoot`メソッドの使用方法を示しています。  
+  
+ [!code-cpp[System.IO.Path Members#8](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#8)]
+ [!code-csharp[System.IO.Path Members#8](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#8)]
+ [!code-vb[System.IO.Path Members#8](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#8)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> が、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。  
+  
+- または - 
+ <see cref="F:System.String.Empty" /> が <paramref name="path" /> に渡されました。</exception>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetRandomFileName">
+      <MemberSignature Language="C#" Value="public static string GetRandomFileName ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetRandomFileName() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetRandomFileName" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetRandomFileName () As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetRandomFileName();" />
+      <MemberSignature Language="F#" Value="static member GetRandomFileName : unit -&gt; string" Usage="System.IO.Path.GetRandomFileName " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>ランダムなフォルダー名またはファイル名を返します。</summary>
+        <returns>ランダムなフォルダー名またはファイル名。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.IO.Path.GetRandomFileName%2A>は、フォルダー名またはファイル名のいずれかとして使用できる暗号強度の高いランダムな文字列を返します。 と<xref:System.IO.Path.GetTempFileName%2A>は<xref:System.IO.Path.GetRandomFileName%2A>異なり、はファイルを作成しません。 ファイルシステムのセキュリティが最優先事項である場合は、の<xref:System.IO.Path.GetTempFileName%2A>代わりにこのメソッドを使用する必要があります。  
+  
+   
+  
+## Examples  
+ 次の例では、 <xref:System.IO.Path.GetRandomFileName%2A>メソッドからの出力を示します。  
+  
+ [!code-csharp[System.IO.Path Members#20](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers20.cs#20)]
+ [!code-vb[System.IO.Path Members#20](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers20.vb#20)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetRelativePath">
+      <MemberSignature Language="C#" Value="public static string GetRelativePath (string relativeTo, string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetRelativePath(string relativeTo, string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetRelativePath(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetRelativePath (relativeTo As String, path As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetRelativePath(System::String ^ relativeTo, System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member GetRelativePath : string * string -&gt; string" Usage="System.IO.Path.GetRelativePath (relativeTo, path)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="relativeTo" Type="System.String" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="path" Type="System.String" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="relativeTo">結果の基準となるソース パス。 このパスは常にディレクトリと見なされます。</param>
+        <param name="path">ターゲット パス。</param>
+        <summary>あるパスから別のパスへの相対パスを返します。</summary>
+        <returns>相対パス。パスが同じルートを共有していない場合は <paramref name="path" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+
+パスは、差異を計算<xref:System.IO.Path.GetFullPath%2A>する前にメソッドを呼び出すことによって解決されます。 このメソッドは、現在のプラットフォーム (<xref:System.StringComparison.OrdinalIgnoreCase?displayProperty=nameWithType> Windows および MacOs の場合は Linux 用) <xref:System.StringComparison.Ordinal?displayProperty=nameWithType>の既定のファイルパス比較を使用します。 
+
+         ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="relativeTo" /> または <paramref name="path" /> が <see langword="null" /> です。</exception>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetTempFileName">
+      <MemberSignature Language="C#" Value="public static string GetTempFileName ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetTempFileName() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetTempFileName" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetTempFileName () As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetTempFileName();" />
+      <MemberSignature Language="F#" Value="static member GetTempFileName : unit -&gt; string" Usage="System.IO.Path.GetTempFileName " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>一意な名前を持つ 0 バイトの一時ファイルをディスク上に作成し、そのファイルの完全パスを返します。</summary>
+        <returns>一時ファイルの完全パス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、「.TMP」という拡張子の一時ファイルを作成します。 一時ファイルは、 <xref:System.IO.Path.GetTempPath%2A> メソッドによりパスを取得される、ユーザーの一時フォルダー内に作成されます。  
+  
+ <xref:System.IO.Path.GetTempFileName%2A> メソッドは、以前の一時ファイルを削除することなく 65535 を超えるファイルを作成しようとした場合に、 <xref:System.IO.IOException> をスローします。  
+  
+ <xref:System.IO.Path.GetTempFileName%2A> メソッドが発生する <xref:System.IO.IOException> 一意の一時ファイル名が使用できない場合。 このエラーを解決するには、不要な一時ファイルをすべて削除してください。  
+  
+ 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IO.IOException">I/O エラー（例：一意の一時ファイル名を取得できない）が発生しました  
+  
+- または -
+  
+ あるいは、このメソッドで一時ファイルを作成できませんでした。</exception>
+        <permission cref="T:System.Security.Permissions.FileIOPermission">一時フォルダーに書き込むために必要です。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.FileIOPermissionAccess.Write" /></permission>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetTempPath">
+      <MemberSignature Language="C#" Value="public static string GetTempPath ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string GetTempPath() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.GetTempPath" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetTempPath () As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ GetTempPath();" />
+      <MemberSignature Language="F#" Value="static member GetTempPath : unit -&gt; string" Usage="System.IO.Path.GetTempPath " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>現在のユーザーの一時フォルダーのパスを返します。</summary>
+        <returns>一時フォルダーのパス。バックスラッシュで終わります。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、次の順序で環境変数の存在を確認し、見つかった最初のパスを使用します。  
+  
+1.  TMP 環境変数によって指定されたパス。  
+  
+2.  TEMP 環境変数によって指定されたパス。  
+  
+3.  USERPROFILE 環境変数によって指定されたパス。  
+  
+4.  Windows ディレクトリ。  
+  
+   
+  
+## Examples  
+ <xref:System.IO.Path.GetTempPath%2A> メソッドを呼び出す方法を次のコード例に示します。  
+  
+```vb  
+Dim result As String = Path.GetTempPath()  
+Console.WriteLine(result)  
+```  
+  
+```csharp  
+string result = Path.GetTempPath();  
+Console.WriteLine(result);  
+```  
+  
+ この例では、次のような出力が生成されます。  
+  
+```  
+C:\Users\UserName\AppData\Local\Temp\  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.SecurityException">呼び出し元に、必要なアクセス許可がありません。</exception>
+        <permission cref="T:System.Security.Permissions.EnvironmentPermission">環境変数に無制限でアクセスできます。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.PermissionState.Unrestricted" /></permission>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="HasExtension">
+      <MemberSignature Language="C#" Value="public static bool HasExtension (ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool HasExtension(valuetype System.ReadOnlySpan`1&lt;char&gt; path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.HasExtension(System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function HasExtension (path As ReadOnlySpan(Of Char)) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool HasExtension(ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="F#" Value="static member HasExtension : ReadOnlySpan&lt;char&gt; -&gt; bool" Usage="System.IO.Path.HasExtension path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path">拡張子を検索するパス。</param>
+        <summary>指定された文字範囲で表されたパスにファイル名拡張子が含まれているかどうかを判断します。</summary>
+        <returns>パスの最後のディレクトリ区切り文字またはボリューム区切り記号の後に続く文字にピリオド (".") が含まれ、その後に 1 つ以上の文字が続く場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+
+の`path`末尾の期間は、拡張機能とは見なされません。
+
+         ]]></format>
+        </remarks>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="HasExtension">
+      <MemberSignature Language="C#" Value="public static bool HasExtension (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool HasExtension(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.HasExtension(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function HasExtension (path As String) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool HasExtension(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member HasExtension : string -&gt; bool" Usage="System.IO.Path.HasExtension path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="path">拡張子を検索するパス。</param>
+        <summary>パスにファイル名の拡張子が含まれているか判定します。</summary>
+        <returns>パスの最後のディレクトリ区切り記号 (\\\ または /) またはボリューム区切り記号 (:) の後に続く文字にピリオド (.) が含まれ、その後に 1 つ以上の文字が続く場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ の`path`末尾から、このメソッドはピリオド (.) と1つ以上の文字を検索します。 <xref:System.IO.Path.DirectorySeparatorChar>、 `true`、または <xref:System.IO.Path.VolumeSeparatorChar> 文字が検出される前にこのパターンが見つかった場合、このメソッドはを返します。 <xref:System.IO.Path.AltDirectorySeparatorChar>  
+  
+ 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。  
+  
+   
+  
+## Examples  
+ `HasExtension` メソッドの使用例を次に示します。  
+  
+ [!code-cpp[System.IO.Path Members#11](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#11)]
+ [!code-csharp[System.IO.Path Members#11](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#11)]
+ [!code-vb[System.IO.Path Members#11](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#11)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> が、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。</exception>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="InvalidPathChars">
+      <MemberSignature Language="C#" Value="public static readonly char[] InvalidPathChars;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly char[] InvalidPathChars" />
+      <MemberSignature Language="DocId" Value="F:System.IO.Path.InvalidPathChars" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly InvalidPathChars As Char() " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly cli::array &lt;char&gt; ^ InvalidPathChars;" />
+      <MemberSignature Language="F#" Value=" staticval mutable InvalidPathChars : char[]" Usage="System.IO.Path.InvalidPathChars" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0">
+          <AttributeName>System.Obsolete("see GetInvalidPathChars and GetInvalidFileNameChars methods.")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netcore-2.0;netcore-2.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.Obsolete("Please use GetInvalidPathChars or GetInvalidFileNameChars instead.")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Char[]</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.IO.Path" /> クラスのメンバーに渡されるパス文字列引数で指定できないプラットフォーム固有の文字配列を提供します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドから返される配列には、ファイル名とディレクトリ名で無効な文字の完全なセットが含まれているとは限りません。 無効な文字の完全なセットは、ファイルシステムによって異なる場合があります。 たとえば、Windows ベースのデスクトッププラットフォームでは、無効なパス文字には、ASCII/Unicode 文字の 1 ~ 31 のほか、引用符 (")、小\<なり ()、より大きい (>)、&#124;パイプ ()、バックスペース (\b)、null (\ 0)、およびタブ (\t) が含まれます。  
+  
+> [!CAUTION]
+>  コードが信頼<xref:System.IO.Path.InvalidPathChars>できないコードと同じアプリケーションドメインで実行される可能性がある場合は、を使用しないでください。 <xref:System.IO.Path.InvalidPathChars>は配列であるため、要素を上書きできます。 信頼できないコードによっ<xref:System.IO.Path.InvalidPathChars>ての要素が上書きされると、コードが悪用される可能性があります。  
+  
+   
+  
+## Examples  
+ 次の例は、 `InvalidPathChars`プロパティの使用方法を示しています。  
+  
+ [!code-cpp[System.IO.Path Members#13](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#13)]
+ [!code-csharp[System.IO.Path Members#13](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#13)]
+ [!code-vb[System.IO.Path Members#13](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#13)]  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="IsPathFullyQualified">
+      <Docs>
+        <summary>ファイル パスが完全修飾されているかどうかを示す値を返します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+ 
+## Remarks  
+
+`IsPathFullyQualified`メソッドのオーバーロードは、 <xref:System.IO.Path.DirectorySeparatorChar>との<xref:System.IO.Path.AltDirectorySeparatorChar>両方の文字を使用するパスを処理します。 引数として渡されるパスに対して検証は実行されません。 その結果、Uri は相対パスとして解釈さ`false`れ、を返します。 
+
+完全修飾パス ( `IsPathFullyQualified`メソッドによって示される) とルート化されたパス ( <xref:System.IO.Path.IsPathRooted%2A>メソッドによって示される) の間には違いがあります。 *完全修飾パス*または*絶対パス*は、特定のドライブまたはデバイスからターゲットファイルまたはディレクトリへの正確なパスを常に定義し、現在のドライブまたは現在のディレクトリに依存しません。 たとえば、Windows システムの場合、 *c:/users/user1/documents/reports/2019/1 月/ハイライト。 .pdf*は、c: ドライブのルートからターゲットファイルへの絶対パスを定義し、 *.pdf を強調*表示します。 ルート*パス*は、開始ドライブまたはルートディレクトリのいずれかを指定しますが、現在のディレクトリ (指定されたドライブがルートになっている場合) または現在のドライブ (ルートディレクトリがルートになっている場合) のいずれかに依存します。 次の例は、完全修飾パスとルート化されたパスの違いを示しています。
+
+[!code-csharp[IsPathRooted](~/samples/snippets/csharp/api/system.IO/Path/IsPathRooted/program.cs)]
+[!code-vb[IsPathRooted](~/samples/snippets/visualbasic/api/system.IO/Path/IsPathRooted/program.vb)]
+
+         ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="IsPathFullyQualified">
+      <MemberSignature Language="C#" Value="public static bool IsPathFullyQualified (ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsPathFullyQualified(valuetype System.ReadOnlySpan`1&lt;char&gt; path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.IsPathFullyQualified(System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsPathFullyQualified (path As ReadOnlySpan(Of Char)) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsPathFullyQualified(ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="F#" Value="static member IsPathFullyQualified : ReadOnlySpan&lt;char&gt; -&gt; bool" Usage="System.IO.Path.IsPathFullyQualified path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path">ファイル パス。</param>
+        <summary>指定された文字範囲で表されたファイル パスが、特定のドライブまたは UNC パスに固定されているかどうかを示す値を返します。</summary>
+        <returns>パスが特定のドライブまたは UNC パスに固定されている場合は <see langword="true" />。パスが現在のドライブまたは作業ディレクトリを基準としている場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+
+
+         ]]></format>
+        </remarks>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="IsPathFullyQualified">
+      <MemberSignature Language="C#" Value="public static bool IsPathFullyQualified (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsPathFullyQualified(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.IsPathFullyQualified(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsPathFullyQualified (path As String) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsPathFullyQualified(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member IsPathFullyQualified : string -&gt; bool" Usage="System.IO.Path.IsPathFullyQualified path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path">ファイル パス。</param>
+        <summary>指定されたファイル パスが特定のドライブまたは UNC パスに固定されているかどうかを示す値を返します。</summary>
+        <returns>パスが特定のドライブまたは UNC パスに固定されている場合は <see langword="true" />。パスが現在のドライブまたは作業ディレクトリを基準としている場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+このメソッドは、代替ディレクトリ区切り記号を使用するパスを処理します。 ルート化されたパス (<xref:System.IO.Path.IsPathRooted(System.String)>) が相対的ではないと想定するのは、よくある間違いです。 たとえば、"C:a" はドライブ相対で、C: の現在のディレクトリに対して解決されます (ルートはありますが、相対)。 "C:\ a" はルートであり、相対ではありません。つまり、現在のディレクトリがパスの変更に使用されることはありません。
+
+          ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="path" /> は <see langword="null" />です。</exception>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="IsPathRooted">
+      <Docs>
+        <summary>ファイル パスにルートが含まれているかどうかを示す値を返します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+ 
+## Remarks  
+
+ルート化された**パス**は、特定のドライブまたは非 ic パスに固定されたファイルパスです。現在のドライブまたは作業ディレクトリに対する相対パスとは対照的です。 たとえば、Windows システムでは、ルート化されたパスは、円記号 ("\Documents" など) またはドライブ文字とコロン (たとえば、"C:Documents") で始まります。 
+
+ルート化されたパスは、絶対パス (完全修飾名) または相対パスのいずれかになることに注意してください。 絶対ルートパスは、ドライブのルートから特定のディレクトリへの完全修飾パスです。 相対ルートパスはドライブを指定しますが、その完全修飾パスは現在のディレクトリに対して解決されます。 この違いを次の例に示します。
+
+[!code-csharp[IsPathRooted](~/samples/snippets/csharp/api/system.IO/Path/IsPathRooted/program.cs)]
+[!code-vb[IsPathRooted](~/samples/snippets/visualbasic/api/system.IO/Path/IsPathRooted/program.vb)]
+
+         ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="IsPathRooted">
+      <MemberSignature Language="C#" Value="public static bool IsPathRooted (ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsPathRooted(valuetype System.ReadOnlySpan`1&lt;char&gt; path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.IsPathRooted(System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsPathRooted (path As ReadOnlySpan(Of Char)) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsPathRooted(ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="F#" Value="static member IsPathRooted : ReadOnlySpan&lt;char&gt; -&gt; bool" Usage="System.IO.Path.IsPathRooted path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path">テストするパス。</param>
+        <summary>ファイル パスを表す指定された文字範囲にルートが含まれているかどうかを示す値を返します。</summary>
+        <returns><paramref name="path" /> にルートが含まれている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>To be added.</remarks>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="IsPathRooted">
+      <MemberSignature Language="C#" Value="public static bool IsPathRooted (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsPathRooted(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.IsPathRooted(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsPathRooted (path As String) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsPathRooted(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member IsPathRooted : string -&gt; bool" Usage="System.IO.Path.IsPathRooted path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="path">テストするパス。</param>
+        <summary>指定されたパス文字列にルートが含まれているかどうかを示す値を返します。</summary>
+        <returns><paramref name="path" /> にルートが含まれている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 最初<xref:System.IO.Path.IsPathRooted%2A>の文字`true`がディレクトリ区切り文字 ("\\" など) の場合、またはパスがドライブ文字とコロン (:) で始まる場合は、メソッドはを返します。 `true`たとえば、"\MyDir \MyFile.txt \\ "、"C:\\\MyDir"、"C:MyDir" などの文字列に対し`path`てを返します。\\ "Mydir `path` " などの文字列に対してを返し`false`ます。  
+  
+ このメソッドでは、パスまたはファイル名が存在するかどうかは検証されません。  
+  
+ 共通 I/O タスクの一覧は、 [共通 I/O タスク](~/docs/standard/io/common-i-o-tasks.md) を参照してください。  
+
+## Examples  
+ 次の例は、メソッド`IsPathRooted`を使用して3つの文字列をテストする方法を示しています。  
+  
+ [!code-cpp[System.IO.Path Members#12](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#12)]
+ [!code-csharp[System.IO.Path Members#12](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#12)]
+ [!code-vb[System.IO.Path Members#12](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#12)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="path" /> が、<see cref="M:System.IO.Path.GetInvalidPathChars" /> で定義されている無効な文字を 1 つ以上含んでいます。</exception>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Join">
+      <MemberSignature Language="C#" Value="public static string Join (params string[] paths);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Join(string[] paths) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Join(System.String[])" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Join (ParamArray paths As String()) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Join(... cli::array &lt;System::String ^&gt; ^ paths);" />
+      <MemberSignature Language="F#" Value="static member Join : string[] -&gt; string" Usage="System.IO.Path.Join paths" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="paths" Type="System.String[]" Index="0" FrameworkAlternate="netcore-3.0">
+          <Attributes>
+            <Attribute FrameworkAlternate="netcore-3.0">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="paths">パスの配列。</param>
+        <summary>パスの配列を連結して 1 つのパスにします。</summary>
+        <returns>連結されたパス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+このメソッドは、内のすべての`paths`文字列を連結するだけで、パスコンポーネントがまだ存在しない場合は、そのディレクトリの区切り文字を追加します。 <xref:System.String.Length> 内 `paths` のいずれかのパスのがゼロの場合、メソッドは残りの引数を連結します。 結果の連結された文字列の長さが0の場合<xref:System.String.Empty?displayProperty=nameWithType>、メソッドはを返します。
+
+のいずれかのパス`paths`(最後のパスを除く) が、ターゲットプラットフォームに適していないパス区切り文字で終了した場合、メソッドは`Join`元のパス区切り文字を保持し、サポートされているものを追加します。 この問題は、Unix ベースのシステムでパスの区切りとして\"認識されない Windows の円記号 (") 文字を使用するハードコードされたパスで発生します。 この問題を回避するには、次の操作を行います。
+
+- ディレクトリの区切り文字を<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>ハードコーディングするのではなく、プロパティの値を取得します。
+
+- ディレクトリの区切り記号としてスラッシュ ("/") を使用します。 この文字は、Unix ベース<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>のシステムのプロパティと<xref:System.IO.Path.AltDirectorySeparatorChar?displayProperty=nameWithType> Windows システムのプロパティによって返されます。
+
+メソッドとは異なり、 <xref:System.IO.Path.Join%2A>メソッドは返されたパスのルートを試行しません。 <xref:System.IO.Path.Combine%2A> (つまり、最後のパスを除き、の`paths`パスのいずれかが絶対パス`Join`である場合、メソッドは、 <xref:System.IO.Path.Combine%2A>メソッドが行うように前のパスを破棄しません。
+
+検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Join`名とファイル名に無効な文字が含まれることはありません。 たとえば、ファイルの`Path.Join("c:\\", "temp", "*.txt")`作成時には無効になる場合がありますが、検索文字列として有効です。 その`Join`ため、メソッドは正常に解釈します。
+
+          ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Join">
+      <MemberSignature Language="C#" Value="public static string Join (ReadOnlySpan&lt;char&gt; path1, ReadOnlySpan&lt;char&gt; path2);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Join(valuetype System.ReadOnlySpan`1&lt;char&gt; path1, valuetype System.ReadOnlySpan`1&lt;char&gt; path2) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Join(System.ReadOnlySpan{System.Char},System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Join (path1 As ReadOnlySpan(Of Char), path2 As ReadOnlySpan(Of Char)) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Join(ReadOnlySpan&lt;char&gt; path1, ReadOnlySpan&lt;char&gt; path2);" />
+      <MemberSignature Language="F#" Value="static member Join : ReadOnlySpan&lt;char&gt; * ReadOnlySpan&lt;char&gt; -&gt; string" Usage="System.IO.Path.Join (path1, path2)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="path2" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="1" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する最初のパスを含む文字範囲。</param>
+        <param name="path2">結合する 2 番目のパスを含む文字範囲。</param>
+        <summary>2 つのパス コンポーネントを単一のパスに連結します。</summary>
+        <returns>結合されたパス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 
+このメソッドは、 `path`と`path2`を連結するだけで、2つのパスコンポーネントが`path2`の`path1`末尾または先頭にまだ存在しない場合は、そのディレクトリの区切り文字を追加します。 `path1`または<xref:System.ReadOnlySpan%601.Length> のいずれかがゼロの場合、メソッドはもう一方のパスを返します。 `path2` <xref:System.ReadOnlySpan%601.Length>と`path1`の両方がゼロの場合、メソッドはを<xref:System.String.Empty?displayProperty=nameWithType>返します。 `path2` 
+
+が`path1`ターゲットプラットフォームに適していないパス区切り文字で終了した場合、 `Join`メソッドは元のパス区切り文字を保持し、サポートされているものを追加します。 この問題は、Unix ベースのシステムでパスの区切りとして\"認識されない Windows の円記号 (") 文字を使用するハードコードされたパスで発生します。 この問題を回避するには、次の操作を行います。
+
+- ディレクトリの区切り文字を<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>ハードコーディングするのではなく、プロパティの値を取得します。
+
+- ディレクトリの区切り記号としてスラッシュ ("/") を使用します。 この文字は、Unix ベース<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>のシステムのプロパティと<xref:System.IO.Path.AltDirectorySeparatorChar?displayProperty=nameWithType> Windows システムのプロパティによって返されます。 
+
+メソッドとは異なり、 <xref:System.IO.Path.Join%2A>メソッドは返されたパスのルートを試行しません。 <xref:System.IO.Path.Combine%2A> (つまり、が絶対`path2`パス`Join`の場合、メソッドはを<xref:System.IO.Path.Combine%2A>破棄`path1`してを返し`path2`ません。次の例は、2つのメソッドによって返されるパスの違いを示しています。 のソースがユーザー `path2`入力の場合<xref:System.IO.Path.Combine%2A> 、このメソッドを使用すると、アプリケーションが意図していなかったファイルシステムリソース (例の場合は、 *C:/Users/User1/Documents/財務*など) にアクセスできます。利用.  
+
+検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Join`名とファイル名に無効な文字が含まれることはありません。 たとえば、ファイルの`Path.Join("c:\\", "*.txt")`作成時には無効になる場合がありますが、検索文字列として有効です。 その`Join`ため、メソッドは正常に解釈します。 
+
+## <a name="example"></a>例
+
+次の例は、メソッド<xref:System.IO.Path.Join(System.ReadOnlySpan%7BSystem.Char%7D,System.ReadOnlySpan%7BSystem.Char%7D)?displayProperty=nameWithType>と<xref:System.IO.Path.Combine(System.String,System.String)?displayProperty=nameWithType>メソッドによって返されるパスの違いを示しています。 最初の文字列がドライブおよびルートディレクトリを含む完全修飾パスで、2番目の文字列が最初のパスからの相対パスである場合、2つのメソッドは同じ結果を生成します。 2回目と3回目の`ShowPathInformation`メソッドの呼び出しでは、2つのメソッドによって返される文字列は分岐します。 2番目のメソッド呼び出しでは、最初の文字列引数はドライブ、2番目の文字列はルート化されたディレクトリです。 メソッド`Join`は、2つの文字列を連結し、重複するパス区切り記号を保持します。 メソッド`Combine`は、ドライブを破棄し、現在のドライブ上のルート化されたディレクトリを返します。 アプリケーションの現在のドライブが C:\ の場合また、この文字列は、ディレクトリ内のファイルにアクセスするために使用され、d: ではなく C: にアクセスします。 最後に、の3番目の呼び出し`ShowPathInformation`の引数は両方ともルート化されているため、メソッドは`Join`単に`Combine`それらを追加して無意味ファイルパスを作成します。メソッドは、最初の文字列を破棄し、2番目の文字列を返します。 ファイルアクセスにこの文字列を使用すると、アプリケーションが機密ファイルに意図せずアクセスする可能性があります。  
+
+[!code-csharp[Path.Join(String,String)](~/samples/snippets/csharp/api/system.io/path/combine2/program.cs)]
+[!code-vb[Path.Join(String,String)](~/samples/snippets/visualbasic/api/system.io/path/combine2/program.vb)]
+
+
+       ]]></format>
+        </remarks>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Join">
+      <MemberSignature Language="C#" Value="public static string Join (string path1, string path2);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Join(string path1, string path2) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Join(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Join (path1 As String, path2 As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Join(System::String ^ path1, System::String ^ path2);" />
+      <MemberSignature Language="F#" Value="static member Join : string * string -&gt; string" Usage="System.IO.Path.Join (path1, path2)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.String" Index="0" FrameworkAlternate="netcore-3.0" />
+        <Parameter Name="path2" Type="System.String" Index="1" FrameworkAlternate="netcore-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する 1 番目のパス。</param>
+        <param name="path2">結合する 2 番目のパス。</param>
+        <summary>2 つのパスを単一のパスに連結します。</summary>
+        <returns>連結されたパス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+このメソッドは、 `path`と`path2`を連結するだけで、パスコンポーネントがまだ存在しない場合は、そのディレクトリの区切り文字を追加します。 `path1`または `path2` の長さが0の場合、メソッドは残りの引数を連結します。 結果として連結された文字列の長さがゼロの<xref:System.String.Empty?displayProperty=nameWithType>場合、メソッドはを返します。
+
+が`path1`ターゲットプラットフォームに適していないパス区切り文字で終了した場合、 `Join`メソッドは元のパス区切り文字を保持し、サポートされているものを追加します。 この問題は、Unix ベースのシステムでパスの区切りとして\"認識されない Windows の円記号 (") 文字を使用するハードコードされたパスで発生します。 この問題を回避するには、次の操作を行います。
+
+- ディレクトリの区切り文字を<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>ハードコーディングするのではなく、プロパティの値を取得します。
+
+- ディレクトリの区切り記号としてスラッシュ ("/") を使用します。 この文字は、Unix ベース<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>のシステムのプロパティと<xref:System.IO.Path.AltDirectorySeparatorChar?displayProperty=nameWithType> Windows システムのプロパティによって返されます。
+
+メソッドとは異なり、 <xref:System.IO.Path.Join%2A>メソッドは返されたパスのルートを試行しません。 <xref:System.IO.Path.Combine%2A> (つまり、が絶対`path2`パス`Join`の場合、メソッドは、 <xref:System.IO.Path.Combine%2A>メソッドと同じ前のパスを破棄しません。
+
+検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Join`名とファイル名に無効な文字が含まれることはありません。 たとえば、ファイルの`Path.Join("c:\\", "temp", "*.txt")`作成時には無効になる場合がありますが、検索文字列として有効です。 その`Join`ため、メソッドは正常に解釈します。
+
+          ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Join">
+      <MemberSignature Language="C#" Value="public static string Join (ReadOnlySpan&lt;char&gt; path1, ReadOnlySpan&lt;char&gt; path2, ReadOnlySpan&lt;char&gt; path3);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Join(valuetype System.ReadOnlySpan`1&lt;char&gt; path1, valuetype System.ReadOnlySpan`1&lt;char&gt; path2, valuetype System.ReadOnlySpan`1&lt;char&gt; path3) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Join(System.ReadOnlySpan{System.Char},System.ReadOnlySpan{System.Char},System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Join (path1 As ReadOnlySpan(Of Char), path2 As ReadOnlySpan(Of Char), path3 As ReadOnlySpan(Of Char)) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Join(ReadOnlySpan&lt;char&gt; path1, ReadOnlySpan&lt;char&gt; path2, ReadOnlySpan&lt;char&gt; path3);" />
+      <MemberSignature Language="F#" Value="static member Join : ReadOnlySpan&lt;char&gt; * ReadOnlySpan&lt;char&gt; * ReadOnlySpan&lt;char&gt; -&gt; string" Usage="System.IO.Path.Join (path1, path2, path3)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="path2" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="1" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="path3" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="2" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する最初のパスを含む文字範囲。</param>
+        <param name="path2">結合する 2 番目のパスを含む文字範囲。</param>
+        <param name="path3">結合する 3 番目のパスを含む文字範囲。</param>
+        <summary>3 つのパス コンポーネントを単一のパスに連結します。</summary>
+        <returns>連結されたパス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 
+このメソッドは、 `path` `path2`、、および`path3`を連結するだけで、パスコンポーネントがまだ存在しない場合は、そのディレクトリの区切り文字を追加します。 <xref:System.ReadOnlySpan%601.Length> 、 `path1`、または `path3` のいずれかの引数のが0の場合、メソッドは残りの引数を連結します。 `path2` すべてのコンポーネントのがゼロの場合、メソッドは<xref:System.String.Empty?displayProperty=nameWithType>を返します。 <xref:System.ReadOnlySpan%601.Length?displayProperty=nameWithType>
+
+また`path1`は`path2`が、ターゲットプラットフォームに適していないパスの区切り文字で終わった`Join`場合、メソッドは元のパス区切り文字を保持し、サポートされているものを追加します。 この問題は、Unix ベースのシステムでパスの区切りとして\"認識されない Windows の円記号 (") 文字を使用するハードコードされたパスで発生します。 この問題を回避するには、次の操作を行います。
+
+- ディレクトリの区切り文字を<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>ハードコーディングするのではなく、プロパティの値を取得します。
+
+- ディレクトリの区切り記号としてスラッシュ ("/") を使用します。 この文字は、Unix ベース<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>のシステムのプロパティと<xref:System.IO.Path.AltDirectorySeparatorChar?displayProperty=nameWithType> Windows システムのプロパティによって返されます。
+
+メソッドとは異なり、 <xref:System.IO.Path.Join%2A>メソッドは返されたパスのルートを試行しません。 <xref:System.IO.Path.Combine%2A> `path2` (また`path2`はが絶対パス`Join`の場合、メソッドは、メソッドが行った<xref:System.IO.Path.Combine%2A>ように、前のパスを破棄しません。
+  
+検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Join`名とファイル名に無効な文字が含まれることはありません。 たとえば、ファイルの`Path.Join("c:\\", "temp", "*.txt")`作成時には無効になる場合がありますが、検索文字列として有効です。 その`Join`ため、メソッドは正常に解釈します。
+
+## <a name="example"></a>例
+
+次の例は、メソッド<xref:System.IO.Path.Join(System.ReadOnlySpan%7BSystem.Char%7D,System.ReadOnlySpan%7BSystem.Char%7D,System.ReadOnlySpan%7BSystem.Char%7D)?displayProperty=nameWithType>と<xref:System.IO.Path.Combine(System.String,System.String,System.String)?displayProperty=nameWithType>メソッドによって返されるパスの違いを示しています。 最初の文字列がドライブおよびルートディレクトリを含む完全修飾パスで、2番目の文字列が最初のパスからの相対パスである場合、2つのメソッドは同じ結果を生成します。 2回目と3回目の`ShowPathInformation`メソッドの呼び出しでは、2つのメソッドによって返される文字列は分岐します。 2番目のメソッド呼び出しでは、最初の文字列引数はドライブ、2番目の文字列はルート化されたディレクトリです。 メソッド`Join`は、2つの文字列を連結し、重複するパス区切り記号を保持します。 <xref:System.IO.Path.GetFullPath%2A>メソッドを呼び出すと、重複が除去されます。 メソッド`Combine`は、ドライブを破棄し、現在のドライブ上のルート化されたディレクトリを返します。 アプリケーションの現在のドライブが C:\ の場合また、この文字列は、ディレクトリ内のファイルにアクセスするために使用され、d: ではなく C: にアクセスします。 最後に、の3番目の呼び出し`ShowPathInformation`の最後の引数がルートになっているため、メソッドは`Join`単にそれを最初の2つの引数`Combine`に追加して無意味ファイルのパスを作成します。メソッドは、最初の2つの文字列を破棄し、を返します。3番目の。 ファイルアクセスにこの文字列を使用すると、アプリケーションが機密ファイルに意図せずアクセスする可能性があります。
+
+[!code-csharp[Path.Join(String,String,String)](~/samples/snippets/csharp/api/system.io/path/combine3/program.cs)]
+[!code-vb[Path.Join(String,String,String)](~/samples/snippets/visualbasic/api/system.io/path/combine3/program.vb)]
+
+       ]]></format>
+        </remarks>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Join">
+      <MemberSignature Language="C#" Value="public static string Join (string path1, string path2, string path3);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Join(string path1, string path2, string path3) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Join(System.String,System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Join (path1 As String, path2 As String, path3 As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Join(System::String ^ path1, System::String ^ path2, System::String ^ path3);" />
+      <MemberSignature Language="F#" Value="static member Join : string * string * string -&gt; string" Usage="System.IO.Path.Join (path1, path2, path3)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.String" Index="0" FrameworkAlternate="netcore-3.0" />
+        <Parameter Name="path2" Type="System.String" Index="1" FrameworkAlternate="netcore-3.0" />
+        <Parameter Name="path3" Type="System.String" Index="2" FrameworkAlternate="netcore-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する 1 番目のパス。</param>
+        <param name="path2">結合する 2 番目のパス。</param>
+        <param name="path3">結合する 3 番目のパス。</param>
+        <summary>3 つのパスを単一のパスに連結します。</summary>
+        <returns>連結されたパス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+このメソッドは、 `path` `path2`、、および`path3`を連結するだけで、パスコンポーネントがまだ存在しない場合は、そのディレクトリの区切り文字を追加します。 、、 `path1` `path2`または `path3` のいずれかの引数の長さが0の場合、メソッドは残りの引数を連結します。 結果として連結された文字列の長さがゼロの<xref:System.String.Empty?displayProperty=nameWithType>場合、メソッドはを返します。
+
+また`path1`は`path2`が、ターゲットプラットフォームに適していないパスの区切り文字で終わった`Join`場合、メソッドは元のパス区切り文字を保持し、サポートされているものを追加します。 この問題は、Unix ベースのシステムでパスの区切りとして\"認識されない Windows の円記号 (") 文字を使用するハードコードされたパスで発生します。 この問題を回避するには、次の操作を行います。
+
+- ディレクトリの区切り文字を<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>ハードコーディングするのではなく、プロパティの値を取得します。
+
+- ディレクトリの区切り記号としてスラッシュ ("/") を使用します。 この文字は、Unix ベース<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>のシステムのプロパティと<xref:System.IO.Path.AltDirectorySeparatorChar?displayProperty=nameWithType> Windows システムのプロパティによって返されます。
+
+メソッドとは異なり、 <xref:System.IO.Path.Join%2A>メソッドは返されたパスのルートを試行しません。 <xref:System.IO.Path.Combine%2A> `path2` (また`path2`はが絶対パス`Join`の場合、メソッドは、メソッドが行った<xref:System.IO.Path.Combine%2A>ように、前のパスを破棄しません。
+
+検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Join`名とファイル名に無効な文字が含まれることはありません。 たとえば、ファイルの`Path.Join("c:\\", "temp", "*.txt")`作成時には無効になる場合がありますが、検索文字列として有効です。 その`Join`ため、メソッドは正常に解釈します。
+
+          ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Join">
+      <MemberSignature Language="C#" Value="public static string Join (ReadOnlySpan&lt;char&gt; path1, ReadOnlySpan&lt;char&gt; path2, ReadOnlySpan&lt;char&gt; path3, ReadOnlySpan&lt;char&gt; path4);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Join(valuetype System.ReadOnlySpan`1&lt;char&gt; path1, valuetype System.ReadOnlySpan`1&lt;char&gt; path2, valuetype System.ReadOnlySpan`1&lt;char&gt; path3, valuetype System.ReadOnlySpan`1&lt;char&gt; path4) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Join(System.ReadOnlySpan{System.Char},System.ReadOnlySpan{System.Char},System.ReadOnlySpan{System.Char},System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Join (path1 As ReadOnlySpan(Of Char), path2 As ReadOnlySpan(Of Char), path3 As ReadOnlySpan(Of Char), path4 As ReadOnlySpan(Of Char)) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Join(ReadOnlySpan&lt;char&gt; path1, ReadOnlySpan&lt;char&gt; path2, ReadOnlySpan&lt;char&gt; path3, ReadOnlySpan&lt;char&gt; path4);" />
+      <MemberSignature Language="F#" Value="static member Join : ReadOnlySpan&lt;char&gt; * ReadOnlySpan&lt;char&gt; * ReadOnlySpan&lt;char&gt; * ReadOnlySpan&lt;char&gt; -&gt; string" Usage="System.IO.Path.Join (path1, path2, path3, path4)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-3.0" />
+        <Parameter Name="path2" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="1" FrameworkAlternate="netcore-3.0" />
+        <Parameter Name="path3" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="2" FrameworkAlternate="netcore-3.0" />
+        <Parameter Name="path4" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="3" FrameworkAlternate="netcore-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する最初のパスを含む文字範囲。</param>
+        <param name="path2">結合する 2 番目のパスを含む文字範囲。</param>
+        <param name="path3">結合する 3 番目のパスを含む文字範囲。</param>
+        <param name="path4">結合する 4 番目のパスを含む文字範囲。</param>
+        <summary>4 つのパス コンポーネントを単一のパスに連結します。</summary>
+        <returns>連結されたパス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+この`path`メソッドは`path2` `path4` 、、、およびを連結するだけで、パスコンポーネントがまだ存在しない場合は、そのディレクトリの区切り文字を追加します。 `path3` <xref:System.ReadOnlySpan%601.Length> 、 `path1` 、または `path4` のいずれかの引数のが0の場合、メソッドは残りの引数を連結します。 `path3` `path2` すべてのコンポーネントのがゼロの場合、メソッドは<xref:System.String.Empty?displayProperty=nameWithType>を返します。 <xref:System.ReadOnlySpan%601.Length?displayProperty=nameWithType>
+
+また`path1` `Join`はまたは `path3` が、ターゲットプラットフォームに適していないパス区切り文字で終了した場合、メソッドは元のパス区切り文字を保持し、サポートされているものを追加します。 `path2` この問題は、Unix ベースのシステムでパスの区切りとして\"認識されない Windows の円記号 (") 文字を使用するハードコードされたパスで発生します。 この問題を回避するには、次の操作を行います。
+
+- ディレクトリの区切り文字を<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>ハードコーディングするのではなく、プロパティの値を取得します。
+
+- ディレクトリの区切り記号としてスラッシュ ("/") を使用します。 この文字は、Unix ベース<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>のシステムのプロパティと<xref:System.IO.Path.AltDirectorySeparatorChar?displayProperty=nameWithType> Windows システムのプロパティによって返されます。
+
+メソッドとは異なり、 <xref:System.IO.Path.Join%2A>メソッドは返されたパスのルートを試行しません。 <xref:System.IO.Path.Combine%2A> ( `path2` `Join` <xref:System.IO.Path.Combine%2A>または `path2` またはが絶対パスの場合、メソッドは、メソッドが行ったように、前 `path3` のパスを破棄しません。
+
+検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Join`名とファイル名に無効な文字が含まれることはありません。 たとえば、ファイルの`Path.Join("c:\\", "temp", "*.txt")`作成時には無効になる場合がありますが、検索文字列として有効です。 その`Join`ため、メソッドは正常に解釈します。
+
+          ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Join">
+      <MemberSignature Language="C#" Value="public static string Join (string path1, string path2, string path3, string path4);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string Join(string path1, string path2, string path3, string path4) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.Join(System.String,System.String,System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Join (path1 As String, path2 As String, path3 As String, path4 As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ Join(System::String ^ path1, System::String ^ path2, System::String ^ path3, System::String ^ path4);" />
+      <MemberSignature Language="F#" Value="static member Join : string * string * string * string -&gt; string" Usage="System.IO.Path.Join (path1, path2, path3, path4)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.String" Index="0" FrameworkAlternate="netcore-3.0" />
+        <Parameter Name="path2" Type="System.String" Index="1" FrameworkAlternate="netcore-3.0" />
+        <Parameter Name="path3" Type="System.String" Index="2" FrameworkAlternate="netcore-3.0" />
+        <Parameter Name="path4" Type="System.String" Index="3" FrameworkAlternate="netcore-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する 1 番目のパス。</param>
+        <param name="path2">結合する 2 番目のパス。</param>
+        <param name="path3">結合する 3 番目のパス。</param>
+        <param name="path4">結合する 4 番目のパス。</param>
+        <summary>4 つのパスを単一のパスに連結します。</summary>
+        <returns>連結されたパス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+
+この`path`メソッドは`path2` `path4` 、、、およびを連結するだけで、パスコンポーネントがまだ存在しない場合は、そのディレクトリの区切り文字を追加します。 `path3` 、 `path1` 、 `path2` または `path4` のいずれかの引数の長さが0の場合、メソッドは残りの引数を連結します。 `path3` 結果として連結された文字列の長さがゼロの<xref:System.String.Empty?displayProperty=nameWithType>場合、メソッドはを返します。
+
+また`path1` `Join`はまたは `path3` が、ターゲットプラットフォームに適していないパス区切り文字で終了した場合、メソッドは元のパス区切り文字を保持し、サポートされているものを追加します。 `path2` この問題は、Unix ベースのシステムでパスの区切りとして\"認識されない Windows の円記号 (") 文字を使用するハードコードされたパスで発生します。 この問題を回避するには、次の操作を行います。
+
+- ディレクトリの区切り文字を<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>ハードコーディングするのではなく、プロパティの値を取得します。
+
+- ディレクトリの区切り記号としてスラッシュ ("/") を使用します。 この文字は、Unix ベース<xref:System.IO.Path.DirectorySeparatorChar?displayProperty=nameWithType>のシステムのプロパティと<xref:System.IO.Path.AltDirectorySeparatorChar?displayProperty=nameWithType> Windows システムのプロパティによって返されます。
+
+メソッドとは異なり、 <xref:System.IO.Path.Join%2A>メソッドは返されたパスのルートを試行しません。 <xref:System.IO.Path.Combine%2A> ( `path2` `Join` <xref:System.IO.Path.Combine%2A>または `path2` またはが絶対パスの場合、メソッドは、メソッドが行ったように、前 `path3` のパスを破棄しません。
+
+検索ワイルドカード文字にはこれらの文字を使用できるため、ディレクトリ`Join`名とファイル名に無効な文字が含まれることはありません。 たとえば、ファイルの`Path.Join("c:\\", "temp", "*.txt")`作成時には無効になる場合がありますが、検索文字列として有効です。 その`Join`ため、メソッドは正常に解釈します。
+
+          ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PathSeparator">
+      <MemberSignature Language="C#" Value="public static readonly char PathSeparator;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly char PathSeparator" />
+      <MemberSignature Language="DocId" Value="F:System.IO.Path.PathSeparator" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly PathSeparator As Char " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly char PathSeparator;" />
+      <MemberSignature Language="F#" Value=" staticval mutable PathSeparator : char" Usage="System.IO.Path.PathSeparator" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Char</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>環境変数のパス文字列を区切るために使用するプラットフォーム固有の区切り記号。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Windows ベースのデスクトッププラットフォームでは、このフィールドの値はセミコロン (;)既定では、他のプラットフォームによって異なる場合があります。  
+  
+   
+  
+## Examples  
+ `PathSeparator`フィールドの使用例を次に示します。  
+  
+ [!code-cpp[System.IO.Path Members#13](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#13)]
+ [!code-csharp[System.IO.Path Members#13](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#13)]
+ [!code-vb[System.IO.Path Members#13](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#13)]  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TrimEndingDirectorySeparator">
+      <MemberSignature Language="C#" Value="public static ReadOnlySpan&lt;char&gt; TrimEndingDirectorySeparator (ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.ReadOnlySpan`1&lt;char&gt; TrimEndingDirectorySeparator(valuetype System.ReadOnlySpan`1&lt;char&gt; path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.TrimEndingDirectorySeparator(System.ReadOnlySpan{System.Char})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TrimEndingDirectorySeparator (path As ReadOnlySpan(Of Char)) As ReadOnlySpan(Of Char)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static ReadOnlySpan&lt;char&gt; TrimEndingDirectorySeparator(ReadOnlySpan&lt;char&gt; path);" />
+      <MemberSignature Language="F#" Value="static member TrimEndingDirectorySeparator : ReadOnlySpan&lt;char&gt; -&gt; ReadOnlySpan&lt;char&gt;" Usage="System.IO.Path.TrimEndingDirectorySeparator path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.ReadOnlySpan&lt;System.Char&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path">トリミングするパス。</param>
+        <summary>指定したパスのルート以降の末尾の区切り記号をトリミングします。</summary>
+        <returns>末尾のディレクトリ区切り記号を含まない <paramref name="path" />。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TrimEndingDirectorySeparator">
+      <MemberSignature Language="C#" Value="public static string TrimEndingDirectorySeparator (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig string TrimEndingDirectorySeparator(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.TrimEndingDirectorySeparator(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TrimEndingDirectorySeparator (path As String) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::String ^ TrimEndingDirectorySeparator(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="static member TrimEndingDirectorySeparator : string -&gt; string" Usage="System.IO.Path.TrimEndingDirectorySeparator path" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" Index="0" FrameworkAlternate="netcore-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="path">トリミングするパス。</param>
+        <summary>指定したパスのルート以降の末尾の区切り記号をトリミングします。</summary>
+        <returns>末尾のディレクトリ区切り記号を含まない <paramref name="path" />。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TryJoin">
+      <Docs>
+        <summary>個々のパス コンポーネントを事前に割り当てられた文字範囲に連結することを試み、この操作が成功したかどうかを示す値を返します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+ 
+## Remarks  
+
+コピー先の文字範囲は、連結されたパスを保持するのに十分な大きさである必要があります。 次の例に示すように、 <xref:System.Span%601.Slice%2A?displayProperty=nameWithType>メソッドを呼び出すことによって、連結されたパスを取得できます。
+
+[!code-csharp[IsPathRooted](~/samples/snippets/csharp/api/system.IO/Path/TryJoin/program.cs)]
+
+         ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TryJoin">
+      <MemberSignature Language="C#" Value="public static bool TryJoin (ReadOnlySpan&lt;char&gt; path1, ReadOnlySpan&lt;char&gt; path2, Span&lt;char&gt; destination, out int charsWritten);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool TryJoin(valuetype System.ReadOnlySpan`1&lt;char&gt; path1, valuetype System.ReadOnlySpan`1&lt;char&gt; path2, valuetype System.Span`1&lt;char&gt; destination, [out] int32&amp; charsWritten) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.TryJoin(System.ReadOnlySpan{System.Char},System.ReadOnlySpan{System.Char},System.Span{System.Char},System.Int32@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryJoin (path1 As ReadOnlySpan(Of Char), path2 As ReadOnlySpan(Of Char), destination As Span(Of Char), ByRef charsWritten As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool TryJoin(ReadOnlySpan&lt;char&gt; path1, ReadOnlySpan&lt;char&gt; path2, Span&lt;char&gt; destination, [Runtime::InteropServices::Out] int % charsWritten);" />
+      <MemberSignature Language="F#" Value="static member TryJoin : ReadOnlySpan&lt;char&gt; * ReadOnlySpan&lt;char&gt; * Span&lt;char&gt; *  -&gt; bool" Usage="System.IO.Path.TryJoin (path1, path2, destination, charsWritten)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="path2" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="1" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="destination" Type="System.Span&lt;System.Char&gt;" Index="2" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="charsWritten" Type="System.Int32" RefType="out" Index="3" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する最初のパスを含む文字範囲。</param>
+        <param name="path2">結合する 2 番目のパスを含む文字範囲。</param>
+        <param name="destination">連結されたパスを保持する文字範囲。</param>
+        <param name="charsWritten">メソッドから制御が戻ったときに、<paramref name="destination" /> に書き込まれた文字数を示す値。</param>
+        <summary>2 つのパス コンポーネントを事前に割り当てられた単一の文字範囲に連結することを試み、この操作が成功したかどうかを示す値を返します。</summary>
+        <returns>連結操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+
+## Remarks
+
+`destination`は、連結されたパスを保持するのに十分な大きさである必要があります。 この例に示すように、 <xref:System.Span%601.Slice%2A?displayProperty=nameWithType>メソッドを呼び出すことで、連結されたパスを取得できます。
+
+         ]]></format>
+        </remarks>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TryJoin">
+      <MemberSignature Language="C#" Value="public static bool TryJoin (ReadOnlySpan&lt;char&gt; path1, ReadOnlySpan&lt;char&gt; path2, ReadOnlySpan&lt;char&gt; path3, Span&lt;char&gt; destination, out int charsWritten);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool TryJoin(valuetype System.ReadOnlySpan`1&lt;char&gt; path1, valuetype System.ReadOnlySpan`1&lt;char&gt; path2, valuetype System.ReadOnlySpan`1&lt;char&gt; path3, valuetype System.Span`1&lt;char&gt; destination, [out] int32&amp; charsWritten) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.IO.Path.TryJoin(System.ReadOnlySpan{System.Char},System.ReadOnlySpan{System.Char},System.ReadOnlySpan{System.Char},System.Span{System.Char},System.Int32@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryJoin (path1 As ReadOnlySpan(Of Char), path2 As ReadOnlySpan(Of Char), path3 As ReadOnlySpan(Of Char), destination As Span(Of Char), ByRef charsWritten As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool TryJoin(ReadOnlySpan&lt;char&gt; path1, ReadOnlySpan&lt;char&gt; path2, ReadOnlySpan&lt;char&gt; path3, Span&lt;char&gt; destination, [Runtime::InteropServices::Out] int % charsWritten);" />
+      <MemberSignature Language="F#" Value="static member TryJoin : ReadOnlySpan&lt;char&gt; * ReadOnlySpan&lt;char&gt; * ReadOnlySpan&lt;char&gt; * Span&lt;char&gt; *  -&gt; bool" Usage="System.IO.Path.TryJoin (path1, path2, path3, destination, charsWritten)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="path1" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="path2" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="1" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="path3" Type="System.ReadOnlySpan&lt;System.Char&gt;" Index="2" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="destination" Type="System.Span&lt;System.Char&gt;" Index="3" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+        <Parameter Name="charsWritten" Type="System.Int32" RefType="out" Index="4" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="path1">結合する最初のパスを含む文字範囲。</param>
+        <param name="path2">結合する 2 番目のパスを含む文字範囲。</param>
+        <param name="path3">結合する 3 番目のパスを含む文字範囲。</param>
+        <param name="destination">連結されたパスを保持する文字範囲。</param>
+        <param name="charsWritten">メソッドから制御が戻ったときに、<paramref name="destination" /> に書き込まれた文字数を示す値。</param>
+        <summary>2 つのパス コンポーネントを事前に割り当てられた単一の文字範囲に連結することを試み、この操作が成功したかどうかを示す値を返します。</summary>
+        <returns>連結操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+
+## Remarks
+
+`destination`は、連結されたパスを保持するのに十分な大きさである必要があります。 この例に示すように、 <xref:System.Span%601.Slice%2A?displayProperty=nameWithType>メソッドを呼び出すことで、連結されたパスを取得できます。
+
+         ]]></format>
+        </remarks>
+        <related type="article" href="~/docs/standard/io/file-path-formats.md">Windows システムのファイル パス形式</related>
+      </Docs>
+    </Member>
+    <Member MemberName="VolumeSeparatorChar">
+      <MemberSignature Language="C#" Value="public static readonly char VolumeSeparatorChar;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly char VolumeSeparatorChar" />
+      <MemberSignature Language="DocId" Value="F:System.IO.Path.VolumeSeparatorChar" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly VolumeSeparatorChar As Char " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly char VolumeSeparatorChar;" />
+      <MemberSignature Language="F#" Value=" staticval mutable VolumeSeparatorChar : char" Usage="System.IO.Path.VolumeSeparatorChar" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Extensions</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Char</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>プラットフォーム固有のボリューム区切り記号を提供します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このフィールドの値はコロン (:)Windows と Macintosh の場合は、UNIX オペレーティングシステムの場合はスラッシュ (/)。 これは、"c:\windows" や "MacVolume: System Folder" などのパスを解析する場合に最も役立ちます。  
+  
+   
+  
+## Examples  
+ `VolumeSeparatorChar`フィールドの使用例を次に示します。  
+  
+ [!code-cpp[System.IO.Path Members#13](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.IO.Path Members/CPP/pathmembers.cpp#13)]
+ [!code-csharp[System.IO.Path Members#13](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.IO.Path Members/CS/pathmembers.cs#13)]
+ [!code-vb[System.IO.Path Members#13](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.IO.Path Members/VB/pathmembers.vb#13)]  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/io/index.md">ファイルおよびストリーム入出力</related>
+        <related type="Article" href="~/docs/standard/io/how-to-read-text-from-a-file.md">方法 : ファイルからテキストを読み取る</related>
+        <related type="Article" href="~/docs/standard/io/how-to-write-text-to-a-file.md">方法 : ファイルにテキストを書き込む</related>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

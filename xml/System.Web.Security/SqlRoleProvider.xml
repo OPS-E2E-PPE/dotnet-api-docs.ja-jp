@@ -1,0 +1,824 @@
+<Type Name="SqlRoleProvider" FullName="System.Web.Security.SqlRoleProvider">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="01155afd8b53cc60cf3f17b4614589033e99d081" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70470898" /></Metadata><TypeSignature Language="C#" Value="public class SqlRoleProvider : System.Web.Security.RoleProvider" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit SqlRoleProvider extends System.Web.Security.RoleProvider" />
+  <TypeSignature Language="DocId" Value="T:System.Web.Security.SqlRoleProvider" />
+  <TypeSignature Language="VB.NET" Value="Public Class SqlRoleProvider&#xA;Inherits RoleProvider" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SqlRoleProvider : System::Web::Security::RoleProvider" />
+  <TypeSignature Language="F#" Value="type SqlRoleProvider = class&#xA;    inherit RoleProvider" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Web.Security.RoleProvider</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>SQL Server データベースにある ASP.NET アプリケーションのロール メンバーシップ情報の保存を管理します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このクラスは、 <xref:System.Web.Security.Roles>および<xref:System.Web.Security.RolePrincipal>クラスによって、SQL Server データベースを使用して ASP.NET アプリケーションのロール管理サービスを提供するために使用されます。 ロール管理を使用して、アプリケーションのさまざまな承認レベルを指定できます。  
+  
+ <xref:System.Web.Security.SqlRoleProvider>クラスを使用するには、 <xref:System.Web.Security.SqlRoleProvider>まずによって使用される SQL Server データベースを作成する必要があります。 <xref:System.Web.Security.SqlRoleProvider>クラスによって使用されるデータベースを作成する`aspnet_regsql.exe`には、 `-Ar` c:\windows\ microsoft.net \framework\ `versionNumber`フォルダーにある実行可能ファイルを実行し、 `aspnet_regsql.exe -Ar`オプション (たとえば、) を指定します。 作成されたデータベースは Aspnetdb.mdf と呼ばれます。 または、aspnet_regsql.exe を実行して GUI 構成モードを取得し、すべての ASP.NET 機能を構成します。  
+  
+ ロールプロバイダーが統合セキュリティを使用する接続文字列を使用して構成されている場合、ASP.NET アプリケーションのプロセスアカウントは、SQL Server データベースに接続する権限を持っている必要があります。  
+  
+ Machine.config ファイルは、ローカルコンピューター上の SQL Server <xref:System.Web.Security.SqlRoleProvider>に接続する AspNetSqlProvider という名前のインスタンスを使用して構成されます。 このプロバイダーのインスタンスを使用することも、ASP.NET アプリケーションの web.config ファイルで独自のインスタンスを指定することもできます。 AspNetSqlProvider インスタンスを使用するには`defaultProvider` 、構成のとして AspNetSqlProvider を指定します。  
+  
+ 認証と承認の<xref:System.Web.Security.SqlRoleProvider>情報に単一のデータベースを使用するために<xref:System.Web.Security.SqlMembershipProvider> 、と同じデータベースおよびユーザー情報を使用するようにを構成できます。 メンバーシップとロール情報に同じデータベースを使用するには、aspnet_regsql.exe 実行可能ファイルを実行し、メンバーシップ機能をインストールします。 次に、インスタンス<xref:System.Web.Security.SqlRoleProvider>と<xref:System.Web.Security.SqlMembershipProvider>インスタンスの両方について、構成に同じ接続文字列を指定します。 また、両方のプロバイダーインスタンスが同じ<xref:System.Web.Security.SqlRoleProvider.ApplicationName%2A>で構成されていることを確認します。  
+  
+   
+  
+## Examples  
+ 次の例は、 <xref:System.Web.Security.SqlRoleProvider>オブジェクト<xref:System.Web.Security.SqlMembershipProvider>とを使用するように構成された ASP.NET アプリケーションの web.config ファイルを示しています。 要素は、管理者ロールの認証されたユーザーにのみアクセスを許可するように構成されています。  
+  
+```  
+<configuration>  
+  <connectionStrings>  
+    <add name="SqlServices" connectionString="Data Source=localhost;Integrated Security=SSPI;Initial Catalog=aspnetdb;" />  
+  </connectionStrings>  
+  <system.web>  
+    <authentication mode="Forms" >  
+      <forms loginUrl="logincs.aspx"  
+      name=".ASPXFORMSAUTH" />  
+    </authentication>  
+    <authorization>  
+      <deny users="?" />  
+         <allow roles="Administrators" />  
+         <deny users="*" />  
+    </authorization>  
+    <membership defaultProvider="SqlProvider" userIsOnlineTimeWindow="15">  
+      <providers>  
+        <add   
+          name="SqlProvider"   
+          type="System.Web.Security.SqlMembershipProvider"   
+          connectionStringName="SqlServices"  
+          enablePasswordRetrieval="false"  
+          enablePasswordReset="false"  
+          requiresQuestionAndAnswer="false"   
+          passwordFormat="Hashed"   
+          applicationName="SampleApplication" />  
+      </providers>  
+    </membership>  
+    <roleManager defaultProvider="SqlProvider"   
+      enabled="true"  
+      cacheRolesInCookie="true"  
+      cookieName=".ASPROLES"  
+      cookieTimeout="30"  
+      cookiePath="/"  
+      cookieRequireSSL="true"  
+      cookieSlidingExpiration="true"  
+      cookieProtection="All" >  
+      <providers>  
+        <add  
+          name="SqlProvider"  
+          type="System.Web.Security.SqlRoleProvider"  
+          connectionStringName="SqlServices"   
+          applicationName="SampleApplication" />  
+      </providers>  
+    </roleManager>  
+  </system.web>  
+</configuration>  
+```  
+  
+ ]]></format>
+    </remarks>
+    <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public SqlRoleProvider ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; SqlRoleProvider();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Web.Security.SqlRoleProvider" /> クラスのインスタンスを作成します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コンストラクターは、アプリケーションの構成で指定されている<xref:System.Web.Security.SqlRoleProvider>ように、クラスのインスタンスを作成するために ASP.NET によって呼び出されます。 <xref:System.Web.Security.SqlRoleProvider.%23ctor%2A> このコンストラクターは、コードから使用するためのものではありません。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="AddUsersToRoles">
+      <MemberSignature Language="C#" Value="public override void AddUsersToRoles (string[] usernames, string[] roleNames);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void AddUsersToRoles(string[] usernames, string[] roleNames) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.AddUsersToRoles(System.String[],System.String[])" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub AddUsersToRoles (usernames As String(), roleNames As String())" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void AddUsersToRoles(cli::array &lt;System::String ^&gt; ^ usernames, cli::array &lt;System::String ^&gt; ^ roleNames);" />
+      <MemberSignature Language="F#" Value="override this.AddUsersToRoles : string[] * string[] -&gt; unit" Usage="sqlRoleProvider.AddUsersToRoles (usernames, roleNames)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="usernames" Type="System.String[]" />
+        <Parameter Name="roleNames" Type="System.String[]" />
+      </Parameters>
+      <Docs>
+        <param name="usernames">指定したロールに追加するユーザー名の文字列配列。</param>
+        <param name="roleNames">指定されたユーザー名の割り当て先となるロール名の文字列配列。</param>
+        <summary>指定された各ロールに、指定されたユーザー名を追加します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、ASP.NET アプリケーションの<xref:System.Web.Security.Roles>構成ファイル (web.config) で指定されている SQL Server データベース内の1つ以上のユーザーを1つ以上のロールに関連付けるために、クラスによって呼び出されます。 <xref:System.Web.Security.SqlRoleProvider.AddUsersToRoles%2A> このメソッドは、 <xref:System.Web.Security.Roles.AddUserToRole%2A> <xref:System.Web.Security.Roles.AddUsersToRole%2A> <xref:System.Web.Security.Roles.AddUserToRoles%2A>クラスの <xref:System.Web.Security.Roles>  、、、および<xref:System.Web.Security.Roles.AddUsersToRoles%2A>の各メソッドによって呼び出されます。  
+  
+ メソッドの<xref:System.Web.Security.SqlRoleProvider.AddUsersToRoles%2A>呼び出し中に実行されるデータベースの更新は、トランザクション内で行われます。 指定されたロールに既に存在するユーザー名など、エラーが発生した場合、トランザクションはロールバックされ、更新は実行されません。  
+  
+ <xref:System.Web.Security.SqlRoleProvider>がと <xref:System.Web.Security.SqlMembershipProvider> 共に使用されていて、指定されたユーザー名の1つがデータベースに存在しない場合、ユーザー名は自動的にデータベースに追加されます。  
+  
+ ユーザー名とロール名にコンマを含めることはできません。  
+  
+   
+  
+## Examples  
+ 次のコード例では、1人以上のユーザーをロールに追加するか、ロールからユーザーを削除します。 ロール管理を有効にする web.config ファイルの例については、 <xref:System.Web.Security.SqlRoleProvider>「」を参照してください。  
+  
+ [!code-aspx-csharp[System.Web.Security.SqlRoleProvider#3](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/CS/adduserstorolecs.aspx#3)]
+ [!code-aspx-vb[System.Web.Security.SqlRoleProvider#3](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/VB/adduserstorolevb.aspx#3)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="roleNames" /> のロールの 1 つが <see langword="null" /> です。  
+  
+- または - 
+<paramref name="usernames" /> のユーザーの 1 つが <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="roleNames" /> のロールの 1 つが空の文字列か、またはコンマ (,) を含んでいます。  
+  
+- または - 
+<paramref name="usernames" /> のロールの 1 つが空の文字列か、またはコンマ (,) を含んでいます。  
+  
+- または - 
+<paramref name="roleNames" /> のロールの 1 つが 256 文字を超えています。  
+  
+または 
+<paramref name="usernames" /> のユーザーの 1 つが 256 文字を超えています。  
+  
+- または - 
+ <paramref name="roleNames" /> に重複した要素が含まれています。  
+  
+または 
+ <paramref name="usernames" /> に重複した要素が含まれています。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException">指定された 1 つ以上のロール名が見つかりませんでした。  
+  
+ - または -  
+  
+ 指定された 1 つ以上のユーザー名が見つかりませんでした。  
+  
+ - または -  
+  
+ 指定された 1 つ以上のユーザー名が、指定された 1 つ以上のロール名に既に関連付けられています。  
+  
+ または  
+  
+ データベースとの通信中に不明なエラーが発生しました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="ApplicationName">
+      <MemberSignature Language="C#" Value="public override string ApplicationName { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string ApplicationName" />
+      <MemberSignature Language="DocId" Value="P:System.Web.Security.SqlRoleProvider.ApplicationName" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Property ApplicationName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ ApplicationName { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ApplicationName : string with get, set" Usage="System.Web.Security.SqlRoleProvider.ApplicationName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ロール情報を保管および取得するアプリケーションの名前を取得または設定します。</summary>
+        <value>ロール情報を保管および取得するアプリケーションの名前。 既定値は、現在の <see cref="P:System.Web.HttpRequest.ApplicationPath" /> の <see cref="P:System.Web.HttpContext.Request" /> プロパティ値です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ は、ユーザーとロール<xref:System.Web.Security.SqlRoleProvider>を異なるアプリケーションに関連付けるために、によって使用されます。 <xref:System.Web.Security.SqlRoleProvider.ApplicationName%2A> これにより、複数のアプリケーションが同じデータベースを使用して、重複したユーザー名またはロール名の間で競合することなく、ユーザーとロールの情報を格納できます。 複数の ASP.NET アプリケーションで同じデータベースを使用するには、 <xref:System.Web.Security.SqlRoleProvider.ApplicationName%2A>プロパティで同じ値を指定します。 プロパティ<xref:System.Web.Security.SqlRoleProvider.ApplicationName%2A>はプログラムによっ`applicationName`て設定できます。または、属性を使用して、Web アプリケーションの構成ファイルで宣言によって設定することもできます。  
+  
+ Web アプリケーション`applicationName` <xref:System.Web.HttpContext.Request%2A?displayProperty=nameWithType>の構成ファイルの属性に値が指定されていない場合は、現在のオブジェクトのプロパティ値が使用されます。 <xref:System.Web.HttpRequest.ApplicationPath%2A?displayProperty=nameWithType>  
+  
+> [!CAUTION]
+>  <xref:System.Web.HttpApplication>オブジェクトによって処理されるすべての要求に対して1つの既定のロールプロバイダーインスタンスが使用されるため、複数の要求を<xref:System.Web.Security.SqlRoleProvider.ApplicationName%2A>同時に実行して、プロパティ値の設定を試みることができます。 プロパティ<xref:System.Web.Security.SqlRoleProvider.ApplicationName%2A>は、複数の書き込みに対してスレッドセーフでは<xref:System.Web.Security.SqlRoleProvider.ApplicationName%2A>ありません。プロパティ値を変更すると、アプリケーションの複数のユーザーに対して予期しない動作が発生する可能性があります。 必要な場合を除き、ユーザーが<xref:System.Web.Security.SqlRoleProvider.ApplicationName%2A>プロパティを設定できるコードを記述しないことをお勧めします。 プロパティを<xref:System.Web.Security.SqlRoleProvider.ApplicationName%2A>設定する必要があるアプリケーションの例として、複数のアプリケーションのロールデータを管理する管理アプリケーションがあります。 このようなアプリケーションは、Web アプリケーションではなく、シングルユーザーアプリケーションである必要があります。  
+  
+   
+  
+## Examples  
+ 次の例は、ASP.NET アプリケーションの`system.web` web.config ファイルのセクションにある要素を示しています。 アプリケーションの<xref:System.Web.Security.SqlRoleProvider>インスタンスを指定し、 <xref:System.Web.Security.SqlRoleProvider.ApplicationName%2A>プロパティをに`MyApplication`設定します。  
+  
+```  
+<roleManager defaultProvider="SqlProvider"   
+  enabled="true"  
+  cacheRolesInCookie="true"  
+  cookieName=".ASPROLES"  
+  cookieTimeout="30"  
+  cookiePath="/"  
+  cookieRequireSSL="false"  
+  cookieSlidingExpiration="true"  
+  cookieProtection="All" >  
+  <providers>  
+    <add  
+      name="SqlProvider"  
+      type="System.Web.Security.SqlRoleProvider"  
+      connectionStringName="SqlServices"  
+      applicationName="MyApplication" />  
+  </providers>  
+</roleManager>  
+```  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Web.HttpException">ASP.NET の <see cref="P:System.Web.Security.SqlRoleProvider.ApplicationName" /> ホスト許可を持たない呼び出し元が、<see cref="F:System.Web.AspNetHostingPermissionLevel.High" /> プロパティを設定しようとしました。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException"><see cref="P:System.Web.Security.SqlRoleProvider.ApplicationName" /> に 256 文字を超える文字列を設定しようとしました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="CreateRole">
+      <MemberSignature Language="C#" Value="public override void CreateRole (string roleName);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void CreateRole(string roleName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.CreateRole(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub CreateRole (roleName As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void CreateRole(System::String ^ roleName);" />
+      <MemberSignature Language="F#" Value="override this.CreateRole : string -&gt; unit" Usage="sqlRoleProvider.CreateRole roleName" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="roleName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="roleName">作成するロールの名前。</param>
+        <summary>新しいロールをロール データベースに追加します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、ASP.NET アプリケーションの<xref:System.Web.Security.Roles>構成ファイル (web.config) で指定された SQL Server データベースにロールを作成するために、クラスによって呼び出されます。 <xref:System.Web.Security.SqlRoleProvider.CreateRole%2A>  
+  
+ ロール名の最大長は256文字です。 ロール名では大文字と小文字は区別されません。 ロール名にコンマを使用することはできません。  
+  
+   
+  
+## Examples  
+ 次のコード例では、データベースに新しいロールを作成します。 ロール管理を有効にする web.config ファイルの例については、 <xref:System.Web.Security.SqlRoleProvider>「」を参照してください。  
+  
+> [!IMPORTANT]
+>  この例には、セキュリティ上の脅威となる可能性のあるユーザー入力を受け付けるテキストボックスが含まれています。 既定では、ASP.NET Web ページによって、ユーザー入力にスクリプトまたは HTML 要素が含まれていないかどうかが検証されます。 詳細については、「[スクリプトによる攻略の概要](https://msdn.microsoft.com/library/772c7312-211a-4eb3-8d6e-eec0aa1dcc07)」を参照してください。  
+  
+ [!code-aspx-csharp[System.Web.Security.SqlRoleProvider#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/CS/createrolecs.aspx#1)]
+ [!code-aspx-vb[System.Web.Security.SqlRoleProvider#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/VB/createrolevb.aspx#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="roleName" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="roleName" /> が空の文字列であるか、またはコンマ (,) を含んでいます。  
+  
+- または - 
+ <paramref name="roleName" /> が 256 文字を超えています。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException"><paramref name="roleName" /> はデータベースに既に存在します。  
+  
+- または - 
+データベースとの通信中に不明なエラーが発生しました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="DeleteRole">
+      <MemberSignature Language="C#" Value="public override bool DeleteRole (string roleName, bool throwOnPopulatedRole);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool DeleteRole(string roleName, bool throwOnPopulatedRole) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.DeleteRole(System.String,System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function DeleteRole (roleName As String, throwOnPopulatedRole As Boolean) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool DeleteRole(System::String ^ roleName, bool throwOnPopulatedRole);" />
+      <MemberSignature Language="F#" Value="override this.DeleteRole : string * bool -&gt; bool" Usage="sqlRoleProvider.DeleteRole (roleName, throwOnPopulatedRole)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="roleName" Type="System.String" />
+        <Parameter Name="throwOnPopulatedRole" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="roleName">削除するロールの名前。</param>
+        <param name="throwOnPopulatedRole"><see langword="true" /> の場合は、<paramref name="roleName" /> に 1 つ以上のメンバーがあれば例外をスローします。</param>
+        <summary>ロール データベースからロールを削除します。</summary>
+        <returns>ロールが正常に削除された場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、ASP.NET アプリケーションの<xref:System.Web.Security.Roles>構成ファイル (web.config) で指定された SQL Server データベースからロールを削除するために、クラスによって呼び出されます。 <xref:System.Web.Security.SqlRoleProvider.DeleteRole%2A> ロールが削除されると、そのロールに関連付けられているユーザーの一覧もデータベースから削除されます。 データベース内のユーザー情報は影響を受けません。  
+  
+ が`throwOnPopulatedRole` `roleName`の場合、例外がスローされ、パラメーターによって識別されるロールに1つ以上のメンバーが含まれている場合、ロールは削除されません。 `true` `throwOnPopulatedRole` が `false` の場合、ロールは空であるかどうかにかかわらず削除されます。  
+  
+   
+  
+## Examples  
+ 次の例では、データベースからロールを削除します。 ロール管理を有効にする web.config ファイルの例については、 <xref:System.Web.Security.SqlRoleProvider>「」を参照してください。  
+  
+ [!code-aspx-csharp[System.Web.Security.SqlRoleProvider#2](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/CS/deleterolecs.aspx#2)]
+ [!code-aspx-vb[System.Web.Security.SqlRoleProvider#2](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/VB/deleterolevb.aspx#2)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="roleName" /> が <see langword="null" /> (Visual Basic の場合は <see langword="Nothing" />) です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="roleName" /> が空の文字列であるか、またはコンマ (,) を含んでいます。  
+  
+または 
+ <paramref name="roleName" /> が 256 文字を超えています。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException"><paramref name="roleName" /> に 1 つ以上のメンバーがあり、<paramref name="throwOnPopulatedRole" /> は <see langword="true" /> です。  
+  
+または 
+データベースとの通信中に不明なエラーが発生しました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="FindUsersInRole">
+      <MemberSignature Language="C#" Value="public override string[] FindUsersInRole (string roleName, string usernameToMatch);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string[] FindUsersInRole(string roleName, string usernameToMatch) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.FindUsersInRole(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function FindUsersInRole (roleName As String, usernameToMatch As String) As String()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override cli::array &lt;System::String ^&gt; ^ FindUsersInRole(System::String ^ roleName, System::String ^ usernameToMatch);" />
+      <MemberSignature Language="F#" Value="override this.FindUsersInRole : string * string -&gt; string[]" Usage="sqlRoleProvider.FindUsersInRole (roleName, usernameToMatch)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="roleName" Type="System.String" />
+        <Parameter Name="usernameToMatch" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="roleName">検索範囲とするロール。</param>
+        <param name="usernameToMatch">検索するユーザー名。</param>
+        <summary>指定されたロールで、ユーザー名が指定内容と一致するユーザーの配列を取得します。</summary>
+        <returns><paramref name="usernameToMatch" /> に一致するユーザー名を持ち、指定されたロールのメンバーであるすべてのユーザーの名前を格納している文字列配列。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、 <xref:System.Web.Security.Roles>クラスによって呼び出され、構成されたに対して指定`usernameToMatch`さ`applicationName`れたと一致するユーザー名を持つロール内のユーザーの一覧を返します。 <xref:System.Web.Security.SqlRoleProvider.FindUsersInRole%2A> は<xref:System.Web.Security.SqlRoleProvider> 、LIKE キーワードを使用して`usernameToMatch`パラメーター値と一致するユーザー名を検索し、SQL Server ワイルドカード文字をサポートします。 たとえば`usernameToMatch` 、パラメーターが "user1" に設定されている場合、ユーザー名が "user1" のユーザーのメンバーシップ情報が返されます (存在する場合)。 `usernameToMatch`パラメーターが "user%" に設定されている場合は、ユーザー名が "user1"、"user2"、"user_admin" などのユーザーのメンバーシップ情報が返されます。  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Web.Security.Roles.FindUsersInRole%2A> 、メソッドを使用して、ユーザー入力に基づいてロールのメンバーシップを表示します。 ロール管理を有効にする web.config ファイルの例については、 <xref:System.Web.Security.Roles>「」を参照してください。  
+  
+> [!IMPORTANT]
+>  この例には、セキュリティ上の脅威となる可能性のあるユーザー入力を受け付けるテキストボックスが含まれています。 既定では、ASP.NET Web ページによって、ユーザー入力にスクリプトまたは HTML 要素が含まれていないかどうかが検証されます。 詳細については、「[スクリプトによる攻略の概要](https://msdn.microsoft.com/library/772c7312-211a-4eb3-8d6e-eec0aa1dcc07)」を参照してください。  
+  
+ [!code-aspx-csharp[System.Web.Security.Roles#11](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Security.Roles/CS/FindUsersInRolecs.aspx#11)]
+ [!code-aspx-vb[System.Web.Security.Roles#11](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Security.Roles/VB/FindUsersInRolevb.aspx#11)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="roleName" /> が <see langword="null" /> (Visual Basic の場合は <see langword="Nothing" />) です。  
+  
+- または - 
+ <paramref name="usernameToMatch" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="roleName" /> が空の文字列であるか、またはコンマ (,) を含んでいます。  
+  
+- または - 
+ <paramref name="usernameToMatch" /> が空の文字列です。  
+  
+- または - 
+ <paramref name="roleName" /> が 256 文字を超えています。  
+  
+または 
+ <paramref name="usernameToMatch" /> が 256 文字を超えています。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException">データベースに <paramref name="roleName" /> が見つかりませんでした。  
+  
+- または - 
+データベースとの通信中に不明なエラーが発生しました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetAllRoles">
+      <MemberSignature Language="C#" Value="public override string[] GetAllRoles ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string[] GetAllRoles() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.GetAllRoles" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetAllRoles () As String()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override cli::array &lt;System::String ^&gt; ^ GetAllRoles();" />
+      <MemberSignature Language="F#" Value="override this.GetAllRoles : unit -&gt; string[]" Usage="sqlRoleProvider.GetAllRoles " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String[]</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>アプリケーションのすべてのロールのリストを取得します。</summary>
+        <returns>特定のアプリケーションのデータベースに保存されているすべてのロール名を格納している文字列配列。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、ASP.NET アプリケーションの<xref:System.Web.Security.Roles>構成ファイル (web.config) で指定されている SQL Server データベース内のすべてのロールの一覧を取得するために、クラスによって呼び出されます。 <xref:System.Web.Security.SqlRoleProvider.GetAllRoles%2A>  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Web.Security.Roles.GetAllRoles%2A> 、メソッドを使用して、アプリケーションのロールの一覧を取得し、 <xref:System.Web.UI.WebControls.GridView?displayProperty=nameWithType>結果をコントロールにバインドします。 ロール管理を有効にする web.config ファイルの例については、 <xref:System.Web.Security.SqlRoleProvider>「」を参照してください。  
+  
+> [!IMPORTANT]
+>  この例には、セキュリティ上の脅威となる可能性のあるユーザー入力を受け付けるテキストボックスが含まれています。 既定では、ASP.NET Web ページによって、ユーザー入力にスクリプトまたは HTML 要素が含まれていないかどうかが検証されます。 詳細については、「[スクリプトによる攻略の概要](https://msdn.microsoft.com/library/772c7312-211a-4eb3-8d6e-eec0aa1dcc07)」を参照してください。  
+  
+ [!code-aspx-csharp[System.Web.Security.SqlRoleProvider#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/CS/createrolecs.aspx#1)]
+ [!code-aspx-vb[System.Web.Security.SqlRoleProvider#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/VB/createrolevb.aspx#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Configuration.Provider.ProviderException">データベースとの通信中に不明なエラーが発生しました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetRolesForUser">
+      <MemberSignature Language="C#" Value="public override string[] GetRolesForUser (string username);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string[] GetRolesForUser(string username) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.GetRolesForUser(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetRolesForUser (username As String) As String()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override cli::array &lt;System::String ^&gt; ^ GetRolesForUser(System::String ^ username);" />
+      <MemberSignature Language="F#" Value="override this.GetRolesForUser : string -&gt; string[]" Usage="sqlRoleProvider.GetRolesForUser username" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="username" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="username">ロールの一覧を取得するユーザー。</param>
+        <summary>ユーザーに割り当てられたロールのリストを取得します。</summary>
+        <returns>指定ユーザーに割り当てられたすべてのロールの名前を格納している文字列配列。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、ASP.NET アプリケーションの<xref:System.Web.Security.Roles>構成ファイル (web.config) で指定された SQL Server データベースから、指定されたユーザーのロールの一覧を取得するために、クラスによって呼び出されます。 <xref:System.Web.Security.SqlRoleProvider.GetRolesForUser%2A>  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Web.Security.Roles.GetRolesForUser%2A> 、メソッドを使用して、指定されたユーザーのロールの一覧<xref:System.Web.UI.WebControls.GridView?displayProperty=nameWithType>を取得し、コントロールにバインドします。 ロール管理を有効にする web.config ファイルの例については、 <xref:System.Web.Security.SqlRoleProvider>「」を参照してください。  
+  
+ [!code-aspx-csharp[System.Web.Security.SqlRoleProvider#4](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/CS/ViewRolescs.aspx#4)]
+ [!code-aspx-vb[System.Web.Security.SqlRoleProvider#4](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/VB/ViewRolesvb.aspx#4)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="username" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="username" /> にコンマが含まれています。  
+  
+- または - 
+ <paramref name="username" /> が 256 文字を超えています。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException">データベースとの通信中に不明なエラーが発生しました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetUsersInRole">
+      <MemberSignature Language="C#" Value="public override string[] GetUsersInRole (string roleName);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string[] GetUsersInRole(string roleName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.GetUsersInRole(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetUsersInRole (roleName As String) As String()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override cli::array &lt;System::String ^&gt; ^ GetUsersInRole(System::String ^ roleName);" />
+      <MemberSignature Language="F#" Value="override this.GetUsersInRole : string -&gt; string[]" Usage="sqlRoleProvider.GetUsersInRole roleName" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="roleName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="roleName">ユーザーについて一覧を取得するロールの名前。</param>
+        <summary>指定されたロールに属するユーザーのリストを取得します。</summary>
+        <returns>指定されたロールのメンバーであるすべてのユーザーの名前を格納している文字列配列。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、ASP.NET アプリケーションの<xref:System.Web.Security.Roles>構成ファイル (web.config) で指定されている SQL Server データベース内の指定されたロールに関連付けられているユーザーの一覧を取得するために、クラスによって呼び出されます。 <xref:System.Web.Security.SqlRoleProvider.GetUsersInRole%2A>  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Web.Security.Roles.GetUsersInRole%2A> 、メソッドを使用して、特定のロールのユーザーの一覧を取得し、 <xref:System.Web.UI.WebControls.GridView?displayProperty=nameWithType>その結果をコントロールにバインドします。 ロール管理を有効にする web.config ファイルの例については、 <xref:System.Web.Security.SqlRoleProvider>「」を参照してください。  
+  
+ [!code-aspx-csharp[System.Web.Security.SqlRoleProvider#3](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/CS/adduserstorolecs.aspx#3)]
+ [!code-aspx-vb[System.Web.Security.SqlRoleProvider#3](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/VB/adduserstorolevb.aspx#3)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="roleName" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="roleName" /> が空の文字列であるか、またはコンマ (,) を含んでいます。  
+  
+- または - 
+ <paramref name="roleName" /> が 256 文字を超えています。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException">データベースに <paramref name="rolename" /> が見つかりませんでした。  
+  
+または 
+データベースとの通信中に不明なエラーが発生しました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Initialize">
+      <MemberSignature Language="C#" Value="public override void Initialize (string name, System.Collections.Specialized.NameValueCollection config);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Initialize(string name, class System.Collections.Specialized.NameValueCollection config) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Initialize (name As String, config As NameValueCollection)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Initialize(System::String ^ name, System::Collections::Specialized::NameValueCollection ^ config);" />
+      <MemberSignature Language="F#" Value="override this.Initialize : string * System.Collections.Specialized.NameValueCollection -&gt; unit" Usage="sqlRoleProvider.Initialize (name, config)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="config" Type="System.Collections.Specialized.NameValueCollection" />
+      </Parameters>
+      <Docs>
+        <param name="name">初期化する <see cref="T:System.Web.Security.SqlRoleProvider" /> インスタンスの名前。</param>
+        <param name="config">ロール プロバイダーの構成オプションの名前と値を含む <see cref="T:System.Collections.Specialized.NameValueCollection" />。</param>
+        <summary>ASP.NET アプリケーションの構成ファイルに指定されているプロパティ値を使用して、SQL Server ロール プロバイダーを初期化します。 このメソッドはコードから直接使用するためのものではありません。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、 <xref:System.Web.Security.SqlRoleProvider> ASP.NET アプリケーション構成ファイル (web.config) で指定されたプロパティ値を使用してを初期化します。コードから直接使用するためのものではありません。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Web.HttpException">ASP.NET アプリケーションは <see cref="F:System.Web.AspNetHostingPermissionLevel.Medium" /> またはそれ以上の信頼レベルで実行されていません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="config" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException"><see langword="connectionStringName" /> 属性が空であるか、この <see cref="T:System.Web.Security.SqlRoleProvider" /> インスタンスのアプリケーション構成ファイルに存在しません。  
+  
+または 
+<see langword="applicationName" /> 属性が 256 文字を超えています。  
+  
+- または - 
+この <see cref="T:System.Web.Security.SqlRoleProvider" /> インスタンスのアプリケーション構成ファイルに、認識できない属性が格納されています。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="IsUserInRole">
+      <MemberSignature Language="C#" Value="public override bool IsUserInRole (string username, string roleName);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool IsUserInRole(string username, string roleName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.IsUserInRole(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function IsUserInRole (username As String, roleName As String) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool IsUserInRole(System::String ^ username, System::String ^ roleName);" />
+      <MemberSignature Language="F#" Value="override this.IsUserInRole : string * string -&gt; bool" Usage="sqlRoleProvider.IsUserInRole (username, roleName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="username" Type="System.String" />
+        <Parameter Name="roleName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="username">検索するユーザー名。</param>
+        <param name="roleName">検索範囲とするロール。</param>
+        <summary>指定したユーザーが指定したロールに存在するかどうかを示す値を取得します。</summary>
+        <returns>指定されたユーザー名が指定されたロールに存在する場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは<xref:System.Web.Security.Roles> <xref:System.Web.UI.Page.User%2A?displayProperty=nameWithType> クラス <xref:System.Security.Principal.IPrincipal.IsInRole%2A> によって呼び出され、プロパティのメソッドは、ASP.NET アプリケーションの構成ファイルで指定された SQL Server データベースのロールにユーザーが関連付けられているかどうかを判断します。 <xref:System.Web.Security.SqlRoleProvider.IsUserInRole%2A>(Web.config)。  
+  
+   
+  
+## Examples  
+ 次のコード例では、ユーザーにユーザーロールの表示を許可する前に、ログオンしているユーザーが管理者ロールにあるかどうかをプログラムによって確認します。 ロール管理を有効にする web.config ファイルの例については、 <xref:System.Web.Security.SqlRoleProvider>「」を参照してください。  
+  
+ [!code-aspx-csharp[System.Web.Security.SqlRoleProvider#4](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/CS/ViewRolescs.aspx#4)]
+ [!code-aspx-vb[System.Web.Security.SqlRoleProvider#4](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/VB/ViewRolesvb.aspx#4)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="roleName" /> は <see langword="null" />です。  
+  
+- または - 
+ <paramref name="username" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="roleName" /> が空の文字列であるか、またはコンマ (,) を含んでいます。  
+  
+- または - 
+ <paramref name="username" /> にコンマが含まれています。  
+  
+- または - 
+ <paramref name="roleName" /> が 256 文字を超えています。  
+  
+または 
+ <paramref name="username" /> が 256 文字を超えています。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException">データベースとの通信中に不明なエラーが発生しました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveUsersFromRoles">
+      <MemberSignature Language="C#" Value="public override void RemoveUsersFromRoles (string[] usernames, string[] roleNames);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void RemoveUsersFromRoles(string[] usernames, string[] roleNames) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.RemoveUsersFromRoles(System.String[],System.String[])" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub RemoveUsersFromRoles (usernames As String(), roleNames As String())" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void RemoveUsersFromRoles(cli::array &lt;System::String ^&gt; ^ usernames, cli::array &lt;System::String ^&gt; ^ roleNames);" />
+      <MemberSignature Language="F#" Value="override this.RemoveUsersFromRoles : string[] * string[] -&gt; unit" Usage="sqlRoleProvider.RemoveUsersFromRoles (usernames, roleNames)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="usernames" Type="System.String[]" />
+        <Parameter Name="roleNames" Type="System.String[]" />
+      </Parameters>
+      <Docs>
+        <param name="usernames">指定されたロールから削除するユーザー名の文字列配列。</param>
+        <param name="roleNames">指定したユーザー名を削除するロール名の文字列配列。</param>
+        <summary>指定されたユーザー名を指定されたロールから削除します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、ASP.NET アプリケーションの<xref:System.Web.Security.Roles>構成ファイル (web.config) で指定されている SQL Server データベース内の1つ以上のロールから1人以上のユーザーを削除するために、クラスによって呼び出されます。 <xref:System.Web.Security.SqlRoleProvider.RemoveUsersFromRoles%2A> このメソッドは、 <xref:System.Web.Security.Roles.RemoveUserFromRole%2A> <xref:System.Web.Security.Roles.RemoveUsersFromRole%2A> <xref:System.Web.Security.Roles.RemoveUserFromRoles%2A>クラスの <xref:System.Web.Security.Roles>  、、、および<xref:System.Web.Security.Roles.RemoveUsersFromRoles%2A>の各メソッドによって呼び出されます。  
+  
+ の呼び出し<xref:System.Web.Security.SqlRoleProvider.RemoveUsersFromRoles%2A>中に実行されるデータベースの更新は、トランザクション内で行われます。 存在しないユーザー名や、指定されたロールに既に存在するユーザー名など、エラーが発生した場合は、トランザクションがロールバックされ、更新は実行されません。  
+  
+ ユーザー名とロール名にコンマを含めることはできません。  
+  
+   
+  
+## Examples  
+ 次のコード例では、1人以上のユーザーをロールに追加するか、ロールからユーザーを削除します。 ロール管理を有効にする web.config ファイルの例については、 <xref:System.Web.Security.SqlRoleProvider>「」を参照してください。  
+  
+ [!code-aspx-csharp[System.Web.Security.SqlRoleProvider#3](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/CS/adduserstorolecs.aspx#3)]
+ [!code-aspx-vb[System.Web.Security.SqlRoleProvider#3](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/VB/adduserstorolevb.aspx#3)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="roleNames" /> のロールの 1 つが <see langword="null" /> です。  
+  
+または 
+<paramref name="usernames" /> のユーザーの 1 つが <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="roleNames" /> のロールの 1 つが空の文字列か、またはコンマ (,) を含んでいます。  
+  
+または 
+<paramref name="usernames" /> のロールの 1 つが空の文字列か、またはコンマ (,) を含んでいます。  
+  
+- または - 
+<paramref name="roleNames" /> のロールの 1 つが 256 文字を超えています。  
+  
+- または - 
+<paramref name="usernames" /> のユーザーの 1 つが 256 文字を超えています。  
+  
+- または - 
+ <paramref name="roleNames" /> に重複した要素が含まれています。  
+  
+- または - 
+ <paramref name="usernames" /> に重複した要素が含まれています。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException">指定された 1 つ以上のユーザー名が見つかりませんでした。  
+  
+ - または -  
+  
+ 指定された 1 つ以上のロール名が見つかりませんでした。  
+  
+ または  
+  
+ 指定された 1 つ以上のユーザー名が、指定された 1 つ以上のロール名に関連付けられていません。  
+  
+ - または -  
+  
+ データベースとの通信中に不明なエラーが発生しました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+    <Member MemberName="RoleExists">
+      <MemberSignature Language="C#" Value="public override bool RoleExists (string roleName);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool RoleExists(string roleName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Security.SqlRoleProvider.RoleExists(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function RoleExists (roleName As String) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool RoleExists(System::String ^ roleName);" />
+      <MemberSignature Language="F#" Value="override this.RoleExists : string -&gt; bool" Usage="sqlRoleProvider.RoleExists roleName" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="roleName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="roleName">データベースで検索するロールの名前。</param>
+        <summary>指定されたロール名がロール データベースに既に存在するかどうかを示す値を取得します。</summary>
+        <returns>ロール名がデータベースに既に存在する場合は <see langword="true" />。それ以外の場合は<see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、ASP.NET アプリケーションの<xref:System.Web.Security.Roles>構成ファイル (web.config) で指定された SQL Server データベースにロール名が存在するかどうかを判断するために、クラスによって呼び出されます。 <xref:System.Web.Security.SqlRoleProvider.RoleExists%2A>  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Web.Security.Roles.RoleExists%2A> 、メソッドを使用して、ロールを作成する前にロール名が既に存在するかどうかを確認します。 ロール管理を有効にする web.config ファイルの例については、 <xref:System.Web.Security.SqlRoleProvider>「」を参照してください。  
+  
+> [!IMPORTANT]
+>  この例には、セキュリティ上の脅威となる可能性のあるユーザー入力を受け付けるテキストボックスが含まれています。 既定では、ASP.NET Web ページによって、ユーザー入力にスクリプトまたは HTML 要素が含まれていないかどうかが検証されます。 詳細については、「[スクリプトによる攻略の概要](https://msdn.microsoft.com/library/772c7312-211a-4eb3-8d6e-eec0aa1dcc07)」を参照してください。  
+  
+ [!code-aspx-csharp[System.Web.Security.SqlRoleProvider#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/CS/createrolecs.aspx#1)]
+ [!code-aspx-vb[System.Web.Security.SqlRoleProvider#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Security.SqlRoleProvider/VB/createrolevb.aspx#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="roleName" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="roleName" /> が空の文字列であるか、またはコンマ (,) を含んでいます。  
+  
+- または - 
+ <paramref name="roleName" /> が 256 文字を超えています。</exception>
+        <exception cref="T:System.Configuration.Provider.ProviderException">データベースとの通信中に不明なエラーが発生しました。</exception>
+        <related type="Article" href="https://msdn.microsoft.com/library/a0d2f19d-a2a7-496d-88b6-30133f8ea3d6">ASP.NET ロール管理について</related>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
