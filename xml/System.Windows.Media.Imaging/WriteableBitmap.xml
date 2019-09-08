@@ -1,0 +1,894 @@
+<Type Name="WriteableBitmap" FullName="System.Windows.Media.Imaging.WriteableBitmap">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="5999a98bb529cee5374999d18ea413f94c9feeda" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70630104" /></Metadata><TypeSignature Language="C#" Value="public sealed class WriteableBitmap : System.Windows.Media.Imaging.BitmapSource" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit WriteableBitmap extends System.Windows.Media.Imaging.BitmapSource" />
+  <TypeSignature Language="DocId" Value="T:System.Windows.Media.Imaging.WriteableBitmap" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class WriteableBitmap&#xA;Inherits BitmapSource" />
+  <TypeSignature Language="C++ CLI" Value="public ref class WriteableBitmap sealed : System::Windows::Media::Imaging::BitmapSource" />
+  <TypeSignature Language="F#" Value="type WriteableBitmap = class&#xA;    inherit BitmapSource" />
+  <AssemblyInfo>
+    <AssemblyName>PresentationCore</AssemblyName>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Windows.Media.Imaging.BitmapSource</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>書き込みおよび更新が可能な <see cref="T:System.Windows.Media.Imaging.BitmapSource" /> を提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ フレームごと<xref:System.Windows.Media.Imaging.WriteableBitmap>にビットマップを更新およびレンダリングするには、クラスを使用します。 これは、フラクタルイメージなどのアルゴリズムコンテンツを生成する場合や、音楽ビジュアライザーなどのデータの視覚化を行う場合に便利です。  
+  
+ クラス<xref:System.Windows.Media.Imaging.WriteableBitmap>は、2つのバッファーを使用します。 *バックバッファー*はシステムメモリに割り当てられ、現在表示されていないコンテンツを蓄積します。 *フロントバッファー*はシステムメモリに割り当てられ、現在表示されているコンテンツが含まれます。 表示用のビデオメモリにフロントバッファーがコピーされます。  
+  
+ 2つのスレッドはこれらのバッファーを使用します。 *ユーザーインターフェイス (ui) スレッド*によって ui が生成されますが、画面には表示されません。 UI スレッドは、ユーザー入力、タイマー、およびその他のイベントに応答します。 アプリケーションは複数の UI スレッドを持つことができます。 *レンダースレッド*は、UI スレッドから変更を合成してレンダリングします。 アプリケーションごとにレンダースレッドは1つだけです。  
+  
+ UI スレッドがコンテンツをバックバッファーに書き込みます。 Render スレッドは、フロントバッファーからコンテンツを読み取り、ビデオメモリにコピーします。 バックバッファーに対する変更は、四角形領域の変更によって追跡されます。  
+  
+ <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A>オーバーロードのいずれかを呼び出して、バックバッファーの内容を自動的に更新および表示します。  
+  
+ 更新をより細かく制御し、バックバッファーへのマルチスレッドアクセスを可能にするには、次のワークフローを使用します。  
+  
+1.  <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A>メソッドを呼び出して、更新用のバックバッファーを予約します。  
+  
+2.  <xref:System.Windows.Media.Imaging.WriteableBitmap.BackBuffer%2A>プロパティにアクセスして、バックバッファーへのポインターを取得します。  
+  
+3.  バックバッファーに変更を書き込みます。 がロックされているときに、 <xref:System.Windows.Media.Imaging.WriteableBitmap>他のスレッドがバックバッファーに変更を書き込む場合があります。  
+  
+4.  変更さ<xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A>れた領域を示すには、メソッドを呼び出します。  
+  
+5.  <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A>メソッドを呼び出して、バックバッファーを解放し、画面にプレゼンテーションできるようにします。  
+  
+ 更新がレンダリングスレッドに送信されると、レンダリングスレッドは、変更された四角形をバックバッファーからフロントバッファーにコピーします。 レンダリングシステムは、デッドロックと再描画 ("ティアリング" など) を回避するために、この交換を制御します。  
+  
+   
+  
+## Examples  
+ 次の例は、を<xref:System.Windows.Media.Imaging.WriteableBitmap> <xref:System.Windows.Controls.Image>のソースとして使用して、マウスが移動したときにピクセルを描画する方法を示しています。  
+  
+ [!code-csharp[WriteableBitmap2#WriteableBitmapFullPage](~/samples/snippets/csharp/VS_Snippets_Wpf/WriteableBitmap2/CS/Program.cs#writeablebitmapfullpage)]  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Windows.Media.Imaging.BitmapSource" />
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> クラスの新しいインスタンスを初期化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public WriteableBitmap (System.Windows.Media.Imaging.BitmapSource source);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Windows.Media.Imaging.BitmapSource source) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.#ctor(System.Windows.Media.Imaging.BitmapSource)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (source As BitmapSource)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; WriteableBitmap(System::Windows::Media::Imaging::BitmapSource ^ source);" />
+      <MemberSignature Language="F#" Value="new System.Windows.Media.Imaging.WriteableBitmap : System.Windows.Media.Imaging.BitmapSource -&gt; System.Windows.Media.Imaging.WriteableBitmap" Usage="new System.Windows.Media.Imaging.WriteableBitmap source" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="source" Type="System.Windows.Media.Imaging.BitmapSource" />
+      </Parameters>
+      <Docs>
+        <param name="source">初期化に使用する <see cref="T:System.Windows.Media.Imaging.BitmapSource" />。</param>
+        <summary>指定した <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> を使用して、<see cref="T:System.Windows.Media.Imaging.BitmapSource" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コンストラクター <xref:System.Windows.Media.Imaging.WriteableBitmap.%23ctor%28System.Int32%2CSystem.Int32%2CSystem.Double%2CSystem.Double%2CSystem.Windows.Media.PixelFormat%2CSystem.Windows.Media.Imaging.BitmapPalette%29>は、このコンストラクターを使用するよりも優先されます。  
+  
+ で`source`ネイティブにサポートされているビットマップ形式を使用しない場合は、フレームの更新ごとに形式変換が適用されるため、パフォーマンスが低下します。  
+  
+ ]]></format>
+        </remarks>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージリソースへのアクセスを許可します。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public WriteableBitmap (int pixelWidth, int pixelHeight, double dpiX, double dpiY, System.Windows.Media.PixelFormat pixelFormat, System.Windows.Media.Imaging.BitmapPalette palette);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(int32 pixelWidth, int32 pixelHeight, float64 dpiX, float64 dpiY, valuetype System.Windows.Media.PixelFormat pixelFormat, class System.Windows.Media.Imaging.BitmapPalette palette) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.#ctor(System.Int32,System.Int32,System.Double,System.Double,System.Windows.Media.PixelFormat,System.Windows.Media.Imaging.BitmapPalette)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; WriteableBitmap(int pixelWidth, int pixelHeight, double dpiX, double dpiY, System::Windows::Media::PixelFormat pixelFormat, System::Windows::Media::Imaging::BitmapPalette ^ palette);" />
+      <MemberSignature Language="F#" Value="new System.Windows.Media.Imaging.WriteableBitmap : int * int * double * double * System.Windows.Media.PixelFormat * System.Windows.Media.Imaging.BitmapPalette -&gt; System.Windows.Media.Imaging.WriteableBitmap" Usage="new System.Windows.Media.Imaging.WriteableBitmap (pixelWidth, pixelHeight, dpiX, dpiY, pixelFormat, palette)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="pixelWidth" Type="System.Int32" />
+        <Parameter Name="pixelHeight" Type="System.Int32" />
+        <Parameter Name="dpiX" Type="System.Double" />
+        <Parameter Name="dpiY" Type="System.Double" />
+        <Parameter Name="pixelFormat" Type="System.Windows.Media.PixelFormat" />
+        <Parameter Name="palette" Type="System.Windows.Media.Imaging.BitmapPalette" />
+      </Parameters>
+      <Docs>
+        <param name="pixelWidth">ビットマップの幅。</param>
+        <param name="pixelHeight">ビットマップの高さ。</param>
+        <param name="dpiX">ビットマップの水平[!INCLUDE[TLA#tla_dpi](~/includes/tlasharptla-dpi-md.md)]。</param>
+        <param name="dpiY">ビットマップの垂直[!INCLUDE[TLA#tla_dpi](~/includes/tlasharptla-dpi-md.md)]。</param>
+        <param name="pixelFormat">ビットマップの <see cref="T:System.Windows.Media.PixelFormat" />。</param>
+        <param name="palette">ビットマップの <see cref="T:System.Windows.Media.Imaging.BitmapPalette" />。</param>
+        <summary>指定したパラメーターを使用して、<see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ の`pixelFormat`推奨値は<xref:System.Windows.Media.PixelFormats.Bgr32%2A>と<xref:System.Windows.Media.PixelFormats.Pbgra32%2A>です。 これらの形式はネイティブでサポートされており、形式変換は必要ありません。 その`pixelFormat`他の値では、フレームの更新ごとに形式変換が必要になるため、パフォーマンスが低下します。  
+  
+ ]]></format>
+        </remarks>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージリソースへのアクセスを許可します。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+      </Docs>
+    </Member>
+    <Member MemberName="AddDirtyRect">
+      <MemberSignature Language="C#" Value="public void AddDirtyRect (System.Windows.Int32Rect dirtyRect);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void AddDirtyRect(valuetype System.Windows.Int32Rect dirtyRect) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect(System.Windows.Int32Rect)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub AddDirtyRect (dirtyRect As Int32Rect)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void AddDirtyRect(System::Windows::Int32Rect dirtyRect);" />
+      <MemberSignature Language="F#" Value="member this.AddDirtyRect : System.Windows.Int32Rect -&gt; unit" Usage="writeableBitmap.AddDirtyRect dirtyRect" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="dirtyRect" Type="System.Windows.Int32Rect" />
+      </Parameters>
+      <Docs>
+        <param name="dirtyRect">変更される領域を表す <see cref="T:System.Windows.Int32Rect" />。 次元はピクセル単位です。</param>
+        <summary>変更されるビットマップの領域を指定します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A>メソッドを呼び出して、コードがバックバッファーに対して行った変更を示します。  
+  
+ このメソッドを複数回呼び出すと、変更された領域は十分に累積されますが、必ずしも最小表現ではありません。 効率を上げるために、ダーティとマークされている領域のみが、フロントバッファーにコピーされることが保証されます。 ただし、ビットマップのすべての部分がコピーされる可能性があるため、バックバッファー全体が常に有効であることを確認する必要があります。  
+  
+ クラスの解説に<xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A>記載されているように、メソッドとメソッドの呼び出しの間でのみメソッドを呼び出します。 <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A>  <xref:System.Windows.Media.Imaging.WriteableBitmap>  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A>メソッドを使用して変更されたバックバッファーの領域を指定する方法を示しています。  
+  
+ [!code-csharp[WriteableBitmap2#2](~/samples/snippets/csharp/VS_Snippets_Wpf/WriteableBitmap2/CS/Program.cs#2)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException"><see cref="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" /> メソッドまたは <see cref="M:System.Windows.Media.Imaging.WriteableBitmap.TryLock(System.Windows.Duration)" /> メソッドへの呼び出しによりロックされなかったビットマップ。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="dirtyRect" /> が <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> の境界の外側にあります。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージリソースへのアクセスを許可します。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+      </Docs>
+    </Member>
+    <Member MemberName="BackBuffer">
+      <MemberSignature Language="C#" Value="public IntPtr BackBuffer { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance native int BackBuffer" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Media.Imaging.WriteableBitmap.BackBuffer" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property BackBuffer As IntPtr" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property IntPtr BackBuffer { IntPtr get(); };" />
+      <MemberSignature Language="F#" Value="member this.BackBuffer : nativeint" Usage="System.Windows.Media.Imaging.WriteableBitmap.BackBuffer" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>get: System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>set: System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.IntPtr</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バック バッファーへのポインターを取得します。</summary>
+        <value>バック バッファーのベース アドレスを指す <see cref="T:System.IntPtr" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ バックバッファーには、ユーザーによって要求されたピクセル形式のビットマップコンテンツが含まれています。  
+  
+ メソッドと<xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A>メソッドの呼び出しの間でのみ、バックバッファーを更新します。 <xref:System.Windows.Media.Imaging.WriteableBitmap>クラスの解説に記述されているロック/ロック解除のワークフローに従わないと、分裂などの未定義の動作が発生する可能性があります。  
+  
+ バックバッファーのアドレスは変更されません。  
+  
+## <a name="thread-safety"></a>スレッド セーフ  
+ 外部コンポーネントおよびその<xref:System.Windows.Media.Imaging.WriteableBitmap.BackBuffer%2A>他のスレッドにポインターを渡して処理することができますが、その場合は、独自のスレッド調整を行う必要があります。 特に、ui スレッドが<xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A>メソッドを呼び出して変更された領域を指定し、ui スレッドが<xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A>メソッドを呼び出すことによってバッファーのロックを解除していることを確認する必要があります。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="BackBufferStride">
+      <MemberSignature Language="C#" Value="public int BackBufferStride { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 BackBufferStride" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Media.Imaging.WriteableBitmap.BackBufferStride" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property BackBufferStride As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int BackBufferStride { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.BackBufferStride : int" Usage="System.Windows.Media.Imaging.WriteableBitmap.BackBufferStride" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>1 行のピクセル データのバイト数を示す値を取得します。</summary>
+        <value>1 行のピクセル データのバイト数を示す整数。</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Clone">
+      <MemberSignature Language="C#" Value="public System.Windows.Media.Imaging.WriteableBitmap Clone ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Windows.Media.Imaging.WriteableBitmap Clone() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.Clone" />
+      <MemberSignature Language="VB.NET" Value="Public Function Clone () As WriteableBitmap" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Windows::Media::Imaging::WriteableBitmap ^ Clone();" />
+      <MemberSignature Language="F#" Value="override this.Clone : unit -&gt; System.Windows.Media.Imaging.WriteableBitmap" Usage="writeableBitmap.Clone " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Media.Imaging.WriteableBitmap</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>この <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> の変更可能な複製を作成し、このオブジェクトの値の詳細コピーを作成します。 このメソッドは、依存関係プロパティをコピーするときにリソース参照とデータ バインディングをコピーしますが (ただし、これらは解決されなくなる場合があります)、アニメーションやその現在の値はコピーしません。</summary>
+        <returns>現在のオブジェクトの変更可能な複製。 複製されたオブジェクトの <see cref="P:System.Windows.Freezable.IsFrozen" /> プロパティは、ソースの <see cref="P:System.Windows.Freezable.IsFrozen" /> プロパティが <see langword="true." /> であった場合でも、<see langword="false" /> になります。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドを使用して、固定された <xref:System.Windows.Freezable> オブジェクト (または任意の <xref:System.Windows.Freezable> オブジェクト) の変更可能なコピーを作成します。 便宜上、このメソッドは、厳密に型指定された実装を使用して、継承されたバージョンをシャドウします。  
+  
+ 詳細については、「<xref:System.Windows.Freezable.Clone%2A?displayProperty=nameWithType>」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CloneCore">
+      <MemberSignature Language="C#" Value="protected override void CloneCore (System.Windows.Freezable sourceFreezable);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void CloneCore(class System.Windows.Freezable sourceFreezable) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.CloneCore(System.Windows.Freezable)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Sub CloneCore (sourceFreezable As Freezable)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void CloneCore(System::Windows::Freezable ^ sourceFreezable);" />
+      <MemberSignature Language="F#" Value="override this.CloneCore : System.Windows.Freezable -&gt; unit" Usage="writeableBitmap.CloneCore sourceFreezable" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityTreatAsSafe</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sourceFreezable" Type="System.Windows.Freezable" />
+      </Parameters>
+      <Docs>
+        <param name="sourceFreezable">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CloneCurrentValue">
+      <MemberSignature Language="C#" Value="public System.Windows.Media.Imaging.WriteableBitmap CloneCurrentValue ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Windows.Media.Imaging.WriteableBitmap CloneCurrentValue() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.CloneCurrentValue" />
+      <MemberSignature Language="VB.NET" Value="Public Function CloneCurrentValue () As WriteableBitmap" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Windows::Media::Imaging::WriteableBitmap ^ CloneCurrentValue();" />
+      <MemberSignature Language="F#" Value="override this.CloneCurrentValue : unit -&gt; System.Windows.Media.Imaging.WriteableBitmap" Usage="writeableBitmap.CloneCurrentValue " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Media.Imaging.WriteableBitmap</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>この <see cref="T:System.Windows.Media.Animation.ByteAnimationUsingKeyFrames" /> オブジェクトの変更可能な複製を作成し、このオブジェクトの現在値の詳細コピーを作成します。 リソース参照、データ バインディング、アニメーションはコピーされませんが、それらの現在値はコピーされます。</summary>
+        <returns>現在のオブジェクトの変更可能な複製。 複製されたオブジェクトの <see cref="P:System.Windows.Freezable.IsFrozen" /> プロパティは、ソースの <see langword="false" /> プロパティが <see cref="P:System.Windows.Freezable.IsFrozen" /> であった場合でも、<see langword="true" /> になります。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドを使用して、固定された <xref:System.Windows.Freezable> オブジェクト (または任意の <xref:System.Windows.Freezable> オブジェクト) の変更可能なコピーを作成します。 便宜上、このメソッドは、厳密に型指定された実装を使用して、継承されたバージョンをシャドウします。  
+  
+ 詳細については、「<xref:System.Windows.Freezable.CloneCurrentValue%2A?displayProperty=nameWithType>」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CloneCurrentValueCore">
+      <MemberSignature Language="C#" Value="protected override void CloneCurrentValueCore (System.Windows.Freezable sourceFreezable);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void CloneCurrentValueCore(class System.Windows.Freezable sourceFreezable) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.CloneCurrentValueCore(System.Windows.Freezable)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Sub CloneCurrentValueCore (sourceFreezable As Freezable)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void CloneCurrentValueCore(System::Windows::Freezable ^ sourceFreezable);" />
+      <MemberSignature Language="F#" Value="override this.CloneCurrentValueCore : System.Windows.Freezable -&gt; unit" Usage="writeableBitmap.CloneCurrentValueCore sourceFreezable" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityTreatAsSafe</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sourceFreezable" Type="System.Windows.Freezable" />
+      </Parameters>
+      <Docs>
+        <param name="sourceFreezable">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CreateInstanceCore">
+      <MemberSignature Language="C#" Value="protected override System.Windows.Freezable CreateInstanceCore ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance class System.Windows.Freezable CreateInstanceCore() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.CreateInstanceCore" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function CreateInstanceCore () As Freezable" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override System::Windows::Freezable ^ CreateInstanceCore();" />
+      <MemberSignature Language="F#" Value="override this.CreateInstanceCore : unit -&gt; System.Windows.Freezable" Usage="writeableBitmap.CreateInstanceCore " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.Freezable</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="FreezeCore">
+      <MemberSignature Language="C#" Value="protected override bool FreezeCore (bool isChecking);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance bool FreezeCore(bool isChecking) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.FreezeCore(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function FreezeCore (isChecking As Boolean) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override bool FreezeCore(bool isChecking);" />
+      <MemberSignature Language="F#" Value="override this.FreezeCore : bool -&gt; bool" Usage="writeableBitmap.FreezeCore isChecking" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityTreatAsSafe</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="isChecking" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="isChecking">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetAsFrozenCore">
+      <MemberSignature Language="C#" Value="protected override void GetAsFrozenCore (System.Windows.Freezable sourceFreezable);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void GetAsFrozenCore(class System.Windows.Freezable sourceFreezable) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.GetAsFrozenCore(System.Windows.Freezable)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Sub GetAsFrozenCore (sourceFreezable As Freezable)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void GetAsFrozenCore(System::Windows::Freezable ^ sourceFreezable);" />
+      <MemberSignature Language="F#" Value="override this.GetAsFrozenCore : System.Windows.Freezable -&gt; unit" Usage="writeableBitmap.GetAsFrozenCore sourceFreezable" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityTreatAsSafe</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sourceFreezable" Type="System.Windows.Freezable" />
+      </Parameters>
+      <Docs>
+        <param name="sourceFreezable">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetCurrentValueAsFrozenCore">
+      <MemberSignature Language="C#" Value="protected override void GetCurrentValueAsFrozenCore (System.Windows.Freezable sourceFreezable);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void GetCurrentValueAsFrozenCore(class System.Windows.Freezable sourceFreezable) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.GetCurrentValueAsFrozenCore(System.Windows.Freezable)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Sub GetCurrentValueAsFrozenCore (sourceFreezable As Freezable)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void GetCurrentValueAsFrozenCore(System::Windows::Freezable ^ sourceFreezable);" />
+      <MemberSignature Language="F#" Value="override this.GetCurrentValueAsFrozenCore : System.Windows.Freezable -&gt; unit" Usage="writeableBitmap.GetCurrentValueAsFrozenCore sourceFreezable" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityTreatAsSafe</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sourceFreezable" Type="System.Windows.Freezable" />
+      </Parameters>
+      <Docs>
+        <param name="sourceFreezable">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Lock">
+      <MemberSignature Language="C#" Value="public void Lock ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void Lock() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Lock ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Lock();" />
+      <MemberSignature Language="F#" Value="member this.Lock : unit -&gt; unit" Usage="writeableBitmap.Lock " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>更新のためにバック バッファーを予約します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A>は、ロック数をインクリメントします。 がロックされている場合、 <xref:System.Windows.Media.Imaging.WriteableBitmap>がメソッドの<xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A>呼び出しによって完全にロック解除されるまで、レンダリングシステムは更新を送信しません。 <xref:System.Windows.Media.Imaging.WriteableBitmap>  
+  
+ メソッドを使用し<xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A>て、マルチスレッドの実装をサポートできます。 これらのシナリオでは、UI スレッドはビットマップをロックし、バックバッファーを他のスレッドに公開します。 ワーカースレッドがフレームを完了すると、UI スレッドによって変更された四角形が追加され、バッファーのロックが解除されます。  
+  
+ UI スレッドは、レンダリングスレッドがバックバッファーのロックを取得してフロントバッファーにコピーするときにブロックできます。 このブロックの待機時間が長すぎる場合は、 <xref:System.Windows.Media.Imaging.WriteableBitmap.TryLock%2A>メソッドを使用して、しばらく待機してから、バックバッファーがロックされている間に他のタスクを実行するように UI スレッドのブロックを解除します。  
+  
+   
+  
+## Examples  
+ <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A>メソッドを使用して、バックバッファーを予約する方法を次のコード例に示します。  
+  
+ [!code-csharp[WriteableBitmap2#2](~/samples/snippets/csharp/VS_Snippets_Wpf/WriteableBitmap2/CS/Program.cs#2)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.TryLock(System.Windows.Duration)" />
+        <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.Unlock" />
+      </Docs>
+    </Member>
+    <Member MemberName="TryLock">
+      <MemberSignature Language="C#" Value="public bool TryLock (System.Windows.Duration timeout);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool TryLock(valuetype System.Windows.Duration timeout) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.TryLock(System.Windows.Duration)" />
+      <MemberSignature Language="VB.NET" Value="Public Function TryLock (timeout As Duration) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool TryLock(System::Windows::Duration timeout);" />
+      <MemberSignature Language="F#" Value="member this.TryLock : System.Windows.Duration -&gt; bool" Usage="writeableBitmap.TryLock timeout" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="timeout" Type="System.Windows.Duration" />
+      </Parameters>
+      <Docs>
+        <param name="timeout">待機時間を表す <see cref="T:System.Windows.Duration" />。 0 を指定するとすぐに制御を戻します。 <see cref="P:System.Windows.Duration.Forever" /> の値は、無期限にブロックします。</param>
+        <summary>ビットマップのロックを試行し、指定された時間内のみ待機します。</summary>
+        <returns>ロックが取得された場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ロックが取得されると、 <xref:System.Windows.Media.Imaging.WriteableBitmap.TryLock%2A>メソッドの動作は<xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A>メソッドと同じになります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="timeout" /> が <see cref="P:System.Windows.Duration.Automatic" /> に設定されます。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージリソースへのアクセスを許可します。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" />
+        <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.Unlock" />
+      </Docs>
+    </Member>
+    <Member MemberName="Unlock">
+      <MemberSignature Language="C#" Value="public void Unlock ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void Unlock() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.Unlock" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Unlock ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Unlock();" />
+      <MemberSignature Language="F#" Value="member this.Unlock : unit -&gt; unit" Usage="writeableBitmap.Unlock " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>バック バッファーを解放して、表示に利用できるようにします。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A>は、ロックカウントをデクリメントします。 ロックカウントが0になると、 <xref:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect%2A>メソッドが呼び出された場合、レンダリングパスが要求されます。  
+  
+   
+  
+## Examples  
+ <xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A>メソッドを使用して、バックバッファーを解放する方法を次のコード例に示します。  
+  
+ [!code-csharp[WriteableBitmap2#2](~/samples/snippets/csharp/VS_Snippets_Wpf/WriteableBitmap2/CS/Program.cs#2)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidOperationException"><see cref="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" /> メソッドまたは <see cref="M:System.Windows.Media.Imaging.WriteableBitmap.TryLock(System.Windows.Duration)" /> メソッドへの呼び出しによりロックされなかったビットマップ。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージリソースへのアクセスを許可します。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.Lock" />
+        <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.AddDirtyRect(System.Windows.Int32Rect)" />
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="WritePixels">
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>書き込み可能なビットマップのピクセルを更新します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="WritePixels">
+      <MemberSignature Language="C#" Value="public void WritePixels (System.Windows.Int32Rect sourceRect, Array pixels, int stride, int offset);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void WritePixels(valuetype System.Windows.Int32Rect sourceRect, class System.Array pixels, int32 stride, int32 offset) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.WritePixels(System.Windows.Int32Rect,System.Array,System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub WritePixels (sourceRect As Int32Rect, pixels As Array, stride As Integer, offset As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void WritePixels(System::Windows::Int32Rect sourceRect, Array ^ pixels, int stride, int offset);" />
+      <MemberSignature Language="F#" Value="member this.WritePixels : System.Windows.Int32Rect * Array * int * int -&gt; unit" Usage="writeableBitmap.WritePixels (sourceRect, pixels, stride, offset)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sourceRect" Type="System.Windows.Int32Rect" />
+        <Parameter Name="pixels" Type="System.Array" />
+        <Parameter Name="stride" Type="System.Int32" />
+        <Parameter Name="offset" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="sourceRect">更新する <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> の四角形。</param>
+        <param name="pixels">ビットマップの更新に使用するピクセル配列。</param>
+        <param name="stride"><paramref name="pixels" /> 内の更新領域のストライド。</param>
+        <param name="offset">入力バッファーのオフセット。</param>
+        <summary>ビットマップの指定した領域内のピクセルを更新します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ オーバーロード<xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> と <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.IntPtr%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> オーバーロードは、このメソッドを使用するよりも優先されます。  
+  
+> [!NOTE]
+>  部分信頼では<xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> 、オーバーロードを使用します。  
+  
+   
+  
+## Examples  
+ <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A>メソッドを使用して、バックバッファー内のピクセルを更新する方法を次のコード例に示します。  
+  
+ [!code-csharp[WriteableBitmap2#3](~/samples/snippets/csharp/VS_Snippets_Wpf/WriteableBitmap2/CS/Program.cs#3)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">次の条件の 1 つ以上が true であること。  
+  
+ <paramref name="sourceRect" /> が <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> の境界の外側にあります。  
+  
+ <paramref name="stride" /> &lt; 1 
+ <paramref name="offset" /> &lt; 0</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="pixels" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="pixels" /> のランクが 1 または 2 以外であるか、その長さが 0 未満です。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージリソースへのアクセスを許可します。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+      </Docs>
+    </Member>
+    <Member MemberName="WritePixels">
+      <MemberSignature Language="C#" Value="public void WritePixels (System.Windows.Int32Rect sourceRect, IntPtr buffer, int bufferSize, int stride);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void WritePixels(valuetype System.Windows.Int32Rect sourceRect, native int buffer, int32 bufferSize, int32 stride) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.WritePixels(System.Windows.Int32Rect,System.IntPtr,System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub WritePixels (sourceRect As Int32Rect, buffer As IntPtr, bufferSize As Integer, stride As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void WritePixels(System::Windows::Int32Rect sourceRect, IntPtr buffer, int bufferSize, int stride);" />
+      <MemberSignature Language="F#" Value="member this.WritePixels : System.Windows.Int32Rect * nativeint * int * int -&gt; unit" Usage="writeableBitmap.WritePixels (sourceRect, buffer, bufferSize, stride)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sourceRect" Type="System.Windows.Int32Rect" />
+        <Parameter Name="buffer" Type="System.IntPtr" />
+        <Parameter Name="bufferSize" Type="System.Int32" />
+        <Parameter Name="stride" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="sourceRect">更新する <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> の四角形。</param>
+        <param name="buffer">ビットマップの更新に使用する入力バッファー。</param>
+        <param name="bufferSize">入力バッファーのサイズ。</param>
+        <param name="stride"><paramref name="buffer" /> 内の更新領域のストライド。</param>
+        <summary>ビットマップの指定した領域内のピクセルを更新します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ オーバーロード<xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> と <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.IntPtr%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> オーバーロードは、このメソッドを使用するよりも優先されます。  
+  
+> [!NOTE]
+>  部分信頼では<xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> 、オーバーロードを使用します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">次の条件の 1 つ以上が true であること。  
+  
+ <paramref name="sourceRect" /> が <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> の境界の外側にあります。  
+  
+ <paramref name="bufferSize" /> &lt; 1 
+ <paramref name="stride" /> &lt; 1</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="buffer" /> は <see langword="null" />です。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージリソースへのアクセスを許可します。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+      </Docs>
+    </Member>
+    <Member MemberName="WritePixels">
+      <MemberSignature Language="C#" Value="public void WritePixels (System.Windows.Int32Rect sourceRect, Array sourceBuffer, int sourceBufferStride, int destinationX, int destinationY);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void WritePixels(valuetype System.Windows.Int32Rect sourceRect, class System.Array sourceBuffer, int32 sourceBufferStride, int32 destinationX, int32 destinationY) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.WritePixels(System.Windows.Int32Rect,System.Array,System.Int32,System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub WritePixels (sourceRect As Int32Rect, sourceBuffer As Array, sourceBufferStride As Integer, destinationX As Integer, destinationY As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void WritePixels(System::Windows::Int32Rect sourceRect, Array ^ sourceBuffer, int sourceBufferStride, int destinationX, int destinationY);" />
+      <MemberSignature Language="F#" Value="member this.WritePixels : System.Windows.Int32Rect * Array * int * int * int -&gt; unit" Usage="writeableBitmap.WritePixels (sourceRect, sourceBuffer, sourceBufferStride, destinationX, destinationY)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sourceRect" Type="System.Windows.Int32Rect" />
+        <Parameter Name="sourceBuffer" Type="System.Array" />
+        <Parameter Name="sourceBufferStride" Type="System.Int32" />
+        <Parameter Name="destinationX" Type="System.Int32" />
+        <Parameter Name="destinationY" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="sourceRect">コピーする <paramref name="sourceBuffer" /> 内の四角形。</param>
+        <param name="sourceBuffer">ビットマップの更新に使用する入力バッファー。</param>
+        <param name="sourceBufferStride">入力バッファー内のストライド (バイト単位)。</param>
+        <param name="destinationX">バック バッファー内の左端のピクセルの描画先の x 座標。</param>
+        <param name="destinationY">バック バッファー内の上端のピクセルの描画先の y 座標。</param>
+        <summary>ビットマップの指定した領域内のピクセルを更新します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドを呼び出して、 <xref:System.Windows.Media.Imaging.WriteableBitmap>の`sourceBuffer`内容を使用してを自動的に更新します。 <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> このメソッドの呼び出しは、 <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> <xref:System.Windows.Media.Imaging.WriteableBitmap>クラスの解説で<xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A>説明されているおよびワークフローを使用することと同じです。  
+  
+> [!NOTE]
+>  部分信頼では、このオーバーロードを使用します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">次の条件の 1 つ以上が true であること。  
+  
+ <paramref name="sourceRect" /> が <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> の境界の外側にあります。  
+  
+ <paramref name="destinationX" /> または <paramref name="destinationY" /> が <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> の境界の外側にあります。  
+  
+ <paramref name="sourceBufferStride" /> &lt; 1</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="sourceBuffer" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="sourceBuffer" /> のランクが 1 または 2 以外であるか、その長さが 0 未満です。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージリソースへのアクセスを許可します。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.WritePixels(System.Windows.Int32Rect,System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32)" />
+      </Docs>
+    </Member>
+    <Member MemberName="WritePixels">
+      <MemberSignature Language="C#" Value="public void WritePixels (System.Windows.Int32Rect sourceRect, IntPtr sourceBuffer, int sourceBufferSize, int sourceBufferStride, int destinationX, int destinationY);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void WritePixels(valuetype System.Windows.Int32Rect sourceRect, native int sourceBuffer, int32 sourceBufferSize, int32 sourceBufferStride, int32 destinationX, int32 destinationY) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Media.Imaging.WriteableBitmap.WritePixels(System.Windows.Int32Rect,System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub WritePixels (sourceRect As Int32Rect, sourceBuffer As IntPtr, sourceBufferSize As Integer, sourceBufferStride As Integer, destinationX As Integer, destinationY As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void WritePixels(System::Windows::Int32Rect sourceRect, IntPtr sourceBuffer, int sourceBufferSize, int sourceBufferStride, int destinationX, int destinationY);" />
+      <MemberSignature Language="F#" Value="member this.WritePixels : System.Windows.Int32Rect * nativeint * int * int * int * int -&gt; unit" Usage="writeableBitmap.WritePixels (sourceRect, sourceBuffer, sourceBufferSize, sourceBufferStride, destinationX, destinationY)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationCore</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sourceRect" Type="System.Windows.Int32Rect" />
+        <Parameter Name="sourceBuffer" Type="System.IntPtr" />
+        <Parameter Name="sourceBufferSize" Type="System.Int32" />
+        <Parameter Name="sourceBufferStride" Type="System.Int32" />
+        <Parameter Name="destinationX" Type="System.Int32" />
+        <Parameter Name="destinationY" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="sourceRect">コピーする <paramref name="sourceBuffer" /> 内の四角形。</param>
+        <param name="sourceBuffer">ビットマップの更新に使用する入力バッファー。</param>
+        <param name="sourceBufferSize">入力バッファーのサイズ。</param>
+        <param name="sourceBufferStride">入力バッファー内のストライド (バイト単位)。</param>
+        <param name="destinationX">バック バッファー内の左端のピクセルの描画先の x 座標。</param>
+        <param name="destinationY">バック バッファー内の上端のピクセルの描画先の y 座標。</param>
+        <summary>ビットマップの指定した領域内のピクセルを更新します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドを呼び出して、 <xref:System.Windows.Media.Imaging.WriteableBitmap>の`sourceBuffer`内容を使用してを自動的に更新します。 <xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%2A> このメソッドの呼び出しは、 <xref:System.Windows.Media.Imaging.WriteableBitmap.Lock%2A> <xref:System.Windows.Media.Imaging.WriteableBitmap>クラスの解説で<xref:System.Windows.Media.Imaging.WriteableBitmap.Unlock%2A>説明されているおよびワークフローを使用することと同じです。  
+  
+> [!NOTE]
+>  部分信頼では<xref:System.Windows.Media.Imaging.WriteableBitmap.WritePixels%28System.Windows.Int32Rect%2CSystem.Array%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%29> 、オーバーロードを使用します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException">次の条件の 1 つ以上が true であること。  
+  
+ <paramref name="sourceRect" /> が <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> の境界の外側にあります。  
+  
+ <paramref name="destinationX" /> または <paramref name="destinationY" /> が <see cref="T:System.Windows.Media.Imaging.WriteableBitmap" /> の境界の外側にあります。  
+  
+ <paramref name="sourceBufferSize" /> &lt; 1 
+ <paramref name="sourceBufferStride" /> &lt; 1</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="sourceBuffer" /> が <see langword="null" /> です。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージリソースへのアクセスを許可します。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /></permission>
+        <altmember cref="M:System.Windows.Media.Imaging.WriteableBitmap.WritePixels(System.Windows.Int32Rect,System.Array,System.Int32,System.Int32,System.Int32)" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>

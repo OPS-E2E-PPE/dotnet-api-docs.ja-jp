@@ -1,0 +1,1561 @@
+<Type Name="Binding" FullName="System.Windows.Data.Binding">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="9a22d563cf90b2854a6bf8d729f1b8114d9c9b46" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70620914" /></Metadata><TypeSignature Language="C#" Value="public class Binding : System.Windows.Data.BindingBase" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit Binding extends System.Windows.Data.BindingBase" />
+  <TypeSignature Language="DocId" Value="T:System.Windows.Data.Binding" />
+  <TypeSignature Language="VB.NET" Value="Public Class Binding&#xA;Inherits BindingBase" />
+  <TypeSignature Language="C++ CLI" Value="public ref class Binding : System::Windows::Data::BindingBase" />
+  <TypeSignature Language="F#" Value="type Binding = class&#xA;    inherit BindingBase" />
+  <AssemblyInfo>
+    <AssemblyName>PresentationFramework</AssemblyName>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Windows.Data.BindingBase</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>バインドの定義に高レベルでアクセスします。バインドは、バインド ターゲット オブジェクト (通常は、WPF 要素) のプロパティと任意のデータ ソース (データベース、XML ファイル、データを格納している任意のオブジェクトなど) とを接続します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ [!INCLUDE[TLA#tla_winclient](~/includes/tlasharptla-winclient-md.md)] データ バインディングは、アプリケーションがデータを提示し、データと対話するための簡単で一貫性のある方法を提供します。 データバインディングを使用すると、2つの異なるオブジェクトのプロパティの値を同期できます。  
+  
+ バインディングを確立するには、 <xref:System.Windows.Data.Binding>クラスまたはを継承<xref:System.Windows.Data.BindingBase>する他のクラスの1つを使用します。 バインドするオブジェクトとデータソースの性質に関係なく、各バインドは次の図に示すモデルに従います。  
+  
+ ![基本的なデータバインディングダイアグラム](~/add/media/databindingmostbasic.png "基本的なデータバインディングダイアグラム")  
+  
+ この図は、次の[!INCLUDE[TLA2#tla_winclient](~/includes/tla2sharptla-winclient-md.md)]基本的なデータバインディングの概念を示しています。  
+  
+-   各バインドには、通常、バインディングターゲットオブジェクト、ターゲットプロパティ、バインディングソース、および使用するバインディングソースの<xref:System.Windows.Data.Binding.Path%2A>値への、それぞれ4つのコンポーネントがあります。 たとえば、の<xref:System.Windows.Controls.TextBox>コンテンツを employee オブジェクトの Name プロパティにバインドする場合、対象のオブジェクト<xref:System.Windows.Controls.TextBox>はで、ターゲットプロパティは<xref:System.Windows.Controls.TextBox.Text%2A>プロパティ、使用する値は Name、ソースオブジェクトは employee になりますを使用します。素材.  
+  
+-   ターゲット プロパティは、依存関係プロパティである必要があります。 これは、フィールドをバインドできないことも意味します。 オブジェクトのほとんど<xref:System.Windows.UIElement>のプロパティは依存関係プロパティであり、ほとんどの依存関係プロパティ (読み取り専用のプロパティを除く) は、既定でデータバインディングをサポートします。 (型<xref:System.Windows.DependencyObject>だけが依存関係プロパティを定義<xref:System.Windows.UIElement>でき、すべて<xref:System.Windows.DependencyObject>のオブジェクトはから派生します)。  
+  
+-   図では指定されていませんが、バインディング ソース オブジェクトはカスタム [!INCLUDE[TLA2#tla_clr](~/includes/tla2sharptla-clr-md.md)] オブジェクトに制限されないことに注意してください。 [!INCLUDE[TLA2#tla_winclient](~/includes/tla2sharptla-winclient-md.md)] データ バインディングは、[!INCLUDE[TLA2#tla_clr](~/includes/tla2sharptla-clr-md.md)] オブジェクトおよび [!INCLUDE[TLA2#tla_xml](~/includes/tla2sharptla-xml-md.md)] の形式でデータをサポートします。 いくつか<xref:System.Windows.UIElement>の例を示すために、バインディングソースは、、すべてのリストオブジェクト[!INCLUDE[TLA2#tla_clr](~/includes/tla2sharptla-clr-md.md)] 、データまたは[!INCLUDE[TLA#tla_adonet](~/includes/tlasharptla-adonet-md.md)] Web [!INCLUDE[TLA2#tla_xml](~/includes/tla2sharptla-xml-md.md)]サービスに関連付けられているオブジェクト、またはデータを含む XmlNode にすることができます。  
+  
+ データフロー <xref:System.Windows.Data.Binding.Mode%2A>の方向を指定するには、プロパティを使用します。 一方向または双方向のバインディングでソースの変更を検出するには、ソースがなど<xref:System.ComponentModel.INotifyPropertyChanged>の適切なプロパティ変更通知機構を実装する必要があります。 例については、「[方法: プロパティ変更通知を実装](~/docs/framework/wpf/data/how-to-implement-property-change-notification.md)する」を参照してください。 プロパティ<xref:System.Windows.Data.Binding.UpdateSourceTrigger%2A>は、ソースの更新のタイミングを指定します。 詳細については、「[データバインディングの概要](~/docs/framework/wpf/data/data-binding-overview.md)」の「基本的なデータバインディングの概念」を参照してください。  
+  
+<a name="xamlAttributeUsage_PriorityBinding"></a>   
+## <a name="xaml-attribute-usage"></a>XAML 属性の使用方法  
+  
+```  
+<object property="{Binding  declaration}"/>  
+```  
+  
+<a name="xamlValues_PriorityBinding"></a>   
+## <a name="xaml-values"></a>XAML 値  
+ *declaration*  
+ コンマ (,) で区切られた0個以上の属性代入句。 詳細については、「[バインディングマークアップ拡張機能](~/docs/framework/wpf/advanced/binding-markup-extension.md)」または「[バインディング宣言の概要](~/docs/framework/wpf/data/binding-declarations-overview.md)」を参照してください。  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Windows.Data.MultiBinding" />
+    <altmember cref="T:System.Windows.Data.PriorityBinding" />
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Windows.Data.Binding" /> クラスの新しいインスタンスを初期化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Binding ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Binding();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Windows.Data.Binding" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Binding (string path);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string path) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.#ctor(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (path As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Binding(System::String ^ path);" />
+      <MemberSignature Language="F#" Value="new System.Windows.Data.Binding : string -&gt; System.Windows.Data.Binding" Usage="new System.Windows.Data.Binding path" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="path" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="path">バインドのための初期 <see cref="P:System.Windows.Data.Binding.Path" />。</param>
+        <summary>初期化パスを使用して、<see cref="T:System.Windows.Data.Binding" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddSourceUpdatedHandler">
+      <MemberSignature Language="C#" Value="public static void AddSourceUpdatedHandler (System.Windows.DependencyObject element, EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt; handler);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void AddSourceUpdatedHandler(class System.Windows.DependencyObject element, class System.EventHandler`1&lt;class System.Windows.Data.DataTransferEventArgs&gt; handler) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.AddSourceUpdatedHandler(System.Windows.DependencyObject,System.EventHandler{System.Windows.Data.DataTransferEventArgs})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub AddSourceUpdatedHandler (element As DependencyObject, handler As EventHandler(Of DataTransferEventArgs))" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void AddSourceUpdatedHandler(System::Windows::DependencyObject ^ element, EventHandler&lt;System::Windows::Data::DataTransferEventArgs ^&gt; ^ handler);" />
+      <MemberSignature Language="F#" Value="static member AddSourceUpdatedHandler : System.Windows.DependencyObject * EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt; -&gt; unit" Usage="System.Windows.Data.Binding.AddSourceUpdatedHandler (element, handler)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="System.Windows.DependencyObject" />
+        <Parameter Name="handler" Type="System.EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="element">イベントをリッスンする <see cref="T:System.Windows.UIElement" /> または <see cref="T:System.Windows.ContentElement" />。</param>
+        <param name="handler">追加するハンドラー。</param>
+        <summary><see cref="E:System.Windows.Data.Binding.SourceUpdated" /> 添付イベントのハンドラーを追加します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、での添付[!INCLUDE[TLA2#tla_xaml](~/includes/tla2sharptla-xaml-md.md)]イベントの使用をサポートします。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddTargetUpdatedHandler">
+      <MemberSignature Language="C#" Value="public static void AddTargetUpdatedHandler (System.Windows.DependencyObject element, EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt; handler);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void AddTargetUpdatedHandler(class System.Windows.DependencyObject element, class System.EventHandler`1&lt;class System.Windows.Data.DataTransferEventArgs&gt; handler) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.AddTargetUpdatedHandler(System.Windows.DependencyObject,System.EventHandler{System.Windows.Data.DataTransferEventArgs})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub AddTargetUpdatedHandler (element As DependencyObject, handler As EventHandler(Of DataTransferEventArgs))" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void AddTargetUpdatedHandler(System::Windows::DependencyObject ^ element, EventHandler&lt;System::Windows::Data::DataTransferEventArgs ^&gt; ^ handler);" />
+      <MemberSignature Language="F#" Value="static member AddTargetUpdatedHandler : System.Windows.DependencyObject * EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt; -&gt; unit" Usage="System.Windows.Data.Binding.AddTargetUpdatedHandler (element, handler)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="System.Windows.DependencyObject" />
+        <Parameter Name="handler" Type="System.EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="element">イベントをリッスンする <see cref="T:System.Windows.UIElement" /> または <see cref="T:System.Windows.ContentElement" />。</param>
+        <param name="handler">追加するハンドラー。</param>
+        <summary><see cref="E:System.Windows.Data.Binding.TargetUpdated" /> 添付イベントのハンドラーを追加します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、での添付[!INCLUDE[TLA2#tla_xaml](~/includes/tla2sharptla-xaml-md.md)]イベントの使用をサポートします。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AsyncState">
+      <MemberSignature Language="C#" Value="public object AsyncState { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object AsyncState" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.AsyncState" />
+      <MemberSignature Language="VB.NET" Value="Public Property AsyncState As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Object ^ AsyncState { System::Object ^ get(); void set(System::Object ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.AsyncState : obj with get, set" Usage="System.Windows.Data.Binding.AsyncState" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(null)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>非同期データ ディスパッチャーに渡される非透過データを取得または設定します。</summary>
+        <value>非同期データ ディスパッチャーに渡されるデータ。</value>
+        <remarks>To be added.</remarks>
+        <altmember cref="P:System.Windows.Data.Binding.IsAsync" />
+        <altmember cref="P:System.Windows.Data.ObjectDataProvider.IsAsynchronous" />
+        <altmember cref="P:System.Windows.Data.XmlDataProvider.IsAsynchronous" />
+      </Docs>
+    </Member>
+    <Member MemberName="BindsDirectlyToSource">
+      <MemberSignature Language="C#" Value="public bool BindsDirectlyToSource { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool BindsDirectlyToSource" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.BindsDirectlyToSource" />
+      <MemberSignature Language="VB.NET" Value="Public Property BindsDirectlyToSource As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool BindsDirectlyToSource { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.BindsDirectlyToSource : bool with get, set" Usage="System.Windows.Data.Binding.BindsDirectlyToSource" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Data.Binding.Path" /> を評価するときに、データ項目を基準にするか、<see cref="T:System.Windows.Data.DataSourceProvider" /> オブジェクトを基準にするかを示す値を取得または設定します。</summary>
+        <value>データ項目自体を基準にしてパスを評価する場合は <see langword="false" />、それ以外の場合は <see langword="true" />。 既定値は、<see langword="false" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 通常の動作 (このプロパティが`false`の場合) には<xref:System.Windows.Data.DataSourceProvider> 、オブジェクトに対する特別な処理が含まれます。 この場合、バインディングエンジンは、 <xref:System.Windows.Data.Binding.Path%2A> <xref:System.Windows.Data.DataSourceProvider.Data%2A>プロパティから取得したオブジェクトに対して相対的なを評価します。 また、バインディングは<xref:System.Windows.Data.DataSourceProvider.DataChanged>イベントをリッスンし、それに応じて反応します。 このプロパティをに`true`設定すると、この動作がオーバーライドされ、 <xref:System.Windows.Data.DataSourceProvider>オブジェクト自体のプロパティへのバインドアクセスが与えられます。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Windows.Data.ObjectDataProvider" />
+        <altmember cref="T:System.Windows.Data.XmlDataProvider" />
+      </Docs>
+    </Member>
+    <Member MemberName="Converter">
+      <MemberSignature Language="C#" Value="public System.Windows.Data.IValueConverter Converter { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Windows.Data.IValueConverter Converter" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.Converter" />
+      <MemberSignature Language="VB.NET" Value="Public Property Converter As IValueConverter" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::Data::IValueConverter ^ Converter { System::Windows::Data::IValueConverter ^ get(); void set(System::Windows::Data::IValueConverter ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Converter : System.Windows.Data.IValueConverter with get, set" Usage="System.Windows.Data.Binding.Converter" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(null)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Windows.Data.IValueConverter</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>使用するコンバーターを取得または設定します。</summary>
+        <value><see cref="T:System.Windows.Data.IValueConverter" />型の値。 既定値は、<see langword="null" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ バインディングは、ソース値とターゲット値の間で型変換を実行しようとする既定のコンバーターを暗黙的に使用します。 変換を実行できない場合、既定のコンバーターは `null` を返します。  
+  
+ カスタム値コンバーターをバインディングに関連付ける場合は、 <xref:System.Windows.Data.IValueConverter>インターフェイスを実装するクラスを作成し、メソッド<xref:System.Windows.Data.IValueConverter.Convert%2A>と<xref:System.Windows.Data.IValueConverter.ConvertBack%2A>メソッドの実装を提供する必要があります。 値コンバーターは、ある型から別の型へのデータの変更、文字セットなどのカルチャの詳細の変換、またはプレゼンテーションのその他の側面の変更を行うことができます。 一般的な変換シナリオの例については、「[データバインディングの概要](~/docs/framework/wpf/data/data-binding-overview.md)」の「データ変換」を参照してください。  
+  
+<a name="xamlAttributeUsage_Converter"></a>   
+## <a name="xaml-attribute-usage"></a>XAML 属性の使用方法  
+  
+```  
+<object Converter="myConverter"/>  
+```  
+  
+<a name="xamlValues_Converter"></a>   
+## <a name="xaml-values"></a>XAML 値  
+ *myConverter*  
+ <xref:System.Windows.Data.IValueConverter>インターフェイスを実装するクラスへのリソース参照。これには、メソッド<xref:System.Windows.Data.IValueConverter.Convert%2A>と<xref:System.Windows.Data.IValueConverter.ConvertBack%2A>メソッドの実装が含まれます。 値コンバーターを参照するには、 [StaticResource マークアップ拡張機能](~/docs/framework/wpf/advanced/staticresource-markup-extension.md)を使用します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ConverterCulture">
+      <MemberSignature Language="C#" Value="public System.Globalization.CultureInfo ConverterCulture { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Globalization.CultureInfo ConverterCulture" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.ConverterCulture" />
+      <MemberSignature Language="VB.NET" Value="Public Property ConverterCulture As CultureInfo" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Globalization::CultureInfo ^ ConverterCulture { System::Globalization::CultureInfo ^ get(); void set(System::Globalization::CultureInfo ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ConverterCulture : System.Globalization.CultureInfo with get, set" Usage="System.Windows.Data.Binding.ConverterCulture" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(null)</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.ComponentModel.TypeConverter(typeof(System.Windows.CultureInfoIetfLanguageTagConverter))</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Globalization.CultureInfo</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>コンバーターを評価するカルチャを取得または設定します。</summary>
+        <value>既定値は、<see langword="null" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティを設定しない場合、バインディングエンジンはバインディングターゲット`Language`オブジェクトのプロパティを使用します。 で[!INCLUDE[TLA2#tla_xaml](~/includes/tla2sharptla-xaml-md.md)]は、既定値は "en-us" です。または、明示的に設定されている場合は、ページのルート要素 (または任意の要素) から値を継承します。  
+  
+ データ変換の詳細については、「データバインディングの[概要](~/docs/framework/wpf/data/data-binding-overview.md)」の「データ変換」セクションを参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ConverterParameter">
+      <MemberSignature Language="C#" Value="public object ConverterParameter { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object ConverterParameter" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.ConverterParameter" />
+      <MemberSignature Language="VB.NET" Value="Public Property ConverterParameter As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Object ^ ConverterParameter { System::Object ^ get(); void set(System::Object ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ConverterParameter : obj with get, set" Usage="System.Windows.Data.Binding.ConverterParameter" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(null)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Data.Binding.Converter" /> に渡すパラメーターを取得または設定します。</summary>
+        <value><see cref="P:System.Windows.Data.Binding.Converter" /> に渡すパラメーター。 既定値は、<see langword="null" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティを使用し<xref:System.Windows.Data.Binding.ConverterParameter%2A>て、オブジェクトの変換方法を指定できます。  このプロパティは、バインディングで使用するコンバーターに追加情報を渡します。  を指定<xref:System.Windows.Data.Binding.ConverterParameter%2A>すると、 `parameter`パラメーターとしてメソッド<xref:System.Windows.Data.IValueConverter.Convert%2A>と<xref:System.Windows.Data.IValueConverter.ConvertBack%2A>メソッドに値が渡されます。  
+  
+ 例については、「[方法: バインドされた項目の一覧に基づいて値を生成](~/docs/framework/wpf/data/how-to-produce-a-value-based-on-a-list-of-bound-items.md)する」を参照してください。 この例では、 <xref:System.Windows.Data.IMultiValueConverter>の実装を示していますが、使用法は引き続き適用されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="DoNothing">
+      <MemberSignature Language="C#" Value="public static readonly object DoNothing;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly object DoNothing" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Data.Binding.DoNothing" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly DoNothing As Object " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Object ^ DoNothing;" />
+      <MemberSignature Language="F#" Value=" staticval mutable DoNothing : obj" Usage="System.Windows.Data.Binding.DoNothing" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインディング エンジンにアクションを実行しないように指示するために、戻り値として使用されます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ バインディングソースのプロパティまたはコンバーターは、 <xref:System.Windows.Data.Binding.DoNothing?displayProperty=nameWithType>を返して、バインディングエンジンが何のアクションも実行しないように指示することができます。 たとえば、バインディングターゲットに値を転送せず、 <xref:System.Windows.Data.Binding> <xref:System.Windows.Data.PriorityBinding>内の次のに移動したり、 `FallBackValue`または既定値を使用しないようにバインドエンジンに指示します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ElementName">
+      <MemberSignature Language="C#" Value="public string ElementName { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string ElementName" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.ElementName" />
+      <MemberSignature Language="VB.NET" Value="Public Property ElementName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ ElementName { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ElementName : string with get, set" Usage="System.Windows.Data.Binding.ElementName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(null)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインド ソース オブジェクトとして使用する要素の名前を取得または設定します。</summary>
+        <value>目的の要素の <see langword="Name" /> プロパティまたは [x:Name ディレクティブ](~/docs/framework/xaml-services/x-name-directive.md) の値。 コード内で要素を参照できるのは、目的の要素が <see cref="T:System.Windows.NameScope" /> を使用して適切な <see langword="RegisterName" />に登録されている場合に限ります。 詳細については、「 [WPF XAML 名前スコープ](~/docs/framework/wpf/advanced/wpf-xaml-namescopes.md)」を参照してください。  
+  
+既定値は、<see langword="null" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティは、アプリケーション内の別の要素のプロパティにバインドする場合に便利です。 たとえば、を<xref:System.Windows.Controls.Slider>使用して、アプリケーション内の別のコントロールの高さを制御したり、 <xref:System.Windows.Controls.Primitives.Selector.SelectedValue%2A>コントロールのを<xref:System.Windows.Controls.ContentControl.Content%2A> <xref:System.Windows.Controls.ListBox>コントロールのプロパティにバインドしたりする場合などです。  
+  
+ 既定では、バインドは、 `DataContext`プロパティによって指定されたデータコンテキスト (設定されている場合) を継承します。 ただし、 <xref:System.Windows.Data.Binding>プロパティは、のソースを明示的に設定し、継承されたデータコンテキストをオーバーライドする方法の1つです。 <xref:System.Windows.Data.Binding.ElementName%2A> 詳細については、「[方法: バインディングソースを指定](~/docs/framework/wpf/data/how-to-specify-the-binding-source.md)する」を参照してください。  
+  
+ クラスの <xref:System.Windows.Data.Binding> プロパティ<xref:System.Windows.Data.Binding.RelativeSource%2A> とプロパティを使用すると、バインディングのソースを明示的に設定することもできます。 <xref:System.Windows.Data.Binding.Source%2A> ただし、3つのプロパティ<xref:System.Windows.Data.Binding.ElementName%2A>(、 <xref:System.Windows.Data.Binding.Source%2A> <xref:System.Windows.Data.Binding.RelativeSource%2A>、) のいずれか1つだけをバインドごとに設定する必要があります。それ以外の場合は、競合が発生する可能性があります。 このプロパティは、バインディングソースの競合がある場合に例外をスローします。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetXmlNamespaceManager">
+      <MemberSignature Language="C#" Value="public static System.Xml.XmlNamespaceManager GetXmlNamespaceManager (System.Windows.DependencyObject target);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Xml.XmlNamespaceManager GetXmlNamespaceManager(class System.Windows.DependencyObject target) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.GetXmlNamespaceManager(System.Windows.DependencyObject)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetXmlNamespaceManager (target As DependencyObject) As XmlNamespaceManager" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Xml::XmlNamespaceManager ^ GetXmlNamespaceManager(System::Windows::DependencyObject ^ target);" />
+      <MemberSignature Language="F#" Value="static member GetXmlNamespaceManager : System.Windows.DependencyObject -&gt; System.Xml.XmlNamespaceManager" Usage="System.Windows.Data.Binding.GetXmlNamespaceManager target" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Xml.XmlNamespaceManager</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.Windows.DependencyObject" />
+      </Parameters>
+      <Docs>
+        <param name="target">名前空間情報の取得元となるオブジェクト。</param>
+        <summary>指定したオブジェクトにアタッチされているバインドによって使用される [!INCLUDE[TLA#tla_xml](~/includes/tlasharptla-xml-md.md)] 名前空間マネージャー オブジェクトを返します。</summary>
+        <returns>渡されたオブジェクト要素上のバインディングに関連する [!INCLUDE[TLA2#tla_xml](~/includes/tla2sharptla-xml-md.md)] 名前空間を表示するために使用されるオブジェクトを返します。 このオブジェクトは <see cref="T:System.Xml.XmlNamespaceManager" /> としてキャストする必要があります。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、 <xref:System.Windows.Data.Binding.XmlNamespaceManager%2A>添付プロパティの添付プロパティの使用をサポートします。  
+  
+ [!INCLUDE[TLA2#tla_xml](~/includes/tla2sharptla-xml-md.md)]名前空間マネージャーは、バインディング内のデータが[!INCLUDE[TLA2#tla_xml](~/includes/tla2sharptla-xml-md.md)]バインディングソース (<xref:System.Windows.Data.XmlDataProvider>オブジェクト) から取得された場合にのみ関連します。  
+  
+ 元のデータソースの作成で、またはその後の呼び出し<xref:System.Windows.Data.Binding.SetXmlNamespaceManager%2A>によって、名前空間マネージャーが明示的に適用されなかった場合、このメソッドはを返し`null`ます。  
+  
+ バインディングの背後にある`null`データがではない[!INCLUDE[TLA2#tla_xml](~/includes/tla2sharptla-xml-md.md)]場合、このメソッドは常にを返します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="target" /> パラメーターとして <see langword="null" /> を使用することはできません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="IndexerName">
+      <MemberSignature Language="C#" Value="public const string IndexerName;" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal string IndexerName" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Data.Binding.IndexerName" />
+      <MemberSignature Language="VB.NET" Value="Public Const IndexerName As String " />
+      <MemberSignature Language="C++ CLI" Value="public: System::String ^ IndexerName;" />
+      <MemberSignature Language="F#" Value="val mutable IndexerName : string" Usage="System.Windows.Data.Binding.IndexerName" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.ComponentModel.PropertyChangedEventArgs.PropertyName" /> の <see cref="T:System.ComponentModel.PropertyChangedEventArgs" /> として使用され、インデクサー プロパティが変更されたことを示します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsAsync">
+      <MemberSignature Language="C#" Value="public bool IsAsync { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsAsync" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.IsAsync" />
+      <MemberSignature Language="VB.NET" Value="Public Property IsAsync As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool IsAsync { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.IsAsync : bool with get, set" Usage="System.Windows.Data.Binding.IsAsync" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Windows.Data.Binding" /> が値の取得と設定を非同期で行う必要があるかどうかを示す値を取得または設定します。</summary>
+        <value>既定値は、<see langword="false" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ バインディングソース<xref:System.Windows.Data.Binding.IsAsync%2A>プロパティの`get`アクセサーに時間がかかる可能性がある場合は、プロパティを使用します。 1つの例として、 `get` Web からダウンロードするアクセサーを持つ image プロパティがあります。 を<xref:System.Windows.Data.Binding.IsAsync%2A>に`true`設定すると[!INCLUDE[TLA2#tla_ui](~/includes/tla2sharptla-ui-md.md)] 、ダウンロード中にのブロックが回避されます。  
+  
+ バインディングは、値が到着するのを待機して<xref:System.Windows.Data.BindingBase.FallbackValue%2A>いる間、が使用可能な場合は、またはバインディングターゲットプロパティの既定値を報告します。  
+  
+ ただし、 <xref:System.Windows.Data.Binding.IsAsync%2A>プロパティを使用する必要があるシナリオは多くありません。 [!INCLUDE[TLA2#tla_net](~/includes/tla2sharptla-net-md.md)]フィールドセットよりも速度が低いプロパティを定義することをお勧めします。 クラスを作成するときは、 `get`アクセサーの外部で非常に遅い操作を処理し、結果をキャッシュすることを検討してください。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Windows.Data.Binding.AsyncState" />
+        <altmember cref="P:System.Windows.Data.ObjectDataProvider.IsAsynchronous" />
+        <altmember cref="P:System.Windows.Data.XmlDataProvider.IsAsynchronous" />
+        <altmember cref="T:System.Windows.PropertyChangedCallback" />
+      </Docs>
+    </Member>
+    <Member MemberName="Mode">
+      <MemberSignature Language="C#" Value="public System.Windows.Data.BindingMode Mode { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Windows.Data.BindingMode Mode" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.Mode" />
+      <MemberSignature Language="VB.NET" Value="Public Property Mode As BindingMode" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::Data::BindingMode Mode { System::Windows::Data::BindingMode get(); void set(System::Windows::Data::BindingMode value); };" />
+      <MemberSignature Language="F#" Value="member this.Mode : System.Windows.Data.BindingMode with get, set" Usage="System.Windows.Data.Binding.Mode" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(Mono.Cecil.CustomAttributeArgument)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Windows.Data.BindingMode</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインドのデータ フローの方向を示す値を取得または設定します。</summary>
+        <value><see cref="T:System.Windows.Data.BindingMode" /> 値のいずれか 1 つ。 既定は <see cref="F:System.Windows.Data.BindingMode.Default" /> です。これは、ターゲットの依存関係プロパティの、既定のバインド モード値を返します。 ただし、既定値は各依存関係プロパティによって異なります。 一般に、ユーザーが編集できる、テキスト ボックスやチェック ボックスなどのコントロール プロパティは既定で双方向のバインディングであり、それ以外のほとんどのプロパティは既定で一方向のバインドになります。  
+  
+依存関係プロパティが既定で一方向と双方向のどちらでバインドされるかをプログラムで判断する 1 つの方法として、<see cref="M:System.Windows.DependencyProperty.GetMetadata(System.Type)" /> を使用してそのプロパティのプロパティ メタデータを取得してから、<see cref="P:System.Windows.FrameworkPropertyMetadata.BindsTwoWayByDefault" /> プロパティのブール値を確認することがきます。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ および<xref:System.Windows.Data.BindingMode.OneWay> <xref:System.ComponentModel.INotifyPropertyChanged>バインドをサポートするには、基になるデータがを実装する必要があります。 <xref:System.Windows.Data.BindingMode.TwoWay> 詳細については、「[方法: プロパティ変更通知を実装](~/docs/framework/wpf/data/how-to-implement-property-change-notification.md)する」を参照してください。  
+  
+ また<xref:System.Windows.Data.BindingMode.TwoWay>は<xref:System.Windows.Data.BindingMode.OneWayToSource>のバインドでは、 <xref:System.Windows.Data.Binding.UpdateSourceTrigger%2A>プロパティを設定することによって、ターゲットからソースへの更新を制御できます。 詳細については、「<xref:System.Windows.Data.Binding.UpdateSourceTrigger%2A>」を参照してください。  
+  
+ さまざまなバインドモードの詳細については、「[データバインディングの概要](~/docs/framework/wpf/data/data-binding-overview.md)」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="NotifyOnSourceUpdated">
+      <MemberSignature Language="C#" Value="public bool NotifyOnSourceUpdated { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool NotifyOnSourceUpdated" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.NotifyOnSourceUpdated" />
+      <MemberSignature Language="VB.NET" Value="Public Property NotifyOnSourceUpdated As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool NotifyOnSourceUpdated { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.NotifyOnSourceUpdated : bool with get, set" Usage="System.Windows.Data.Binding.NotifyOnSourceUpdated" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインディング ターゲットからバインディング ソースへ値が転送されたときに、<see cref="E:System.Windows.Data.Binding.SourceUpdated" /> イベントを発生させるかどうかを示す値を取得または設定します。</summary>
+        <value>バインディング ソースが更新されたときに、<see cref="E:System.Windows.Data.Binding.SourceUpdated" /> イベントを発生させる必要がある場合は、<see langword="true" />。それ以外の場合は、<see langword="false" />。 既定値は、<see langword="false" /> です。</value>
+        <remarks>To be added.</remarks>
+        <altmember cref="M:System.Windows.Data.BindingExpression.UpdateSource" />
+      </Docs>
+    </Member>
+    <Member MemberName="NotifyOnTargetUpdated">
+      <MemberSignature Language="C#" Value="public bool NotifyOnTargetUpdated { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool NotifyOnTargetUpdated" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.NotifyOnTargetUpdated" />
+      <MemberSignature Language="VB.NET" Value="Public Property NotifyOnTargetUpdated As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool NotifyOnTargetUpdated { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.NotifyOnTargetUpdated : bool with get, set" Usage="System.Windows.Data.Binding.NotifyOnTargetUpdated" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインディング ソースからバインディング ターゲットへ値が転送されたときに <see cref="E:System.Windows.Data.Binding.TargetUpdated" /> イベントを発生させるかどうかを示す値を取得または設定します。</summary>
+        <value>バインディング ターゲットの値が更新されたときに、<see cref="E:System.Windows.Data.Binding.TargetUpdated" /> イベントを発生させる必要がある場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 既定値は、<see langword="false" /> です。</value>
+        <remarks>To be added.</remarks>
+        <altmember cref="M:System.Windows.Data.BindingExpression.UpdateTarget" />
+      </Docs>
+    </Member>
+    <Member MemberName="NotifyOnValidationError">
+      <MemberSignature Language="C#" Value="public bool NotifyOnValidationError { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool NotifyOnValidationError" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.NotifyOnValidationError" />
+      <MemberSignature Language="VB.NET" Value="Public Property NotifyOnValidationError As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool NotifyOnValidationError { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.NotifyOnValidationError : bool with get, set" Usage="System.Windows.Data.Binding.NotifyOnValidationError" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインドされたオブジェクトに対して <see cref="E:System.Windows.Controls.Validation.Error" /> 添付イベントを発生させるかどうかを示す値を取得または設定します。</summary>
+        <value>ソースの更新中に検証エラーが発生したときにバインドされたオブジェクトに対して<see langword="true" /> 添付イベントを発生させる場合は <see cref="E:System.Windows.Controls.Validation.Error" /> 。それ以外の場合は <see langword="false" />。 既定値は、<see langword="false" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ バインディングが<xref:System.Windows.Data.Binding.ValidationRules%2A>関連付けられている場合、バインディングエンジンは、ターゲットプロパティの値をソースプロパティに転送するたびに各規則を確認します。 規則が値を無効にした場合、バインディングエンジン<xref:System.Windows.Controls.ValidationError>はオブジェクトを作成し、 <xref:System.Windows.Controls.Validation>に追加します。<xref:System.Windows.Controls.Validation.Errors%2A> バインドされたオブジェクトのコレクションです。 プロパティが空<xref:System.Windows.Controls.Validation.HasError%2A?displayProperty=nameWithType>でない場合、オブジェクトの添付プロパティはに`true`設定されます。 <xref:System.Windows.Controls.Validation.Errors%2A?displayProperty=nameWithType> のプロパティがに `true` 設定されている場合、バインディングエンジンはオブジェクト<xref:System.Windows.Controls.Validation.Error?displayProperty=nameWithType>の添付イベントを発生させます。 <xref:System.Windows.Data.Binding> <xref:System.Windows.Data.Binding.NotifyOnValidationError%2A>  
+  
+ 検証プロセスの詳細については、「[データバインディングの概要](~/docs/framework/wpf/data/data-binding-overview.md)」の「データの検証」セクションを参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Path">
+      <MemberSignature Language="C#" Value="public System.Windows.PropertyPath Path { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Windows.PropertyPath Path" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.Path" />
+      <MemberSignature Language="VB.NET" Value="Public Property Path As PropertyPath" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::PropertyPath ^ Path { System::Windows::PropertyPath ^ get(); void set(System::Windows::PropertyPath ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Path : System.Windows.PropertyPath with get, set" Usage="System.Windows.Data.Binding.Path" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Windows.PropertyPath</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインディング ソース プロパティへのパスを取得または設定します。</summary>
+        <value>バインディング ソース プロパティへのパス。 既定値は、<see langword="null" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 各バインドには、通常、バインディングターゲットオブジェクト、ターゲットプロパティ、バインディングソース、および使用するバインディングソース内の値へのパスという4つのコンポーネントがあります。 これらのデータバインディングの概念の詳細については、「[データバインディングの概要](~/docs/framework/wpf/data/data-binding-overview.md)」を参照してください。  
+  
+ <xref:System.Windows.Data.Binding.Path%2A>プロパティを使用して、バインド先のソース値を指定します。  
+  
+-   最も単純<xref:System.Windows.Data.Binding.Path%2A> `Path=PropertyName`なケースでは、プロパティの値は、バインディングに使用するソースオブジェクトのプロパティの名前です。たとえば、のようになります。  
+  
+-   プロパティのサブプロパティは、でC#使用される構文と同様の構文で指定できます。 たとえば、句 `Path=ShoppingCart.Order` は、バインディングをオブジェクトのサブプロパティ `Order` またはプロパティ `ShoppingCart` に設定します。  
+  
+-   添付プロパティにバインドするには、添付プロパティをかっこで囲みます。 たとえば、添付プロパティ<xref:System.Windows.Controls.DockPanel.Dock%2A?displayProperty=nameWithType>にバインドするために、構文は`Path=(DockPanel.Dock)`です。  
+  
+-   プロパティのインデクサーは、インデクサーが適用されているプロパティ名の後ろの角かっこ内に指定できます。 たとえば、句 `Path=ShoppingCart[0]` は、プロパティの内部インデックスがリテラル文字列「0」を処理する方法に対応するインデックスへのバインディングを設定します。 複数のインデクサーもサポートされています。  
+  
+-   `Path` 句ではインデクサーとサブプロパティを混在させることができます。例: `Path=ShoppingCart.ShippingInfo[MailingAddress,Street].`  
+  
+-   インデクサー内では、複数のインデクサーパラメーターをコンマ (,) で区切ることができます。 各パラメーターの型は、かっこで指定できます。 たとえば、 `Path="[(sys:Int32)42,(sys:Int32)24]"`を使用することができ`sys`ます。ここで`System` 、は名前空間にマップされます。  
+  
+-   ソースがコレクションビューの場合、現在の項目をスラッシュ (/) で指定できます。 たとえば、句`Path=/`は、バインドをビューの現在のアイテムに設定します。 ソースがコレクションの場合、この構文では、既定のコレクションビューの現在の項目を指定します。  
+  
+-   プロパティ名とスラッシュを組み合わせて、コレクションであるプロパティを走査することができます。 たとえば、は`Path=/Offices/ManagerName` 、コレクションでもある`Offices`プロパティを含むソースコレクションの現在の項目を指定します。 現在の項目は、プロパティを`ManagerName`含むオブジェクトです。  
+  
+-   必要に応じて、ピリオド (.) のパスを使用して、現在のソースにバインドできます。 たとえば、`Text="{Binding}"` は、`Text="{Binding Path=.}"` と同じです。  
+  
+ パスの構文の詳細については、「[バインディング宣言の概要](~/docs/framework/wpf/data/binding-declarations-overview.md)」または「 [PropertyPath XAML 構文](~/docs/framework/wpf/advanced/propertypath-xaml-syntax.md)」を参照してください。  
+  
+ バインド[!INCLUDE[TLA#tla_xml](~/includes/tlasharptla-xml-md.md)]につい<xref:System.Windows.Data.Binding.XPath%2A>ては、プロパティを参照してください。  
+  
+ オブジェクト全体にバインドするには、 <xref:System.Windows.Data.Binding.Path%2A>プロパティを指定する必要はありません。 詳細については、「[データバインディングの概要](~/docs/framework/wpf/data/data-binding-overview.md)」の「値へのパスの指定」を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例は、検証エラーメッセージを報告<xref:System.Windows.Controls.ToolTip>するを作成するスタイルトリガーを示しています。 Setter の値は、 <xref:System.Windows.Controls.TextBox> <xref:System.Windows.Data.Binding.RelativeSource%2A>プロパティを使用して、現在の<xref:System.Windows.Controls.TextBox> (スタイルを使用している) のエラーコンテンツにバインドされます。 この例の詳細については、「[方法: バインディング検証を実装](~/docs/framework/wpf/data/how-to-implement-binding-validation.md)する」を参照してください。  
+  
+ [!code-xaml[BindValidation#5](~/samples/snippets/csharp/VS_Snippets_Wpf/BindValidation/CSharp/Window1.xaml#5)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RelativeSource">
+      <MemberSignature Language="C#" Value="public System.Windows.Data.RelativeSource RelativeSource { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Windows.Data.RelativeSource RelativeSource" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.RelativeSource" />
+      <MemberSignature Language="VB.NET" Value="Public Property RelativeSource As RelativeSource" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::Data::RelativeSource ^ RelativeSource { System::Windows::Data::RelativeSource ^ get(); void set(System::Windows::Data::RelativeSource ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.RelativeSource : System.Windows.Data.RelativeSource with get, set" Usage="System.Windows.Data.Binding.RelativeSource" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(null)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Windows.Data.RelativeSource</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインディング ターゲットの位置に対して相対的な位置を指定することにより、バインディング ソースを取得または設定します。</summary>
+        <value>使用するバインディング ソースの相対的な位置を指定する <see cref="T:System.Windows.Data.RelativeSource" /> オブジェクト。 既定値は、<see langword="null" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティは、通常、オブジェクトの1つのプロパティを同じオブジェクトの別のプロパティにバインドしたり、スタイルまたはテンプレートでバインディングを定義したりするために使用されます。  
+  
+ 既定では、バインドは、 `DataContext`プロパティによって指定されたデータコンテキスト (設定されている場合) を継承します。 ただし、 <xref:System.Windows.Data.Binding>プロパティは、のソースを明示的に設定し、継承されたデータコンテキストをオーバーライドする方法の1つです。 <xref:System.Windows.Data.Binding.RelativeSource%2A> 詳細については、「[方法: バインディングソースを指定](~/docs/framework/wpf/data/how-to-specify-the-binding-source.md)する」を参照してください。  
+  
+ プロパティ<xref:System.Windows.Data.Binding.ElementName%2A?displayProperty=nameWithType>と<xref:System.Windows.Data.Binding.Source%2A?displayProperty=nameWithType>プロパティを使用すると、バインディングのソースを明示的に設定することもできます。 ただし、3つのプロパティ<xref:System.Windows.Data.Binding.ElementName%2A>(、 <xref:System.Windows.Data.Binding.Source%2A> <xref:System.Windows.Data.Binding.RelativeSource%2A>、) のいずれか1つだけをバインドごとに設定する必要があります。それ以外の場合は、競合が発生する可能性があります。 このプロパティは、バインディングソースの競合がある場合に例外をスローします。  
+  
+ 詳細[!INCLUDE[TLA2#tla_xaml](~/includes/tla2sharptla-xaml-md.md)]については、「 [RelativeSource MarkupExtension](~/docs/framework/wpf/advanced/relativesource-markupextension.md)」を参照してください。  
+    
+## Examples  
+ 次の例は、検証エラーメッセージを報告<xref:System.Windows.Controls.ToolTip>するを作成するスタイルトリガーを示しています。 Setter の値は、 <xref:System.Windows.Controls.TextBox> <xref:System.Windows.Data.Binding.RelativeSource%2A>プロパティを使用して、現在の<xref:System.Windows.Controls.TextBox> (スタイルを使用している) のエラーコンテンツにバインドされます。 この例の詳細については、「[方法: バインディング検証を実装](~/docs/framework/wpf/data/how-to-implement-binding-validation.md)する」を参照してください。  
+  
+ [!code-xaml[BindValidation#5](~/samples/snippets/csharp/VS_Snippets_Wpf/BindValidation/CSharp/Window1.xaml#5)]  
+  
+ 完全な例については、「[バインディングの検証のサンプル](https://go.microsoft.com/fwlink/?LinkID=159972)」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Windows.Data.Binding.Source" />
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveSourceUpdatedHandler">
+      <MemberSignature Language="C#" Value="public static void RemoveSourceUpdatedHandler (System.Windows.DependencyObject element, EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt; handler);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void RemoveSourceUpdatedHandler(class System.Windows.DependencyObject element, class System.EventHandler`1&lt;class System.Windows.Data.DataTransferEventArgs&gt; handler) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.RemoveSourceUpdatedHandler(System.Windows.DependencyObject,System.EventHandler{System.Windows.Data.DataTransferEventArgs})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub RemoveSourceUpdatedHandler (element As DependencyObject, handler As EventHandler(Of DataTransferEventArgs))" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void RemoveSourceUpdatedHandler(System::Windows::DependencyObject ^ element, EventHandler&lt;System::Windows::Data::DataTransferEventArgs ^&gt; ^ handler);" />
+      <MemberSignature Language="F#" Value="static member RemoveSourceUpdatedHandler : System.Windows.DependencyObject * EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt; -&gt; unit" Usage="System.Windows.Data.Binding.RemoveSourceUpdatedHandler (element, handler)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="System.Windows.DependencyObject" />
+        <Parameter Name="handler" Type="System.EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="element">イベントをリッスンする <see cref="T:System.Windows.UIElement" /> または <see cref="T:System.Windows.ContentElement" />。</param>
+        <param name="handler">削除するハンドラー。</param>
+        <summary><see cref="E:System.Windows.Data.Binding.SourceUpdated" /> 添付イベントのハンドラーを削除します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、での添付[!INCLUDE[TLA2#tla_xaml](~/includes/tla2sharptla-xaml-md.md)]イベントの使用をサポートします。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveTargetUpdatedHandler">
+      <MemberSignature Language="C#" Value="public static void RemoveTargetUpdatedHandler (System.Windows.DependencyObject element, EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt; handler);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void RemoveTargetUpdatedHandler(class System.Windows.DependencyObject element, class System.EventHandler`1&lt;class System.Windows.Data.DataTransferEventArgs&gt; handler) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.RemoveTargetUpdatedHandler(System.Windows.DependencyObject,System.EventHandler{System.Windows.Data.DataTransferEventArgs})" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub RemoveTargetUpdatedHandler (element As DependencyObject, handler As EventHandler(Of DataTransferEventArgs))" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void RemoveTargetUpdatedHandler(System::Windows::DependencyObject ^ element, EventHandler&lt;System::Windows::Data::DataTransferEventArgs ^&gt; ^ handler);" />
+      <MemberSignature Language="F#" Value="static member RemoveTargetUpdatedHandler : System.Windows.DependencyObject * EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt; -&gt; unit" Usage="System.Windows.Data.Binding.RemoveTargetUpdatedHandler (element, handler)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="element" Type="System.Windows.DependencyObject" />
+        <Parameter Name="handler" Type="System.EventHandler&lt;System.Windows.Data.DataTransferEventArgs&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="element">イベントをリッスンする <see cref="T:System.Windows.UIElement" /> または <see cref="T:System.Windows.ContentElement" />。</param>
+        <param name="handler">削除するハンドラー。</param>
+        <summary><see cref="E:System.Windows.Data.Binding.TargetUpdated" /> 添付イベントのハンドラーを削除します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、での添付[!INCLUDE[TLA2#tla_xaml](~/includes/tla2sharptla-xaml-md.md)]イベントの使用をサポートします。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetXmlNamespaceManager">
+      <MemberSignature Language="C#" Value="public static void SetXmlNamespaceManager (System.Windows.DependencyObject target, System.Xml.XmlNamespaceManager value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void SetXmlNamespaceManager(class System.Windows.DependencyObject target, class System.Xml.XmlNamespaceManager value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.SetXmlNamespaceManager(System.Windows.DependencyObject,System.Xml.XmlNamespaceManager)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub SetXmlNamespaceManager (target As DependencyObject, value As XmlNamespaceManager)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void SetXmlNamespaceManager(System::Windows::DependencyObject ^ target, System::Xml::XmlNamespaceManager ^ value);" />
+      <MemberSignature Language="F#" Value="static member SetXmlNamespaceManager : System.Windows.DependencyObject * System.Xml.XmlNamespaceManager -&gt; unit" Usage="System.Windows.Data.Binding.SetXmlNamespaceManager (target, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="target" Type="System.Windows.DependencyObject" />
+        <Parameter Name="value" Type="System.Xml.XmlNamespaceManager" />
+      </Parameters>
+      <Docs>
+        <param name="target">名前空間情報の取得元となるオブジェクト。</param>
+        <param name="value">渡された要素で名前空間の評価に使用する <see cref="T:System.Xml.XmlNamespaceManager" />。</param>
+        <summary>指定した要素にアタッチされているバインドによって使用される名前空間マネージャー オブジェクトを設定します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、 <xref:System.Windows.Data.Binding.XmlNamespaceManager%2A>添付プロパティの添付プロパティの使用をサポートします。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="target" /> が <see langword="null" /> です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ShouldSerializePath">
+      <MemberSignature Language="C#" Value="public bool ShouldSerializePath ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool ShouldSerializePath() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.ShouldSerializePath" />
+      <MemberSignature Language="VB.NET" Value="Public Function ShouldSerializePath () As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool ShouldSerializePath();" />
+      <MemberSignature Language="F#" Value="member this.ShouldSerializePath : unit -&gt; bool" Usage="binding.ShouldSerializePath " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="P:System.Windows.Data.Binding.Path" /> プロパティを永続化する必要があるかどうかを示します。</summary>
+        <returns>プロパティの値が既定値から変更されている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この`ShouldSerialize`メソッドは、プロパティに<xref:System.Windows.Data.Binding.Path%2A>単純な既定値がないために用意されています。 このメソッドは、プロパティが既定値から変更されたかどうかを示します。 のデザイナー <xref:System.Windows.Data.Binding>を開発している場合、またはを組み込んだ独自の<xref:System.Windows.Data.Binding>コントロールを開発している場合は、通常、このメソッドを呼び出します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ShouldSerializeSource">
+      <MemberSignature Language="C#" Value="public bool ShouldSerializeSource ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool ShouldSerializeSource() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.ShouldSerializeSource" />
+      <MemberSignature Language="VB.NET" Value="Public Function ShouldSerializeSource () As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool ShouldSerializeSource();" />
+      <MemberSignature Language="F#" Value="member this.ShouldSerializeSource : unit -&gt; bool" Usage="binding.ShouldSerializeSource " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="P:System.Windows.Data.Binding.Source" /> プロパティを永続化する必要があるかどうかを示します。</summary>
+        <returns>プロパティの値が既定値から変更されている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この`ShouldSerialize`メソッドは、プロパティに<xref:System.Windows.Data.Binding.Source%2A>単純な既定値がないために用意されています。 このメソッドは、プロパティが既定値から変更されたかどうかを示します。 のデザイナー <xref:System.Windows.Data.Binding>を開発している場合、またはを組み込んだ独自の<xref:System.Windows.Data.Binding>コントロールを開発している場合は、通常、このメソッドを呼び出します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ShouldSerializeValidationRules">
+      <MemberSignature Language="C#" Value="public bool ShouldSerializeValidationRules ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool ShouldSerializeValidationRules() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Data.Binding.ShouldSerializeValidationRules" />
+      <MemberSignature Language="VB.NET" Value="Public Function ShouldSerializeValidationRules () As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool ShouldSerializeValidationRules();" />
+      <MemberSignature Language="F#" Value="member this.ShouldSerializeValidationRules : unit -&gt; bool" Usage="binding.ShouldSerializeValidationRules " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="P:System.Windows.Data.Binding.ValidationRules" /> プロパティを永続化する必要があるかどうかを示します。</summary>
+        <returns>プロパティの値が既定値から変更されている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この`ShouldSerialize`メソッドは、プロパティに<xref:System.Windows.Data.Binding.ValidationRules%2A>単純な既定値がないために用意されています。 このメソッドは、プロパティが既定値から変更されたかどうかを示します。 のデザイナー <xref:System.Windows.Data.Binding>を開発している場合、またはを組み込んだ独自の<xref:System.Windows.Data.Binding>コントロールを開発している場合は、通常、このメソッドを呼び出します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Source">
+      <MemberSignature Language="C#" Value="public object Source { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object Source" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.Source" />
+      <MemberSignature Language="VB.NET" Value="Public Property Source As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Object ^ Source { System::Object ^ get(); void set(System::Object ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Source : obj with get, set" Usage="System.Windows.Data.Binding.Source" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインド ソースとして使用されるオブジェクトを取得または設定します。</summary>
+        <value>バインド ソースとして使用されるオブジェクト。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 既定では、バインドは、 `DataContext`プロパティによって指定されたデータコンテキスト (設定されている場合) を継承します。 ただし、 <xref:System.Windows.Data.Binding>プロパティは、のソースを明示的に設定し、継承されたデータコンテキストをオーバーライドする方法の1つです。 <xref:System.Windows.Data.Binding.Source%2A> 複数のプロパティが同じデータコンテキストを継承するスコープを確立する機能が不要な場合は、プロパティ<xref:System.Windows.Data.Binding.Source%2A> `DataContext`の代わりにプロパティを使用できます。  
+  
+ プロパティ<xref:System.Windows.Data.Binding.ElementName%2A?displayProperty=nameWithType>と<xref:System.Windows.Data.Binding.RelativeSource%2A?displayProperty=nameWithType>プロパティを使用すると、バインディングのソースを明示的に設定することもできます。 ただし、3つのプロパティ<xref:System.Windows.Data.Binding.ElementName%2A>(、 <xref:System.Windows.Data.Binding.Source%2A> <xref:System.Windows.Data.Binding.RelativeSource%2A>、) のいずれか1つだけをバインドごとに設定する必要があります。それ以外の場合は、競合が発生する可能性があります。 このプロパティは、バインディングソースの競合がある場合に例外をスローします。  
+  
+ このプロパティをクリアするには、 <xref:System.Windows.DependencyProperty.UnsetValue?displayProperty=nameWithType>をに設定します。  
+  
+<a name="xamlAttributeUsage_Source"></a>   
+## <a name="xaml-attribute-usage"></a>XAML 属性の使用方法  
+  
+```  
+<object Source="object"/>  
+```  
+  
+<a name="xamlValues_Source"></a>   
+## <a name="xaml-values"></a>XAML 値  
+ *object*  
+ 既存のオブジェクト。 既存のオブジェクトを参照するには、 [StaticResource マークアップ拡張機能](~/docs/framework/wpf/advanced/staticresource-markup-extension.md)を使用します。  
+  
+   
+  
+## Examples  
+ 次の例では`Person` 、最初の強調表示さ`PersonName`れた行に示さ`SDKSample`れているように、名前空間で定義されているという名前の文字列プロパティを持つオブジェクトを使用します。 `<src>`要素を含む強調表示された行では、 `Person` `PersonName`プロパティ値がの`Joe`オブジェクトがインスタンス化されます。 これは、 `Resources` 「」セクションで行い、 `x:Key`が割り当てられています。  
+  
+ [!code-xaml[BindingInstantiation](~/samples/snippets/csharp/VS_Snippets_Wpf/SimpleBinding/CSharp/Page1.xaml?highlight=4,9,37)]  
+  
+ `<TextBlock>`要素を含む強調表示された行は、 `PersonName`プロパティにバインドする方法を示しています。 その結果、コントロールに<xref:System.Windows.Controls.TextBlock>は "Joe" という値が表示されます。  
+  
+ 次の例<xref:System.Windows.Data.Binding.Source%2A>では`static` 、 <xref:System.Windows.Data.Binding>オブジェクトの値がプロパティ<xref:System.Windows.Application.Current%2A?displayProperty=nameWithType>に設定されています。  
+  
+ [!code-xaml[DataBindingLab#ComboBoxMultiBinding](~/samples/snippets/csharp/VS_Snippets_Wpf/DataBindingLab/CSharp/AddProductWindow.xaml#comboboxmultibinding)]  
+  
+ 完全な例については、「[データバインディングのデモ](https://go.microsoft.com/fwlink/?LinkID=163703)」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SourceUpdated">
+      <MemberSignature Language="C#" Value="see AddSourceUpdatedHandler, and RemoveSourceUpdatedHandler" />
+      <MemberSignature Language="ILAsm" Value="see AddSourceUpdatedHandler, and RemoveSourceUpdatedHandler" />
+      <MemberSignature Language="DocId" Value="E:System.Windows.Data.Binding.SourceUpdated" />
+      <MemberSignature Language="VB.NET" Value="see AddSourceUpdatedHandler, and RemoveSourceUpdatedHandler" />
+      <MemberSignature Language="F#" Value="see AddSourceUpdatedHandler, and RemoveSourceUpdatedHandler" Usage="see AddSourceUpdatedHandler, and RemoveSourceUpdatedHandler" />
+      <MemberType>AttachedEvent</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>値がバインディング ターゲットからバインディング ソースに転送されるときに発生します。ただし、これは <see cref="P:System.Windows.Data.Binding.NotifyOnSourceUpdated" /> 値が <see langword="true" /> に設定されているバインディングに限られます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+<a name="routedEventInfo_SourceUpdatedEvent"></a>   
+## <a name="routed-event-information"></a>ルーティングされたイベント情報  
+  
+|||  
+|-|-|  
+|識別子フィールド|<xref:System.Windows.Data.Binding.SourceUpdatedEvent>|  
+|ルーティング方法|バブリング|  
+|Delegate|<xref:System.EventHandler%601>。に<xref:System.Windows.Data.DataTransferEventArgs>制限されています。|  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Windows.Data.BindingExpression.UpdateSource" />
+        <altmember cref="E:System.Windows.Data.Binding.TargetUpdated" />
+      </Docs>
+    </Member>
+    <Member MemberName="SourceUpdatedEvent">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.RoutedEvent SourceUpdatedEvent;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.RoutedEvent SourceUpdatedEvent" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Data.Binding.SourceUpdatedEvent" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly SourceUpdatedEvent As RoutedEvent " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::RoutedEvent ^ SourceUpdatedEvent;" />
+      <MemberSignature Language="F#" Value=" staticval mutable SourceUpdatedEvent : System.Windows.RoutedEvent" Usage="System.Windows.Data.Binding.SourceUpdatedEvent" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.RoutedEvent</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="E:System.Windows.Data.Binding.SourceUpdated" /> 添付イベントを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="TargetUpdated">
+      <MemberSignature Language="C#" Value="see AddTargetUpdatedHandler, and RemoveTargetUpdatedHandler" />
+      <MemberSignature Language="ILAsm" Value="see AddTargetUpdatedHandler, and RemoveTargetUpdatedHandler" />
+      <MemberSignature Language="DocId" Value="E:System.Windows.Data.Binding.TargetUpdated" />
+      <MemberSignature Language="VB.NET" Value="see AddTargetUpdatedHandler, and RemoveTargetUpdatedHandler" />
+      <MemberSignature Language="F#" Value="see AddTargetUpdatedHandler, and RemoveTargetUpdatedHandler" Usage="see AddTargetUpdatedHandler, and RemoveTargetUpdatedHandler" />
+      <MemberType>AttachedEvent</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>値がバインディング ソースからバインディング ターゲットに転送されるときに発生します。ただし、これは <see cref="P:System.Windows.Data.Binding.NotifyOnTargetUpdated" /> 値が <see langword="true" /> に設定されているバインディングに限られます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+<a name="routedEventInfo_TargetUpdatedEvent"></a>   
+## <a name="routed-event-information"></a>ルーティングされたイベント情報  
+  
+|||  
+|-|-|  
+|識別子フィールド|<xref:System.Windows.Data.Binding.TargetUpdatedEvent>|  
+|ルーティング方法|バブリング|  
+|Delegate|<xref:System.EventHandler%601>。に<xref:System.Windows.Data.DataTransferEventArgs>制限されています。|  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Windows.Data.BindingExpression.UpdateTarget" />
+        <altmember cref="E:System.Windows.Data.Binding.SourceUpdated" />
+      </Docs>
+    </Member>
+    <Member MemberName="TargetUpdatedEvent">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.RoutedEvent TargetUpdatedEvent;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.RoutedEvent TargetUpdatedEvent" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Data.Binding.TargetUpdatedEvent" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly TargetUpdatedEvent As RoutedEvent " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::RoutedEvent ^ TargetUpdatedEvent;" />
+      <MemberSignature Language="F#" Value=" staticval mutable TargetUpdatedEvent : System.Windows.RoutedEvent" Usage="System.Windows.Data.Binding.TargetUpdatedEvent" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.RoutedEvent</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="E:System.Windows.Data.Binding.TargetUpdated" /> 添付イベントを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="UpdateSourceExceptionFilter">
+      <MemberSignature Language="C#" Value="public System.Windows.Data.UpdateSourceExceptionFilterCallback UpdateSourceExceptionFilter { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Windows.Data.UpdateSourceExceptionFilterCallback UpdateSourceExceptionFilter" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.UpdateSourceExceptionFilter" />
+      <MemberSignature Language="VB.NET" Value="Public Property UpdateSourceExceptionFilter As UpdateSourceExceptionFilterCallback" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::Data::UpdateSourceExceptionFilterCallback ^ UpdateSourceExceptionFilter { System::Windows::Data::UpdateSourceExceptionFilterCallback ^ get(); void set(System::Windows::Data::UpdateSourceExceptionFilterCallback ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.UpdateSourceExceptionFilter : System.Windows.Data.UpdateSourceExceptionFilterCallback with get, set" Usage="System.Windows.Data.Binding.UpdateSourceExceptionFilter" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Windows.Data.UpdateSourceExceptionFilterCallback</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインディング ソースの値の更新時にバインディング エンジンが検出した例外を処理するためにカスタム ロジックの提供に使用できるハンドラーを取得または設定します。 これは、バインディングに <see cref="T:System.Windows.Controls.ExceptionValidationRule" /> を関連付けている場合にのみ適用できます。</summary>
+        <value>バインディング ソースの値の更新時にバインディング エンジンが検出した例外を処理するためのカスタム ロジックを提供するメソッド。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Windows.Controls.ExceptionValidationRule>は、バインディングソースプロパティの更新中にスローされた例外を確認する組み込みの検証規則です。 を<xref:System.Windows.Controls.ExceptionValidationRule> オブジェクト <xref:System.Windows.Data.Binding> に関連付けた場合は、このプロパティを使用して、これらの例外を処理するためのカスタムロジックを提供するようにハンドラーを設定できます。 がに指定されていない<xref:System.Windows.Controls.Validation.Errors%2A?displayProperty=nameWithType>場合<xref:System.Windows.Controls.ValidationError> 、バインディングエンジンは例外を使用してを作成し、バインドされた要素のコレクションに <xref:System.Windows.Data.Binding> 追加 <xref:System.Windows.Data.Binding.UpdateSourceExceptionFilter%2A>します。  
+  
+   
+  
+## Examples  
+ `Age3`次<xref:System.Windows.Controls.TextBox.Text%2A> の <xref:System.Windows.Controls.TextBox> プロパティは、型 `int` のソースプロパティにデータバインドされています。 は<xref:System.Windows.Controls.ExceptionValidationRule> 、ソースプロパティの更新中にスローされた例外を確認します (ユーザーが整数に変換できない値を入力した場合など)。  
+  
+ [!code-xaml[BindValidation#tbExceptionFilter](~/samples/snippets/csharp/VS_Snippets_Wpf/BindValidation/CSharp/Window1.xaml#tbexceptionfilter)]  
+  
+ これらの例外を処理するカスタムロジックを提供できます。 次の例は、プロパティを使用<xref:System.Windows.Data.Binding.UpdateSourceExceptionFilter%2A>してを<xref:System.Windows.Data.UpdateSourceExceptionFilterCallback>設定する方法を示しています。  
+  
+ [!code-csharp[BindValidation#filtercallback](~/samples/snippets/csharp/VS_Snippets_Wpf/BindValidation/CSharp/Window1.xaml.cs#filtercallback)]  
+  
+ の実装例を次に示し<xref:System.Windows.Data.UpdateSourceExceptionFilterCallback>ます。  
+  
+ [!code-csharp[BindValidation#Handler](~/samples/snippets/csharp/VS_Snippets_Wpf/BindValidation/CSharp/Window1.xaml.cs#handler)]  
+  
+ は、、例外`null`自体、またはを<xref:System.Windows.Controls.ValidationError>返すこともできます。 <xref:System.Windows.Data.UpdateSourceExceptionFilterCallback> 詳細については、「<xref:System.Windows.Data.UpdateSourceExceptionFilterCallback>」を参照してください。  
+  
+ 完全なサンプルについては、「[バインディングの検証のサンプル](https://go.microsoft.com/fwlink/?LinkID=159972)」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="UpdateSourceTrigger">
+      <MemberSignature Language="C#" Value="public System.Windows.Data.UpdateSourceTrigger UpdateSourceTrigger { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Windows.Data.UpdateSourceTrigger UpdateSourceTrigger" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.UpdateSourceTrigger" />
+      <MemberSignature Language="VB.NET" Value="Public Property UpdateSourceTrigger As UpdateSourceTrigger" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Windows::Data::UpdateSourceTrigger UpdateSourceTrigger { System::Windows::Data::UpdateSourceTrigger get(); void set(System::Windows::Data::UpdateSourceTrigger value); };" />
+      <MemberSignature Language="F#" Value="member this.UpdateSourceTrigger : System.Windows.Data.UpdateSourceTrigger with get, set" Usage="System.Windows.Data.Binding.UpdateSourceTrigger" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(Mono.Cecil.CustomAttributeArgument)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Windows.Data.UpdateSourceTrigger</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>バインディング ソースの更新のタイミングを決定する値を取得または設定します。</summary>
+        <value><see cref="T:System.Windows.Data.UpdateSourceTrigger" /> 値のいずれか。 既定値は <see cref="F:System.Windows.Data.UpdateSourceTrigger.Default" /> で、ターゲット依存関係プロパティの既定の <see cref="T:System.Windows.Data.UpdateSourceTrigger" /> 値を返します。 ほとんどの依存関係プロパティの既定値は <see cref="F:System.Windows.Data.UpdateSourceTrigger.PropertyChanged" /> です。ただし、<see cref="P:System.Windows.Controls.TextBox.Text" /> プロパティの既定値は <see cref="F:System.Windows.Data.UpdateSourceTrigger.LostFocus" /> です。  
+  
+プログラムを使って依存関係プロパティの既定の <see cref="P:System.Windows.Data.Binding.UpdateSourceTrigger" /> 値を確認するには、<see cref="M:System.Windows.DependencyProperty.GetMetadata(System.Type)" /> を使ってプロパティのプロパティ メタデータを取得してから、<see cref="P:System.Windows.FrameworkPropertyMetadata.DefaultUpdateSourceTrigger" /> プロパティの値を確認します。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ターゲットプロパティの<xref:System.Windows.Data.BindingMode.TwoWay>変更<xref:System.Windows.Data.BindingMode.OneWayToSource>をリッスンし、ソースに反映させるバインディング。 これは、ソースの更新と呼ばれます。 通常、これらの更新は、ターゲットプロパティが変更されるたびに行われます。 これはチェックボックスやその他の簡単なコントロールには適していますが、通常はテキストフィールドには適していません。 すべてのキーストロークの後で更新すると、パフォーマンスが低下する可能性があり、ユーザーは、新しい値にコミットする前に、backspace キーを押して、入力エラーを修正することを拒否できます。 したがって、 <xref:System.Windows.Controls.TextBox.Text%2A>プロパティ<xref:System.Windows.Data.Binding.UpdateSourceTrigger%2A>の既定値はで<xref:System.Windows.Data.UpdateSourceTrigger.LostFocus>あり、 <xref:System.Windows.Data.UpdateSourceTrigger.PropertyChanged>ではありません。  
+  
+ <xref:System.Windows.Data.Binding.UpdateSourceTrigger%2A>値をに<xref:System.Windows.Data.UpdateSourceTrigger.Explicit>設定した場合、 <xref:System.Windows.Data.BindingExpression.UpdateSource%2A>メソッドを呼び出す必要があります。指定しない場合、変更はソースに反映されません。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Windows.Data.Binding.Mode" />
+      </Docs>
+    </Member>
+    <Member MemberName="ValidatesOnDataErrors">
+      <MemberSignature Language="C#" Value="public bool ValidatesOnDataErrors { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool ValidatesOnDataErrors" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.ValidatesOnDataErrors" />
+      <MemberSignature Language="VB.NET" Value="Public Property ValidatesOnDataErrors As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool ValidatesOnDataErrors { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.ValidatesOnDataErrors : bool with get, set" Usage="System.Windows.Data.Binding.ValidatesOnDataErrors" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Windows.Controls.DataErrorValidationRule" /> を含めるかどうかを示す値を取得または設定します。</summary>
+        <value><see cref="T:System.Windows.Controls.DataErrorValidationRule" /> を含める場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティを設定することにより、 <xref:System.Windows.Controls.DataErrorValidationRule>要素を明示的に使用することができます。 は<xref:System.Windows.Controls.DataErrorValidationRule> 、ソースオブジェクトの<xref:System.ComponentModel.IDataErrorInfo>実装によって発生したエラーをチェックする、組み込みの検証規則です。 エラーが発生した場合、バインディングエンジンは、 <xref:System.Windows.Controls.ValidationError>エラーが発生したを作成し<xref:System.Windows.Controls.Validation.Errors%2A?displayProperty=nameWithType> 、バインドされた要素のコレクションに追加します。 エラーがないと、別のルールで検証の問題が発生しない限り、この検証フィードバックはクリアされます。  
+  
+ <xref:System.Windows.Data.Binding.ValidatesOnDataErrors%2A>は .NET Framework バージョン3.5 で導入されました。  詳細については、「[.NET Framework のバージョンおよび依存関係](~/docs/framework/migration-guide/versions-and-dependencies.md)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例で<xref:System.ComponentModel.IDataErrorInfo>は<xref:System.Windows.Data.Binding.ValidatesOnDataErrors%2A> 、とを使用して<xref:System.Windows.Controls.TextBox>、のユーザー入力を検証します。 最初の例では、を実装<xref:System.ComponentModel.IDataErrorInfo>するデータ型を作成して、検証エラーを報告します。  
+  
+ [!code-csharp[BindingValidationAttributesSnippets#IDataErrorInfoData](~/samples/snippets/csharp/VS_Snippets_Wpf/bindingvalidationattributessnippets/csharp/data.cs#idataerrorinfodata)]
+ [!code-vb[BindingValidationAttributesSnippets#IDataErrorInfoData](~/samples/snippets/visualbasic/VS_Snippets_Wpf/bindingvalidationattributessnippets/visualbasic/window1.xaml.vb#idataerrorinfodata)]  
+  
+ 次の例では`Age` 、プロパティ<xref:System.Windows.Controls.TextBox>をにバインド<xref:System.Windows.Data.Binding.ValidatesOnDataErrors%2A> <xref:System.Windows.Data.Binding>し`true` 、でをに設定します。  ユーザーが無効な値を入力すると、に赤い枠線<xref:System.Windows.Controls.TextBox>が表示<xref:System.Windows.Controls.ToolTip>され、によってエラーメッセージが報告されます。  
+  
+ [!code-xaml[BindingValidationAttributesSnippets#IDataErrorInfoXaml](~/samples/snippets/csharp/VS_Snippets_Wpf/bindingvalidationattributessnippets/csharp/window1.xaml#idataerrorinfoxaml)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Windows.Data.Binding.ValidatesOnExceptions" />
+      </Docs>
+    </Member>
+    <Member MemberName="ValidatesOnExceptions">
+      <MemberSignature Language="C#" Value="public bool ValidatesOnExceptions { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool ValidatesOnExceptions" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.ValidatesOnExceptions" />
+      <MemberSignature Language="VB.NET" Value="Public Property ValidatesOnExceptions As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool ValidatesOnExceptions { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.ValidatesOnExceptions : bool with get, set" Usage="System.Windows.Data.Binding.ValidatesOnExceptions" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Windows.Controls.ExceptionValidationRule" /> を含めるかどうかを示す値を取得または設定します。</summary>
+        <value><see cref="T:System.Windows.Controls.ExceptionValidationRule" /> を含める場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティを設定することにより、 <xref:System.Windows.Controls.ExceptionValidationRule>要素を明示的に使用することができます。 <xref:System.Windows.Controls.ExceptionValidationRule>は、ソースプロパティの更新中にスローされた例外を確認する組み込みの検証規則です。 例外がスローされた場合、バインディングエンジンは<xref:System.Windows.Controls.ValidationError>例外を使用してを作成し<xref:System.Windows.Controls.Validation.Errors%2A?displayProperty=nameWithType> 、バインドされた要素のコレクションに追加します。 エラーがないと、別のルールで検証の問題が発生しない限り、この検証フィードバックはクリアされます。  
+  
+ <xref:System.Windows.Data.Binding.ValidatesOnExceptions%2A>は .NET Framework バージョン3.5 で導入されました。  詳細については、「[.NET Framework のバージョンおよび依存関係](~/docs/framework/migration-guide/versions-and-dependencies.md)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例で<xref:System.Windows.Data.Binding.ValidatesOnExceptions%2A>は、を使用して<xref:System.Windows.Controls.TextBox>、でのユーザー入力を検証します。 最初の例では、 `Age`プロパティが無効なプロパティに設定されている場合に例外をスローするデータ型を作成します。  
+  
+ [!code-csharp[BindingValidationAttributesSnippets#ThrowExceptionData](~/samples/snippets/csharp/VS_Snippets_Wpf/bindingvalidationattributessnippets/csharp/data.cs#throwexceptiondata)]
+ [!code-vb[BindingValidationAttributesSnippets#ThrowExceptionData](~/samples/snippets/visualbasic/VS_Snippets_Wpf/bindingvalidationattributessnippets/visualbasic/window1.xaml.vb#throwexceptiondata)]  
+  
+ 次の例では`Age` 、プロパティ<xref:System.Windows.Controls.TextBox>をにバインド<xref:System.Windows.Data.Binding.ValidatesOnExceptions%2A> <xref:System.Windows.Data.Binding>し`true` 、でをに設定します。 ユーザーが無効な値を入力すると、に赤い枠線<xref:System.Windows.Controls.TextBox>が表示<xref:System.Windows.Controls.ToolTip>され、によってエラーメッセージが報告されます。  
+  
+ [!code-xaml[BindingValidationAttributesSnippets#ThrowExceptionXaml](~/samples/snippets/csharp/VS_Snippets_Wpf/bindingvalidationattributessnippets/csharp/window1.xaml#throwexceptionxaml)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Windows.Data.Binding.ValidatesOnDataErrors" />
+      </Docs>
+    </Member>
+    <Member MemberName="ValidatesOnNotifyDataErrors">
+      <MemberSignature Language="C#" Value="public bool ValidatesOnNotifyDataErrors { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool ValidatesOnNotifyDataErrors" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.ValidatesOnNotifyDataErrors" />
+      <MemberSignature Language="VB.NET" Value="Public Property ValidatesOnNotifyDataErrors As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool ValidatesOnNotifyDataErrors { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.ValidatesOnNotifyDataErrors : bool with get, set" Usage="System.Windows.Data.Binding.ValidatesOnNotifyDataErrors" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netcore-3.0">
+          <AttributeName>System.ComponentModel.DefaultValue(true)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Windows.Controls.NotifyDataErrorValidationRule" /> を含めるかどうかを示す値を取得または設定します。</summary>
+        <value><see cref="T:System.Windows.Controls.NotifyDataErrorValidationRule" /> を含める場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 既定値は、<see langword="true" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ が<xref:System.Windows.Data.Binding.ValidatesOnNotifyDataErrors%2A> <xref:System.ComponentModel.INotifyDataErrorInfo>の場合、バインディングはを実装するデータソースによって発生したエラーを確認して報告します。 `true`  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ValidationRules">
+      <MemberSignature Language="C#" Value="public System.Collections.ObjectModel.Collection&lt;System.Windows.Controls.ValidationRule&gt; ValidationRules { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Collections.ObjectModel.Collection`1&lt;class System.Windows.Controls.ValidationRule&gt; ValidationRules" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.ValidationRules" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property ValidationRules As Collection(Of ValidationRule)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Collections::ObjectModel::Collection&lt;System::Windows::Controls::ValidationRule ^&gt; ^ ValidationRules { System::Collections::ObjectModel::Collection&lt;System::Windows::Controls::ValidationRule ^&gt; ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.ValidationRules : System.Collections.ObjectModel.Collection&lt;System.Windows.Controls.ValidationRule&gt;" Usage="System.Windows.Data.Binding.ValidationRules" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.ObjectModel.Collection&lt;System.Windows.Controls.ValidationRule&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ユーザー入力の有効性をチェックする規則のコレクションを取得します。</summary>
+        <value><see cref="T:System.Windows.Controls.ValidationRule" /> オブジェクトのコレクション。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ データバインディングモデルを使用すると、 <xref:System.Windows.Data.Binding.ValidationRules%2A> <xref:System.Windows.Data.Binding>または<xref:System.Windows.Data.MultiBinding>オブジェクトに関連付けることができます。 [!INCLUDE[TLA2#tla_winclient](~/includes/tla2sharptla-winclient-md.md)] <xref:System.Windows.Controls.ValidationRule>クラスから派生し、 <xref:System.Windows.Controls.ValidationRule.Validate%2A>メソッドを実装することによってカスタム規則を作成することも、組み込みの<xref:System.Windows.Controls.ExceptionValidationRule>を使用することもできます。これにより、ソースの更新中に例外が発生した場合に値が無効になります。  
+  
+ バインディングエンジンは、入力<xref:System.Windows.Controls.ValidationRule>値 (バインディングターゲットプロパティ値) がバインディングソースプロパティに転送されるたびに、バインディングに関連付けられている各をチェックします。 検証プロセスの詳細については、「[データバインディングの概要](~/docs/framework/wpf/data/data-binding-overview.md)」の「データの検証」セクションを参照してください。  
+  
+> [!NOTE]
+>  このプロパティを設定できるの[!INCLUDE[TLA#tla_xaml](~/includes/tlasharptla-xaml-md.md)]は、表示されているコレクション構文を使用するか、コレクションオブジェクトにアクセスし、などの`Add`さまざまなメソッドを使用することによってのみです。 コレクションオブジェクトにアクセスするプロパティは読み取り専用ですが、コレクション自体は読み取り/書き込み可能です。  
+  
+<a name="xamlPropertyElementUsage_ValidationRules"></a>   
+## <a name="xaml-property-element-usage"></a>XAML プロパティ要素の使用  
+  
+```  
+<object>  
+  <object.ValidationRules>  
+    oneOrMoreValidationRules  
+  </object.ValidationRules>  
+</object>  
+  
+```  
+  
+<a name="xamlValues_ValidationRules"></a>   
+## <a name="xaml-values"></a>XAML 値  
+ *oneOrMoreValidationRules*  
+ 1つ以上のオブジェクト。 <xref:System.Windows.Controls.ValidationRule> クラスを使用<xref:System.Windows.Controls.ExceptionValidationRule>することも、 <xref:System.Windows.Controls.ValidationRule>クラスをサブクラス化することによってカスタム規則を作成することもできます。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Windows.Controls.Validation" />
+      </Docs>
+    </Member>
+    <Member MemberName="XmlNamespaceManager">
+      <MemberSignature Language="C#" Value="see GetXmlNamespaceManager, and SetXmlNamespaceManager" />
+      <MemberSignature Language="ILAsm" Value="see GetXmlNamespaceManager, and SetXmlNamespaceManager" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.XmlNamespaceManager" />
+      <MemberSignature Language="VB.NET" Value="see GetXmlNamespaceManager, and SetXmlNamespaceManager" />
+      <MemberSignature Language="F#" Value="see GetXmlNamespaceManager, and SetXmlNamespaceManager" Usage="see GetXmlNamespaceManager, and SetXmlNamespaceManager" />
+      <MemberType>AttachedProperty</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>XML バインディングで名前空間に対応している <see langword="XPath" /> クエリを実行するために使用される <see cref="T:System.Xml.XmlNamespaceManager" /> を取得または設定します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この添付プロパティは、プロパティ値の継承を使用します。これにより、に[!INCLUDE[TLA#tla_xml](~/includes/tlasharptla-xml-md.md)]存在する名前空間の継承の動作が再現されます。 詳細については、「[プロパティ値の継承](~/docs/framework/wpf/advanced/property-value-inheritance.md)」を参照してください。  
+  
+<a name="dependencyPropertyInfo_XmlNamespaceManager"></a>   
+## <a name="dependency-property-information"></a>依存プロパティ情報  
+  
+|||  
+|-|-|  
+|識別子フィールド|<xref:System.Windows.Data.Binding.XmlNamespaceManagerProperty>|  
+|メタデータプロパティがに設定される`true`|<xref:System.Windows.FrameworkPropertyMetadata.Inherits%2A>|  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="XmlNamespaceManagerProperty">
+      <MemberSignature Language="C#" Value="public static readonly System.Windows.DependencyProperty XmlNamespaceManagerProperty;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class System.Windows.DependencyProperty XmlNamespaceManagerProperty" />
+      <MemberSignature Language="DocId" Value="F:System.Windows.Data.Binding.XmlNamespaceManagerProperty" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly XmlNamespaceManagerProperty As DependencyProperty " />
+      <MemberSignature Language="C++ CLI" Value="public: static initonly System::Windows::DependencyProperty ^ XmlNamespaceManagerProperty;" />
+      <MemberSignature Language="F#" Value=" staticval mutable XmlNamespaceManagerProperty : System.Windows.DependencyProperty" Usage="System.Windows.Data.Binding.XmlNamespaceManagerProperty" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Windows.DependencyProperty</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="P:System.Windows.Data.Binding.XmlNamespaceManager" /> 添付プロパティを識別します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="XPath">
+      <MemberSignature Language="C#" Value="public string XPath { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string XPath" />
+      <MemberSignature Language="DocId" Value="P:System.Windows.Data.Binding.XPath" />
+      <MemberSignature Language="VB.NET" Value="Public Property XPath As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ XPath { System::String ^ get(); void set(System::String ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.XPath : string with get, set" Usage="System.Windows.Data.Binding.XPath" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.ComponentModel.DefaultValue(null)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>使用する [!INCLUDE[TLA#tla_xml](~/includes/tlasharptla-xml-md.md)] バインディング ソースの値を返す <see langword="XPath" /> クエリーを取得または設定します。</summary>
+        <value><see langword="XPath" /> クエリ。 既定値は、<see langword="null" /> です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ バインディング[!INCLUDE[TLA#tla_xml](~/includes/tlasharptla-xml-md.md)]ソースが[!INCLUDE[TLA#tla_clr](~/includes/tlasharptla-clr-md.md)]オブジェクト<xref:System.Windows.Data.Binding.Path%2A>ではなくデータである場合は、使用するバインディングソースの値へのパスを示すために、プロパティの代わりにプロパティが使用されます。 <xref:System.Windows.Data.Binding.XPath%2A>  
+  
+ <xref:System.Windows.Data.Binding.XPath%2A>プロパティを設定することにより、ノード`XPath`またはノードのコレクションを選択するクエリを作成<xref:System.Xml.XmlElement?displayProperty=nameWithType>し<xref:System.Xml.XmlAttribute?displayProperty=nameWithType>ます (と<xref:System.Xml.XmlNode?displayProperty=nameWithType>の両方がから派生します)。 <xref:System.Xml.XmlNode?displayProperty=nameWithType>はオブジェクトです。これは、 <xref:System.Windows.Data.Binding.Path%2A>プロパティを使用してプロパティにバインドできることを意味します。 [!INCLUDE[TLA#tla_clr](~/includes/tlasharptla-clr-md.md)]  
+  
+ メソッド<xref:System.Xml.XmlNode.SelectNodes%2A?displayProperty=nameWithType>は、 <xref:System.Windows.Data.Binding.XPath%2A>プロパティ`XPath`の式を処理します。 `XPath`関数はサポートされていません。 式`XPath`の情報につい<xref:System.Xml.XmlNode.SelectNodes%2A>ては、「」のドキュメントと、「例」で説明しているいくつかの例を参照してください。  
+  
+ オブジェクト<xref:System.Xml.Linq.XDocument>を LINQ to XML <xref:System.Xml.Linq.XElement>し、を`XPath`使用しません。 詳細については、「[方法: XDocument、XElement、または LINQ FOR XML クエリの結果にバインドする」を](~/docs/framework/wpf/data/how-to-bind-to-xdocument-xelement-or-linq-for-xml-query-results.md)参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

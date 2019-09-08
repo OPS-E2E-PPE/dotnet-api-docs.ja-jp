@@ -1,0 +1,392 @@
+<Type Name="EncoderFallbackBuffer" FullName="System.Text.EncoderFallbackBuffer">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="36d20c01a10df1ac3b8d9349072ea2049fe240af" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70695164" /></Metadata><TypeSignature Language="C#" Value="public abstract class EncoderFallbackBuffer" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit EncoderFallbackBuffer extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Text.EncoderFallbackBuffer" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class EncoderFallbackBuffer" />
+  <TypeSignature Language="C++ CLI" Value="public ref class EncoderFallbackBuffer abstract" />
+  <TypeSignature Language="F#" Value="type EncoderFallbackBuffer = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Text.Encoding</AssemblyName>
+    <AssemblyVersion>4.0.10.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>mscorlib</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Runtime</AssemblyName>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>フォールバック ハンドラーが入力文字をエンコードできないときに、エンコーダーに別の文字列を返せるようにするためのバッファーを提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ エンコーディングは、Unicode 文字とエンコードされたバイトシーケンスとの間のマッピングを定義します。 入力文字を出力バイトシーケンスに変換するエンコード操作は、特定の文字に対してマッピングが定義されていない場合に失敗します。  
+  
+ 変換を実行できない場合、.NET Framework はフォールバックと呼ばれるエラー処理機構を提供します。 すべてのエンコーダーフォールバックハンドラーは、次のものを実装する必要があります。  
+  
+-   エンコーダーフォールバック。 <xref:System.Text.EncoderFallback>クラスから派生したクラスによって表されます。  
+  
+-   エンコーダーフォールバックバッファー。変換操作に文字列を返すことができる<xref:System.Text.EncoderFallbackBuffer>クラスから派生した型によって表されます。  
+  
+ フォールバックでは、変換エラーを処理するために3つの方法を使用できます。  
+  
+-   最適マッピング。 エンコーダーフォールバックバッファーは、入力文字の近似値を表す文字列を返すことができます。 .NET Framework には、最適な<xref:System.Text.EncoderFallbackBuffer>パブリック実装が用意されていません。  
+  
+-   代わりに. エンコーダーフォールバックバッファーは、文字をエンコードできなかったことを示す疑問符 ("?") などの文字列を返すことができます。 .NET Framework では、クラス<xref:System.Text.EncoderReplacementFallback>と<xref:System.Text.EncoderReplacementFallbackBuffer>クラスは、パブリックな置換フォールバックバッファーの実装を提供します。 <xref:System.Text.EncoderReplacementFallback>クラスのコンストラクターを使用すると、置換文字列を定義できます。  
+  
+-   例外。 実装<xref:System.Text.EncoderFallbackBuffer>は、文字をエンコードできないことを示す例外をスローし、エンコーディング操作を終了します。 この場合、フォールバックハンドラーは<xref:System.Text.EncoderFallbackBuffer>実装を提供する必要がありますが、エンコーダーに文字列を返しません。 .NET Framework では、クラス<xref:System.Text.EncoderExceptionFallback>と<xref:System.Text.EncoderExceptionFallbackBuffer>クラスは、文字をエンコードできない<xref:System.Text.EncoderFallbackException>場合にをスローするパブリック例外フォールバックの実装を提供します。  
+  
+ <xref:System.Text.EncoderFallbackBuffer>実装内のバッファーは、エンコーダーフォールバックに応答してエンコーダーに返される文字列全体を表します。 通常、実装には、エンコーダーに返す次の文字のインデックスや、返される残りの文字数など、状態情報も含まれます。 は<xref:System.Text.EncoderFallbackBuffer>抽象クラスであるため、少なくとも次のメンバーを実装するための派生クラスが必要です。  
+  
+-   オーバーロード<xref:System.Text.EncoderFallbackBuffer.Fallback%2A>されたメソッド。文字をエンコードできないときにエンコーダーによって呼び出されます。 エンコーダーは、2つの情報をフォールバックバッファーの実装に渡します。エンコードできなかった文字またはサロゲートペアと入力内の文字のインデックスです。 エンコーダーフォールバック例外ハンドラーでは、このメソッドで例外がスローされます。 それ以外の場合、 `true`メソッドはフォールバックを提供するか`false` 、そうでない場合はを返します。  
+  
+-   メソッド。 <xref:System.Text.EncoderFallbackBuffer.Fallback%2A>メソッドがを返し`true`た場合、エンコーダーによって繰り返し呼び出されます。 <xref:System.Text.EncoderFallbackBuffer.GetNextChar%2A> 後続の呼び出しでは、ハンドラーはバッファー内の各文字を返す必要があります。 すべての文字が返された場合は、U + 0000 を返します。 例外ハンドラーは常に U + 0000 を返します。  
+  
+-   メソッド<xref:System.Text.EncoderFallbackBuffer.MovePrevious%2A> 。このメソッドは、ポインターをバッファー内の前の位置に移動しようとし、移動が成功したかどうかを示します。 例外ハンドラーは常に`false`を返します。  
+  
+-   <xref:System.Text.EncoderFallbackBuffer.Remaining%2A>プロパティ。エンコーダーに返される残りの文字数を示します。 例外フォールバックハンドラーは常に0を返します。  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Text.EncoderFallback" />
+    <related type="Article" href="~/docs/standard/base-types/character-encoding.md">.NET Framework における文字エンコーディング</related>
+    <related type="ExternalDocumentation" href="https://code.msdn.microsoft.com/Cyrillic-to-Roman-f7e88b29">サンプル: キリル翻字ユーティリティ</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected EncoderFallbackBuffer ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Text.EncoderFallbackBuffer.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Protected Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; EncoderFallbackBuffer();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Text.Encoding</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Text.EncoderFallbackBuffer" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Fallback">
+      <AssemblyInfo>
+        <AssemblyName>System.Text.Encoding</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>元の入力をエンコードできないときに、代替文字列を使用できるか、または元の入力を無視するかを示します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Fallback">
+      <MemberSignature Language="C#" Value="public abstract bool Fallback (char charUnknown, int index);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool Fallback(char charUnknown, int32 index) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Text.EncoderFallbackBuffer.Fallback(System.Char,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Function Fallback (charUnknown As Char, index As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract bool Fallback(char charUnknown, int index);" />
+      <MemberSignature Language="F#" Value="abstract member Fallback : char * int -&gt; bool" Usage="encoderFallbackBuffer.Fallback (charUnknown, index)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Text.Encoding</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="charUnknown" Type="System.Char" />
+        <Parameter Name="index" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="charUnknown">入力文字。</param>
+        <param name="index">入力バッファーにおける文字のインデックス位置。</param>
+        <summary>派生クラスでオーバーライドされた場合、指定した入力文字を処理するためのフォールバック バッファーを確保します。</summary>
+        <returns>フォールバック バッファーが <paramref name="charUnknown" /> を処理できる場合は <see langword="true" />、フォールバック バッファーが <paramref name="charUnknown" /> を無視する場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Text.Encoding.GetBytes%2A?displayProperty=nameWithType>と<xref:System.Text.Encoder.Convert%2A?displayProperty=nameWithType>メソッドは<xref:System.Text.DecoderFallbackBuffer.Fallback%28System.Byte%5B%5D%2CSystem.Int32%29> 、エンコードできない不明な入力文字が検出された場合にを呼び出します。 戻り値がの`true`場合は、フォールバックバッファーが入力文字を処理できることを示します。これにより<xref:System.Text.EncoderFallbackBuffer.GetNextChar%2A> 、呼び出し元のメソッドがメソッドを呼び出し、フォールバックバッファーの各文字を取得します。 個々の文字を処理しないため、 <xref:System.Text.EncoderFallbackBuffer.Fallback%2A>例外フォールバックハンドラーのメソッドは例外をスローします。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Fallback">
+      <MemberSignature Language="C#" Value="public abstract bool Fallback (char charUnknownHigh, char charUnknownLow, int index);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool Fallback(char charUnknownHigh, char charUnknownLow, int32 index) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Text.EncoderFallbackBuffer.Fallback(System.Char,System.Char,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Function Fallback (charUnknownHigh As Char, charUnknownLow As Char, index As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract bool Fallback(char charUnknownHigh, char charUnknownLow, int index);" />
+      <MemberSignature Language="F#" Value="abstract member Fallback : char * char * int -&gt; bool" Usage="encoderFallbackBuffer.Fallback (charUnknownHigh, charUnknownLow, index)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Text.Encoding</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="charUnknownHigh" Type="System.Char" />
+        <Parameter Name="charUnknownLow" Type="System.Char" />
+        <Parameter Name="index" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="charUnknownHigh">入力ペアの上位サロゲート。</param>
+        <param name="charUnknownLow">入力ペアの下位サロゲート。</param>
+        <param name="index">入力バッファーにおけるサロゲート ペアのインデックス位置。</param>
+        <summary>派生クラスでオーバーライドされた場合、指定したサロゲート ペアを処理するためのフォールバック バッファーを確保します。</summary>
+        <returns>フォールバック バッファーが <paramref name="charUnknownHigh" /> および <paramref name="charUnknownLow" /> を処理できる場合は <see langword="true" />。フォールバック バッファーがサロゲート ペアを無視する場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Text.Encoding.GetBytes%2A?displayProperty=nameWithType>と<xref:System.Text.Encoder.Convert%2A?displayProperty=nameWithType>メソッドは<xref:System.Text.EncoderFallbackBuffer.Fallback%28System.Char%2CSystem.Char%2CSystem.Int32%29> 、入力にサロゲートペアが見つかった場合、を呼び出します。 戻り値がの`true`場合は、フォールバックバッファーがサロゲートペアを処理できることを示します。これにより<xref:System.Text.EncoderFallbackBuffer.GetNextChar%2A> 、呼び出し元のメソッドがメソッドを呼び出し、フォールバックバッファーの各文字を取得します。  個々の文字を処理しないため、 <xref:System.Text.EncoderFallbackBuffer.Fallback%2A>例外フォールバックハンドラーのメソッドは例外をスローします。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetNextChar">
+      <MemberSignature Language="C#" Value="public abstract char GetNextChar ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance char GetNextChar() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Text.EncoderFallbackBuffer.GetNextChar" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Function GetNextChar () As Char" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract char GetNextChar();" />
+      <MemberSignature Language="F#" Value="abstract member GetNextChar : unit -&gt; char" Usage="encoderFallbackBuffer.GetNextChar " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Text.Encoding</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Char</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>派生クラスでオーバーライドされた場合、フォールバック バッファーの次の文字を取得します。</summary>
+        <returns>フォールバック バッファーの次の文字。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 操作で入力で不明<xref:System.Text.EncoderFallbackBuffer.Fallback%2A>な文字またはサロゲートペアが検出された場合、エンコーディング操作はメソッドを呼び出します。 たとえば、置換フォールバックの場合、メソッドから<xref:System.Text.EncoderFallbackBuffer.Fallback%2A>が返さ`true`れた場合、不明な入力ではなくエンコードできる代替文字列が存在します。 エンコーディング操作は、 <xref:System.Text.EncoderFallbackBuffer.GetNextChar%2A>メソッドを繰り返し呼び出し、置換文字列を一度に1文字ずつ取得します。 フォールバックバッファー内のすべての文字がエンコーダーに返されると、メソッド<xref:System.Text.EncoderFallbackBuffer.GetNextChar%2A>は U + 0000 を返す必要があります。  
+  
+ 例外フォールバックハンドラーの場合、メソッド<xref:System.Text.EncoderFallbackBuffer.GetNextChar%2A>は U + 0000 を返す必要があります。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MovePrevious">
+      <MemberSignature Language="C#" Value="public abstract bool MovePrevious ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool MovePrevious() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Text.EncoderFallbackBuffer.MovePrevious" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Function MovePrevious () As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract bool MovePrevious();" />
+      <MemberSignature Language="F#" Value="abstract member MovePrevious : unit -&gt; bool" Usage="encoderFallbackBuffer.MovePrevious " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Text.Encoding</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>派生クラスでオーバーライドされた場合、<see cref="M:System.Text.EncoderFallbackBuffer.GetNextChar" /> メソッドに対する次の呼び出しで、データ バッファーにおける現在の文字位置の前の文字位置に移動します。</summary>
+        <returns><see cref="M:System.Text.EncoderFallbackBuffer.MovePrevious" /> 操作が正常に実行された場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 例外フォールバックハンドラーはを返す`false`必要があります。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Remaining">
+      <MemberSignature Language="C#" Value="public abstract int Remaining { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 Remaining" />
+      <MemberSignature Language="DocId" Value="P:System.Text.EncoderFallbackBuffer.Remaining" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride ReadOnly Property Remaining As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract property int Remaining { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.Remaining : int" Usage="System.Text.EncoderFallbackBuffer.Remaining" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Text.Encoding</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>派生クラスでオーバーライドされた場合、現在の <see cref="T:System.Text.EncoderFallbackBuffer" /> オブジェクト内に処理されずに残っている文字数を取得します。</summary>
+        <value>現在のフォールバック バッファーに処理されずに残っている文字数。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ が<xref:System.Text.EncoderFallbackBuffer.Fallback%2A> 0 以外`true`の<xref:System.Text.EncoderFallbackBuffer.Remaining%2A>値の場合、メソッドはを返します。  
+  
+ 例外フォールバックハンドラーの場合、メソッド<xref:System.Text.DecoderFallbackBuffer.Remaining%2A>は0を返す必要があります。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Reset">
+      <MemberSignature Language="C#" Value="public virtual void Reset ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Reset() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Text.EncoderFallbackBuffer.Reset" />
+      <MemberSignature Language="VB.NET" Value="Public Overridable Sub Reset ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void Reset();" />
+      <MemberSignature Language="F#" Value="abstract member Reset : unit -&gt; unit&#xA;override this.Reset : unit -&gt; unit" Usage="encoderFallbackBuffer.Reset " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Text.Encoding</AssemblyName>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>このフォールバック バッファーに関連するすべてのデータおよびステータス情報を初期化します。</summary>
+        <remarks>To be added.</remarks>
+        <block subset="none" type="overrides"><para><see cref="M:System.Text.EncoderFallbackBuffer.Reset" />メソッドを呼び出した後、 <see cref="P:System.Text.EncoderFallbackBuffer.Remaining" />プロパティは0を返し、 <see cref="M:System.Text.EncoderFallbackBuffer.GetNextChar" />メソッドは U + 0000 を返す必要が<see cref="M:System.Text.EncoderFallbackBuffer.MovePrevious" />あり、メソッド<see langword="false" />はを返す必要があります。</para></block>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
