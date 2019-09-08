@@ -1,0 +1,156 @@
+<Type Name="Format" FullName="Microsoft.SqlServer.Server.Format">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="ffca0cda31e32a79ce7ab852c13be008741be0df" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70611924" /></Metadata><TypeSignature Language="C#" Value="public enum Format" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed Format extends System.Enum" />
+  <TypeSignature Language="DocId" Value="T:Microsoft.SqlServer.Server.Format" />
+  <TypeSignature Language="VB.NET" Value="Public Enum Format" />
+  <TypeSignature Language="C++ CLI" Value="public enum class Format" />
+  <TypeSignature Language="F#" Value="type Format = " />
+  <AssemblyInfo>
+    <AssemblyName>System.Data</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Data.SqlClient</AssemblyName>
+    <AssemblyVersion>4.4.0.0</AssemblyVersion>
+    <AssemblyVersion>4.5.0.0</AssemblyVersion>
+    <AssemblyVersion>4.6.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Enum</BaseTypeName>
+  </Base>
+  <Docs>
+    <summary><see cref="T:Microsoft.SqlServer.Server.SqlUserDefinedTypeAttribute" /> および <see cref="T:Microsoft.SqlServer.Server.SqlUserDefinedAggregateAttribute" /> がユーザー定義型 (UDT) または集計のシリアル化形式を指定するときに使用します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+この列挙体は、 <xref:Microsoft.SqlServer.Server.SqlUserDefinedTypeAttribute>ユーザー <xref:Microsoft.SqlServer.Server.SqlUserDefinedAggregateAttribute>定義型 (UDT) または集計のシリアル化形式を示すために、およびによって使用されます。 `Native` と `UserDefined` 列挙型のメンバーの使用には特別な要件があります。   
+
+- `Format.Native`
+
+   この`Format.Native`形式の要件は次のとおりです。  
+  
+   - の<xref:System.Runtime.InteropServices.StructLayoutAttribute> プロパティ値 <xref:System.Runtime.InteropServices.StructLayoutAttribute.Value> がであるは、構造体ではなくクラスで定義されている場合、集計または UDT に適用する必要があります。 <xref:System.Runtime.InteropServices.LayoutKind.Sequential?displayProperty=nameWithType> これは、データフィールドの物理的なレイアウトを制御し、メンバーが表示される順序で順番に配置されるようにするために使用されます。 SQL Server は、この属性を使用して、複数のフィールドを持つ Udt のフィールドの順序を決定します。
+  
+   - 型には少なくとも1つのメンバーが含まれている必要があります (シリアル化された値のサイズは0バイトにはできません)。  
+  
+   - 集計のすべてのフィールドは*blittable*型である必要があります。つまり、マネージメモリとアンマネージメモリの両方に共通の表現が必要であり、相互運用マーシャラーによる特別な処理は必要ありません。  
+  
+   - UDT の`bool`すべてのフィールドは`long` `ulong` `byte` `sbyte`、シリアル化可能な次のいずれかの型である必要があり`short`ます。 `int`、 `uint`、、 `ushort` `float` 、、、、、、`double` 、、 <xref:System.Data.SqlTypes.SqlInt32> 、 <xref:System.Data.SqlTypes.SqlByte> 、、 <xref:System.Data.SqlTypes.SqlInt64> 、、、、のいずれかのフィールドを含むユーザーが定義した、、、、、、、、、、またはその他の値の型<xref:System.Data.SqlTypes.SqlInt16> <xref:System.Data.SqlTypes.SqlDateTime> <xref:System.Data.SqlTypes.SqlSingle> <xref:System.Data.SqlTypes.SqlDouble> <xref:System.Data.SqlTypes.SqlMoney>な.  
+
+   - 集計では、の`MaxByteSize`値を指定することはできません。  
+  
+   - 集計には [シリアル化されていません] フィールドを含めることはできません。  
+  
+   - フィールドを明示的なレイアウトとしてマークすること<xref:System.Runtime.InteropServices.StructLayoutAttribute.Value?displayProperty=nameWithType>は<xref:System.Runtime.InteropServices.LayoutKind.Explicit?displayProperty=nameWithType>できません (の場合)。  
+
+- `Format.UserDefined`
+
+   この`Format.UserDefined`形式の要件は次のとおりです。
+
+   - 集計では、の`MaxByteSize`値を指定する必要があります。  
+  
+   - 属性の<xref:Microsoft.SqlServer.Server.SqlUserDefinedTypeAttribute.IsByteOrdered%2A?displayProperty=nameWithType>プロパティを指定します。 既定値は `false` です。  
+  
+   - メソッド<xref:Microsoft.SqlServer.Server.IBinarySerialize.Read%2A?displayProperty=nameWithType>または<xref:Microsoft.SqlServer.Server.IBinarySerialize.Write%2A?displayProperty=nameWithType>メソッドでフィールドを省略した場合、そのフィールドの状態はシリアル化されません。  
+
+## Examples  
+
+次の例は、 `UserDefinedType` Point UDT の属性を示しています。  UDT はバイト順で、"Point" という名前が付けられ、"ValidatePoint" という名前の検証メソッドを持ち、ネイティブシリアル化形式を使用します。  
+  
+[!code-csharp[DataWorks SqlUserDefinedTypeAttribute Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/DataWorks SqlUserDefinedTypeAttribute Example/CS/source.cs#1)]
+[!code-vb[DataWorks SqlUserDefinedTypeAttribute Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/DataWorks SqlUserDefinedTypeAttribute Example/VB/source.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="Native">
+      <MemberSignature Language="C#" Value="Native" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Microsoft.SqlServer.Server.Format Native = int32(1)" />
+      <MemberSignature Language="DocId" Value="F:Microsoft.SqlServer.Server.Format.Native" />
+      <MemberSignature Language="VB.NET" Value="Native" />
+      <MemberSignature Language="C++ CLI" Value="Native" />
+      <MemberSignature Language="F#" Value="Native = 1" Usage="Microsoft.SqlServer.Server.Format.Native" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Microsoft.SqlServer.Server.Format</ReturnType>
+      </ReturnValue>
+      <MemberValue>1</MemberValue>
+      <Docs>
+        <summary>このシリアル化形式には、SQL Server が UDT 表現をディスク上に効率よく格納できるようにする、きわめてシンプルなアルゴリズムが使用されています。 <see langword="Native" /> シリアル化の対象となる型には、値型 (Microsoft Visual C# の struct、Microsoft Visual Basic .NET の Structure) のみ、メンバーとして割り当てることができます。 参照型のメンバー (Visual C# や Visual Basic のクラスなど) は、ユーザー定義型であるか .NET クラス ライブラリに存在するもの (<see cref="T:System.String" /> など) であるかに関係なく、サポートされません。</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="Unknown">
+      <MemberSignature Language="C#" Value="Unknown" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Microsoft.SqlServer.Server.Format Unknown = int32(0)" />
+      <MemberSignature Language="DocId" Value="F:Microsoft.SqlServer.Server.Format.Unknown" />
+      <MemberSignature Language="VB.NET" Value="Unknown" />
+      <MemberSignature Language="C++ CLI" Value="Unknown" />
+      <MemberSignature Language="F#" Value="Unknown = 0" Usage="Microsoft.SqlServer.Server.Format.Unknown" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Microsoft.SqlServer.Server.Format</ReturnType>
+      </ReturnValue>
+      <MemberValue>0</MemberValue>
+      <Docs>
+        <summary>シリアル化形式は未知です。</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="UserDefined">
+      <MemberSignature Language="C#" Value="UserDefined" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Microsoft.SqlServer.Server.Format UserDefined = int32(2)" />
+      <MemberSignature Language="DocId" Value="F:Microsoft.SqlServer.Server.Format.UserDefined" />
+      <MemberSignature Language="VB.NET" Value="UserDefined" />
+      <MemberSignature Language="C++ CLI" Value="UserDefined" />
+      <MemberSignature Language="F#" Value="UserDefined = 2" Usage="Microsoft.SqlServer.Server.Format.UserDefined" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.SqlClient</AssemblyName>
+        <AssemblyVersion>4.4.0.0</AssemblyVersion>
+        <AssemblyVersion>4.5.0.0</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Microsoft.SqlServer.Server.Format</ReturnType>
+      </ReturnValue>
+      <MemberValue>2</MemberValue>
+      <Docs>
+        <summary>このシリアル化形式を使用すると、開発者は、<see cref="M:Microsoft.SqlServer.Server.IBinarySerialize.Write(System.IO.BinaryWriter)" /> および <see cref="M:Microsoft.SqlServer.Server.IBinarySerialize.Read(System.IO.BinaryReader)" /> メソッドを通じてバイナリ形式を完全に制御できます。</summary>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
