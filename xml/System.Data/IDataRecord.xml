@@ -1,0 +1,1202 @@
+<Type Name="IDataRecord" FullName="System.Data.IDataRecord">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="d4263a10e356a61b63e890b3c00f90b265a4b566" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70526243" /></Metadata><TypeSignature Language="C#" Value="public interface IDataRecord" />
+  <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract IDataRecord" />
+  <TypeSignature Language="DocId" Value="T:System.Data.IDataRecord" />
+  <TypeSignature Language="VB.NET" Value="Public Interface IDataRecord" />
+  <TypeSignature Language="C++ CLI" Value="public interface class IDataRecord" />
+  <TypeSignature Language="F#" Value="type IDataRecord = interface" />
+  <AssemblyInfo>
+    <AssemblyName>System.Data.Common</AssemblyName>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Data</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Interfaces />
+  <Docs>
+    <summary><see langword="DataReader" /> について各行内の列の値へのアクセスを提供し、リレーショナル データベースにアクセスする .NET Framework データ プロバイダーによって実装されています。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ インターフェイスとインターフェイスを使用すると<xref:System.Data.IDataRecord> 、 `DataReader`継承クラスでクラスを実装できます。 <xref:System.Data.IDataReader> これにより、結果セットの1つ以上の順方向専用ストリームを読み取ることができます。 `DataReader`クラスの詳細については、「 [DataReader を使用したデータの取得](~/docs/framework/data/adonet/retrieving-data-using-a-datareader.md)」を参照してください。  
+  
+ アプリケーションは、 <xref:System.Data.IDataRecord>インターフェイスのインスタンスを直接作成するのではなく、を継承<xref:System.Data.IDataRecord>するクラスのインスタンスを作成します。 通常、これを行うには、 `DataReader` `Command`オブジェクトの`ExecuteReader`メソッドを使用してを取得します。  
+  
+ を継承<xref:System.Data.IDataRecord>するクラスは、継承されたすべてのメンバーを実装する必要があり、通常は、プロバイダー固有の機能を追加するための追加メンバーを定義します。  
+  
+ 共通言語ランタイム`DataReader` (CLR) 型のデータを公開するには、を実装するプロバイダーが必要です。 型の強制型変換は、CLR に含まれていない一部の型に対して定義されます。 これらの値には、CLR 型に準拠する代替の型としてアクセスできます。 例として、次の表は、OLE DB のデータ型から CLR 型への推奨マッピングを示しています。別の型はかっこで囲まれています。  
+  
+|OLE DB 型|CLR 型|  
+|-----------------|--------------|  
+|DBTYPE_BOOL|Int16|  
+|DBTYPE_BSTR|string|  
+|DBTYPE_BYTES|byte[]|  
+|DBTYPE_CY|Decimal (10 進数型)|  
+|DBTYPE_DATE|DateTime|  
+|DBTYPE_DBDATE|DateTime|  
+|DBTYPE_DBTIME|DateTime|  
+|DBTYPE_DBTIMESTAMP|DateTime|  
+|DBTYPE_DECIMAL|Decimal (10 進数型)|  
+|DBTYPE_EMPTY|null|  
+|DBTYPE_ERROR|ExternalException|  
+|DBTYPE_FILETIME|DateTime|  
+|DBTYPE_GUID|GUID|  
+|DBTYPE_HCHAPTER|サポート外|  
+|DBTYPE_I1|SByte|  
+|DBTYPE_I2|Int16|  
+|DBTYPE_I4|Int32|  
+|DBTYPE_I8|Int64|  
+|DBTYPE_IDISPATCH|object|  
+|DBTYPE_IUNKNOWN|object|  
+|DBTYPE_NULL|DBNull. 値|  
+|DBTYPE_NUMERIC|Decimal (10 進数型)|  
+|DBTYPE_PROPVARIANT|object|  
+|DBTYPE_R4|Single|  
+|DBTYPE_R8|倍精度浮動小数点型|  
+|DBTYPE_STR|string|  
+|DBTYPE_UDT|サポート外|  
+|DBTYPE_UI1|byte (Int16)|  
+|DBTYPE_UI2|UInt16 (Int32)|  
+|DBTYPE_UI4|UInt32 (Int64)|  
+|DBTYPE_UI8|UInt64 (10 進数)|  
+|DBTYPE_VARIANT|object|  
+|DBTYPE_VARNUMERIC|サポート外|  
+|DBTYPE_WSTR|string|  
+  
+   
+  
+## Examples  
+ 次の例では、派生クラス<xref:System.Data.SqlClient.SqlConnection> <xref:System.Data.SqlClient.SqlCommand>、、、および<xref:System.Data.SqlClient.SqlDataReader>のインスタンスを作成します。 この例では、データを読み取り、コンソールに書き込みます。 最後に、この例で<xref:System.Data.SqlClient.SqlDataReader>は、を閉じ<xref:System.Data.SqlClient.SqlConnection>てから、を閉じます。  
+  
+ [!code-csharp[Classic WebData SqlDataReader.Read Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData SqlDataReader.Read Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData SqlDataReader.Read Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData SqlDataReader.Read Example/VB/source.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="FieldCount">
+      <MemberSignature Language="C#" Value="public int FieldCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 FieldCount" />
+      <MemberSignature Language="DocId" Value="P:System.Data.IDataRecord.FieldCount" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property FieldCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int FieldCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.FieldCount : int" Usage="System.Data.IDataRecord.FieldCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>現在の行の列の数を取得します。</summary>
+        <value>有効なレコードセットに配置されない場合は 0。それ以外の場合は現在のレコードの列の数。 既定値は -1 です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ (たとえば、 <xref:System.Data.IDbCommand.ExecuteNonQuery%2A>メソッドを使用して) 行を返さないクエリを実行すると<xref:System.Data.IDataRecord.FieldCount%2A> 、は-1 を返します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetBoolean">
+      <MemberSignature Language="C#" Value="public bool GetBoolean (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool GetBoolean(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetBoolean(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetBoolean (i As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool GetBoolean(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetBoolean : int -&gt; bool" Usage="iDataRecord.GetBoolean i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の値を Boolean として取得します。</summary>
+        <returns>列の値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 変換は実行されません。 したがって、取得するデータは既にブール値である必要があります。それ以外の場合は、例外が生成されます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetByte">
+      <MemberSignature Language="C#" Value="public byte GetByte (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance unsigned int8 GetByte(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetByte(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetByte (i As Integer) As Byte" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Byte GetByte(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetByte : int -&gt; byte" Usage="iDataRecord.GetByte i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の 8 ビット符号なし整数値を取得します。</summary>
+        <returns>指定した列の 8 ビット符号なし整数値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetBytes">
+      <MemberSignature Language="C#" Value="public long GetBytes (int i, long fieldOffset, byte[] buffer, int bufferoffset, int length);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance int64 GetBytes(int32 i, int64 fieldOffset, unsigned int8[] buffer, int32 bufferoffset, int32 length) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetBytes (i As Integer, fieldOffset As Long, buffer As Byte(), bufferoffset As Integer, length As Integer) As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; long GetBytes(int i, long fieldOffset, cli::array &lt;System::Byte&gt; ^ buffer, int bufferoffset, int length);" />
+      <MemberSignature Language="F#" Value="abstract member GetBytes : int * int64 * byte[] * int * int -&gt; int64" Usage="iDataRecord.GetBytes (i, fieldOffset, buffer, bufferoffset, length)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+        <Parameter Name="fieldOffset" Type="System.Int64" />
+        <Parameter Name="buffer" Type="System.Byte[]" />
+        <Parameter Name="bufferoffset" Type="System.Int32" />
+        <Parameter Name="length" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <param name="fieldOffset">読み取り操作を開始する位置を示すフィールド内のインデックス。</param>
+        <param name="buffer">バイトのストリームを読み込むバッファー。</param>
+        <param name="bufferoffset">読み取り操作を開始する <paramref name="buffer" /> のインデックス。</param>
+        <param name="length">読み取るバイト数。</param>
+        <summary>指定した列オフセットから、指定したバッファー オフセットから始まるバイトのストリームを、配列としてバッファーに読み取ります。</summary>
+        <returns>実際に読み取られたバイト数。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Data.IDataRecord.GetBytes%2A>フィールドの使用可能なバイト数を返します。 多くの場合、フィールドの正確な長さです。 ただし、がフィールドからバイトを取得するために既に使用され`GetBytes`ている場合、返される数値は、フィールドの実際の長さよりも小さくなることがあります。  
+  
+ であるバッファーを渡した場合`null`、 <xref:System.Data.IDataRecord.GetBytes%2A>は行の長さをバイト単位で返します。  
+  
+ 変換は実行されません。したがって、取得されるデータは既にバイト配列である必要があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetChar">
+      <MemberSignature Language="C#" Value="public char GetChar (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance char GetChar(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetChar(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetChar (i As Integer) As Char" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; char GetChar(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetChar : int -&gt; char" Usage="iDataRecord.GetChar i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Char</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の文字値を取得します。</summary>
+        <returns>指定した列の文字値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetChars">
+      <MemberSignature Language="C#" Value="public long GetChars (int i, long fieldoffset, char[] buffer, int bufferoffset, int length);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance int64 GetChars(int32 i, int64 fieldoffset, char[] buffer, int32 bufferoffset, int32 length) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetChars (i As Integer, fieldoffset As Long, buffer As Char(), bufferoffset As Integer, length As Integer) As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; long GetChars(int i, long fieldoffset, cli::array &lt;char&gt; ^ buffer, int bufferoffset, int length);" />
+      <MemberSignature Language="F#" Value="abstract member GetChars : int * int64 * char[] * int * int -&gt; int64" Usage="iDataRecord.GetChars (i, fieldoffset, buffer, bufferoffset, length)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+        <Parameter Name="fieldoffset" Type="System.Int64" />
+        <Parameter Name="buffer" Type="System.Char[]" />
+        <Parameter Name="bufferoffset" Type="System.Int32" />
+        <Parameter Name="length" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <param name="fieldoffset">読み取り操作を開始する位置を示す行内のインデックス。</param>
+        <param name="buffer">バイトのストリームを読み込むバッファー。</param>
+        <param name="bufferoffset">読み取り操作を開始する <paramref name="buffer" /> のインデックス。</param>
+        <param name="length">読み取るバイト数。</param>
+        <summary>指定した列オフセットから、指定したバッファー オフセットから始まる文字列ストリームを、配列としてバッファーに読み取ります。</summary>
+        <returns>実際に読み取られた文字数。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Data.IDataRecord.GetChars%2A>フィールド内の使用可能な文字数を返します。 多くの場合、フィールドの正確な長さです。 ただし、がフィールドから文字を取得するために既に使用され`GetChars`ている場合、返される数値はフィールドの正確な長さよりも小さくなることがあります。  
+  
+ であるバッファーを渡すと、 `null` `GetChars`はフィールドの長さを文字数で返します。  
+  
+ 変換は実行されません。したがって、取得されるデータは既に文字配列である必要があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetData">
+      <MemberSignature Language="C#" Value="public System.Data.IDataReader GetData (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Data.IDataReader GetData(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetData(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetData (i As Integer) As IDataReader" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::IDataReader ^ GetData(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetData : int -&gt; System.Data.IDataReader" Usage="iDataRecord.GetData i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.IDataReader</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定された列序数の <see cref="T:System.Data.IDataReader" /> を返します。</summary>
+        <returns>指定した列の序数の <see cref="T:System.Data.IDataReader" />。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDataTypeName">
+      <MemberSignature Language="C#" Value="public string GetDataTypeName (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance string GetDataTypeName(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetDataTypeName(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetDataTypeName (i As Integer) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::String ^ GetDataTypeName(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetDataTypeName : int -&gt; string" Usage="iDataRecord.GetDataTypeName i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定されたフィールドのデータ型情報を取得します。</summary>
+        <returns>指定したフィールドのデータ型情報。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ データ型情報は、によっ`GetFieldType`て返される型情報とは異なる場合があります。特に、基になるデータ型が、その言語でサポートされているランタイム型にマップされていない場合です。 (たとえば、 `DataTypeName`は "integer" `Type.Name`である場合もありますが、"Int32" である場合もあります)。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDateTime">
+      <MemberSignature Language="C#" Value="public DateTime GetDateTime (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance valuetype System.DateTime GetDateTime(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetDateTime(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetDateTime (i As Integer) As DateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; DateTime GetDateTime(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetDateTime : int -&gt; DateTime" Usage="iDataRecord.GetDateTime i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定されたフィールドの日付と時刻のデータ値を取得します。</summary>
+        <returns>指定したフィールドの日時のデータ値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDecimal">
+      <MemberSignature Language="C#" Value="public decimal GetDecimal (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance valuetype System.Decimal GetDecimal(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetDecimal(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetDecimal (i As Integer) As Decimal" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Decimal GetDecimal(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetDecimal : int -&gt; decimal" Usage="iDataRecord.GetDecimal i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Decimal</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定されたフィールドの固定位置の数値を取得します。</summary>
+        <returns>指定したフィールドの固定位置数値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDouble">
+      <MemberSignature Language="C#" Value="public double GetDouble (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance float64 GetDouble(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetDouble(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetDouble (i As Integer) As Double" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; double GetDouble(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetDouble : int -&gt; double" Usage="iDataRecord.GetDouble i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定されたフィールドの倍精度浮動小数点値を取得します。</summary>
+        <returns>指定したフィールドの倍精度浮動小数点数。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFieldType">
+      <MemberSignature Language="C#" Value="public Type GetFieldType (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Type GetFieldType(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetFieldType(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetFieldType (i As Integer) As Type" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Type ^ GetFieldType(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetFieldType : int -&gt; Type" Usage="iDataRecord.GetFieldType i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Type</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary><see cref="M:System.Data.IDataRecord.GetValue(System.Int32)" /> から返される <see cref="T:System.Object" /> の型に対応する <see cref="T:System.Type" /> 情報を取得します。</summary>
+        <returns><see cref="M:System.Data.IDataRecord.GetValue(System.Int32)" /> から返される <see cref="T:System.Object" /> の型に対応する <see cref="T:System.Type" /> 情報。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この情報を使用すると、厳密に型指定されたアクセサーを呼び出すことによってパフォーマンスを向上させることができます。 (たとえば、の使用`GetInt32`は、を使用する`GetValue`よりも約10倍高速です)。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFloat">
+      <MemberSignature Language="C#" Value="public float GetFloat (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance float32 GetFloat(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetFloat(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetFloat (i As Integer) As Single" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; float GetFloat(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetFloat : int -&gt; single" Usage="iDataRecord.GetFloat i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Single</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定されたフィールドの単精度浮動小数点値を取得します。</summary>
+        <returns>指定したフィールドの単精度浮動小数点数。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetGuid">
+      <MemberSignature Language="C#" Value="public Guid GetGuid (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance valuetype System.Guid GetGuid(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetGuid(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetGuid (i As Integer) As Guid" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Guid GetGuid(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetGuid : int -&gt; Guid" Usage="iDataRecord.GetGuid i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Guid</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定したフィールドの GUID 値を返します。</summary>
+        <returns>指定したフィールドの GUID 値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetInt16">
+      <MemberSignature Language="C#" Value="public short GetInt16 (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance int16 GetInt16(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetInt16(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetInt16 (i As Integer) As Short" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; short GetInt16(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetInt16 : int -&gt; int16" Usage="iDataRecord.GetInt16 i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int16</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定されたフィールドの 16 ビット符号付き整数値を取得します。</summary>
+        <returns>指定したフィールドの 16 ビット符号付き整数値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetInt32">
+      <MemberSignature Language="C#" Value="public int GetInt32 (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance int32 GetInt32(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetInt32(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetInt32 (i As Integer) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; int GetInt32(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetInt32 : int -&gt; int" Usage="iDataRecord.GetInt32 i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定されたフィールドの 32 ビット符号付き整数値を取得します。</summary>
+        <returns>指定されたフィールドの 32 ビット符号付き整数値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetInt64">
+      <MemberSignature Language="C#" Value="public long GetInt64 (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance int64 GetInt64(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetInt64(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetInt64 (i As Integer) As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; long GetInt64(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetInt64 : int -&gt; int64" Usage="iDataRecord.GetInt64 i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定されたフィールドの 64 ビット符号付き整数値を取得します。</summary>
+        <returns>指定されたフィールドの 64 ビット符号付き整数値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetName">
+      <MemberSignature Language="C#" Value="public string GetName (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance string GetName(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetName(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetName (i As Integer) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::String ^ GetName(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetName : int -&gt; string" Usage="iDataRecord.GetName i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>検索するフィールドの名前を取得します。</summary>
+        <returns>フィールドの名前。返される値がない場合は空の文字列 ("")。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOrdinal">
+      <MemberSignature Language="C#" Value="public int GetOrdinal (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance int32 GetOrdinal(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetOrdinal(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOrdinal (name As String) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; int GetOrdinal(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="abstract member GetOrdinal : string -&gt; int" Usage="iDataRecord.GetOrdinal name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">検索するフィールドの名前。</param>
+        <summary>名前付きフィールドのインデックスを返します。</summary>
+        <returns>名前付きフィールドのインデックス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `GetOrdinal`最初に大文字と小文字を区別する検索を実行します。 失敗した場合は、大文字小文字を区別しない検索が2回行われます。 `GetOrdinal`かなの文字幅を区別しません。 名前付きフィールドのインデックスが見つから`IndexOutOfRangeException`ない場合は、がスローされます。  
+  
+ 序数ベースの参照は名前付き参照よりも効率的であるため、ループ内`GetOrdinal`でを呼び出すことは効率的ではありません。 一度呼び出し`GetOrdinal`て、ループ内で使用するために結果を整数変数に代入することで、時間を節約します。  
+  
+   
+  
+## Examples  
+ 次の例は、継承<xref:System.Data.Odbc.OdbcDataReader.GetOrdinal%2A>されたメソッドの使用方法を示しています。  
+  
+ [!code-csharp[Classic WebData OdbcDataReader.GetOrdinal#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData OdbcDataReader.GetOrdinal/CS/source.cs#1)]
+ [!code-vb[Classic WebData OdbcDataReader.GetOrdinal#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData OdbcDataReader.GetOrdinal/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetString">
+      <MemberSignature Language="C#" Value="public string GetString (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance string GetString(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetString(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetString (i As Integer) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::String ^ GetString(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetString : int -&gt; string" Usage="iDataRecord.GetString i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定したフィールドの文字列値を取得します。</summary>
+        <returns>指定したフィールドの文字列値。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetValue">
+      <MemberSignature Language="C#" Value="public object GetValue (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance object GetValue(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetValue(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetValue (i As Integer) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Object ^ GetValue(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetValue : int -&gt; obj" Usage="iDataRecord.GetValue i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定したフィールドの値を返します。</summary>
+        <returns>フィールドの値が返されたときにその値を格納する <see cref="T:System.Object" />。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetValues">
+      <MemberSignature Language="C#" Value="public int GetValues (object[] values);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance int32 GetValues(object[] values) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.GetValues(System.Object[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetValues (values As Object()) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; int GetValues(cli::array &lt;System::Object ^&gt; ^ values);" />
+      <MemberSignature Language="F#" Value="abstract member GetValues : obj[] -&gt; int" Usage="iDataRecord.GetValues values" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="values" Type="System.Object[]" />
+      </Parameters>
+      <Docs>
+        <param name="values">属性フィールドをコピーする <see cref="T:System.Object" /> の配列。</param>
+        <summary>現在のレコードの列の値を持つオブジェクトの配列を設定します。</summary>
+        <returns>配列に含まれる <see cref="T:System.Object" /> のインスタンスの数。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ほとんどのアプリケーションでは<xref:System.Data.IDataRecord.GetValues%2A> 、メソッドは、各列を個別に取得するのではなく、すべての列を取得するための効率的な手段を提供します。  
+  
+ 結果の行に<xref:System.Object>含まれる列数よりも小さい配列を渡すことができます。 配列に保持されるデータ<xref:System.Object>量だけが配列にコピーされます。 また、長さが結果<xref:System.Object>の行に含まれる列の数よりも多い配列を渡すこともできます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsDBNull">
+      <MemberSignature Language="C#" Value="public bool IsDBNull (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool IsDBNull(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.IDataRecord.IsDBNull(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function IsDBNull (i As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool IsDBNull(int i);" />
+      <MemberSignature Language="F#" Value="abstract member IsDBNull : int -&gt; bool" Usage="iDataRecord.IsDBNull i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">検索するフィールドのインデックス。</param>
+        <summary>指定されたフィールドが null に設定されているかどうかを返します。</summary>
+        <returns>指定したフィールドが null に設定されている場合は <see langword="true" />、それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドを呼び出して、型指定された get メソッド ( <xref:System.Data.SqlClient.SqlDataReader.GetByte%2A> <xref:System.Data.SqlClient.SqlDataReader.GetChar%2A>、など) を呼び出す前に null 列の値があるかどうかを確認し、エラーが発生しないようにします。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Item">
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>指定した列を取得します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Item">
+      <MemberSignature Language="C#" Value="public object this[int i] { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object Item(int32)" />
+      <MemberSignature Language="DocId" Value="P:System.Data.IDataRecord.Item(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Default Public ReadOnly Property Item(i As Integer) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Object ^ default[int] { System::Object ^ get(int i); };" />
+      <MemberSignature Language="F#" Value="member this.Item(int) : obj" Usage="System.Data.IDataRecord.Item" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">取得する列の 0 から始まるインデックス。</param>
+        <summary>指定したインデックスにある列を取得します。</summary>
+        <value>指定したインデックス位置に <see cref="T:System.Object" /> として存在する列。</value>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Item">
+      <MemberSignature Language="C#" Value="public object this[string name] { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object Item(string)" />
+      <MemberSignature Language="DocId" Value="P:System.Data.IDataRecord.Item(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Default Public ReadOnly Property Item(name As String) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Object ^ default[System::String ^] { System::Object ^ get(System::String ^ name); };" />
+      <MemberSignature Language="F#" Value="member this.Item(string) : obj" Usage="System.Data.IDataRecord.Item" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.Common</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Data</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">検索する列の名前。</param>
+        <summary>指定された名前を持つ列を取得します。</summary>
+        <value>指定した名前を <see cref="T:System.Object" /> として持つ列。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 大文字と小文字を区別する検索が最初に実行されます。 失敗した場合は、大文字小文字を区別しない検索が2回行われます。  
+  
+ この方法では、かなの文字幅を区別しません。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.IndexOutOfRangeException">指定された名前の列は見つかりませんでした。</exception>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
