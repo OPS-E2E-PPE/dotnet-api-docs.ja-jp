@@ -1,0 +1,527 @@
+<Type Name="RecognizedPhrase" FullName="System.Speech.Recognition.RecognizedPhrase">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="532436c4bf4201c336f4d35a62ee5de8416d69f2" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70621744" /></Metadata><TypeSignature Language="C#" Value="public class RecognizedPhrase" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi serializable beforefieldinit RecognizedPhrase extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Speech.Recognition.RecognizedPhrase" />
+  <TypeSignature Language="VB.NET" Value="Public Class RecognizedPhrase" />
+  <TypeSignature Language="C++ CLI" Value="public ref class RecognizedPhrase" />
+  <TypeSignature Language="F#" Value="type RecognizedPhrase = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Speech</AssemblyName>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute>
+      <AttributeName>System.Diagnostics.DebuggerDisplay("{Text}")</AttributeName>
+    </Attribute>
+    <Attribute>
+      <AttributeName>System.Serializable</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>音声認識エンジンで生成された、認識された入力に関する詳細な情報が含まれています。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このクラスには、次のような音声認識操作中に処理される単語と語句に関する詳細情報が含まれます。  
+  
+-   プロパティ<xref:System.Speech.Recognition.RecognizedPhrase.Grammar%2A>は、認識<xref:System.Speech.Recognition.Grammar>エンジンが入力を識別するために使用したを参照します。  
+  
+-   プロパティ<xref:System.Speech.Recognition.RecognizedPhrase.Text%2A>は、語句の正規化されたテキストを格納します。  
+  
+-   プロパティ<xref:System.Speech.Recognition.RecognizedPhrase.Semantics%2A>は、結果に含まれるセマンティック情報を参照します。 セマンティック情報は、キー名と関連付けられたセマンティックデータの辞書です。  
+  
+-   プロパティ<xref:System.Speech.Recognition.RecognizedPhrase.Words%2A>は、入力で認識さ<xref:System.Speech.Recognition.RecognizedWordUnit>れている各単語を表すオブジェクトの順序付けられたコレクションを格納します。 各ワード単位には、対応する単語の表示形式、構文形式、および発音情報が含まれています。  
+  
+-   プロパティ<xref:System.Speech.Recognition.RecognizedPhrase.ReplacementWordUnits%2A>には、特殊な単語の置換に関する情報が含まれています。  
+  
+-   プロパティ<xref:System.Speech.Recognition.RecognizedPhrase.Homophones%2A> と <xref:System.Speech.Recognition.RecognizedPhrase.HomophoneGroupId%2A> プロパティには、同一または類似した発音を持つ認識代替に関する情報が含まれています。  
+  
+-   <xref:System.Speech.Recognition.RecognizedPhrase.Confidence%2A>プロパティの値は、認識された語句が入力と一致することを、音声認識エンジンによって割り当てられる確実性の度合いを示します。  
+  
+ 音声認識エンジンは、から<xref:System.Speech.Recognition.RecognitionResult> <xref:System.Speech.Recognition.RecognizedPhrase>継承されるオブジェクトで認識結果を返します。 認識結果<xref:System.Speech.Recognition.RecognitionResult.Alternates%2A>プロパティには、オブジェクトの<xref:System.Speech.Recognition.RecognizedPhrase>順序付けられたコレクションが含まれます。各オブジェクトは、認識エンジンへの入力と一致する可能性があります。  
+  
+   
+  
+## Examples  
+ 次の<xref:System.Speech.Recognition.SpeechRecognitionEngine.SpeechRecognized?displayProperty=nameWithType>例では、、 <xref:System.Speech.Recognition.SpeechRecognizer.SpeechRecognized?displayProperty=nameWithType>、または<xref:System.Speech.Recognition.Grammar.SpeechRecognized?displayProperty=nameWithType>イベントのハンドラー <xref:System.Speech.Recognition.RecognitionResult>と、オブジェクトに関連付けられている情報の一部を示します。 <xref:System.Speech.Recognition.RecognitionResult> クラスは <xref:System.Speech.Recognition.RecognizedPhrase> クラスから派生します。  
+  
+```csharp  
+void SpeechRecognizedHandler(object sender, SpeechRecognizedEventArgs e)  
+{  
+  if (e.Result == null) return;  
+  
+  // Add event handler code here.  
+  
+  // The following code illustrates some of the information available  
+  // in the recognition result.  
+  Console.WriteLine("Recognition result summary:");  
+  Console.WriteLine(  
+    "  Recognized phrase: {0}\n" +   
+    "  Confidence score {1}\n" +   
+    "  Grammar used: {2}\n",   
+    e.Result.Text, e.Result.Confidence, e.Result.Grammar.Name);  
+  
+  // Display the semantic values in the recognition result.  
+  Console.WriteLine("  Semantic results:");  
+  foreach (KeyValuePair<String, SemanticValue> child in e.Result.Semantics)  
+  {  
+    Console.WriteLine("    The {0} city is {1}",  
+      child.Key, child.Value.Value ?? "null");  
+  }  
+  Console.WriteLine();  
+  
+  // Display information about the words in the recognition result.  
+  Console.WriteLine("  Word summary: ");  
+  foreach (RecognizedWordUnit word in e.Result.Words)  
+  {  
+    Console.WriteLine(  
+      "    Lexical form ({1})" +  
+      " Pronunciation ({0})" +  
+      " Display form ({2})",  
+      word.Pronunciation, word.LexicalForm, word.DisplayAttributes);  
+  }  
+  
+  // Display information about the audio in the recognition result.  
+  Console.WriteLine("  Input audio summary:\n" +  
+    "    Candidate Phrase at:       {0} mSec\n" +  
+    "    Phrase Length:             {1} mSec\n" +  
+    "    Input State Time:          {2}\n" +  
+    "    Input Format:              {3}\n",  
+    e.Result.Audio.AudioPosition,  
+    e.Result.Audio.Duration,  
+    e.Result.Audio.StartTime,  
+    e.Result.Audio.Format.EncodingFormat);  
+  
+  // Display information about the alternate recognitions in the recognition result.  
+  Console.WriteLine("  Alternate phrase collection:");  
+  foreach (RecognizedPhrase phrase in e.Result.Alternates)  
+  {  
+    Console.WriteLine("    Phrase: " + phrase.Text);  
+    Console.WriteLine("    Confidence score: " + phrase.Confidence);  
+  }  
+}  
+```  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Speech.Recognition.RecognitionResult" />
+    <altmember cref="T:System.Speech.Recognition.RecognizedWordUnit" />
+  </Docs>
+  <Members>
+    <Member MemberName="Confidence">
+      <MemberSignature Language="C#" Value="public float Confidence { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance float32 Confidence" />
+      <MemberSignature Language="DocId" Value="P:System.Speech.Recognition.RecognizedPhrase.Confidence" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Confidence As Single" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property float Confidence { float get(); };" />
+      <MemberSignature Language="F#" Value="member this.Confidence : single" Usage="System.Speech.Recognition.RecognizedPhrase.Confidence" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Single</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Speech.Recognition.RecognizedPhrase" /> が特定の入力と一致する確率を表す値 (認識エンジンによって割り当てられます) を取得します。</summary>
+        <value>語句の正しい認識の確実性の相対測定値。 値は 0.0 から 1.0 までであり、低い数字ほど信頼度が低くなります。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 信頼度スコアは、語句が正しく認識されたことを示す絶対確率を示しません。 代わりに、信頼スコアは、特定の入力に対する複数の認識代替の相対的な精度を比較するためのメカニズムを提供します。 これにより、最も正確な認識結果が返されます。 たとえば、認識された語句の信頼スコアが0.8 である場合、そのフレーズは、入力と一致する確率が 80% であるという意味ではありません。  これは、語句が、信頼スコアが0.8 未満の他の結果とは、入力の正しい一致である可能性が高いことを意味します。  
+  
+ 同じ認識操作から、または同じ入力の前の認識から比較する別の結果がない場合を除き、信頼スコアは独自に意味がありません。 値は、オブジェクトの<xref:System.Speech.Recognition.RecognitionResult.Alternates%2A> <xref:System.Speech.Recognition.RecognitionResult>プロパティによって返される代替語句のランク付けに使用されます。  
+  
+ 信頼度の値は、各認識エンジンに対して相対的で一意です。 2つの異なる認識エンジンによって返される信頼の値は、明確に比較できません。  
+  
+ 音声認識エンジンは、読み上げ入力に対して、背景の干渉、音声による認識、予期しない単語やワードシーケンスなど、さまざまな理由で信頼度の低いスコアを割り当てることができます。 アプリケーションで<xref:System.Speech.Recognition.SpeechRecognitionEngine>インスタンスを使用している場合は、いずれか<xref:System.Speech.Recognition.SpeechRecognitionEngine.UpdateRecognizerSetting%2A>の方法で音声入力が受け入れられるか拒否されるかの信頼レベルを変更できます。 によって<xref:System.Speech.Recognition.SpeechRecognizer>管理される共有レコグナイザーの信頼しきい値は、ユーザープロファイルに関連付けられ、Windows レジストリに格納されます。 アプリケーションでは、共有認識エンジンのプロパティに対する変更をレジストリに書き込むことはできません。  
+  
+ オブジェクトのプロパティに<xref:System.Speech.Recognition.RecognitionResult.Alternates%2A>は、オブジェクトの<xref:System.Speech.Recognition.RecognizedPhrase>順序付けられたコレクションが含まれます。各オブジェクトは、認識エンジンへの入力と一致する可能性があります。 <xref:System.Speech.Recognition.RecognitionResult> 代替は、高い信頼度から順に並べ替えられます。  
+  
+   
+  
+## Examples  
+ 次の例は<xref:System.Speech.Recognition.SpeechRecognitionEngine.SpeechRecognized?displayProperty=nameWithType>、 <xref:System.Speech.Recognition.SpeechRecognizer.SpeechRecognized?displayProperty=nameWithType>イベント、イベント、または<xref:System.Speech.Recognition.Grammar.SpeechRecognized?displayProperty=nameWithType>イベントのハンドラーを示しています。 この例では、 <xref:System.Speech.Recognition.RecognitionResult>オブジェクトに関連付けられている情報を示しています。その一部はから<xref:System.Speech.Recognition.RecognizedPhrase>派生しています。 ハンドラーは、認識された語句と認識の代替の信頼スコアを表示します。  
+  
+```csharp  
+void SpeechRecognizedHandler(object sender, SpeechRecognizedEventArgs e)  
+{  
+  if (e.Result == null) return;  
+  
+  // Add event handler code here.  
+  
+  // The following code illustrates some of the information available  
+  // in the recognition result.  
+  Console.WriteLine("Recognition result summary:");  
+  Console.WriteLine(  
+    "  Recognized phrase: {0}\n" +   
+    "  Confidence score {1}\n" +   
+    "  Grammar used: {2}\n",   
+    e.Result.Text, e.Result.Confidence, e.Result.Grammar.Name);  
+  
+  // Display the semantic values in the recognition result.  
+  Console.WriteLine("  Semantic results:");  
+  foreach (KeyValuePair<String, SemanticValue> child in e.Result.Semantics)  
+  {  
+    Console.WriteLine("    The {0} city is {1}",  
+      child.Key, child.Value.Value ?? "null");  
+  }  
+  Console.WriteLine();  
+  
+  // Display information about the words in the recognition result.  
+  Console.WriteLine("  Word summary: ");  
+  foreach (RecognizedWordUnit word in e.Result.Words)  
+  {  
+    Console.WriteLine(  
+      "    Lexical form ({1})" +  
+      " Pronunciation ({0})" +  
+      " Display form ({2})",  
+      word.Pronunciation, word.LexicalForm, word.DisplayAttributes);  
+  }  
+  
+  // Display information about the audio in the recognition result.  
+  Console.WriteLine("  Input audio summary:\n" +  
+    "    Candidate Phrase at:       {0} mSec\n" +  
+    "    Phrase Length:             {1} mSec\n" +  
+    "    Input State Time:          {2}\n" +  
+    "    Input Format:              {3}\n",  
+    e.Result.Audio.AudioPosition,  
+    e.Result.Audio.Duration,  
+    e.Result.Audio.StartTime,  
+    e.Result.Audio.Format.EncodingFormat);  
+  
+  // Display information about the alternate recognitions in the recognition result.  
+  Console.WriteLine("  Alternate phrase collection:");  
+  foreach (RecognizedPhrase phrase in e.Result.Alternates)  
+  {  
+    Console.WriteLine("    Phrase: " + phrase.Text);  
+    Console.WriteLine("    Confidence score: " + phrase.Confidence);  
+  }  
+}  
+  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Speech.Recognition.RecognitionResult" />
+        <altmember cref="P:System.Speech.Recognition.RecognitionResult.Alternates" />
+        <altmember cref="T:System.Speech.Recognition.SpeechRecognitionEngine" />
+        <altmember cref="T:System.Speech.Recognition.SpeechRecognizer" />
+      </Docs>
+    </Member>
+    <Member MemberName="ConstructSmlFromSemantics">
+      <MemberSignature Language="C#" Value="public System.Xml.XPath.IXPathNavigable ConstructSmlFromSemantics ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Xml.XPath.IXPathNavigable ConstructSmlFromSemantics() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Speech.Recognition.RecognizedPhrase.ConstructSmlFromSemantics" />
+      <MemberSignature Language="VB.NET" Value="Public Function ConstructSmlFromSemantics () As IXPathNavigable" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Xml::XPath::IXPathNavigable ^ ConstructSmlFromSemantics();" />
+      <MemberSignature Language="F#" Value="member this.ConstructSmlFromSemantics : unit -&gt; System.Xml.XPath.IXPathNavigable" Usage="recognizedPhrase.ConstructSmlFromSemantics " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Xml.XPath.IXPathNavigable</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Speech.Recognition.RecognizedPhrase" /> オブジェクトのセマンティクス情報のセマンティクス マークアップ言語 (SML) ドキュメントを返します。</summary>
+        <returns>ナビゲート可能な <see href="https://msdn.microsoft.com/library/ms256115.aspx">XPath</see> オブジェクトとして、<see cref="T:System.Speech.Recognition.RecognizedPhrase" /> のセマンティクスの SML 記述を返します。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ セマンティックマークアップ言語 (SML) の詳細については、「[セマンティックマークアップ言語リファレンス](https://msdn.microsoft.com/library/f9d83443-2cac-49bc-a447-210feda62f5d)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例では、メソッドは、認識された語句のセマンティクスの SML を含む文字列を返します。  
+  
+```  
+private string GetSemanticsSML(RecognizedPhrase result)  
+{  
+  if (result.Semantics.Count > 0)  
+  {  
+    return result.ConstructSmlFromSemantics().CreateNavigator().OuterXml;  
+  }  
+  else  
+  {  
+    return null;  
+  }  
+}  
+```  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Grammar">
+      <MemberSignature Language="C#" Value="public System.Speech.Recognition.Grammar Grammar { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Speech.Recognition.Grammar Grammar" />
+      <MemberSignature Language="DocId" Value="P:System.Speech.Recognition.RecognizedPhrase.Grammar" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Grammar As Grammar" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Speech::Recognition::Grammar ^ Grammar { System::Speech::Recognition::Grammar ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Grammar : System.Speech.Recognition.Grammar" Usage="System.Speech.Recognition.RecognizedPhrase.Grammar" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Recognition.Grammar</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>音声認識エンジンが <see cref="T:System.Speech.Recognition.RecognizedPhrase" /> を返すために使用した <see cref="T:System.Speech.Recognition.Grammar" /> を取得します。</summary>
+        <value>音声認識エンジンが入力の特定に使用した文法オブジェクト。</value>
+        <remarks>To be added.</remarks>
+        <altmember cref="T:System.Speech.Recognition.Grammar" />
+        <altmember cref="T:System.Speech.Recognition.RecognitionResult" />
+        <altmember cref="T:System.Speech.Recognition.SpeechRecognitionEngine" />
+        <altmember cref="T:System.Speech.Recognition.SpeechRecognizer" />
+      </Docs>
+    </Member>
+    <Member MemberName="HomophoneGroupId">
+      <MemberSignature Language="C#" Value="public int HomophoneGroupId { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 HomophoneGroupId" />
+      <MemberSignature Language="DocId" Value="P:System.Speech.Recognition.RecognizedPhrase.HomophoneGroupId" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property HomophoneGroupId As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int HomophoneGroupId { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.HomophoneGroupId : int" Usage="System.Speech.Recognition.RecognizedPhrase.HomophoneGroupId" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>語句の同音異義語グループの識別子を取得します。</summary>
+        <value>語句の同音異義語グループの識別子。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 音声認識エンジンは、同じ発音を持つすべての認識代替にグループ識別子を割り当てます。 一意の発音を持つ代替のそれぞれについて、レコグナイザーは同音異義語グループを作成します。 音声認識エンジンは、認識操作ごとに識別子の新しいグループを生成します。識別子を使用して、個別の認識操作から生成された代替を比較することはできません。  
+  
+ たとえば、代替の "tale of two"、"tail"、"the ale" を含む認識結果の場合、最初の2つの代替は1つの同音異義語グループに属し、最後の代替は2番目の同音異義語グループの1つのメンバーになります。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Speech.Recognition.RecognitionResult.Alternates" />
+        <altmember cref="P:System.Speech.Recognition.RecognizedPhrase.Homophones" />
+      </Docs>
+    </Member>
+    <Member MemberName="Homophones">
+      <MemberSignature Language="C#" Value="public System.Collections.ObjectModel.ReadOnlyCollection&lt;System.Speech.Recognition.RecognizedPhrase&gt; Homophones { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Collections.ObjectModel.ReadOnlyCollection`1&lt;class System.Speech.Recognition.RecognizedPhrase&gt; Homophones" />
+      <MemberSignature Language="DocId" Value="P:System.Speech.Recognition.RecognizedPhrase.Homophones" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Homophones As ReadOnlyCollection(Of RecognizedPhrase)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Collections::ObjectModel::ReadOnlyCollection&lt;System::Speech::Recognition::RecognizedPhrase ^&gt; ^ Homophones { System::Collections::ObjectModel::ReadOnlyCollection&lt;System::Speech::Recognition::RecognizedPhrase ^&gt; ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Homophones : System.Collections.ObjectModel.ReadOnlyCollection&lt;System.Speech.Recognition.RecognizedPhrase&gt;" Usage="System.Speech.Recognition.RecognizedPhrase.Homophones" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.ObjectModel.ReadOnlyCollection&lt;System.Speech.Recognition.RecognizedPhrase&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>この認識された語句と同じ発音の代替認識のコレクションを取得します。</summary>
+        <value>この認識された語句と同じ発音の代替認識の読み取り専用コレクション。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティは、この認識された語句と同じ発音を持つ他のすべての認識代替を返します。  
+  
+ たとえば、"tale of two" と "the tail" という代替が含まれている認識結果の場合、最初の代替の同音異義語コレクションである "tale of two" には、2番目の "the tail" という語句が含まれます。 2番目の代替の同音異義語コレクションである "tail" には、最初の "the tale of two" という語句が含まれます。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Speech.Recognition.RecognitionResult.Alternates" />
+        <altmember cref="P:System.Speech.Recognition.RecognizedPhrase.HomophoneGroupId" />
+      </Docs>
+    </Member>
+    <Member MemberName="ReplacementWordUnits">
+      <MemberSignature Language="C#" Value="public System.Collections.ObjectModel.Collection&lt;System.Speech.Recognition.ReplacementText&gt; ReplacementWordUnits { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Collections.ObjectModel.Collection`1&lt;class System.Speech.Recognition.ReplacementText&gt; ReplacementWordUnits" />
+      <MemberSignature Language="DocId" Value="P:System.Speech.Recognition.RecognizedPhrase.ReplacementWordUnits" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property ReplacementWordUnits As Collection(Of ReplacementText)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Collections::ObjectModel::Collection&lt;System::Speech::Recognition::ReplacementText ^&gt; ^ ReplacementWordUnits { System::Collections::ObjectModel::Collection&lt;System::Speech::Recognition::ReplacementText ^&gt; ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.ReplacementWordUnits : System.Collections.ObjectModel.Collection&lt;System.Speech.Recognition.ReplacementText&gt;" Usage="System.Speech.Recognition.RecognizedPhrase.ReplacementWordUnits" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.ObjectModel.Collection&lt;System.Speech.Recognition.ReplacementText&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>音声認識エンジンが音声からテキストへの正規化の一部として変更したテキストに関する情報を取得します。</summary>
+        <value>認識された入力を正規化したときに音声認識エンジンが置き換えたテキストのセクションを記述する <see cref="T:System.Speech.Recognition.ReplacementText" /> オブジェクトのコレクション。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 音声認識エンジンは、音声認識プロセスの一部として、認識された入力を表示フォームに正規化します。  
+  
+ たとえば、音声入力 "20 5 ドル" は、 <xref:System.Speech.Recognition.RecognizedPhrase.Words%2A>プロパティに "20"、"5"、および "ドル" という単語が含まれ、プロパティに<xref:System.Speech.Recognition.RecognizedPhrase.Text%2A> "$25.00" という語句が含まれている場合に認識結果を生成します。 テキストの正規化の詳細については<xref:System.Speech.Recognition.ReplacementText> 、クラスを参照してください。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Speech.Recognition.RecognizedWordUnit" />
+        <altmember cref="T:System.Speech.Recognition.ReplacementText" />
+        <altmember cref="P:System.Speech.Recognition.RecognizedPhrase.Text" />
+        <altmember cref="P:System.Speech.Recognition.RecognizedPhrase.Words" />
+      </Docs>
+    </Member>
+    <Member MemberName="Semantics">
+      <MemberSignature Language="C#" Value="public System.Speech.Recognition.SemanticValue Semantics { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Speech.Recognition.SemanticValue Semantics" />
+      <MemberSignature Language="DocId" Value="P:System.Speech.Recognition.RecognizedPhrase.Semantics" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Semantics As SemanticValue" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Speech::Recognition::SemanticValue ^ Semantics { System::Speech::Recognition::SemanticValue ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Semantics : System.Speech.Recognition.SemanticValue" Usage="System.Speech.Recognition.RecognizedPhrase.Semantics" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Speech.Recognition.SemanticValue</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>認識された語句に関連付けられているセマンティクス情報を取得します。</summary>
+        <value>認識された語句に関連付けられているセマンティクス情報。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 音声認識の文法には、セマンティック情報を含めることができます。 音声認識エンジンによって、このような文法の認識結果が生成されると、文法の規則および認識エンジンへの入力に従って、セマンティック情報が認識結果に含まれる場合があります。 セマンティック情報の詳細については、「[セマンティクス](https://msdn.microsoft.com/library/2a9dbd8b-cf6d-42cd-bbb9-ca0b3e534005)の結果<xref:System.Speech.Recognition.SemanticResultKey>に<xref:System.Speech.Recognition.SemanticResultValue>ついて」および「クラスとクラス」を参照してください。  
+  
+   
+  
+## Examples  
+ 次の例では、認識された語句から特定のセマンティック情報を取得するメソッドを定義しています。 このメソッドから制御が戻るときに、セマンティックキーの値が含まれているか、値が取得されなかった場合は null になります。 このメソッドは、最上位レベルのキーのみをチェックします。 セマンティック情報は値のツリーに含まれているため、下位レベルのキーには返されたセマンティック値を介してアクセスする必要があります。  
+  
+```  
+static bool TryGetSemanticValue(  
+      RecognizedPhrase phrase, string key, out SemanticValue value)  
+{  
+  value = null;  
+  bool found = phrase.Semantics.ContainsKey(key);  
+  if (found)  
+  {  
+    value = phrase.Semantics[key];  
+  }  
+  
+  return found;  
+}  
+```  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Speech.Recognition.SemanticResultKey" />
+        <altmember cref="T:System.Speech.Recognition.SemanticResultValue" />
+        <altmember cref="T:System.Speech.Recognition.SemanticValue" />
+      </Docs>
+    </Member>
+    <Member MemberName="Text">
+      <MemberSignature Language="C#" Value="public string Text { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Text" />
+      <MemberSignature Language="DocId" Value="P:System.Speech.Recognition.RecognizedPhrase.Text" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Text As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ Text { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Text : string" Usage="System.Speech.Recognition.RecognizedPhrase.Text" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>認識された入力から音声認識エンジンによって生成された正規化テキストを取得します。</summary>
+        <value>認識された入力から音声認識エンジンによって生成される正規化テキスト。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 音声認識エンジンは、音声認識プロセスの一部として、認識された入力の音声からテキストへの正規化を表示フォームに実行します。  
+  
+ たとえば、音声入力 "20 5 ドル" は、 <xref:System.Speech.Recognition.RecognizedPhrase.Words%2A>プロパティに "20"、"5"、および "ドル" という単語が含まれ、プロパティに<xref:System.Speech.Recognition.RecognizedPhrase.Text%2A> "$25.00" という語句が含まれている場合に認識結果を生成します。 テキストの正規化の詳細について<xref:System.Speech.Recognition.ReplacementText>は、「」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="P:System.Speech.Recognition.RecognizedPhrase.ReplacementWordUnits" />
+        <altmember cref="P:System.Speech.Recognition.RecognizedPhrase.Words" />
+      </Docs>
+    </Member>
+    <Member MemberName="Words">
+      <MemberSignature Language="C#" Value="public System.Collections.ObjectModel.ReadOnlyCollection&lt;System.Speech.Recognition.RecognizedWordUnit&gt; Words { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Collections.ObjectModel.ReadOnlyCollection`1&lt;class System.Speech.Recognition.RecognizedWordUnit&gt; Words" />
+      <MemberSignature Language="DocId" Value="P:System.Speech.Recognition.RecognizedPhrase.Words" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Words As ReadOnlyCollection(Of RecognizedWordUnit)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Collections::ObjectModel::ReadOnlyCollection&lt;System::Speech::Recognition::RecognizedWordUnit ^&gt; ^ Words { System::Collections::ObjectModel::ReadOnlyCollection&lt;System::Speech::Recognition::RecognizedWordUnit ^&gt; ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Words : System.Collections.ObjectModel.ReadOnlyCollection&lt;System.Speech.Recognition.RecognizedWordUnit&gt;" Usage="System.Speech.Recognition.RecognizedPhrase.Words" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Speech</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.ObjectModel.ReadOnlyCollection&lt;System.Speech.Recognition.RecognizedWordUnit&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>認識された入力から音声認識エンジンによって生成される単語を取得します。</summary>
+        <value>認識された入力に対して音声認識エンジンによって生成される <see cref="T:System.Speech.Recognition.RecognizedWordUnit" /> オブジェクトのコレクション。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティには、音声認識エンジンによって生成された、結果の音声合成テキストの正規化の前に生成された単語が含まれます。  
+  
+ たとえば、音声入力 "20 5 ドル" は、 <xref:System.Speech.Recognition.RecognizedPhrase.Words%2A>プロパティに "20"、"5"、および "ドル" という単語が含まれ、プロパティに<xref:System.Speech.Recognition.RecognizedPhrase.Text%2A> "$25.00" という語句が含まれている場合に認識結果を生成します。 テキストの正規化の詳細について<xref:System.Speech.Recognition.ReplacementText>は、「」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Speech.Recognition.RecognizedWordUnit" />
+        <altmember cref="P:System.Speech.Recognition.RecognizedPhrase.ReplacementWordUnits" />
+        <altmember cref="P:System.Speech.Recognition.RecognizedPhrase.Text" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>
