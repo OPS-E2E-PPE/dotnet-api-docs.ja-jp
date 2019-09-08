@@ -1,0 +1,227 @@
+<Type Name="WebAuditEvent" FullName="System.Web.Management.WebAuditEvent">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="d0c641019015b0c2536bac8394b48f6333c49201" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70660814" /></Metadata><TypeSignature Language="C#" Value="public class WebAuditEvent : System.Web.Management.WebManagementEvent" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit WebAuditEvent extends System.Web.Management.WebManagementEvent" />
+  <TypeSignature Language="DocId" Value="T:System.Web.Management.WebAuditEvent" />
+  <TypeSignature Language="VB.NET" Value="Public Class WebAuditEvent&#xA;Inherits WebManagementEvent" />
+  <TypeSignature Language="C++ CLI" Value="public ref class WebAuditEvent : System::Web::Management::WebManagementEvent" />
+  <TypeSignature Language="F#" Value="type WebAuditEvent = class&#xA;    inherit WebManagementEvent" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Web.Management.WebManagementEvent</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>すべての ASP.NET 状態監視監査イベントの基本クラスです。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ASP.NET の正常性の監視により、運用スタッフと運用スタッフは、デプロイされた Web アプリケーションを管理できます。 名前<xref:System.Web.Management>空間には、アプリケーションの正常性状態データのパッケージ化を担当する正常性イベントの種類と、このデータの処理を担当するプロバイダーの種類が含まれています。 また、正常性イベントの管理に役立つサポート型も含まれています。  
+  
+ <xref:System.Web.Management.WebAuditEvent>クラスは、ASP.NET health monitoring 監査イベントクラスの派生元である基本クラスです。 監査イベントは、Web アプリケーションのセキュリティ関連の操作に関する情報を生成し、監査操作ごとに成功イベントと失敗イベントの両方を提供します。  
+  
+ 正常性監視システムは成功したイベントと失敗したイベントの両方を監査できます。つまり、正常な状態と異常な状態の両方についてアプリケーションを監視できます。 既定では、エラー監査イベントのみが記録されます。  
+  
+ 次の操作は、ASP.NET によって監査され、成功または失敗の正常性監視の監査イベントを生成する場合があります。  
+  
+-   ASP.NET アプリケーションのユーザーが行ったログインの試行。 この監査の詳細については<xref:System.Web.Management.WebAuthenticationSuccessAuditEvent> 、 <xref:System.Web.Management.WebSuccessAuditEvent>「」および「」を参照してください。  
+  
+-   セキュリティ関連のイベント (認証エラー、リソースアクセス試行の失敗、その他のセキュリティ関連のイベントなど)。 これらのイベントのログは、アプリケーションに対する侵入や攻撃を調査するときに役立ちます。 既定では、匿名ユーザーの承認エラーに対する監査のサポートは提供されません。 失敗イベントの監査の詳細について<xref:System.Web.Management.WebAuthenticationFailureAuditEvent>は<xref:System.Web.Management.WebFailureAuditEvent>、「」および「」を参照してください。  
+  
+-   ASP.NET アプリケーションによって発生するカスタムイベント。 <xref:System.Web.Management.WebAuditEvent>クラスおよび派生クラスによって提供される機能を拡張することで、カスタムイベントを監査できます。  
+  
+> [!NOTE]
+>  ほとんどの場合、ASP.NET の正常性監視の種類を実装として使用できます。また、 `healthMonitoring`構成セクションで値を指定することによって、正常性監視システムを制御します。 また、正常性監視型から派生して、独自のカスタムイベントおよびプロバイダーを作成することもできます。 <xref:System.Web.Management.WebAuditEvent>クラスから派生する例については、このトピックで説明する例を参照してください。  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Web.Management.WebAuditEvent>クラスから派生させてカスタム監査イベントを作成する方法を示しています。  
+  
+ [!code-csharp[System.Web.Management.WebAuditEvent#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.WebAuditEvent/CS/webauditevent.cs#1)]
+ [!code-vb[System.Web.Management.WebAuditEvent#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.WebAuditEvent/VB/webauditevent.vb#1)]  
+  
+ ASP.NET がイベントを使用できるようにする構成ファイルの抜粋を次に示します。  
+  
+```  
+<healthMonitoring   
+  enabled="true"  
+  heartBeatInterval="0">   
+  
+  <providers>  
+    <add name="EventLogProvider"   
+      type="System.Web.Management.EventLogWebEventProvider,  
+      System.Web,Version=2.0.3600.0,Culture=neutral,  
+      PublicKeyToken=b03f5f7f11d50a3a"/>  
+  </providers>  
+  
+  <eventMappings>  
+    <add  name="SampleWebAuditEvent"   
+      type="SamplesAspNet.SampleWebAuditEvent,  
+      webauditevent,Version=1.0.1663.31140,   
+      Culture=neutral,   
+      PublicKeyToken=0d1fa0f69d94de96,   
+      processorArchitecture=MSIL"/>  
+  </eventMappings>  
+  
+  <rules>  
+    <add name="Custom Audit Default"  
+      eventName="SampleWebAuditEvent"  
+      provider="EventLogProvider"  
+      profile="Default"/>    
+  </rules>  
+  
+</healthMonitoring>  
+```  
+  
+ ]]></format>
+    </remarks>
+    <block subset="none" type="overrides"><para>表示するカスタムイベント情報の書式を設定する場合<see cref="M:System.Web.Management.WebBaseEvent.FormatCustomEventDetails(System.Web.Management.WebEventFormatter)" />は、 <see cref="Overload:System.Web.Management.WebBaseEvent.ToString" />メソッドではなく、メソッドをオーバーライドします。 これにより、機密性の高いシステム情報の上書きや改ざんを防ぐことができます。</para></block>
+    <altmember cref="T:System.Web.Management.WebManagementEvent" />
+    <altmember cref="T:System.Web.Management.WebFailureAuditEvent" />
+    <altmember cref="T:System.Web.Management.WebAuthenticationFailureAuditEvent" />
+    <altmember cref="T:System.Web.Management.WebSuccessAuditEvent" />
+    <altmember cref="T:System.Web.Management.WebAuthenticationSuccessAuditEvent" />
+    <altmember cref="T:System.Web.Management.WebViewStateFailureAuditEvent" />
+    <altmember cref="T:System.Web.Management.WebEventCodes" />
+    <related type="Article" href="https://msdn.microsoft.com/library/e003f224-70fe-4cd8-a71a-2dc81e2d7e4c">ASP.NET の正常性監視の概要</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected internal WebAuditEvent (string message, object eventSource, int eventCode);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig specialname rtspecialname instance void .ctor(string message, object eventSource, int32 eventCode) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Management.WebAuditEvent.#ctor(System.String,System.Object,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Sub New (message As String, eventSource As Object, eventCode As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; WebAuditEvent(System::String ^ message, System::Object ^ eventSource, int eventCode);" />
+      <MemberSignature Language="F#" Value="new System.Web.Management.WebAuditEvent : string * obj * int -&gt; System.Web.Management.WebAuditEvent" Usage="new System.Web.Management.WebAuditEvent (message, eventSource, eventCode)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="message" Type="System.String" />
+        <Parameter Name="eventSource" Type="System.Object" />
+        <Parameter Name="eventCode" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="message">イベントの説明。</param>
+        <param name="eventSource">イベントのソースであるオブジェクト。</param>
+        <param name="eventCode">イベントに関連付けられているコード。 カスタム イベントを実装する場合、イベント コードを <see cref="F:System.Web.Management.WebEventCodes.WebExtendedBase" /> より大きくする必要があります。</param>
+        <summary>指定されたパラメーターを使用して、<see cref="T:System.Web.Management.WebAuditEvent" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このコンストラクターは、ASP.NET health 監視システムによって内部的に使用されます。 このクラスを使用して<xref:System.Web.Management.WebAuditEvent>オブジェクトをインスタンス化することはありませんが、このクラスから継承する独自のイベントの種類を実装する場合は、このコンストラクターを呼び出すことができます。  
+  
+   
+  
+## Examples  
+ 次のコード例は、このコンストラクターを呼び出す方法を示しています。 このコード例は、 <xref:System.Web.Management.WebAuditEvent>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Web.Management.WebAuditEvent#2](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.WebAuditEvent/CS/webauditevent.cs#2)]
+ [!code-vb[System.Web.Management.WebAuditEvent#2](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.WebAuditEvent/VB/webauditevent.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected internal WebAuditEvent (string message, object eventSource, int eventCode, int eventDetailCode);" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig specialname rtspecialname instance void .ctor(string message, object eventSource, int32 eventCode, int32 eventDetailCode) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.Management.WebAuditEvent.#ctor(System.String,System.Object,System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Sub New (message As String, eventSource As Object, eventCode As Integer, eventDetailCode As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; WebAuditEvent(System::String ^ message, System::Object ^ eventSource, int eventCode, int eventDetailCode);" />
+      <MemberSignature Language="F#" Value="new System.Web.Management.WebAuditEvent : string * obj * int * int -&gt; System.Web.Management.WebAuditEvent" Usage="new System.Web.Management.WebAuditEvent (message, eventSource, eventCode, eventDetailCode)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="message" Type="System.String" />
+        <Parameter Name="eventSource" Type="System.Object" />
+        <Parameter Name="eventCode" Type="System.Int32" />
+        <Parameter Name="eventDetailCode" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="message">イベントの説明。</param>
+        <param name="eventSource">イベントのソースであるオブジェクト。</param>
+        <param name="eventCode">イベントに関連付けられているコード。 カスタム イベントを実装する場合、イベント コードを <see cref="F:System.Web.Management.WebEventCodes.WebExtendedBase" /> より大きくする必要があります。</param>
+        <param name="eventDetailCode">イベントの詳細な識別子を指定する <see cref="T:System.Web.Management.WebEventCodes" /> 値。</param>
+        <summary>イベント パラメーターを指定して、<see cref="T:System.Web.Management.WebAuditEvent" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このコンストラクターは、ASP.NET health 監視システムによって内部的に使用されます。 このクラスを使用して<xref:System.Web.Management.WebAuditEvent>オブジェクトをインスタンス化することはありませんが、このクラスから継承する独自のイベントの種類を実装する場合は、このコンストラクターを呼び出すことができます。  
+  
+   
+  
+## Examples  
+ 次のコード例は、このコンストラクターを呼び出す方法を示しています。 このコード例は、 <xref:System.Web.Management.WebAuditEvent>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Web.Management.WebAuditEvent#3](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.WebAuditEvent/CS/webauditevent.cs#3)]
+ [!code-vb[System.Web.Management.WebAuditEvent#3](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.WebAuditEvent/VB/webauditevent.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RequestInformation">
+      <MemberSignature Language="C#" Value="public System.Web.Management.WebRequestInformation RequestInformation { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.Management.WebRequestInformation RequestInformation" />
+      <MemberSignature Language="DocId" Value="P:System.Web.Management.WebAuditEvent.RequestInformation" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property RequestInformation As WebRequestInformation" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Web::Management::WebRequestInformation ^ RequestInformation { System::Web::Management::WebRequestInformation ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.RequestInformation : System.Web.Management.WebRequestInformation" Usage="System.Web.Management.WebAuditEvent.RequestInformation" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.Management.WebRequestInformation</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Web 要求に関連付けられた情報を取得します。</summary>
+        <value>Web 要求に関連付けられた情報を格納する <see cref="T:System.Web.Management.WebRequestInformation" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 不具合の原因を検出する<xref:System.Web.Management.WebAuditEvent.RequestInformation%2A>ために、プロパティによって提供される情報を使用します。  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Web.Management.WebRequestInformation>プロパティを使用して要求情報を取得する方法を示しています。  
+  
+ [!code-csharp[System.Web.Management.WebAuditEvent#5](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.Management.WebAuditEvent/CS/webauditevent.cs#5)]
+ [!code-vb[System.Web.Management.WebAuditEvent#5](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.Management.WebAuditEvent/VB/webauditevent.vb#5)]  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Web.Management.WebRequestInformation" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>
