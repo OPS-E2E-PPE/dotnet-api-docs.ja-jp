@@ -1,0 +1,1240 @@
+<Type Name="MemoryCache" FullName="System.Runtime.Caching.MemoryCache">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="4ee2cb9a75e5d483ec72c62d8ba6243c69376d44" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70490438" /></Metadata><TypeSignature Language="C#" Value="public class MemoryCache : System.Runtime.Caching.ObjectCache, IDisposable" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit MemoryCache extends System.Runtime.Caching.ObjectCache implements class System.Collections.IEnumerable, class System.IDisposable" />
+  <TypeSignature Language="DocId" Value="T:System.Runtime.Caching.MemoryCache" />
+  <TypeSignature Language="VB.NET" Value="Public Class MemoryCache&#xA;Inherits ObjectCache&#xA;Implements IDisposable" />
+  <TypeSignature Language="C++ CLI" Value="public ref class MemoryCache : System::Runtime::Caching::ObjectCache, IDisposable" />
+  <TypeSignature Language="F#" Value="type MemoryCache = class&#xA;    inherit ObjectCache&#xA;    interface IEnumerable&#xA;    interface IDisposable" />
+  <AssemblyInfo>
+    <AssemblyName>System.Runtime.Caching</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Runtime.Caching.ObjectCache</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.Collections.IEnumerable</InterfaceName>
+    </Interface>
+    <Interface>
+      <InterfaceName>System.IDisposable</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Docs>
+    <summary>メモリ内キャッシュを実装する型を表します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Runtime.Caching.MemoryCache> クラスは、抽象 <xref:System.Runtime.Caching.ObjectCache> クラスの具象実装です。  
+  
+> [!NOTE]
+>  クラス<xref:System.Runtime.Caching.MemoryCache>は、ASP.NET <xref:System.Web.Caching.Cache>クラスに似ています。 クラスには、ASP.NET <xref:System.Web.Caching.Cache>クラスを使用した場合によく知られるキャッシュにアクセスするための多数のプロパティとメソッドがあります。 <xref:System.Runtime.Caching.MemoryCache> クラス<xref:System.Web.Caching.Cache>と<xref:System.Runtime.Caching.MemoryCache>クラスの主な違いは、 <xref:System.Runtime.Caching.MemoryCache>クラスは、アプリケーションを ASP.NET しないアプリケーションで[!INCLUDE[dnprdnshort](~/includes/dnprdnshort-md.md)]使用できるように変更されていることです。 たとえば、クラスは<xref:System.Runtime.Caching.MemoryCache> `System.Web`アセンブリに依存しません。 もう1つの違いは、同じアプリケーションと同じ<xref:System.Runtime.Caching.MemoryCache> <xref:System.AppDomain>インスタンスで使用するクラスの複数のインスタンスを作成できることです。  
+  
+ クラスでは、キャッシュ`null`内の値としてを使用することはできません。 <xref:System.Runtime.Caching.MemoryCache> 値がであるキャッシュエントリを追加または変更しよう`null`とすると、エラーが発生します。  
+  
+ 型<xref:System.Runtime.Caching.MemoryCache>に*キャッシュ領域*が実装されていません。 したがって、領域の<xref:System.Runtime.Caching.MemoryCache>パラメーターを含む基本メソッドを実装するメソッドを呼び出す場合は、パラメーターの値を渡さないでください。 Region パラメーターを使用するメソッドはすべて既定`null`値を指定します。 たとえば、 <xref:System.Runtime.Caching.MemoryCache.AddOrGetExisting%2A?displayProperty=nameWithType>メソッドのオーバーロードには、 `regionName`既定値が`null`であるパラメーターがあります。  
+  
+   
+  
+## Examples  
+ 次の例では、既定のメモリキャッシュインスタンスへの参照を宣言しています。 キャッシュエントリは、オブジェクト<xref:System.Runtime.Caching.CacheItemPolicy>を使用して、キャッシュエントリの削除と有効期限の詳細を提供します。 また、オブジェクトを<xref:System.Runtime.Caching.ChangeMonitor>使用して、ファイルシステム上のソースデータ (ファイル) の状態を監視します。  
+  
+```vb  
+Private Sub btnGet_Click(ByVal sender As Object, ByVal e As EventArgs)   
+    Dim cache As ObjectCache = MemoryCache.[Default]   
+    Dim fileContents As String = TryCast(cache("filecontents"), String)   
+  
+    If fileContents Is Nothing Then   
+        Dim policy As New CacheItemPolicy()   
+        Dim filePaths As New List(Of String)()   
+        filePaths.Add("c:\cache\example.txt")   
+  
+        policy.ChangeMonitors.Add(New HostFileChangeMonitor(filePaths))   
+  
+        ' Fetch the file contents.  
+        fileContents = File.ReadAllText("c:\cache\example.txt")   
+  
+        cache.[Set]("filecontents", fileContents, policy)   
+    End If   
+  
+    Label1.Text = fileContents  
+End Sub  
+```  
+  
+```csharp  
+private void btnGet_Click(object sender, EventArgs e)  
+{  
+    ObjectCache cache = MemoryCache.Default;  
+    string fileContents = cache["filecontents"] as string;  
+  
+    if (fileContents == null)  
+    {  
+        CacheItemPolicy policy = new CacheItemPolicy();  
+  
+        List<string> filePaths = new List<string>();  
+        filePaths.Add("c:\\cache\\example.txt");  
+  
+        policy.ChangeMonitors.Add(new   
+        HostFileChangeMonitor(filePaths));  
+  
+        // Fetch the file contents.  
+        fileContents =   
+            File.ReadAllText("c:\\cache\\example.txt");  
+  
+        cache.Set("filecontents", fileContents, policy);  
+    }  
+  
+    Label1.Text = fileContents;  
+}  
+```  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe>この型はスレッド セーフです。</threadsafe>
+    <altmember cref="T:System.Runtime.Caching.ObjectCache" />
+    <related type="Article" href="https://msdn.microsoft.com/library/942236f6-0138-4aaf-af71-a5ea451a1e23">チュートリアル: ASP.NET でのアプリケーションデータのキャッシュ</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/c4b47ee0-4b82-4124-9bce-818088385e34">.NET Framework アプリケーションでのキャッシュ</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public MemoryCache (string name, System.Collections.Specialized.NameValueCollection config = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string name, class System.Collections.Specialized.NameValueCollection config) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.#ctor(System.String,System.Collections.Specialized.NameValueCollection)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (name As String, Optional config As NameValueCollection = null)" />
+      <MemberSignature Language="F#" Value="new System.Runtime.Caching.MemoryCache : string * System.Collections.Specialized.NameValueCollection -&gt; System.Runtime.Caching.MemoryCache" Usage="new System.Runtime.Caching.MemoryCache (name, config)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="config" Type="System.Collections.Specialized.NameValueCollection" />
+      </Parameters>
+      <Docs>
+        <param name="name">構成情報を検索するために使用する名前。  
+  
+ <c>注</c> 名前に対して構成情報が存在しない場合でも問題はありません。  
+  
+一致する構成エントリが存在する場合、<see cref="T:System.Runtime.Caching.MemoryCache" /> インスタンスを構成するために構成情報が使用されます。 一致する構成エントリが存在しない場合、指定した名前が <see cref="P:System.Runtime.Caching.MemoryCache.Name" /> インスタンスに関連付けられているため、<see cref="T:System.Runtime.Caching.MemoryCache" /> プロパティから名前にアクセスできます。 メモリ キャッシュ構成の詳細については、「<see cref="T:System.Runtime.Caching.Configuration.MemoryCacheElement" />」を参照してください。</param>
+        <param name="config">キャッシュを構成するために使用する構成情報の名前と値のペアのコレクション。</param>
+        <summary><see cref="T:System.Runtime.Caching.MemoryCache" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ クラスが初期化されると、コンストラクター内の省略可能`config`なパラメーターを使用してオーバーライドされた可能性がある構成エントリがあるかどうかがチェックされます。 <xref:System.Runtime.Caching.MemoryCache> `config`パラメーターには、次のパラメーターを渡すことができます。 すべての値を整数として渡すことができます。  
+  
+-   <xref:System.Runtime.Caching.Configuration.MemoryCacheElement.CacheMemoryLimitMegabytes%2A>  
+  
+-   <xref:System.Runtime.Caching.Configuration.MemoryCacheElement.PhysicalMemoryLimitPercentage%2A>  
+  
+-   <xref:System.Runtime.Caching.Configuration.MemoryCacheElement.PollingInterval%2A>  
+  
+ このコンストラクターが呼び出されると、構成設定がアプリケーション構成ファイルから最初に取得されます。 アプリケーション構成ファイルに構成エントリが存在しない場合は、に`config`指定された設定のみが適用されます。 アプリケーション構成の構成エントリが存在し、情報も渡`config`される場合、「 `config` 」の情報は、構成ファイルから読み取られた情報をオーバーライドします。  
+  
+ キャッシュインスタンスに割り当てられる名前の値は、次の2つの方法で使用されます。  
+  
+-   複数のインスタンスが存在する場合に、複数のキャッシュインスタンスを追跡するのに役立ちます。  
+  
+-   インスタンスの<xref:System.Runtime.Caching.MemoryCache>初期化時に構成ファイルの設定を参照する場合は。  
+  
+    > [!NOTE]
+    >  キャッシュインスタンスに一意の名前を適用するメカニズムはありません。 そのため、同じ名前の複数のキャッシュインスタンスを持つことができます。  
+  
+    > [!CAUTION]
+    >  必要な場合<xref:System.Runtime.Caching.MemoryCache>を除き、インスタンスを作成しないでください。 クライアントおよび Web アプリケーション<xref:System.Runtime.Caching.MemoryCache>にキャッシュインスタンスを作成する場合は、アプリケーションのライフサイクルの初期段階でインスタンスを作成する必要があります。 アプリケーションで使用されるキャッシュインスタンスの数だけを作成し、グローバルにアクセスできる変数にキャッシュインスタンスへの参照を保存する必要があります。 たとえば、ASP.NET アプリケーションでは、参照をアプリケーション状態に格納できます。 アプリケーションにキャッシュインスタンスを1つだけ作成する場合は、キャッシュにアクセスする必要があるときに、既定<xref:System.Runtime.Caching.MemoryCache.Default%2A>のキャッシュを使用してプロパティから参照を取得します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="name" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="config" /> パラメーター内の名前または値を解析できませんでした。</exception>
+        <exception cref="T:System.Configuration.ConfigurationException"><paramref name="config" /> コレクション内の値が無効です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public MemoryCache (string name, System.Collections.Specialized.NameValueCollection config, bool ignoreConfigSection);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string name, class System.Collections.Specialized.NameValueCollection config, bool ignoreConfigSection) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.#ctor(System.String,System.Collections.Specialized.NameValueCollection,System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (name As String, config As NameValueCollection, ignoreConfigSection As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; MemoryCache(System::String ^ name, System::Collections::Specialized::NameValueCollection ^ config, bool ignoreConfigSection);" />
+      <MemberSignature Language="F#" Value="new System.Runtime.Caching.MemoryCache : string * System.Collections.Specialized.NameValueCollection * bool -&gt; System.Runtime.Caching.MemoryCache" Usage="new System.Runtime.Caching.MemoryCache (name, config, ignoreConfigSection)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+        <Parameter Name="config" Type="System.Collections.Specialized.NameValueCollection" Index="1" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+        <Parameter Name="ignoreConfigSection" Type="System.Boolean" Index="2" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      </Parameters>
+      <Docs>
+        <param name="name">構成情報を検索するために使用する名前。</param>
+        <param name="config">キャッシュを構成するために使用する構成情報の名前と値のペアのコレクション。</param>
+        <param name="ignoreConfigSection">構成セクションを無視する必要があるかどうかを示します。</param>
+        <summary><see cref="T:System.Runtime.Caching.MemoryCache" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Add">
+      <MemberSignature Language="C#" Value="public override bool Add (System.Runtime.Caching.CacheItem item, System.Runtime.Caching.CacheItemPolicy policy);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool Add(class System.Runtime.Caching.CacheItem item, class System.Runtime.Caching.CacheItemPolicy policy) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.Add(System.Runtime.Caching.CacheItem,System.Runtime.Caching.CacheItemPolicy)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function Add (item As CacheItem, policy As CacheItemPolicy) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool Add(System::Runtime::Caching::CacheItem ^ item, System::Runtime::Caching::CacheItemPolicy ^ policy);" />
+      <MemberSignature Language="F#" Value="override this.Add : System.Runtime.Caching.CacheItem * System.Runtime.Caching.CacheItemPolicy -&gt; bool" Usage="memoryCache.Add (item, policy)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="System.Runtime.Caching.CacheItem" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+        <Parameter Name="policy" Type="System.Runtime.Caching.CacheItemPolicy" Index="1" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      </Parameters>
+      <Docs>
+        <param name="item">追加するオブジェクト。</param>
+        <param name="policy">キャッシュ エントリの削除の詳細を格納しているオブジェクト。 このオブジェクトは、単純な絶対有効期限よりも多くの削除オプションを提供します。</param>
+        <summary>キャッシュ エントリを <see cref="T:System.Runtime.Caching.CacheItem" /> インスタンスとしてキャッシュに挿入し、このエントリの削除方法の詳細を追加します。</summary>
+        <returns>挿入が成功した場合は true。項目と同じキーを持つエントリがキャッシュに既に存在する場合は false。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!WARNING]
+>  <xref:System.Runtime.Caching.ObjectCache.Add%2A> および <xref:System.Runtime.Caching.ObjectCache.AddOrGetExisting%2A> メソッドのオーバーロードは、<xref:System.Runtime.Caching.CacheItemPolicy.UpdateCallback%2A> プロパティをサポートしません。 したがって、キャッシュ エントリについて <xref:System.Runtime.Caching.CacheItemPolicy.UpdateCallback%2A> プロパティを設定するのには、<xref:System.Runtime.Caching.MemoryCache.Set%2A> メソッド オーバーロードを代わりに使用します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="AddOrGetExisting">
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>キャッシュ エントリをキャッシュに挿入します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ キャッシュ<xref:System.Runtime.Caching.MemoryCache.AddOrGetExisting%2A>エントリをキャッシュに挿入するには、メソッドのオーバーロードを使用します。 一致するキーを持つキャッシュエントリが存在しない場合、これらのメソッドは新しいエントリを挿入します。 一致するキーを持つキャッシュエントリが既に存在する場合は、既存のエントリが返されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="AddOrGetExisting">
+      <MemberSignature Language="C#" Value="public override System.Runtime.Caching.CacheItem AddOrGetExisting (System.Runtime.Caching.CacheItem item, System.Runtime.Caching.CacheItemPolicy policy);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Runtime.Caching.CacheItem AddOrGetExisting(class System.Runtime.Caching.CacheItem item, class System.Runtime.Caching.CacheItemPolicy policy) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.AddOrGetExisting(System.Runtime.Caching.CacheItem,System.Runtime.Caching.CacheItemPolicy)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function AddOrGetExisting (item As CacheItem, policy As CacheItemPolicy) As CacheItem" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Runtime::Caching::CacheItem ^ AddOrGetExisting(System::Runtime::Caching::CacheItem ^ item, System::Runtime::Caching::CacheItemPolicy ^ policy);" />
+      <MemberSignature Language="F#" Value="override this.AddOrGetExisting : System.Runtime.Caching.CacheItem * System.Runtime.Caching.CacheItemPolicy -&gt; System.Runtime.Caching.CacheItem" Usage="memoryCache.AddOrGetExisting (item, policy)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Runtime.Caching.CacheItem</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="System.Runtime.Caching.CacheItem" />
+        <Parameter Name="policy" Type="System.Runtime.Caching.CacheItemPolicy" />
+      </Parameters>
+      <Docs>
+        <param name="item">追加するオブジェクト。</param>
+        <param name="policy">キャッシュ エントリの削除の詳細を格納しているオブジェクト。 このオブジェクトは、単純な絶対有効期限よりも多くの削除オプションを提供します。</param>
+        <summary>指定した <see cref="T:System.Runtime.Caching.CacheItem" /> インスタンスおよびエントリの削除方法の詳細を使用して、キャッシュ エントリをキャッシュに追加します。</summary>
+        <returns>同じキーを持つキャッシュ エントリが存在する場合は既存のキャッシュ エントリ。それ以外の場合は <see langword="null" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ パラメーター `item`は、メソッドによって使用されるキーと値を指定します。 `item`パラメーターのキーと同じキーを持つキャッシュエントリがキャッシュにある場合、メソッドは既存のエントリを<xref:System.Runtime.Caching.CacheItem>インスタンスとして返します。 既存のキャッシュエントリが存在しない場合、メソッドは、 `item`パラメーターによって指定されたキーと値、およびによっ`policy`て指定された削除の詳細を使用して、新しいエントリを作成します。  
+  
+> [!WARNING]
+>  <xref:System.Runtime.Caching.ObjectCache.Add%2A> および <xref:System.Runtime.Caching.ObjectCache.AddOrGetExisting%2A> メソッドのオーバーロードは、<xref:System.Runtime.Caching.CacheItemPolicy.UpdateCallback%2A> プロパティをサポートしません。 したがって、キャッシュ エントリについて <xref:System.Runtime.Caching.CacheItemPolicy.UpdateCallback%2A> プロパティを設定するのには、<xref:System.Runtime.Caching.MemoryCache.Set%2A> メソッド オーバーロードを代わりに使用します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><see cref="P:System.Runtime.Caching.CacheItem.Value" /> プロパティが <see langword="null" /> である。</exception>
+        <exception cref="T:System.ArgumentException"><see cref="T:System.Runtime.Caching.CacheItemPolicy" /> オブジェクトの絶対有効期限とスライド式有効期限の値の両方が、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> および <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> フィールドの既定値以外の値に設定されています。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは、絶対有効期限と変化する有効期限の組み合わせに基づいて有効期限ポリシーを設定できません。 <see cref="T:System.Runtime.Caching.MemoryCache" /> インスタンスを使用すると、1 つの有効期限の設定だけを明示的に設定できます。 他の有効期限設定は、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> フィールドまたは <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> フィールドに設定する必要があります。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティは、<see cref="F:System.TimeSpan.Zero" /> 未満の値が設定されています。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティが、1 年よりも大きな値に設定されています。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.Priority" /> プロパティが、<see cref="T:System.Runtime.Caching.CacheItemPriority" /> 列挙体の値ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="AddOrGetExisting">
+      <MemberSignature Language="C#" Value="public override object AddOrGetExisting (string key, object value, DateTimeOffset absoluteExpiration, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance object AddOrGetExisting(string key, object value, valuetype System.DateTimeOffset absoluteExpiration, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.AddOrGetExisting(System.String,System.Object,System.DateTimeOffset,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function AddOrGetExisting (key As String, value As Object, absoluteExpiration As DateTimeOffset, Optional regionName As String = null) As Object" />
+      <MemberSignature Language="F#" Value="override this.AddOrGetExisting : string * obj * DateTimeOffset * string -&gt; obj" Usage="memoryCache.AddOrGetExisting (key, value, absoluteExpiration, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+        <Parameter Name="value" Type="System.Object" />
+        <Parameter Name="absoluteExpiration" Type="System.DateTimeOffset" />
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">追加するキャッシュ エントリの一意の識別子。</param>
+        <param name="value">キャッシュ エントリのデータ。</param>
+        <param name="absoluteExpiration">キャッシュ エントリの有効期限が切れる固定日時。</param>
+        <param name="regionName">キャッシュ エントリを追加できるキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>指定したキーと値および絶対有効期限の値を使用して、キャッシュ エントリをキャッシュに追加します。</summary>
+        <returns>同じキーを持つキャッシュ エントリが存在する場合は既存のキャッシュ エントリ。それ以外の場合は <see langword="null" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ パラメーターに`key`一致するキーを持つキャッシュエントリがキャッシュにない場合、新しいキャッシュエントリが作成され、メソッド<xref:System.Runtime.Caching.MemoryCache.AddOrGetExisting%2A?displayProperty=nameWithType>オーバーロードはを`null`返します。 一致するキャッシュエントリが存在する場合は、既存のエントリが返されます。  
+  
+> [!WARNING]
+>  <xref:System.Runtime.Caching.ObjectCache.Add%2A> および <xref:System.Runtime.Caching.ObjectCache.AddOrGetExisting%2A> メソッドのオーバーロードは、<xref:System.Runtime.Caching.CacheItemPolicy.UpdateCallback%2A> プロパティをサポートしません。 したがって、キャッシュ エントリについて <xref:System.Runtime.Caching.CacheItemPolicy.UpdateCallback%2A> プロパティを設定するのには、<xref:System.Runtime.Caching.MemoryCache.Set%2A> メソッド オーバーロードを代わりに使用します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="value" /> が <see langword="null" /> ではありません。</exception>
+        <exception cref="T:System.NotSupportedException"><paramref name="regionName" /> が <see langword="null" /> ではありません。</exception>
+        <exception cref="T:System.ArgumentException"><see cref="T:System.Runtime.Caching.CacheItemPolicy" /> オブジェクトの絶対有効期限とスライド式有効期限の値の両方が、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> および <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> フィールドの既定値以外の値に設定されています。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは、絶対有効期限と変化する有効期限の組み合わせに基づいて有効期限ポリシーを設定できません。 <see cref="T:System.Runtime.Caching.MemoryCache" /> インスタンスを使用すると、1 つの有効期限の設定だけを明示的に設定できます。 他の有効期限設定は、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> または <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> に設定する必要があります。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティは、<see cref="F:System.TimeSpan.Zero" /> 未満の値が設定されています。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティが、1 年よりも大きな値に設定されています。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.Priority" /> プロパティが、<see cref="T:System.Runtime.Caching.CacheItemPriority" /> 列挙体の値ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="AddOrGetExisting">
+      <MemberSignature Language="C#" Value="public override object AddOrGetExisting (string key, object value, System.Runtime.Caching.CacheItemPolicy policy, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance object AddOrGetExisting(string key, object value, class System.Runtime.Caching.CacheItemPolicy policy, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.AddOrGetExisting(System.String,System.Object,System.Runtime.Caching.CacheItemPolicy,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function AddOrGetExisting (key As String, value As Object, policy As CacheItemPolicy, Optional regionName As String = null) As Object" />
+      <MemberSignature Language="F#" Value="override this.AddOrGetExisting : string * obj * System.Runtime.Caching.CacheItemPolicy * string -&gt; obj" Usage="memoryCache.AddOrGetExisting (key, value, policy, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+        <Parameter Name="value" Type="System.Object" />
+        <Parameter Name="policy" Type="System.Runtime.Caching.CacheItemPolicy" />
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">追加または取得するキャッシュ エントリの一意の識別子。</param>
+        <param name="value">キャッシュ エントリのデータ。</param>
+        <param name="policy">キャッシュ エントリの削除の詳細を格納しているオブジェクト。 このオブジェクトは、単純な絶対有効期限よりも多くの削除オプションを提供します。</param>
+        <param name="regionName">キャッシュ エントリを追加できるキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 既定では、<see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは <see langword="null" /> です。</param>
+        <summary>指定したキーと値およびキャッシュ エントリの削除方法の詳細を使用して、キャッシュ エントリをキャッシュに挿入します。</summary>
+        <returns>一致するキャッシュ エントリが既に存在する場合はキャッシュ エントリ。それ以外の場合は <see langword="null" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+  
+> [!WARNING]
+>  <xref:System.Runtime.Caching.ObjectCache.Add%2A> および <xref:System.Runtime.Caching.ObjectCache.AddOrGetExisting%2A> メソッドのオーバーロードは、<xref:System.Runtime.Caching.CacheItemPolicy.UpdateCallback%2A> プロパティをサポートしません。 したがって、キャッシュ エントリについて <xref:System.Runtime.Caching.CacheItemPolicy.UpdateCallback%2A> プロパティを設定するのには、<xref:System.Runtime.Caching.MemoryCache.Set%2A> メソッド オーバーロードを代わりに使用します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="value" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><see cref="T:System.Runtime.Caching.CacheItemPolicy" /> オブジェクトの絶対有効期限とスライド式有効期限の値の両方が、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> と <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> の既定値以外の値に設定されています。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは、絶対有効期限と変化する有効期限の両方の組み合わせに基づいて有効期限ポリシーを設定できません。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスを使用すると、1 つの有効期限の設定だけを明示的に設定できます。 他の設定は、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> または <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> に設定する必要があります。  
+  
+- または - 
+削除コールバックと更新コールバックの両方が <see cref="T:System.Runtime.Caching.CacheItemPolicy" /> に対して指定されています。 <see cref="T:System.Runtime.Caching.MemoryCache" /> は、キャッシュ エントリごとに 1 つの種類のコールバックを使用することのみをサポートしています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティは、<see cref="F:System.TimeSpan.Zero" /> 未満の値が設定されています。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> が、1 年よりも大きな値に設定されています。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.Priority" /> プロパティが、<see cref="T:System.Runtime.Caching.CacheItemPriority" /> 列挙体の値ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="CacheMemoryLimit">
+      <MemberSignature Language="C#" Value="public long CacheMemoryLimit { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int64 CacheMemoryLimit" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Caching.MemoryCache.CacheMemoryLimit" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property CacheMemoryLimit As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property long CacheMemoryLimit { long get(); };" />
+      <MemberSignature Language="F#" Value="member this.CacheMemoryLimit : int64" Usage="System.Runtime.Caching.MemoryCache.CacheMemoryLimit" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>キャッシュに使用できるコンピューターのメモリの量をバイト単位で取得します。</summary>
+        <value>メモリの量 (バイト単位)。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ キャッシュの現在のインスタンスが<xref:System.Runtime.Caching.MemoryCache.CacheMemoryLimit%2A>プロパティによって設定されたメモリの制限を超えた場合、キャッシュの実装はキャッシュエントリを削除します。 アプリケーション内の各キャッシュインスタンスは、 <xref:System.Runtime.Caching.MemoryCache.CacheMemoryLimit%2A>プロパティによって指定されたメモリ量を使用できます。  
+  
+ <xref:System.Runtime.Caching.MemoryCache.CacheMemoryLimit%2A>プロパティの設定は、アプリケーション構成ファイルで指定できます。 または、クラスの<xref:System.Runtime.Caching.MemoryCache>初期化時にコンストラクターで渡すこともできます。 このプロパティを構成する方法の詳細については、「 [ &lt;namedcaches&gt;要素 (キャッシュ設定)](~/docs/framework/configure-apps/file-schema/runtime/namedcaches-element-cache-settings.md)」を参照してください。 <xref:System.Runtime.Caching.MemoryCache>クラスを初期化するときにこの値を設定する方法の詳細については<xref:System.Runtime.Caching.MemoryCache.%23ctor%2A> 、メソッドを参照してください。  
+  
+ <xref:System.Runtime.Caching.MemoryCache>は、 <xref:System.Runtime.Caching.MemoryCache>インスタンスに<xref:System.Runtime.Caching.MemoryCache.CacheMemoryLimit%2A>新しい項目が追加されるたびに、すぐには適用されません。 から<xref:System.Runtime.Caching.MemoryCache>余分な項目を見つけする内部ヒューリスティックによって、ガベージコレクターからの情報が徐々に処理され (「[ガベージコレクション](~/docs/standard/garbage-collection/index.md)」を参照)、現在のキャッシュサイズやシステムメモリ全体などの他の要因が考慮されます。負荷. したがって、で<xref:System.Runtime.Caching.MemoryCache>は、構成さ<xref:System.Runtime.Caching.MemoryCache.CacheMemoryLimit%2A>れた内でキャッシュサイズを維持しようとしても、非常に高い速度でキャッシュ項目を追加することで一時的に制限を超える可能性があります。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="https://msdn.microsoft.com/library/6bd4fbc5-55a6-4dc4-998b-cdcc7e023330">&lt;namedcaches&gt;要素 (キャッシュ設定)</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Contains">
+      <MemberSignature Language="C#" Value="public override bool Contains (string key, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool Contains(string key, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.Contains(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function Contains (key As String, Optional regionName As String = null) As Boolean" />
+      <MemberSignature Language="F#" Value="override this.Contains : string * string -&gt; bool" Usage="memoryCache.Contains (key, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">検索するキャッシュ エントリの一意の識別子。</param>
+        <param name="regionName">キャッシュ エントリが追加されたキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>キャッシュ エントリがキャッシュに存在するかどうかを判断します。</summary>
+        <returns><paramref name="key" /> とキーが一致するキャッシュ エントリがキャッシュに存在する場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="key" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.NotSupportedException"><paramref name="regionName" /> が <see langword="null" /> ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="CreateCacheEntryChangeMonitor">
+      <MemberSignature Language="C#" Value="public override System.Runtime.Caching.CacheEntryChangeMonitor CreateCacheEntryChangeMonitor (System.Collections.Generic.IEnumerable&lt;string&gt; keys, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Runtime.Caching.CacheEntryChangeMonitor CreateCacheEntryChangeMonitor(class System.Collections.Generic.IEnumerable`1&lt;string&gt; keys, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.CreateCacheEntryChangeMonitor(System.Collections.Generic.IEnumerable{System.String},System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function CreateCacheEntryChangeMonitor (keys As IEnumerable(Of String), Optional regionName As String = null) As CacheEntryChangeMonitor" />
+      <MemberSignature Language="F#" Value="override this.CreateCacheEntryChangeMonitor : seq&lt;string&gt; * string -&gt; System.Runtime.Caching.CacheEntryChangeMonitor" Usage="memoryCache.CreateCacheEntryChangeMonitor (keys, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Runtime.Caching.CacheEntryChangeMonitor</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="keys" Type="System.Collections.Generic.IEnumerable&lt;System.String&gt;" />
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="keys"><see cref="T:System.Runtime.Caching.CacheEntryChangeMonitor" /> オブジェクトに対して一意のキャッシュ エントリ キーの列挙体。</param>
+        <param name="regionName">キャッシュ エントリを追加できるキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>指定したキャッシュ エントリへの変更に応答してイベントを発生させることができる <see cref="T:System.Runtime.Caching.CacheEntryChangeMonitor" /> オブジェクトを作成します。</summary>
+        <returns>キャッシュ内のエントリを監視する変更監視機能。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Runtime.Caching.MemoryCache.CreateCacheEntryChangeMonitor%2A>は、インスタンス<xref:System.Runtime.Caching.CacheEntryChangeMonitor>を作成します。 この特別な変更モニターを使用して、 `keys`コレクションに指定されているキャッシュエントリを監視し、エントリが変更されたときにイベントをトリガーします。  
+  
+ 監視対象のエントリは、次のいずれかの理由で変更されていると見なされます。  
+  
+-   このキーは、メソッドの<xref:System.Runtime.Caching.MemoryCache.CreateCacheEntryChangeMonitor%2A>呼び出し時に存在しません。 その場合、結果<xref:System.Runtime.Caching.CacheEntryChangeMonitor>のインスタンスは直ちに変更された状態に設定されます。 これは、コードが後で変更通知コールバックをバインドするときに、すぐにコールバックがトリガーされることを意味します。  
+  
+-   関連付けられているキャッシュエントリがキャッシュから削除されました。 これは、エントリが明示的に削除された場合、有効期限が切れた場合、またはメモリを回復するために削除された場合に発生する可能性があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException"><paramref name="regionName" /> が <see langword="null" /> ではありません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="keys" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="keys" /> コレクション内の項目が <see langword="null" /> です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Default">
+      <MemberSignature Language="C#" Value="public static System.Runtime.Caching.MemoryCache Default { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property class System.Runtime.Caching.MemoryCache Default" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Caching.MemoryCache.Default" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly Property Default As MemoryCache" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static property System::Runtime::Caching::MemoryCache ^ Default { System::Runtime::Caching::MemoryCache ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Default : System.Runtime.Caching.MemoryCache" Usage="System.Runtime.Caching.MemoryCache.Default" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Runtime.Caching.MemoryCache</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>既定の <see cref="T:System.Runtime.Caching.MemoryCache" /> インスタンスへの参照を取得します。</summary>
+        <value>キャッシュの既定インスタンス。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティは、常に既定のキャッシュインスタンスへの参照を返します。 一般的なアプリケーションシナリオでは、の<xref:System.Runtime.Caching.MemoryCache>インスタンスは1つだけ必要です。  
+  
+ 既定のキャッシュインスタンスはコンストラクターによって作成されないため、既定のキャッシュインスタンスのメモリとポーリング値を明示的に設定するには、構成を使用する必要があります。 詳細については、「 [ &lt;memorycache&gt;要素 (キャッシュ設定)](~/docs/framework/configure-apps/file-schema/runtime/memorycache-element-cache-settings.md)」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="https://msdn.microsoft.com/library/182a622f-f7cf-472d-9d0b-451d2fd94525">&lt;memorycache&gt;要素 (キャッシュ設定)</related>
+      </Docs>
+    </Member>
+    <Member MemberName="DefaultCacheCapabilities">
+      <MemberSignature Language="C#" Value="public override System.Runtime.Caching.DefaultCacheCapabilities DefaultCacheCapabilities { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Runtime.Caching.DefaultCacheCapabilities DefaultCacheCapabilities" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Caching.MemoryCache.DefaultCacheCapabilities" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property DefaultCacheCapabilities As DefaultCacheCapabilities" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Runtime::Caching::DefaultCacheCapabilities DefaultCacheCapabilities { System::Runtime::Caching::DefaultCacheCapabilities get(); };" />
+      <MemberSignature Language="F#" Value="member this.DefaultCacheCapabilities : System.Runtime.Caching.DefaultCacheCapabilities" Usage="System.Runtime.Caching.MemoryCache.DefaultCacheCapabilities" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Runtime.Caching.DefaultCacheCapabilities</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>キャッシュが提供する機能の説明を取得します。</summary>
+        <value>キャッシュ実装の既定の機能を示すフラグのビットごとの組み合わせ。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ キャッシュ実装の機能は、次の値を組み合わせたものです。  
+  
+-   <xref:System.Runtime.Caching.DefaultCacheCapabilities.InMemoryProvider>  
+  
+-   <xref:System.Runtime.Caching.DefaultCacheCapabilities.CacheEntryChangeMonitors>  
+  
+-   <xref:System.Runtime.Caching.DefaultCacheCapabilities.AbsoluteExpirations>  
+  
+-   <xref:System.Runtime.Caching.DefaultCacheCapabilities.SlidingExpirations>  
+  
+-   <xref:System.Runtime.Caching.DefaultCacheCapabilities.CacheEntryUpdateCallback>  
+  
+-   <xref:System.Runtime.Caching.DefaultCacheCapabilities.CacheEntryRemovedCallback>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="public void Dispose ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Dispose() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.Dispose" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Dispose ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void Dispose();" />
+      <MemberSignature Language="F#" Value="abstract member Dispose : unit -&gt; unit&#xA;override this.Dispose : unit -&gt; unit" Usage="memoryCache.Dispose " />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.IDisposable.Dispose</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Runtime.Caching.MemoryCache" /> クラスの現在のインスタンスによって使用されているすべてのリソースを解放します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 各<xref:System.Runtime.Caching.MemoryCache>インスタンスは、 <xref:System.Web.Compilation.ClientBuildManager.AppDomainUnloaded>イベントにバインドされます。 ただし、アプリケーションドメインのシャットダウン中に、メモリベースのキャッシュが明示的に破棄されていない場合は、キャッシュ<xref:System.Runtime.Caching.MemoryCache.Dispose%2A>インスタンスによってメソッドが自動的に呼び出されます。  
+  
+ 破棄されたキャッシュインスタンスは、次の手順を使用してシャットダウンします。  
+  
+1.  キャッシュの状態は、キャッシュが破棄されたことを示すように設定されます。 キャッシュエントリを追加、削除、または取得するメソッドなど、キャッシュの状態を変更するパブリックキャッシュメソッドを呼び出そうとすると、予期しない動作が発生する可能性があります。 たとえば、キャッシュが破棄され<xref:System.Runtime.Caching.MemoryCache.Set%2A>た後にメソッドを呼び出すと、操作なしのエラーが発生します。 キャッシュから項目を取得しようとすると、 <xref:System.Runtime.Caching.MemoryCache.Get%2A>メソッドは常に`null`を返します。  
+  
+2.  現在のキャッシュインスタンスからパフォーマンスカウンター情報が生成されなくなりました。  
+  
+3.  現在のキャッシュインスタンスによって保持されているキャッシュオブジェクトへのすべての参照が解放されます。  
+  
+4.  キャッシュ<xref:System.Runtime.Caching.CacheEntryChangeMonitor>内のエントリを現在監視しているすべてのインスタンスに通知されます。  
+  
+5.  これらのモニターに対する変更の通知を提供するコールバックオブジェクトが呼び出されます。  
+  
+6.  キャッシュ<xref:System.Web.Caching.CacheItemRemovedCallback>内のエントリに登録されているすべてのインスタンスが呼び出されます。 コールバックに渡される削除の理由は<xref:System.Runtime.Caching.CacheEntryRemovedReason.CacheSpecificEviction>です。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Get">
+      <MemberSignature Language="C#" Value="public override object Get (string key, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance object Get(string key, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.Get(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function Get (key As String, Optional regionName As String = null) As Object" />
+      <MemberSignature Language="F#" Value="override this.Get : string * string -&gt; obj" Usage="memoryCache.Get (key, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">取得するキャッシュ エントリの一意の識別子。</param>
+        <param name="regionName">キャッシュ エントリが追加されたキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>キャッシュからエントリを返します。</summary>
+        <returns>キャッシュ エントリが存在する場合は、<paramref name="key" /> で識別されるそのキャッシュ エントリへの参照。それ以外の場合は <see langword="null" />。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.NotSupportedException"><paramref name="regionName" /> が <see langword="null" /> ではありません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="key" /> が <see langword="null" /> です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetCacheItem">
+      <MemberSignature Language="C#" Value="public override System.Runtime.Caching.CacheItem GetCacheItem (string key, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Runtime.Caching.CacheItem GetCacheItem(string key, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.GetCacheItem(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetCacheItem (key As String, Optional regionName As String = null) As CacheItem" />
+      <MemberSignature Language="F#" Value="override this.GetCacheItem : string * string -&gt; System.Runtime.Caching.CacheItem" Usage="memoryCache.GetCacheItem (key, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Runtime.Caching.CacheItem</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">取得するキャッシュ エントリの一意の識別子。</param>
+        <param name="regionName">キャッシュ エントリが追加されたキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>指定したエントリをキャッシュから <see cref="T:System.Runtime.Caching.CacheItem" /> インスタンスとして返します。</summary>
+        <returns>キャッシュ エントリが存在する場合は、<paramref name="key" /> で識別されるそのキャッシュ エントリへの参照。それ以外の場合は <see langword="null" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ によって`key`指定されたキャッシュエントリがキャッシュ内<xref:System.Runtime.Caching.MemoryCache.GetCacheItem%2A>に存在する場合、 <xref:System.Runtime.Caching.CacheItem>メソッドはそれをインスタンスとして返します。 インスタンスの <xref:System.Runtime.Caching.CacheItem> プロパティ <xref:System.Runtime.Caching.CacheItem.Value%2A> とプロパティが設定されます。 <xref:System.Runtime.Caching.CacheItem.Key%2A> ただし、この`null` <xref:System.Runtime.Caching.MemoryCache>プロパティはになります。これは、領域がクラスに実装されていない<xref:System.Runtime.Caching.CacheItem.RegionName%2A>ためです。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException"><paramref name="regionName" /> が <see langword="null" /> ではありません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="key" /> が <see langword="null" /> です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetCount">
+      <MemberSignature Language="C#" Value="public override long GetCount (string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance int64 GetCount(string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.GetCount(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetCount (Optional regionName As String = null) As Long" />
+      <MemberSignature Language="F#" Value="override this.GetCount : string -&gt; int64" Usage="memoryCache.GetCount regionName" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="regionName">キャッシュ エントリが追加されたキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>キャッシュ内のキャッシュ エントリの合計数を返します。</summary>
+        <returns>キャッシュ内のエントリの数。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.NotSupportedException"><paramref name="regionName" /> が <see langword="null" /> ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetEnumerator">
+      <MemberSignature Language="C#" Value="protected override System.Collections.Generic.IEnumerator&lt;System.Collections.Generic.KeyValuePair&lt;string,object&gt;&gt; GetEnumerator ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance class System.Collections.Generic.IEnumerator`1&lt;valuetype System.Collections.Generic.KeyValuePair`2&lt;string, object&gt;&gt; GetEnumerator() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.GetEnumerator" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function GetEnumerator () As IEnumerator(Of KeyValuePair(Of String, Object))" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override System::Collections::Generic::IEnumerator&lt;System::Collections::Generic::KeyValuePair&lt;System::String ^, System::Object ^&gt;&gt; ^ GetEnumerator();" />
+      <MemberSignature Language="F#" Value="override this.GetEnumerator : unit -&gt; System.Collections.Generic.IEnumerator&lt;System.Collections.Generic.KeyValuePair&lt;string, obj&gt;&gt;" Usage="memoryCache.GetEnumerator " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IEnumerator&lt;System.Collections.Generic.KeyValuePair&lt;System.String,System.Object&gt;&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>キャッシュ エントリのコレクションを反復処理するために使用できる列挙子を作成します。</summary>
+        <returns>キャッシュ内のアイテムへのアクセスを提供する列挙子オブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Runtime.Caching.MemoryCache.GetEnumerator%2A>メソッドによって返される列挙子は、キャッシュ内のエントリを反復処理するために使用できます。  
+  
+> [!IMPORTANT]
+>  <xref:System.Runtime.Caching.MemoryCache>インスタンスの列挙子を取得するのは、リソースを集中的に使用するブロッキング操作です。 このため、列挙子は実稼働アプリケーションでは使用しないでください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetLastSize">
+      <MemberSignature Language="C#" Value="public long GetLastSize (string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance int64 GetLastSize(string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.GetLastSize(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetLastSize (Optional regionName As String = null) As Long" />
+      <MemberSignature Language="F#" Value="member this.GetLastSize : string -&gt; int64" Usage="memoryCache.GetLastSize regionName" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="regionName" Type="System.String" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      </Parameters>
+      <Docs>
+        <param name="regionName">領域の名前。</param>
+        <summary>名前付き領域のサイズを取得します。</summary>
+        <returns>名前付き領域のサイズ。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetValues">
+      <MemberSignature Language="C#" Value="public override System.Collections.Generic.IDictionary&lt;string,object&gt; GetValues (System.Collections.Generic.IEnumerable&lt;string&gt; keys, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Collections.Generic.IDictionary`2&lt;string, object&gt; GetValues(class System.Collections.Generic.IEnumerable`1&lt;string&gt; keys, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.GetValues(System.Collections.Generic.IEnumerable{System.String},System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetValues (keys As IEnumerable(Of String), Optional regionName As String = null) As IDictionary(Of String, Object)" />
+      <MemberSignature Language="F#" Value="override this.GetValues : seq&lt;string&gt; * string -&gt; System.Collections.Generic.IDictionary&lt;string, obj&gt;" Usage="memoryCache.GetValues (keys, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IDictionary&lt;System.String,System.Object&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="keys" Type="System.Collections.Generic.IEnumerable&lt;System.String&gt;" />
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="keys">返すキャッシュ エントリの一意の識別子のセット。</param>
+        <param name="regionName">キャッシュ エントリが追加されたキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>指定したキーに対応するキャッシュ エントリのセットを返します。</summary>
+        <returns>指定したキーに対応するキャッシュ エントリのセット。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ によって`keys`表されるキャッシュエントリが存在しない場合、ディクショナリ内の返されたオブジェクトに対応する値がに`null`設定されます。 したがって、返されたディクショナリには、内`keys`の要素の数と同じ数の項目が常に含まれます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException"><paramref name="regionName" /> が <see langword="null" /> ではありません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="keys" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException">コレクション内の個々のキーが <see langword="null" /> です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Item">
+      <MemberSignature Language="C#" Value="public override object this[string key] { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object Item(string)" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Caching.MemoryCache.Item(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Default Public Overrides Property Item(key As String) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Object ^ default[System::String ^] { System::Object ^ get(System::String ^ key); void set(System::String ^ key, System::Object ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Item(string) : obj with get, set" Usage="System.Runtime.Caching.MemoryCache.Item" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">取得または設定するキャッシュ値の一意の識別子。</param>
+        <summary><see cref="T:System.Runtime.Caching.MemoryCache" /> クラスのインスタンスの既定のインデクサー プロパティを使用して、キャッシュ内の値を取得または設定します。</summary>
+        <value>エントリが存在する場合は、指定したキーのキャッシュ インスタンス内の値。それ以外の場合は <see langword="null" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティを設定すると、値がキャッシュに挿入されます。 キャッシュエントリの有効期限ポリシーはに<xref:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration>設定されています。 一致するキーを持つキャッシュエントリが既に存在する場合、その値は更新されます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="key" /> は <see langword="null" />です。  
+  
+または 
+挿入された値は <see langword="null" /> です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Name">
+      <MemberSignature Language="C#" Value="public override string Name { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Name" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Caching.MemoryCache.Name" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property Name As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ Name { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Name : string" Usage="System.Runtime.Caching.MemoryCache.Name" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>キャッシュの名前を取得します。</summary>
+        <value>キャッシュの名前。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティ<xref:System.Runtime.Caching.MemoryCache.Name%2A>は、 <xref:System.Runtime.Caching.MemoryCache>クラスの現在のインスタンスの名前を返します。 複数のキャッシュインスタンスを使用するアプリケーションでは、 <xref:System.Runtime.Caching.MemoryCache.Name%2A>プロパティを使用して、インスタンスを区別できます。 詳細については、<xref:System.Runtime.Caching.MemoryCache.%23ctor%28System.String%2CSystem.Collections.Specialized.NameValueCollection%29?displayProperty=nameWithType> メソッドを参照してください。 既定のメモリベースのキャッシュでは、既定の名前が返されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PhysicalMemoryLimit">
+      <MemberSignature Language="C#" Value="public long PhysicalMemoryLimit { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int64 PhysicalMemoryLimit" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Caching.MemoryCache.PhysicalMemoryLimit" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property PhysicalMemoryLimit As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property long PhysicalMemoryLimit { long get(); };" />
+      <MemberSignature Language="F#" Value="member this.PhysicalMemoryLimit : int64" Usage="System.Runtime.Caching.MemoryCache.PhysicalMemoryLimit" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>キャッシュが使用できる物理メモリの割合を取得します。</summary>
+        <value>キャッシュが使用できる物理メモリの割合。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティ<xref:System.Runtime.Caching.MemoryCache.PhysicalMemoryLimit%2A>は、 <xref:System.Runtime.Caching.MemoryCache>クラスの1つのインスタンスで使用できる物理コンピューターメモリの合計の割合を返します。 キャッシュインスタンスが指定された制限を超えると、キャッシュエントリが削除されます。  
+  
+ <xref:System.Runtime.Caching.MemoryCache.PhysicalMemoryLimit%2A>プロパティの設定は、アプリケーション構成ファイルで指定できます。 または、 <xref:System.Runtime.Caching.MemoryCache>クラスを初期化するときに、呼び出し元から渡すこともできます。 このプロパティを構成する方法の詳細については、「 [ &lt;namedcaches&gt;要素 (キャッシュ設定)](~/docs/framework/configure-apps/file-schema/runtime/namedcaches-element-cache-settings.md)」を参照してください。 <xref:System.Runtime.Caching.MemoryCache>クラスを初期化するときにプロパティを構成する方法の詳細については、 <xref:System.Runtime.Caching.MemoryCache.%23ctor%28System.String%2CSystem.Collections.Specialized.NameValueCollection%29?displayProperty=nameWithType>メソッドを参照してください。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="https://msdn.microsoft.com/library/6bd4fbc5-55a6-4dc4-998b-cdcc7e023330">&lt;namedcaches&gt;要素 (キャッシュ設定)</related>
+      </Docs>
+    </Member>
+    <Member MemberName="PollingInterval">
+      <MemberSignature Language="C#" Value="public TimeSpan PollingInterval { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.TimeSpan PollingInterval" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Caching.MemoryCache.PollingInterval" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property PollingInterval As TimeSpan" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property TimeSpan PollingInterval { TimeSpan get(); };" />
+      <MemberSignature Language="F#" Value="member this.PollingInterval : TimeSpan" Usage="System.Runtime.Caching.MemoryCache.PollingInterval" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.TimeSpan</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>キャッシュがメモリ統計情報を更新するまでの最大時間を取得します。</summary>
+        <value>メモリ統計情報が更新される前に経過する必要のある最大時間。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Runtime.Caching.MemoryCache.PollingInterval%2A>プロパティの設定は、アプリケーション構成ファイルで指定できます。 または、クラスの<xref:System.Runtime.Caching.MemoryCache>初期化時に渡すこともできます。 このプロパティを構成する方法の詳細については、「 [ &lt;namedcaches&gt;要素 (キャッシュ設定)](~/docs/framework/configure-apps/file-schema/runtime/namedcaches-element-cache-settings.md)」を参照してください。 <xref:System.Runtime.Caching.MemoryCache>クラスを初期化するときにプロパティを構成する方法の詳細については、 <xref:System.Runtime.Caching.MemoryCache.%23ctor%28System.String%2CSystem.Collections.Specialized.NameValueCollection%29?displayProperty=nameWithType>メソッドを参照してください。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="https://msdn.microsoft.com/library/6bd4fbc5-55a6-4dc4-998b-cdcc7e023330">&lt;namedcaches&gt;要素 (キャッシュ設定)</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Remove">
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>指定した項目をキャッシュから削除します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Remove">
+      <MemberSignature Language="C#" Value="public override object Remove (string key, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance object Remove(string key, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.Remove(System.String,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function Remove (key As String, Optional regionName As String = null) As Object" />
+      <MemberSignature Language="F#" Value="override this.Remove : string * string -&gt; obj" Usage="memoryCache.Remove (key, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">削除するキャッシュ エントリの一意の識別子。</param>
+        <param name="regionName">キャッシュ エントリが追加されたキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>キャッシュからキャッシュ エントリを削除します。</summary>
+        <returns>キャッシュ内でエントリが見つかった場合は、削除されたキャッシュ エントリ。それ以外の場合は <see langword="null" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ によって`key`指定されたエントリがキャッシュに存在する場合、その項目を削除すると、関連するすべての変更モニターがトリガーされます。 削除された項目が<xref:System.Web.Caching.CacheItemUpdateCallback>オブジェクト<xref:System.Web.Caching.CacheItemRemovedCallback>またはオブジェクトに関連付けられていた場合、 <xref:System.Runtime.Caching.CacheEntryRemovedReason.Removed>コールバックに渡される理由はです。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException"><paramref name="regionName" /> が <see langword="null" /> ではありません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="key" /> は <see langword="null" />です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Remove">
+      <MemberSignature Language="C#" Value="public object Remove (string key, System.Runtime.Caching.CacheEntryRemovedReason reason, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance object Remove(string key, valuetype System.Runtime.Caching.CacheEntryRemovedReason reason, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.Remove(System.String,System.Runtime.Caching.CacheEntryRemovedReason,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Remove (key As String, reason As CacheEntryRemovedReason, Optional regionName As String = null) As Object" />
+      <MemberSignature Language="F#" Value="override this.Remove : string * System.Runtime.Caching.CacheEntryRemovedReason * string -&gt; obj" Usage="memoryCache.Remove (key, reason, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+        <Parameter Name="reason" Type="System.Runtime.Caching.CacheEntryRemovedReason" Index="1" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+        <Parameter Name="regionName" Type="System.String" Index="2" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      </Parameters>
+      <Docs>
+        <param name="key">削除するキャッシュ エントリの一意の識別子。</param>
+        <param name="reason">項目が削除された理由。</param>
+        <param name="regionName">キャッシュ エントリが追加されたキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>理由を使用してキャッシュからキャッシュ エントリを削除します。</summary>
+        <returns>キャッシュ内でエントリが見つかった場合は、削除されたキャッシュ エントリ。それ以外の場合は <see langword="null" />。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Set">
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>キャッシュ エントリをキャッシュに挿入します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 指定されたエントリが存在しない場合は、作成されます。 指定されたエントリが存在する場合は、更新されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Set">
+      <MemberSignature Language="C#" Value="public override void Set (System.Runtime.Caching.CacheItem item, System.Runtime.Caching.CacheItemPolicy policy);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Set(class System.Runtime.Caching.CacheItem item, class System.Runtime.Caching.CacheItemPolicy policy) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.Set(System.Runtime.Caching.CacheItem,System.Runtime.Caching.CacheItemPolicy)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Set (item As CacheItem, policy As CacheItemPolicy)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Set(System::Runtime::Caching::CacheItem ^ item, System::Runtime::Caching::CacheItemPolicy ^ policy);" />
+      <MemberSignature Language="F#" Value="override this.Set : System.Runtime.Caching.CacheItem * System.Runtime.Caching.CacheItemPolicy -&gt; unit" Usage="memoryCache.Set (item, policy)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item" Type="System.Runtime.Caching.CacheItem" />
+        <Parameter Name="policy" Type="System.Runtime.Caching.CacheItemPolicy" />
+      </Parameters>
+      <Docs>
+        <param name="item">挿入するキャッシュ エントリを表すオブジェクト。</param>
+        <param name="policy">キャッシュ エントリの削除の詳細を格納しているオブジェクト。 このオブジェクトは、単純な絶対有効期限よりも多くの削除オプションを提供します。</param>
+        <summary>キャッシュ エントリのキーと値を指定するために <see cref="T:System.Runtime.Caching.CacheItem" /> インスタンスを使用して、キャッシュ エントリをキャッシュに挿入します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 他の<xref:System.Runtime.Caching.MemoryCache.Set%2A>メソッドオーバーロードと同様<xref:System.Runtime.Caching.MemoryCache.Set%2A>に、メソッドは、同じキーを持つエントリが既に存在するかどうかに関係なく、常にキャッシュ値をキャッシュに格納します。 指定したエントリがキャッシュに存在しない場合は、新しいキャッシュエントリが挿入されます。 指定したエントリが既に存在する場合は、その値が更新されます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="item" /> は <see langword="null" />です。  
+  
+または 
+<see cref="P:System.Runtime.Caching.CacheItem.Key" /> プロパティが <see langword="null" /> である。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItem.Value" /> プロパティが <see langword="null" /> である。</exception>
+        <exception cref="T:System.ArgumentException">キャッシュ エントリの無効な組み合わせの引数が渡されました。 これは、次の有効期限に関する詳細がキャッシュ エントリのポリシー オブジェクトで設定されている場合に発生します。 
+-   <see cref="T:System.Runtime.Caching.CacheItemPolicy" /> オブジェクトの絶対有効期限とスライド式有効期限の値の両方が、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> と <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> フィールドの既定値以外の値に設定されている場合。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは、絶対有効期限と変化する有効期限の両方に基づいて有効期限ポリシーを設定できません。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスを使用すると、1 つの有効期限の設定だけを明示的に設定できます。 他の設定は、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> または <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> プロパティに設定する必要があります。  
+  
+-   削除コールバックと更新コールバックの両方が <see cref="T:System.Runtime.Caching.CacheItemPolicy" /> オブジェクトに対して指定されている場合。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは、キャッシュ エントリごとに 1 つの種類のコールバックを使用することのみをサポートしています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティは、<see cref="F:System.TimeSpan.Zero" /> 未満の値が設定されています。  
+  
+または 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティが、1 年よりも大きな値に設定されています。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.Priority" /> が <see cref="T:System.Runtime.Caching.CacheItemPriority" /> 列挙体の値ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Set">
+      <MemberSignature Language="C#" Value="public override void Set (string key, object value, DateTimeOffset absoluteExpiration, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Set(string key, object value, valuetype System.DateTimeOffset absoluteExpiration, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.Set(System.String,System.Object,System.DateTimeOffset,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Set (key As String, value As Object, absoluteExpiration As DateTimeOffset, Optional regionName As String = null)" />
+      <MemberSignature Language="F#" Value="override this.Set : string * obj * DateTimeOffset * string -&gt; unit" Usage="memoryCache.Set (key, value, absoluteExpiration, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+        <Parameter Name="value" Type="System.Object" />
+        <Parameter Name="absoluteExpiration" Type="System.DateTimeOffset" />
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">挿入するキャッシュ エントリの一意の識別子。</param>
+        <param name="value">キャッシュ エントリのデータ。</param>
+        <param name="absoluteExpiration">キャッシュ エントリの有効期限が切れる固定日時。</param>
+        <param name="regionName">キャッシュ エントリを追加できるキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>キーと値を使用してキャッシュ エントリをキャッシュに挿入し、時間ベースの有効期限の詳細を指定します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 他の<xref:System.Runtime.Caching.MemoryCache.Set%2A>メソッドオーバーロードと同様<xref:System.Runtime.Caching.MemoryCache.Set%2A>に、同じキーを持つエントリが既に存在するかどうかにかかわらず、メソッドは常にキャッシュ値をキャッシュに格納します。 指定したエントリが存在しない場合は、新しいキャッシュエントリが挿入されます。 指定されたエントリが存在する場合は、更新されます。  
+  
+ パラメーター `absoluteExpiration`は、エントリをキャッシュから削除するタイミングを示します。  
+  
+ エントリを削除すると、関連付けられている変更モニターがトリガーされます。 削除された項目が<xref:System.Web.Caching.CacheItemUpdateCallback>オブジェクトまたは<xref:System.Web.Caching.CacheItemRemovedCallback>オブジェクトに関連付けられていた場合、 <xref:System.Runtime.Caching.CacheEntryRemovedReason.Removed>コールバックに渡される削除の理由は、プロパティに含まれています。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException"><paramref name="regionName" /> が <see langword="null" /> ではありません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="key" /> が <see langword="null" /> です。  
+  
+- または - 
+ <paramref name="Value" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException">-   キャッシュ エントリの無効な組み合わせの引数が渡されました。 これは、次の有効期限に関する詳細がキャッシュ エントリのポリシー オブジェクトで設定されている場合に発生します。 
+-   <see cref="T:System.Runtime.Caching.CacheItemPolicy" /> オブジェクトの絶対有効期限とスライド式有効期限の値の両方が、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> と <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> の既定値以外の値に設定されている場合。 これは、<see cref="T:System.Runtime.Caching.MemoryCache" /> クラスが絶対有効期限と変化する有効期限の両方に基づいて有効期限の切れたエントリをサポートしていないため発生します。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスを使用すると、1 つの有効期限の設定だけを明示的に設定できます。 他の設定は、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> または <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> に設定する必要があります。  
+  
+-   削除コールバックと更新コールバックの両方が <see cref="T:System.Runtime.Caching.CacheItemPolicy" /> オブジェクトに対して指定されている場合。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは、キャッシュ エントリごとに 1 つの種類のコールバックを使用することのみをサポートしています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティは、<see cref="F:System.TimeSpan.Zero" /> 未満の値が設定されています。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティが、1 年よりも大きな値に設定されています。  
+  
+- または - 
+-   <see cref="P:System.Runtime.Caching.CacheItemPolicy.Priority" /> プロパティが、<see cref="T:System.Runtime.Caching.CacheItemPriority" /> 列挙体の値ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Set">
+      <MemberSignature Language="C#" Value="public override void Set (string key, object value, System.Runtime.Caching.CacheItemPolicy policy, string regionName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Set(string key, object value, class System.Runtime.Caching.CacheItemPolicy policy, string regionName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.Set(System.String,System.Object,System.Runtime.Caching.CacheItemPolicy,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Set (key As String, value As Object, policy As CacheItemPolicy, Optional regionName As String = null)" />
+      <MemberSignature Language="F#" Value="override this.Set : string * obj * System.Runtime.Caching.CacheItemPolicy * string -&gt; unit" Usage="memoryCache.Set (key, value, policy, regionName)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="key" Type="System.String" />
+        <Parameter Name="value" Type="System.Object" />
+        <Parameter Name="policy" Type="System.Runtime.Caching.CacheItemPolicy" />
+        <Parameter Name="regionName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="key">挿入するキャッシュ エントリの一意の識別子。</param>
+        <param name="value">キャッシュ エントリのデータ。</param>
+        <param name="policy">キャッシュ エントリの削除の詳細を格納しているオブジェクト。 このオブジェクトは、単純な絶対有効期限よりも多くの削除オプションを提供します。</param>
+        <param name="regionName">キャッシュ エントリを追加できるキャッシュ内の名前付き領域。 このパラメーターには値を渡さないでください。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは領域を実装しないため、このパラメーターは既定で <see langword="null" /> です。</param>
+        <summary>キーと値および削除の詳細を使用して、キャッシュ エントリをキャッシュに挿入します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 他の<xref:System.Runtime.Caching.MemoryCache.Set%2A>メソッドオーバーロードと同様<xref:System.Runtime.Caching.MemoryCache.Set%2A>に、メソッドは、一致するエントリが既に存在するかどうかにかかわらず、常にキャッシュ値をキャッシュに格納します。 指定したエントリがキャッシュに存在しない場合は、新しいキャッシュエントリが挿入されます。 指定されたエントリが存在する場合は、更新されます。  
+  
+ エントリを削除すると、関連付けられている変更モニターがトリガーされます。 削除された項目が<xref:System.Web.Caching.CacheItemUpdateCallback>オブジェクトまたは<xref:System.Web.Caching.CacheItemRemovedCallback>オブジェクトに関連付けられていた場合、 <xref:System.Runtime.Caching.CacheEntryRemovedReason.Removed>コールバックに渡される削除の理由は、プロパティに含まれています。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="key" /> は <see langword="null" />です。  
+  
+- または - 
+ <paramref name="value" /> は <see langword="null" /> です  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.UpdateCallback" /> プロパティでヘルパー メソッドに渡されたコールバック参照は <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException">-   キャッシュ エントリの無効な組み合わせの引数が存在します。 これは、次の有効期限に関する詳細がキャッシュ エントリのポリシー オブジェクトで設定されている場合に発生します。 
+-   <see cref="T:System.Runtime.Caching.CacheItemPolicy" /> オブジェクトの絶対有効期限とスライド式有効期限の値の両方が、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> と <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> の既定値以外の値に設定されている場合。 これは、<see cref="T:System.Runtime.Caching.MemoryCache" /> クラスが絶対有効期限と変化する有効期限の両方に基づいて有効期限の切れたエントリをサポートしていないためです。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスを使用すると、1 つの有効期限の設定だけを明示的に設定できます。 他の設定は、<see cref="F:System.Runtime.Caching.ObjectCache.InfiniteAbsoluteExpiration" /> または <see cref="F:System.Runtime.Caching.ObjectCache.NoSlidingExpiration" /> に設定する必要があります。  
+  
+-   削除コールバックと更新コールバックの両方が <see cref="T:System.Runtime.Caching.CacheItemPolicy" /> クラスに対して指定されている場合。 <see cref="T:System.Runtime.Caching.MemoryCache" /> クラスは、キャッシュ エントリごとに 1 つの種類のコールバックを使用することのみをサポートしています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティは、<see cref="F:System.TimeSpan.Zero" /> 未満の値が設定されています。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.SlidingExpiration" /> プロパティが、1 年よりも大きな値に設定されています。  
+  
+- または - 
+<see cref="P:System.Runtime.Caching.CacheItemPolicy.Priority" /> プロパティが、<see cref="T:System.Runtime.Caching.CacheItemPriority" /> 列挙体の値ではありません。</exception>
+        <exception cref="T:System.NotSupportedException"><paramref name="regionName" /> が <see langword="null" /> ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="System.Collections.IEnumerable.GetEnumerator">
+      <MemberSignature Language="C#" Value="System.Collections.IEnumerator IEnumerable.GetEnumerator ();" />
+      <MemberSignature Language="ILAsm" Value=".method hidebysig newslot virtual instance class System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.System#Collections#IEnumerable#GetEnumerator" />
+      <MemberSignature Language="VB.NET" Value="Function GetEnumerator () As IEnumerator Implements IEnumerable.GetEnumerator" />
+      <MemberSignature Language="C++ CLI" Value=" virtual System::Collections::IEnumerator ^ System.Collections.IEnumerable.GetEnumerator() = System::Collections::IEnumerable::GetEnumerator;" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Collections.IEnumerable.GetEnumerator</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.IEnumerator</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>ジェネリック コレクションに対する反復処理をサポートします。</summary>
+        <returns>キャッシュ内のエントリへのアクセスを提供する列挙子オブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメンバーは、明示的なインターフェイス メンバーの実装です。 このメソッドは、 <xref:System.Runtime.Caching.MemoryCache>インスタンスが<xref:System.Collections.IEnumerable>インターフェイスにキャストされている場合にのみ使用できます。  
+  
+ このメソッドを使用して、キャッシュエントリのジェネリックコレクションを反復処理できます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Trim">
+      <MemberSignature Language="C#" Value="public long Trim (int percent);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance int64 Trim(int32 percent) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Caching.MemoryCache.Trim(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Trim (percent As Integer) As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; long Trim(int percent);" />
+      <MemberSignature Language="F#" Value="member this.Trim : int -&gt; int64" Usage="memoryCache.Trim percent" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime.Caching</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="percent" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="percent">削除するキャッシュ エントリの合計の割合。</param>
+        <summary>指定した割合のキャッシュ エントリをキャッシュ オブジェクトから削除します。</summary>
+        <returns>キャッシュから削除されたエントリの数。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティ<xref:System.Runtime.Caching.MemoryCache.Trim%2A>は、絶対有効期限またはスライド式有効期限のいずれかを超えたエントリを最初に削除します。 削除された項目に登録されているコールバックには、削除<xref:System.Web.Caching.CacheItemRemovedReason.Expired>された理由が渡されます。  
+  
+ 期限切れのエントリを削除しても、指定したトリミング率に到達できない場合は、要求されたトリミング率に達するまで、最近使用された (LRU) アルゴリズムに基づいて、キャッシュから追加エントリが削除されます。 この方法で削除された項目に登録されているコールバックには、 <xref:System.Runtime.Caching.CacheEntryRemovedReason.Evicted>の削除の理由が渡されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

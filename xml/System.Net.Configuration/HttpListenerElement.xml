@@ -1,0 +1,271 @@
+<Type Name="HttpListenerElement" FullName="System.Net.Configuration.HttpListenerElement">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="0bb649fa98399448f29bf4d71df1fde7531797b2" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70691264" /></Metadata><TypeSignature Language="C#" Value="public sealed class HttpListenerElement : System.Configuration.ConfigurationElement" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed HttpListenerElement extends System.Configuration.ConfigurationElement" />
+  <TypeSignature Language="DocId" Value="T:System.Net.Configuration.HttpListenerElement" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class HttpListenerElement&#xA;Inherits ConfigurationElement" />
+  <TypeSignature Language="C++ CLI" Value="public ref class HttpListenerElement sealed : System::Configuration::ConfigurationElement" />
+  <TypeSignature Language="F#" Value="type HttpListenerElement = class&#xA;    inherit ConfigurationElement" />
+  <AssemblyInfo>
+    <AssemblyName>System</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Configuration.ConfigurationElement</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>構成ファイルの HttpListener 要素を表します。 このクラスは継承できません。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このクラスは、httpListener \<> 要素 (ネットワーク設定) 構成要素に対応しています。 このクラスは、構成ファイルに格納できる情報にプログラムでアクセスできるようにします。  
+  
+ プロパティ<xref:System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl%2A>は、が<xref:System.Net.HttpListener>変換された uri ではなく、生のエスケープされていない uri を使用するかどうかを示します。  
+  
+ インスタンスは<xref:System.Net.HttpListener> `http.sys` 、サービスを介して要求を受け取ると、によっ`http.sys`て提供される URI 文字列のインスタンスを作成し、 <xref:System.Net.HttpListenerRequest.Url%2A?displayProperty=nameWithType>プロパティとして公開します。  
+  
+ サービス`http.sys`は、次の2つの要求 URI 文字列を公開します。  
+  
+-   未加工の URI  
+  
+-   変換された URI  
+  
+ 未加工 URI は、HTTP <xref:System.Uri?displayProperty=nameWithType>要求の要求行で指定されるです。  
+  
+ `GET /path/`  
+  
+ `Host: www.contoso.com`  
+  
+ 前述の要求に対し`http.sys`てによって提供される未加工の URI は、"/path/" です。 これは、ネットワーク経由で送信された HTTP 動詞に続く文字列を表します。  
+  
+ サービス`http.sys`は、HTTP 要求行に指定された uri とホストヘッダーを使用して、要求で提供される情報から変換された uri を作成し、要求の転送先となる配信元サーバーを決定します。 これは、要求の情報を一連の登録済み URI プレフィックスと比較することによって行われます。 HTTP Server SDK ドキュメントは、この変換後の URI を[HTTP_COOKED_URL](https://go.microsoft.com/fwlink/?LinkID=166108)構造体として参照します。  
+  
+ 要求を登録済みの URI プレフィックスと比較できるようにするには、要求の正規化を行う必要があります。 上記のサンプルの場合、変換後の URI は次のようになります。  
+  
+ `http://www.contoso.com/path/`  
+  
+ サービス`http.sys`は、要求<xref:System.Uri.Host%2A?displayProperty=nameWithType>行にプロパティ値と文字列を結合して、変換された URI を作成します。 さらに、 `http.sys`クラスは<xref:System.Uri?displayProperty=nameWithType>次の操作も行います。  
+  
+-   パーセントでエンコードされたすべての値をエスケープ解除します。  
+  
+-   パーセントでエンコードされた非 ASCII 文字を UTF-16 文字表現に変換します。 UTF-8 および ANSI/DBCS 文字は、Unicode 文字 (% uXXXX 形式を使用した Unicode エンコード) でもサポートされています。  
+  
+-   パスの圧縮など、その他の正規化手順を実行します。  
+  
+ パーセントでエンコードされた値に使用されるエンコーディングに関する情報が要求に含まれていないため、パーセントでエンコードされた値を解析するだけで、正しいエンコーディングを判断できない場合があります。  
+  
+ この`http.sys`ため、プロセスを変更するには、次の2つのレジストリキーを使用します。  
+  
+|レジストリ キー|既定値|説明|  
+|------------------|-------------------|-----------------|  
+|EnableNonUTF8|1|ゼロの場合`http.sys` 、は utf-8 でエンコードされた url のみを受け入れます。<br /><br /> 0以外の場合、 `http.sys`は、要求で ANSI エンコードまたは DBCS でエンコードされた url も受け入れます。|  
+|FavorUTF8|1|0以外の場合、 `http.sys`は常に utf-8 として URL をデコードしようとします。変換に失敗し、EnableNonUTF8 が0以外の場合は、http.sys は ANSI または DBCS としてデコードしようとします。<br /><br /> ゼロ (および EnableNonUTF8 が0以外) の場合、 `http.sys`は ANSI または DBCS としてデコードしようとします。成功しなかった場合は、utf-8 変換を試行します。|  
+  
+ は<xref:System.Net.HttpListener> 、要求を受信すると、変換され`http.sys`た URI をから<xref:System.Net.HttpListenerRequest.Url%2A>プロパティへの入力として使用します。  
+  
+ Uri の文字と数字以外の文字をサポートする必要があります。 例として、次の URI があります。これは、顧客番号 "1/3812" の顧客情報を取得するために使用されます。  
+  
+ `http://www.contoso.com/Customer('1%2F3812')/`  
+  
+ Uri (% 2F) のパーセントでエンコードされたスラッシュに注意してください。 この場合は、スラッシュ文字がパス区切り記号ではなく、データを表すために必要です。  
+  
+ 文字列を Uri コンストラクターに渡すと、次の URI になります。  
+  
+ `http://www.contoso.com/Customer('1/3812')/`  
+  
+ パスをセグメントに分割すると、次の要素が生成されます。  
+  
+ `Customer('1`  
+  
+ `3812')`  
+  
+ これは、要求の送信者の意図ではありません。  
+  
+ プロパティが false に設定されている場合、 <xref:System.Net.HttpListener>が要求を受信すると、 <xref:System.Net.HttpListenerRequest.Url%2A>から`http.sys`変換された uri ではなく、未加工の uri がプロパティへの入力として使用されます。 <xref:System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl%2A>  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Net.HttpListener" />
+    <altmember cref="P:System.Net.HttpListenerRequest.Url" />
+    <related type="Article" href="~/docs/framework/configure-apps/file-schema/network/index.md">ネットワーク設定スキーマ</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/62f121fd-3f2e-4033-bb39-48ae996bfbd9">&lt;httpListener&gt;要素 (ネットワーク設定)</related>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public HttpListenerElement ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Net.Configuration.HttpListenerElement.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; HttpListenerElement();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Net.Configuration.HttpListenerElement" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Properties">
+      <MemberSignature Language="C#" Value="protected override System.Configuration.ConfigurationPropertyCollection Properties { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Configuration.ConfigurationPropertyCollection Properties" />
+      <MemberSignature Language="DocId" Value="P:System.Net.Configuration.HttpListenerElement.Properties" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides ReadOnly Property Properties As ConfigurationPropertyCollection" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; virtual property System::Configuration::ConfigurationPropertyCollection ^ Properties { System::Configuration::ConfigurationPropertyCollection ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Properties : System.Configuration.ConfigurationPropertyCollection" Usage="System.Net.Configuration.HttpListenerElement.Properties" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Configuration.ConfigurationPropertyCollection</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Timeouts">
+      <MemberSignature Language="C#" Value="public System.Net.Configuration.HttpListenerTimeoutsElement Timeouts { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Net.Configuration.HttpListenerTimeoutsElement Timeouts" />
+      <MemberSignature Language="DocId" Value="P:System.Net.Configuration.HttpListenerElement.Timeouts" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Timeouts As HttpListenerTimeoutsElement" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Net::Configuration::HttpListenerTimeoutsElement ^ Timeouts { System::Net::Configuration::HttpListenerTimeoutsElement ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Timeouts : System.Net.Configuration.HttpListenerTimeoutsElement" Usage="System.Net.Configuration.HttpListenerElement.Timeouts" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Configuration.ConfigurationProperty("timeouts")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Net.Configuration.HttpListenerTimeoutsElement</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Net.HttpListener" /> オブジェクトで使用する既定のタイムアウト要素を取得します。</summary>
+        <value><see cref="T:System.Net.HttpListener" /> オブジェクトが使用するタイムアウト要素です。</value>
+        <remarks>To be added.</remarks>
+        <altmember cref="T:System.Net.HttpListener" />
+        <altmember cref="T:System.Net.HttpListenerTimeoutManager" />
+        <altmember cref="T:System.Net.Configuration.HttpListenerTimeoutsElement" />
+      </Docs>
+    </Member>
+    <Member MemberName="UnescapeRequestUrl">
+      <MemberSignature Language="C#" Value="public bool UnescapeRequestUrl { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool UnescapeRequestUrl" />
+      <MemberSignature Language="DocId" Value="P:System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property UnescapeRequestUrl As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool UnescapeRequestUrl { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.UnescapeRequestUrl : bool" Usage="System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.Configuration.ConfigurationProperty("unescapeRequestUrl", DefaultValue=Mono.Cecil.CustomAttributeArgument, IsRequired=false)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Net.HttpListener" /> が変換された URI ではなくエスケープされていない生の URI を使用するかどうかを示す値を取得します。</summary>
+        <value><see cref="T:System.Net.HttpListener" /> が変換された URI ではなくエスケープされていない生の URI を使用するかどうかを示すブール値。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティ<xref:System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl%2A>は、が<xref:System.Net.HttpListener>変換された uri ではなく、生のエスケープされていない uri を使用するかどうかを示します。  
+  
+ インスタンスは<xref:System.Net.HttpListener> `http.sys` 、サービスを介して要求を受け取ると、によっ`http.sys`て提供される URI 文字列のインスタンスを作成し、 <xref:System.Net.HttpListenerRequest.Url%2A?displayProperty=nameWithType>プロパティとして公開します。  
+  
+ サービス`http.sys`は、次の2つの要求 URI 文字列を公開します。  
+  
+-   未加工の URI  
+  
+-   変換された URI  
+  
+ 未加工 URI は、HTTP <xref:System.Uri?displayProperty=nameWithType>要求の要求行で指定されるです。  
+  
+ `GET /path/`  
+  
+ `Host: www.contoso.com`  
+  
+ 前述の要求に対し`http.sys`てによって提供される未加工の URI は、"/path/" です。 これは、ネットワーク経由で送信された HTTP 動詞に続く文字列を表します。  
+  
+ サービス`http.sys`は、HTTP 要求行に指定された uri とホストヘッダーを使用して、要求で提供される情報から変換された uri を作成し、要求の転送先となる配信元サーバーを決定します。 これは、要求の情報を一連の登録済み URI プレフィックスと比較することによって行われます。 HTTP Server SDK ドキュメントは、この変換後の URI を[HTTP_COOKED_URL](https://go.microsoft.com/fwlink/?LinkID=166108)構造体として参照します。  
+  
+ 要求を登録済みの URI プレフィックスと比較できるようにするには、要求の正規化を行う必要があります。 上記のサンプルの場合、変換後の URI は次のようになります。  
+  
+ `http://www.contoso.com/path/`  
+  
+ サービス`http.sys`は、要求<xref:System.Uri.Host%2A?displayProperty=nameWithType>行にプロパティ値と文字列を結合して、変換された URI を作成します。 さらに、 `http.sys`クラスは<xref:System.Uri?displayProperty=nameWithType>次の操作も行います。  
+  
+-   パーセントでエンコードされたすべての値をエスケープ解除します。  
+  
+-   パーセントでエンコードされた非 ASCII 文字を UTF-16 文字表現に変換します。 UTF-8 および ANSI/DBCS 文字は、Unicode 文字 (% uXXXX 形式を使用した Unicode エンコード) でもサポートされています。  
+  
+-   パスの圧縮など、その他の正規化手順を実行します。  
+  
+ パーセントでエンコードされた値に使用されるエンコーディングに関する情報が要求に含まれていないため、パーセントでエンコードされた値を解析するだけで、正しいエンコーディングを判断できない場合があります。  
+  
+ この`http.sys`ため、プロセスを変更するには、次の2つのレジストリキーを使用します。  
+  
+|レジストリ キー|既定値|説明|  
+|------------------|-------------------|-----------------|  
+|EnableNonUTF8|1|ゼロの場合`http.sys` 、は utf-8 でエンコードされた url のみを受け入れます。<br /><br /> 0以外の場合、 `http.sys`は、要求で ANSI エンコードまたは DBCS でエンコードされた url も受け入れます。|  
+|FavorUTF8|1|0以外の場合、 `http.sys`は常に utf-8 として URL をデコードしようとします。変換に失敗し、EnableNonUTF8 が0以外の場合は、http.sys は ANSI または DBCS としてデコードしようとします。<br /><br /> ゼロ (および EnableNonUTF8 が0以外) の場合、 `http.sys`は ANSI または DBCS としてデコードしようとします。成功しなかった場合は、utf-8 変換を試行します。|  
+  
+ は<xref:System.Net.HttpListener> 、要求を受信すると、変換され`http.sys`た URI をから<xref:System.Net.HttpListenerRequest.Url%2A>プロパティへの入力として使用します。  
+  
+ Uri の文字と数字以外の文字をサポートする必要があります。 例として、次の URI があります。これは、顧客番号 "1/3812" の顧客情報を取得するために使用されます。  
+  
+ `http://www.contoso.com/Customer('1%2F3812')/`  
+  
+ Uri (% 2F) のパーセントでエンコードされたスラッシュに注意してください。 この場合は、スラッシュ文字がパス区切り記号ではなく、データを表すために必要です。  
+  
+ 文字列を Uri コンストラクターに渡すと、次の URI になります。  
+  
+ `http://www.contoso.com/Customer('1/3812')/`  
+  
+ パスをセグメントに分割すると、次の要素が生成されます。  
+  
+ `Customer('1`  
+  
+ `3812')`  
+  
+ これは、要求の送信者の意図ではありません。  
+  
+ プロパティが false に設定されている場合、 <xref:System.Net.HttpListener>が要求を受信すると、 <xref:System.Net.HttpListenerRequest.Url%2A>から`http.sys`変換された uri ではなく、未加工の uri がプロパティへの入力として使用されます。 <xref:System.Net.Configuration.HttpListenerElement.UnescapeRequestUrl%2A>  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Net.HttpListener" />
+        <altmember cref="P:System.Net.HttpListenerRequest.Url" />
+        <related type="Article" href="~/docs/framework/configure-apps/file-schema/network/index.md">ネットワーク設定スキーマ</related>
+        <related type="Article" href="https://msdn.microsoft.com/library/62f121fd-3f2e-4033-bb39-48ae996bfbd9">&lt;httpListener&gt;要素 (ネットワーク設定)</related>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
