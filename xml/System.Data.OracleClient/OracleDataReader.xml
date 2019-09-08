@@ -1,0 +1,1972 @@
+<Type Name="OracleDataReader" FullName="System.Data.OracleClient.OracleDataReader">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="335f641da266e49acce02bd59fa451815a99fb7a" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70684524" /></Metadata><TypeSignature Language="C#" Value="public sealed class OracleDataReader : System.Data.Common.DbDataReader" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit OracleDataReader extends System.Data.Common.DbDataReader" />
+  <TypeSignature Language="DocId" Value="T:System.Data.OracleClient.OracleDataReader" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class OracleDataReader&#xA;Inherits DbDataReader" />
+  <TypeSignature Language="C++ CLI" Value="public ref class OracleDataReader sealed : System::Data::Common::DbDataReader" />
+  <TypeSignature Language="F#" Value="type OracleDataReader = class&#xA;    inherit DbDataReader" />
+  <AssemblyInfo>
+    <AssemblyName>System.Data.OracleClient</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Data.Common.DbDataReader</BaseTypeName>
+    <BaseTypeName FrameworkAlternate="netframework-1.1">System.MarshalByRefObject</BaseTypeName>
+  </Base>
+  <Interfaces>
+  </Interfaces>
+  <Docs>
+    <summary>データ ソースからデータ行の前方向ストリームを読み取る方法を提供します。 このクラスは継承できません。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ を作成<xref:System.Data.OracleClient.OracleDataReader>するには、コンストラクターを直接使用する<xref:System.Data.OracleClient.OracleCommand>のではなく、オブジェクトの<xref:System.Data.OracleClient.OracleCommand.ExecuteReader%2A>メソッドを呼び出す必要があります。  
+  
+ データの読み取り中に別のプロセスまたはスレッドによって結果セットに加えられた変更は<xref:System.Data.OracleClient.OracleDataReader>、のユーザーに表示されることがあります。  
+  
+ <xref:System.Data.OracleClient.OracleDataReader.IsClosed%2A>と<xref:System.Data.OracleClient.OracleDataReader.RecordsAffected%2A>は、 <xref:System.Data.OracleClient.OracleDataReader>が閉じられた後に呼び出すことができる唯一のプロパティです。 場合によっては、を<xref:System.Data.OracleClient.OracleDataReader.Close%2A>呼び出す<xref:System.Data.OracleClient.OracleDataReader.RecordsAffected%2A>前にを呼び出す必要があります。  
+  
+ 任意の時点で、複数のを開くことができます。 <xref:System.Data.OracleClient.OracleDataReader>  
+  
+ 次の2つの Visual Basic 例では、 <xref:System.Data.OracleClient.OracleDataReader>を使用して`REF CURSOR`Oracle を取得する方法を示します。 これらの例では、Oracle Scott/トラスキーマで定義されているテーブルを使用し、次の PL/SQL パッケージとパッケージ本文が必要です。 これらの例を使用するには、サーバーでこれらを作成する必要があります。  
+  
+ 次の Oracle パッケージを Oracle サーバー上に作成します。  
+  
+```  
+CREATE OR REPLACE PACKAGE CURSPKG AS   
+   TYPE T_CURSOR IS REF CURSOR;   
+   PROCEDURE OPEN_ONE_CURSOR (N_EMPNO IN NUMBER,   
+      IO_CURSOR IN OUT T_CURSOR);   
+   PROCEDURE OPEN_TWO_CURSORS (EMPCURSOR OUT T_CURSOR,   
+      DEPTCURSOR OUT T_CURSOR);  
+END CURSPKG;  
+/  
+```  
+  
+ Oracle サーバーで、次の Oracle パッケージ本体を作成します。  
+  
+```  
+  
+CREATE OR REPLACE PACKAGE BODY CURSPKG AS   
+    PROCEDURE OPEN_ONE_CURSOR (N_EMPNO IN NUMBER,   
+                               IO_CURSOR OUT T_CURSOR)   
+    IS   
+        V_CURSOR T_CURSOR;   
+    BEGIN   
+        IF N_EMPNO <> 0 THEN   
+             OPEN V_CURSOR FOR   
+             SELECT EMP.EMPNO, EMP.ENAME, DEPT.DEPTNO, DEPT.DNAME   
+                  FROM EMP, DEPT   
+                  WHERE EMP.DEPTNO = DEPT.DEPTNO   
+                        AND EMP.EMPNO = N_EMPNO;   
+        ELSE   
+             OPEN V_CURSOR FOR   
+             SELECT EMP.EMPNO, EMP.ENAME, DEPT.DEPTNO, DEPT.DNAME   
+                  FROM EMP, DEPT   
+                  WHERE EMP.DEPTNO = DEPT.DEPTNO;   
+        END IF;   
+        IO_CURSOR := V_CURSOR;   
+    END OPEN_ONE_CURSOR;   
+    PROCEDURE OPEN_TWO_CURSORS (EMPCURSOR OUT T_CURSOR,   
+                                DEPTCURSOR OUT T_CURSOR)   
+    IS   
+        V_CURSOR1 T_CURSOR;   
+        V_CURSOR2 T_CURSOR;   
+    BEGIN   
+        OPEN V_CURSOR1 FOR SELECT * FROM EMP;   
+        OPEN V_CURSOR2 FOR SELECT * FROM DEPT;   
+        EMPCURSOR  := V_CURSOR1;   
+        DEPTCURSOR := V_CURSOR2;   
+    END OPEN_TWO_CURSORS;   
+END CURSPKG;  
+/  
+```  
+  
+ この Visual Basic の例では、 `REF CURSOR`パラメーターを返す PL/SQL ストアドプロシージャを実行し、値をとし<xref:System.Data.OracleClient.OracleDataReader>て読み取ります。  
+  
+```vb  
+Private Sub ReadOracleData(ByVal connectionString As String)  
+   Dim connection As New OracleConnection(connectionString)  
+   Dim command As New OracleCommand()  
+   Dim reader As OracleDataReader  
+  
+   connection.Open()  
+   command.Connection = connection  
+   command.CommandText = "CURSPKG.OPEN_ONE_CURSOR"  
+   command.CommandType = CommandType.StoredProcedure  
+   command.Parameters.Add(New OracleParameter("N_EMPNO", OracleType.Number)).Value = 7369  
+   command.Parameters.Add(New OracleParameter("IO_CURSOR", OracleType.Cursor)).Direction = ParameterDirection.Output  
+  
+   reader = command.ExecuteReader()  
+   While (reader.Read())  
+      ' Do something with the values.  
+   End While  
+   reader.Close()  
+   connection.Close()  
+End Sub  
+```  
+  
+ この Visual Basic の例では、2つ`REF CURSOR`のパラメーターを返す PL/SQL ストアドプロシージャを実行し、を<xref:System.Data.OracleClient.OracleDataReader>使用して値を読み取ります。  
+  
+```vb  
+Private Sub ReadOracleData(ByVal connectionString As String)  
+   Dim dataSet As New DataSet()  
+   Dim connection As New OracleConnection(connectionString)  
+   Dim command As New OracleCommand()  
+   Dim reader As OracleDataReader  
+  
+   connection.Open()  
+   command.Connection = connection  
+   command.CommandText = "CURSPKG.OPEN_TWO_CURSORS"  
+   command.CommandType = CommandType.StoredProcedure  
+   command.Parameters.Add(New OracleParameter("EMPCURSOR", OracleType.Cursor)).Direction = ParameterDirection.Output  
+   command.Parameters.Add(New OracleParameter("DEPTCURSOR", OracleType.Cursor)).Direction = ParameterDirection.Output  
+  
+   reader = command.ExecuteReader(CommandBehavior.CloseConnection)  
+   While (reader.Read())  
+      ' Do something with the values.  
+   End While  
+   reader.NextResult()  
+   While (reader.Read())  
+        ' Do something with the values.  
+   End While  
+   reader.Close()  
+   connection.Close()  
+ End Sub  
+```  
+  
+ このC#例では、Oracle テーブルを作成し、データを読み込みます。 この例は、次の例を実行する前に実行する必要が<xref:System.Data.OracleClient.OracleDataReader>あります。これは、を使用して OracleType 構造体を使用してデータにアクセスする方法を示しています。  
+  
+```csharp  
+public void Setup(string connectionString)  
+{  
+   OracleConnection connection = new OracleConnection(connectionString);  
+   try  
+   {  
+      connection.Open();  
+      OracleCommand command = connection.CreateCommand();  
+      command.CommandText ="CREATE TABLE OracleTypesTable (MyVarchar2 varchar2(3000),MyNumber number(28,4) PRIMARY KEY,MyDate date, MyRaw raw(255))";  
+      command.ExecuteNonQuery();  
+      command.CommandText ="INSERT INTO OracleTypesTable VALUES ('test', 2, to_date('2000-01-11 12:54:01','yyyy-mm-dd hh24:mi:ss'), '0001020304')";  
+      command.ExecuteNonQuery();  
+      command.CommandText="SELECT * FROM OracleTypesTable";  
+   }  
+   catch(Exception)  
+   {  
+   }  
+   finally  
+   {  
+      connection.Close();  
+   }  
+}  
+```  
+  
+ このC#例では<xref:System.Data.OracleClient.OracleDataReader> 、を使用してデータに<xref:System.Data.OracleClient.OracleType>アクセスし、いくつかの構造体を使用してデータを表示します。  
+  
+```csharp  
+public void ReadOracleTypesExample(string connectionString)  
+{  
+   OracleConnection connection = new OracleConnection(connectionString);  
+   connection.Open();  
+   OracleCommand command = connection.CreateCommand();  
+   try  
+   {  
+      command.CommandText = "SELECT * FROM OracleTypesTable";  
+      OracleDataReader reader = command.ExecuteReader();  
+      reader.Read();  
+      //Using the Oracle specific getters for each type is faster than  
+      //using GetOracleValue.  
+      //First column, MyVarchar2, is a VARCHAR2 data type in Oracle Server  
+      //and maps to OracleString.  
+      OracleString oraclestring1 = reader.GetOracleString(0);  
+      Console.WriteLine("OracleString " + oraclestring1.ToString());  
+  
+      //Second column, MyNumber, is a NUMBER data type in Oracle Server  
+      //and maps to OracleNumber.  
+      OracleNumber oraclenumber1 = reader.GetOracleNumber(1);  
+      Console.WriteLine("OracleNumber " + oraclenumber1.ToString());  
+  
+      //Third column, MyDate, is a DATA data type in Oracle Server  
+      //and maps to OracleDateTime.  
+      OracleDateTime oracledatetime1 = reader.GetOracleDateTime(2);  
+      Console.WriteLine("OracleDateTime " + oracledatetime1.ToString());  
+  
+      //Fourth column, MyRaw, is a RAW data type in Oracle Server and  
+      //maps to OracleBinary.  
+      OracleBinary oraclebinary1 = reader.GetOracleBinary(3);  
+  
+      //Calling value on a null OracleBinary throws  
+      //OracleNullValueException; therefore, check for a null value.  
+      if (oraclebinary1.IsNull==false)  
+      {  
+         foreach(byte b in oraclebinary1.Value)  
+         {  
+            Console.WriteLine("byte " + b.ToString());  
+         }  
+      }  
+      reader.Close();  
+   }  
+   catch(Exception e)  
+   {  
+      Console.WriteLine(e.ToString());  
+   }  
+   finally  
+   {  
+      connection.Close();  
+   }  
+}  
+```  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.OracleClient.OracleConnection>、、 <xref:System.Data.OracleClient.OracleCommand>、および<xref:System.Data.OracleClient.OracleDataReader>を作成します。 この例では、データを読み取り、コンソールに書き込みます。 最後に、この例で<xref:System.Data.OracleClient.OracleDataReader>は、を<xref:System.Data.OracleClient.OracleConnection>閉じてから、を閉じます。  
+  
+ [!code-csharp[Classic WebData OracleDataReader#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData OracleDataReader/CS/source.cs#1)]
+ [!code-vb[Classic WebData OracleDataReader#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData OracleDataReader/VB/source.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="Close">
+      <MemberSignature Language="C#" Value="public override void Close ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void Close() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.Close" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub Close ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void Close();" />
+      <MemberSignature Language="F#" Value="override this.Close : unit -&gt; unit" Usage="oracleDataReader.Close " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Data.OracleClient.OracleDataReader" /> オブジェクトを閉じます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 任意の時点で、複数のを開くことができます。 <xref:System.Data.OracleClient.OracleDataReader>  
+  
+> [!CAUTION]
+>  クラスの`Close` メソッドで `Finalize`  、接続、 `DataReader`、またはその他のマネージオブジェクトに対して、または`Dispose`を呼び出さないでください。 ファイナライザーでは、クラスが直接所有しているアンマネージリソースのみを解放する必要があります。 クラスがアンマネージ リソースを所有していない場合は、クラス定義に `Finalize` メソッドを含めないでください。 詳細については、「[ガベージ コレクション](~/docs/standard/garbage-collection/index.md)」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Depth">
+      <MemberSignature Language="C#" Value="public override int Depth { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 Depth" />
+      <MemberSignature Language="DocId" Value="P:System.Data.OracleClient.OracleDataReader.Depth" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property Depth As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property int Depth { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.Depth : int" Usage="System.Data.OracleClient.OracleDataReader.Depth" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>現在の行の入れ子の深さを示す値を取得します。</summary>
+        <value>現在の行の入れ子の深さ。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 最も外側のテーブルは深さ 0 です。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="public void Dispose ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Dispose() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.Dispose" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Dispose ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void Dispose();" />
+      <MemberSignature Language="F#" Value="abstract member Dispose : unit -&gt; unit&#xA;override this.Dispose : unit -&gt; unit" Usage="oracleDataReader.Dispose " />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.IDisposable.Dispose</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>このオブジェクトによって使用されているリソースを解放します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="FieldCount">
+      <MemberSignature Language="C#" Value="public override int FieldCount { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 FieldCount" />
+      <MemberSignature Language="DocId" Value="P:System.Data.OracleClient.OracleDataReader.FieldCount" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property FieldCount As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property int FieldCount { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.FieldCount : int" Usage="System.Data.OracleClient.OracleDataReader.FieldCount" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>現在の行の列の数を取得します。</summary>
+        <value>現在の位置が有効なレコード セット内ではない場合は 0。それ以外の場合は現在のレコード内の列の数。 既定値は -1 です。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 非表示フィールドを含めます。 非表示フィールドを除外するには、<xref:System.Data.Common.DbDataReader.VisibleFieldCount%2A> を使用します。  
+  
+ 行を返さないクエリを実行すると、 <xref:System.Data.OracleClient.OracleDataReader.FieldCount%2A>は0を返します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.NotSupportedException">データ ソースへの現在の接続がありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetBoolean">
+      <MemberSignature Language="C#" Value="public override bool GetBoolean (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool GetBoolean(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetBoolean(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetBoolean (i As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool GetBoolean(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetBoolean : int -&gt; bool" Usage="oracleDataReader.GetBoolean i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の値を Boolean として取得します。</summary>
+        <returns>列の値を示すブール値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetByte">
+      <MemberSignature Language="C#" Value="public override byte GetByte (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance unsigned int8 GetByte(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetByte(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetByte (i As Integer) As Byte" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Byte GetByte(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetByte : int -&gt; byte" Usage="oracleDataReader.GetByte i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の値をバイトとして取得します。</summary>
+        <returns>指定した列のバイト型の値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetBytes">
+      <MemberSignature Language="C#" Value="public override long GetBytes (int i, long fieldOffset, byte[] buffer2, int bufferoffset, int length);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance int64 GetBytes(int32 i, int64 fieldOffset, unsigned int8[] buffer2, int32 bufferoffset, int32 length) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetBytes (i As Integer, fieldOffset As Long, buffer2 As Byte(), bufferoffset As Integer, length As Integer) As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override long GetBytes(int i, long fieldOffset, cli::array &lt;System::Byte&gt; ^ buffer2, int bufferoffset, int length);" />
+      <MemberSignature Language="F#" Value="override this.GetBytes : int * int64 * byte[] * int * int -&gt; int64" Usage="oracleDataReader.GetBytes (i, fieldOffset, buffer2, bufferoffset, length)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+        <Parameter Name="fieldOffset" Type="System.Int64" />
+        <Parameter Name="buffer2" Type="System.Byte[]" />
+        <Parameter Name="bufferoffset" Type="System.Int32" />
+        <Parameter Name="length" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <param name="fieldOffset">読み込みを開始するフィールド内のインデックス。</param>
+        <param name="buffer2">バイトのストリームを読み込むバッファー。</param>
+        <param name="bufferoffset"><paramref name="buffer2" /> が書き込み操作を開始するインデックス。</param>
+        <param name="length">読み取るバイト数。</param>
+        <summary>指定した列オフセットから、指定したバッファー オフセットから始まるバイトのストリームを、配列としてバッファーに読み取ります。</summary>
+        <returns>実際に読み取られたバイト数。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Data.OracleClient.OracleDataReader.GetBytes%2A>フィールドの使用可能なバイト数を返します。 ほとんどの場合、これはフィールドの正確な長さです。 ただし、がフィールドからバイトを取得するために既に使用され`GetBytes`ている場合、返される数値は、フィールドの実際の長さよりも小さくなることがあります。 たとえば、 <xref:System.Data.OracleClient.OracleDataReader>が大きなデータ構造体をバッファーに読み込んでいる場合などです。 詳細については、 `SequentialAccess` 「」 <xref:System.Data.CommandBehavior>の設定を参照してください。  
+  
+ Null 値のバッファーを渡した場合、 <xref:System.Data.OracleClient.OracleDataReader.GetBytes%2A>はフィールドの長さをバイト単位で返します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetChar">
+      <MemberSignature Language="C#" Value="public override char GetChar (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance char GetChar(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetChar(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetChar (i As Integer) As Char" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override char GetChar(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetChar : int -&gt; char" Usage="oracleDataReader.GetChar i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Char</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を文字として取得します。</summary>
+        <returns>指定した列の文字としての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetChars">
+      <MemberSignature Language="C#" Value="public override long GetChars (int i, long fieldOffset, char[] buffer2, int bufferoffset, int length);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance int64 GetChars(int32 i, int64 fieldOffset, char[] buffer2, int32 bufferoffset, int32 length) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetChars (i As Integer, fieldOffset As Long, buffer2 As Char(), bufferoffset As Integer, length As Integer) As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override long GetChars(int i, long fieldOffset, cli::array &lt;char&gt; ^ buffer2, int bufferoffset, int length);" />
+      <MemberSignature Language="F#" Value="override this.GetChars : int * int64 * char[] * int * int -&gt; int64" Usage="oracleDataReader.GetChars (i, fieldOffset, buffer2, bufferoffset, length)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+        <Parameter Name="fieldOffset" Type="System.Int64" />
+        <Parameter Name="buffer2" Type="System.Char[]" />
+        <Parameter Name="bufferoffset" Type="System.Int32" />
+        <Parameter Name="length" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <param name="fieldOffset">読み込みを開始する行内のインデックス。</param>
+        <param name="buffer2">データのコピー先のバッファー。</param>
+        <param name="bufferoffset"><paramref name="buffer2" /> が書き込み操作を開始するインデックス。</param>
+        <param name="length">読み取る文字の数。</param>
+        <summary>指定した列オフセットから、指定したバッファー オフセットから始まる文字列ストリームを、配列としてバッファーに読み取ります。</summary>
+        <returns>実際に読み取られた文字数。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Data.OracleClient.OracleDataReader.GetChars%2A>フィールド内の使用可能な文字数を返します。 ほとんどの場合、これはフィールドの正確な長さです。 ただし、がフィールドから文字を取得するために既に使用され`GetChars`ている場合、返される数値は、フィールドの実際の長さよりも小さくなることがあります。 たとえば、 <xref:System.Data.OracleClient.OracleDataReader>が大きなデータ構造体をバッファーに読み込んでいる場合などです。 詳細については、 `SequentialAccess` 「」 <xref:System.Data.CommandBehavior>の設定を参照してください。  
+  
+ Null 値のバッファーを渡す場合。 <xref:System.Data.OracleClient.OracleDataReader.GetChars%2A>フィールドの長さを文字数で返します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetData">
+      <MemberSignature Language="C#" Value="public System.Data.IDataReader GetData (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Data.IDataReader GetData(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetData(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetData (i As Integer) As IDataReader" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual System::Data::IDataReader ^ GetData(int i);" />
+      <MemberSignature Language="F#" Value="abstract member GetData : int -&gt; System.Data.IDataReader&#xA;override this.GetData : int -&gt; System.Data.IDataReader" Usage="oracleDataReader.GetData i" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Data.IDataRecord.GetData(System.Int32)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.IDataReader</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" Index="0" FrameworkAlternate="netframework-1.1" />
+      </Parameters>
+      <Docs>
+        <param name="i">列の序数。</param>
+        <summary>指定された列序数の <see cref="T:System.Data.IDataReader" /> を返します。</summary>
+        <returns>指定した列序数の IdataReader インスタンス。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDataTypeName">
+      <MemberSignature Language="C#" Value="public override string GetDataTypeName (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string GetDataTypeName(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetDataTypeName(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetDataTypeName (i As Integer) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::String ^ GetDataTypeName(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetDataTypeName : int -&gt; string" Usage="oracleDataReader.GetDataTypeName i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>ソース データ型名を取得します。</summary>
+        <returns>ソース データ型の名前。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDateTime">
+      <MemberSignature Language="C#" Value="public override DateTime GetDateTime (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance valuetype System.DateTime GetDateTime(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetDateTime(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetDateTime (i As Integer) As DateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override DateTime GetDateTime(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetDateTime : int -&gt; DateTime" Usage="oracleDataReader.GetDateTime i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.DateTime</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の値を <see langword="DateTime" /> オブジェクトとして取得します。</summary>
+        <returns>指定した列の <see langword="DateTime" /> オブジェクトとしての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDecimal">
+      <MemberSignature Language="C#" Value="public override decimal GetDecimal (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance valuetype System.Decimal GetDecimal(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetDecimal(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetDecimal (i As Integer) As Decimal" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Decimal GetDecimal(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetDecimal : int -&gt; decimal" Usage="oracleDataReader.GetDecimal i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Decimal</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の値を <see langword="Decimal" /> オブジェクトとして取得します。</summary>
+        <returns>指定した列の <see langword="Decimal" /> オブジェクトとしての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetDouble">
+      <MemberSignature Language="C#" Value="public override double GetDouble (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance float64 GetDouble(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetDouble(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetDouble (i As Integer) As Double" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override double GetDouble(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetDouble : int -&gt; double" Usage="oracleDataReader.GetDouble i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の値を倍精度浮動小数点値として取得します。</summary>
+        <returns>指定した列の倍精度浮動小数点数としての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetEnumerator">
+      <MemberSignature Language="C#" Value="public override System.Collections.IEnumerator GetEnumerator ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Collections.IEnumerator GetEnumerator() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetEnumerator" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetEnumerator () As IEnumerator" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Collections::IEnumerator ^ GetEnumerator();" />
+      <MemberSignature Language="F#" Value="override this.GetEnumerator : unit -&gt; System.Collections.IEnumerator" Usage="oracleDataReader.GetEnumerator " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.IEnumerator</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>データ リーダー内の行に対して反復処理を行うために使用できる <see cref="T:System.Collections.IEnumerator" /> を返します。</summary>
+        <returns>データ リーダー内の行に対して反復処理を行うために使用できる <see cref="T:System.Collections.IEnumerator" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドを使用すると、foreach コンストラクトをサポートする言語で、明示的な列挙子を取得できますが、データリーダー内の行を反復処理するためにループ構造を直接使用する方が簡単です。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFieldType">
+      <MemberSignature Language="C#" Value="public override Type GetFieldType (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Type GetFieldType(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetFieldType(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetFieldType (i As Integer) As Type" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override Type ^ GetFieldType(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetFieldType : int -&gt; Type" Usage="oracleDataReader.GetFieldType i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Type</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>オブジェクトのデータ型である <see cref="T:System.Type" /> を取得します。</summary>
+        <returns>オブジェクトのデータ型である <see cref="T:System.Type" />。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetFloat">
+      <MemberSignature Language="C#" Value="public override float GetFloat (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance float32 GetFloat(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetFloat(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetFloat (i As Integer) As Single" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override float GetFloat(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetFloat : int -&gt; single" Usage="oracleDataReader.GetFloat i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Single</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を単精度浮動小数点数として取得します。</summary>
+        <returns>指定した列の単精度浮動小数点数としての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetGuid">
+      <MemberSignature Language="C#" Value="public override Guid GetGuid (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance valuetype System.Guid GetGuid(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetGuid(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetGuid (i As Integer) As Guid" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override Guid GetGuid(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetGuid : int -&gt; Guid" Usage="oracleDataReader.GetGuid i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Guid</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の値をグローバル一意識別子 (GUID) として取得します。</summary>
+        <returns>指定した列の GUID としての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetInt16">
+      <MemberSignature Language="C#" Value="public override short GetInt16 (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance int16 GetInt16(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetInt16(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetInt16 (i As Integer) As Short" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override short GetInt16(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetInt16 : int -&gt; int16" Usage="oracleDataReader.GetInt16 i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int16</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を 16 ビット符号付き整数として取得します。</summary>
+        <returns>16 ビット符号付き整数として指定された列の値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetInt32">
+      <MemberSignature Language="C#" Value="public override int GetInt32 (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance int32 GetInt32(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetInt32(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetInt32 (i As Integer) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override int GetInt32(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetInt32 : int -&gt; int" Usage="oracleDataReader.GetInt32 i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の値を 32 ビット符号付き整数として取得します。</summary>
+        <returns>32 ビット符号付き整数として指定された列の値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetInt64">
+      <MemberSignature Language="C#" Value="public override long GetInt64 (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance int64 GetInt64(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetInt64(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetInt64 (i As Integer) As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override long GetInt64(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetInt64 : int -&gt; int64" Usage="oracleDataReader.GetInt64 i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定された列の値を 64 ビット符号付き整数として取得します。</summary>
+        <returns>64 ビット符号付き整数として指定された列の値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetName">
+      <MemberSignature Language="C#" Value="public override string GetName (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string GetName(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetName(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetName (i As Integer) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::String ^ GetName(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetName : int -&gt; string" Usage="oracleDataReader.GetName i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の名前を取得します。</summary>
+        <returns>指定した列の名前を示す文字列。</returns>
+        <remarks>To be added.</remarks>
+        <altmember cref="M:System.Data.OracleClient.OracleDataReader.GetOrdinal(System.String)" />
+      </Docs>
+    </Member>
+    <Member MemberName="GetOracleBFile">
+      <MemberSignature Language="C#" Value="public System.Data.OracleClient.OracleBFile GetOracleBFile (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Data.OracleClient.OracleBFile GetOracleBFile(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOracleBFile(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOracleBFile (i As Integer) As OracleBFile" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::OracleClient::OracleBFile ^ GetOracleBFile(int i);" />
+      <MemberSignature Language="F#" Value="member this.GetOracleBFile : int -&gt; System.Data.OracleClient.OracleBFile" Usage="oracleDataReader.GetOracleBFile i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.OracleClient.OracleBFile</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を <see cref="T:System.Data.OracleClient.OracleBFile" /> オブジェクトとして取得します。</summary>
+        <returns>指定した列の <see cref="T:System.Data.OracleClient.OracleBFile" /> オブジェクトとしての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOracleBinary">
+      <MemberSignature Language="C#" Value="public System.Data.OracleClient.OracleBinary GetOracleBinary (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance valuetype System.Data.OracleClient.OracleBinary GetOracleBinary(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOracleBinary(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOracleBinary (i As Integer) As OracleBinary" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::OracleClient::OracleBinary GetOracleBinary(int i);" />
+      <MemberSignature Language="F#" Value="member this.GetOracleBinary : int -&gt; System.Data.OracleClient.OracleBinary" Usage="oracleDataReader.GetOracleBinary i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.OracleClient.OracleBinary</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を <see cref="T:System.Data.OracleClient.OracleBinary" /> オブジェクトとして取得します。</summary>
+        <returns>指定した列の <see cref="T:System.Data.OracleClient.OracleBinary" /> オブジェクトとしての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOracleDateTime">
+      <MemberSignature Language="C#" Value="public System.Data.OracleClient.OracleDateTime GetOracleDateTime (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance valuetype System.Data.OracleClient.OracleDateTime GetOracleDateTime(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOracleDateTime(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOracleDateTime (i As Integer) As OracleDateTime" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::OracleClient::OracleDateTime GetOracleDateTime(int i);" />
+      <MemberSignature Language="F#" Value="member this.GetOracleDateTime : int -&gt; System.Data.OracleClient.OracleDateTime" Usage="oracleDataReader.GetOracleDateTime i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.OracleClient.OracleDateTime</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を <see cref="T:System.Data.OracleClient.OracleDateTime" /> オブジェクトとして取得します。</summary>
+        <returns>指定した列の <see cref="T:System.Data.OracleClient.OracleDateTime" /> オブジェクトとしての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOracleLob">
+      <MemberSignature Language="C#" Value="public System.Data.OracleClient.OracleLob GetOracleLob (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Data.OracleClient.OracleLob GetOracleLob(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOracleLob(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOracleLob (i As Integer) As OracleLob" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::OracleClient::OracleLob ^ GetOracleLob(int i);" />
+      <MemberSignature Language="F#" Value="member this.GetOracleLob : int -&gt; System.Data.OracleClient.OracleLob" Usage="oracleDataReader.GetOracleLob i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.OracleClient.OracleLob</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を <see cref="T:System.Data.OracleClient.OracleLob" /> オブジェクトとして取得します。</summary>
+        <returns>指定した列の <see cref="T:System.Data.OracleClient.OracleLob" /> オブジェクトとしての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOracleMonthSpan">
+      <MemberSignature Language="C#" Value="public System.Data.OracleClient.OracleMonthSpan GetOracleMonthSpan (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance valuetype System.Data.OracleClient.OracleMonthSpan GetOracleMonthSpan(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOracleMonthSpan(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOracleMonthSpan (i As Integer) As OracleMonthSpan" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::OracleClient::OracleMonthSpan GetOracleMonthSpan(int i);" />
+      <MemberSignature Language="F#" Value="member this.GetOracleMonthSpan : int -&gt; System.Data.OracleClient.OracleMonthSpan" Usage="oracleDataReader.GetOracleMonthSpan i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.OracleClient.OracleMonthSpan</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を <see cref="T:System.Data.OracleClient.OracleMonthSpan" /> オブジェクトとして取得します。</summary>
+        <returns>指定した列の <see cref="T:System.Data.OracleClient.OracleMonthSpan" /> オブジェクトとしての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOracleNumber">
+      <MemberSignature Language="C#" Value="public System.Data.OracleClient.OracleNumber GetOracleNumber (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance valuetype System.Data.OracleClient.OracleNumber GetOracleNumber(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOracleNumber(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOracleNumber (i As Integer) As OracleNumber" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::OracleClient::OracleNumber GetOracleNumber(int i);" />
+      <MemberSignature Language="F#" Value="member this.GetOracleNumber : int -&gt; System.Data.OracleClient.OracleNumber" Usage="oracleDataReader.GetOracleNumber i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.OracleClient.OracleNumber</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を <see cref="T:System.Data.OracleClient.OracleNumber" /> オブジェクトとして取得します。</summary>
+        <returns>指定した列の <see cref="T:System.Data.OracleClient.OracleNumber" /> オブジェクトとしての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOracleString">
+      <MemberSignature Language="C#" Value="public System.Data.OracleClient.OracleString GetOracleString (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance valuetype System.Data.OracleClient.OracleString GetOracleString(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOracleString(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOracleString (i As Integer) As OracleString" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::OracleClient::OracleString GetOracleString(int i);" />
+      <MemberSignature Language="F#" Value="member this.GetOracleString : int -&gt; System.Data.OracleClient.OracleString" Usage="oracleDataReader.GetOracleString i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.OracleClient.OracleString</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を <see cref="T:System.Data.OracleClient.OracleString" /> オブジェクトとして取得します。</summary>
+        <returns>指定した列の <see cref="T:System.Data.OracleClient.OracleString" /> オブジェクトとしての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOracleTimeSpan">
+      <MemberSignature Language="C#" Value="public System.Data.OracleClient.OracleTimeSpan GetOracleTimeSpan (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance valuetype System.Data.OracleClient.OracleTimeSpan GetOracleTimeSpan(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOracleTimeSpan(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOracleTimeSpan (i As Integer) As OracleTimeSpan" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Data::OracleClient::OracleTimeSpan GetOracleTimeSpan(int i);" />
+      <MemberSignature Language="F#" Value="member this.GetOracleTimeSpan : int -&gt; System.Data.OracleClient.OracleTimeSpan" Usage="oracleDataReader.GetOracleTimeSpan i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.OracleClient.OracleTimeSpan</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を <see cref="T:System.Data.OracleClient.OracleTimeSpan" /> オブジェクトとして取得します。</summary>
+        <returns>指定した列の <see cref="T:System.Data.OracleClient.OracleTimeSpan" /> オブジェクトとしての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOracleValue">
+      <MemberSignature Language="C#" Value="public object GetOracleValue (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance object GetOracleValue(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOracleValue(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOracleValue (i As Integer) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Object ^ GetOracleValue(int i);" />
+      <MemberSignature Language="F#" Value="member this.GetOracleValue : int -&gt; obj" Usage="oracleDataReader.GetOracleValue i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した序数の列の値を Oracle の書式で取得します。</summary>
+        <returns>返される Oracle 値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ null データベース列の場合は、<xref:System.DBNull> が返されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOracleValues">
+      <MemberSignature Language="C#" Value="public int GetOracleValues (object[] values);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance int32 GetOracleValues(object[] values) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOracleValues(System.Object[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetOracleValues (values As Object()) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; int GetOracleValues(cli::array &lt;System::Object ^&gt; ^ values);" />
+      <MemberSignature Language="F#" Value="member this.GetOracleValues : obj[] -&gt; int" Usage="oracleDataReader.GetOracleValues values" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="values" Type="System.Object[]" />
+      </Parameters>
+      <Docs>
+        <param name="values">属性列のコピー先の <see cref="T:System.Object" /> 型の配列。</param>
+        <summary>現在の行のすべての属性列を Oracle の書式で取得します。</summary>
+        <returns>配列に含まれる <see cref="T:System.Object" /> のインスタンスの数。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ほとんどのアプリケーションでは<xref:System.Data.OracleClient.OracleDataReader.GetOracleValues%2A> 、メソッドは、各列を個別に取得するのではなく、すべての列を取得するための効率的な手段を提供します。  
+  
+ 結果の行に<xref:System.Object>含まれる列数よりも小さい配列を渡すことができます。 配列に保持されるデータ<xref:System.Object>量だけが配列にコピーされます。 また、長さが、 <xref:System.Object>結果の行に含まれる列数よりも多い配列を渡すこともできます。  
+  
+ null データベース列の場合は、<xref:System.DBNull> が返されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetOrdinal">
+      <MemberSignature Language="C#" Value="public override int GetOrdinal (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance int32 GetOrdinal(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetOrdinal(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetOrdinal (name As String) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override int GetOrdinal(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="override this.GetOrdinal : string -&gt; int" Usage="oracleDataReader.GetOrdinal name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">列の名前。</param>
+        <summary>列の名前を指定して、列の序数を取得します。</summary>
+        <returns>0 から始まる列序数。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Data.OracleClient.OracleDataReader.GetOrdinal%2A>最初に大文字と小文字を区別する検索を実行します。 失敗した場合は、大文字小文字を区別しない検索が2回行われます。 0から始まる列`IndexOutOfRange`序数が見つからない場合、メソッドは例外をスローします。  
+  
+ <xref:System.Data.OracleClient.OracleDataReader.GetOrdinal%2A>かなの文字幅を区別しません。  
+  
+ 序数ベースの参照は名前付き参照よりも効率的であるため、ループ内<xref:System.Data.OracleClient.OracleDataReader.GetOrdinal%2A>でを呼び出すことは効率的ではありません。 代わりに、を<xref:System.Data.OracleClient.OracleDataReader.GetOrdinal%2A>一度呼び出し、ループ内で使用するために結果を整数変数に代入します。  
+  
+   
+  
+## Examples  
+ <xref:System.Data.OracleClient.OracleDataReader.GetOrdinal%2A> メソッドの使用方法を次の例に示します。  
+  
+```vb  
+Public Sub ReadOracleData(ByVal connectionString As String)  
+  
+    Dim queryString As String = "SELECT OrderID, CustomerID FROM Orders"  
+    Dim connection As New OracleConnection(connectionString)  
+    Dim command As New OracleCommand(queryString, connectionString)  
+  
+    connection.Open()  
+  
+    Dim reader As OracleDataReader = command.ExecuteReader()  
+  
+    Dim custIdCol As Integer = reader.GetOrdinal("CustomerID")  
+  
+    Do While reader.Read()  
+        Console.WriteLine("CustomerID = {0}", reader.GetString(custIdCol))  
+    Loop  
+  
+    reader.Close()  
+    connection.Close()  
+End Sub  
+```  
+  
+```csharp  
+public void ReadOracleData(string connectionString)  
+{  
+    string queryString = "SELECT OrderID, CustomerID FROM Orders";  
+    OracleConnection connection = new OracleConnection(connectionString);  
+    OracleCommand command = new OracleCommand(queryString,connection);  
+  
+    connection.Open();  
+    OracleDataReader reader = command.ExecuteReader();  
+  
+    int custIdCol = reader.GetOrdinal("CustomerID");  
+  
+    while (reader.Read())  
+        Console.WriteLine("CustomerID = {0}", reader.GetString(custIdCol));  
+  
+    reader.Close();  
+    connection.Close();  
+}  
+```  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetProviderSpecificFieldType">
+      <MemberSignature Language="C#" Value="public override Type GetProviderSpecificFieldType (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Type GetProviderSpecificFieldType(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetProviderSpecificFieldType(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetProviderSpecificFieldType (i As Integer) As Type" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override Type ^ GetProviderSpecificFieldType(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetProviderSpecificFieldType : int -&gt; Type" Usage="oracleDataReader.GetProviderSpecificFieldType i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Type</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" Index="0" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      </Parameters>
+      <Docs>
+        <param name="i"><see cref="T:System.Int32" />。</param>
+        <summary>基になるプロバイダー固有フィールド型の内部表現である <see langword="Object" /> を取得します。</summary>
+        <returns>基になるプロバイダー固有フィールド型の内部表現である <see cref="T:System.Object" /> を取得します。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetProviderSpecificValue">
+      <MemberSignature Language="C#" Value="public override object GetProviderSpecificValue (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance object GetProviderSpecificValue(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetProviderSpecificValue(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetProviderSpecificValue (i As Integer) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Object ^ GetProviderSpecificValue(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetProviderSpecificValue : int -&gt; obj" Usage="oracleDataReader.GetProviderSpecificValue i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" Index="0" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      </Parameters>
+      <Docs>
+        <param name="i"><see cref="T:System.Int32" />。</param>
+        <summary>基になるプロバイダー固有フィールド型の内部表現である <see langword="Object" /> を取得します。</summary>
+        <returns>基になるプロバイダー固有フィールド型の内部表現である <see cref="T:System.Object" /> を取得します。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetProviderSpecificValues">
+      <MemberSignature Language="C#" Value="public override int GetProviderSpecificValues (object[] values);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance int32 GetProviderSpecificValues(object[] values) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetProviderSpecificValues(System.Object[])" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetProviderSpecificValues (values As Object()) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override int GetProviderSpecificValues(cli::array &lt;System::Object ^&gt; ^ values);" />
+      <MemberSignature Language="F#" Value="override this.GetProviderSpecificValues : obj[] -&gt; int" Usage="oracleDataReader.GetProviderSpecificValues values" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="values" Type="System.Object[]" Index="0" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      </Parameters>
+      <Docs>
+        <param name="values"><see cref="T:System.Object" /> の配列。</param>
+        <summary>基になるプロバイダー固有の値の内部表現であるオブジェクトの配列を取得します。</summary>
+        <returns>配列に含まれる <see cref="T:System.Object" /> のインスタンスの数。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ほとんどのアプリケーションでは<xref:System.Data.OracleClient.OracleDataReader.GetProviderSpecificValues%2A> 、メソッドは、各列を個別に取得するのではなく、すべての列を取得するための効率的な手段を提供します。  
+  
+ 結果の行に<xref:System.Object>含まれる列数よりも小さい配列を渡すことができます。 配列に保持されるデータ<xref:System.Object>量だけが配列にコピーされます。 また、長さが、 <xref:System.Object>結果の行に含まれる列数よりも多い配列を渡すこともできます。  
+  
+ null データベース列の場合は、<xref:System.DBNull> が返されます。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetSchemaTable">
+      <MemberSignature Language="C#" Value="public override System.Data.DataTable GetSchemaTable ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance class System.Data.DataTable GetSchemaTable() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetSchemaTable" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetSchemaTable () As DataTable" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Data::DataTable ^ GetSchemaTable();" />
+      <MemberSignature Language="F#" Value="override this.GetSchemaTable : unit -&gt; System.Data.DataTable" Usage="oracleDataReader.GetSchemaTable " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Data.DataTable</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>OracleDataReader の列メタデータを記述する <see cref="T:System.Data.DataTable" /> を返します。</summary>
+        <returns>列メタデータを記述する <see cref="T:System.Data.DataTable" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Data.OracleClient.OracleDataReader.GetSchemaTable%2A>は、各列に関するメタデータを次の順序で返します。  
+  
+|DataReader 列|説明|  
+|-----------------------|-----------------|  
+|ColumnName|列の名前です。これは一意ではない可能性があります。 列名を特定できない場合は、null 値が返されます。 この名前には、常に現在のビューまたはコマンドテキストの列の最新の名前が反映されます。|  
+|カラム|列の 0 から始まる序数。 この列に null 値を含めることはできません。|  
+|ColumnSize|列内の値の可能な最大長。 固定長データ型を使用する列の場合、これはデータ型のサイズです。|  
+|NumericPrecision|が<xref:System.Data.OracleClient.OracleParameter.DbType%2A> numeric データ型である場合、これは列の最大有効桁数になります。 有効桁数は、列の定義によって異なります。 `Float`Oracle `Double`のデータ型とデータ型は、バイナリ精度です。|  
+|NumericScale|が<xref:System.Data.OracleClient.OracleParameter.DbType%2A>数値データ型である場合は、小数点の右側の桁数。 `Float`Oracle `Double`のデータ型は、バイナリスケールです。|  
+|DataType|は、の<xref:System.Data.OracleClient.OracleParameter.DbType%2A>共通言語ランタイム型にマップされます。|  
+|IsLong|`true`非常に長いデータを含むバイナリ Long オブジェクト (BLOB) が列に含まれている場合。|  
+|AllowDBNull|`true`コンシューマーが列を null 値に設定できる場合はです。それ以外`false`の場合は。 Null 値に設定できない場合でも、列に null 値が含まれている可能性があります。|  
+|IsUnique|`true`: ベーステーブルに2つの行がありません。 <xref:System.Data.Common.SchemaTableColumn.BaseTableName>によって返されるテーブルは、この列に同じ値を持つことができます。 列がそれ自体によっ`true`てキーを構成する場合、またはこの列にのみ適用される UNIQUE 型の制約がある場合、 **isunique**はになることが保証されます。 `false`: 列には、ベーステーブル内の重複する値を含めることができます。 この列の既定値は false です。|  
+|IsKey|`true`: 列は、行セット内の列のセットの1つで、行を一意に識別するために使用されます。 **IsKey**が true に設定されている列のセットでは、行セット内の行を一意に識別する必要があります。 この一連の列が列の最小セットである必要はありません。 この一連の列は、ベーステーブルの主キー、一意の制約、または一意のインデックスから生成できます。 `false`: 列は、行を一意に識別するためには必要ありません。|  
+|BaseTableName|列を含むデータストア内のテーブルまたはビューの名前。 ベーステーブル名を特定できない場合は null 値です。 この列の既定値は null 値です。|  
+|BaseColumnName|データ ストア内での列名。 別名が使用されている場合は、 **ColumnName**列に返される列名とは異なる場合があります。 ベース列名を特定できない場合、または行セット列がデータストア内の列と同じではない場合、null 値。 この列の既定値は null 値です。|  
+|BaseSchemaName|列を含むデータストア内のスキーマの名前。 ベーススキーマ名を特定できない場合は null 値です。 この列の既定値は null 値です。|  
+  
+ 結果セット内のすべての列に対して行が返されます。  
+  
+> [!NOTE]
+>  メタデータ列が正しい情報を返すようにするには<xref:System.Data.OracleClient.OracleCommand.ExecuteReader%2A> 、 `behavior`パラメーターをに`KeyInfo`設定してを呼び出す必要があります。 それ以外の場合、スキーマテーブルの一部の列は、既定値、null 値、または正しくないデータを返すことがあります。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/framework/data/adonet/retrieving-database-schema-information.md">データベース スキーマ情報の取得 (ADO.NET)</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetString">
+      <MemberSignature Language="C#" Value="public override string GetString (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string GetString(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetString(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetString (i As Integer) As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::String ^ GetString(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetString : int -&gt; string" Usage="oracleDataReader.GetString i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を文字列として取得します。</summary>
+        <returns>指定した列の文字列としての値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetTimeSpan">
+      <MemberSignature Language="C#" Value="public TimeSpan GetTimeSpan (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance valuetype System.TimeSpan GetTimeSpan(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetTimeSpan(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetTimeSpan (i As Integer) As TimeSpan" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; TimeSpan GetTimeSpan(int i);" />
+      <MemberSignature Language="F#" Value="member this.GetTimeSpan : int -&gt; TimeSpan" Usage="oracleDataReader.GetTimeSpan i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.TimeSpan</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した列の値を <see langword="System.TimeSpan" /> として取得します。</summary>
+        <returns><see cref="T:System.TimeSpan" /> として指定された列の値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Data.OracleClient.OracleDataReader.IsDBNull%2A>メソッドを呼び出す前に、を呼び出して null 値を確認してください。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.InvalidCastException">指定したキャストが有効ではありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetValue">
+      <MemberSignature Language="C#" Value="public override object GetValue (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance object GetValue(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetValue(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetValue (i As Integer) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Object ^ GetValue(int i);" />
+      <MemberSignature Language="F#" Value="override this.GetValue : int -&gt; obj" Usage="oracleDataReader.GetValue i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>指定した序数の列の値をネイティブ形式で取得します。</summary>
+        <returns>戻り値。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ null データベース列の場合は、<xref:System.DBNull> が返されます。 このメソッドによって返される値は、Oracle の Number データ型から .NET Decimal 型への変換の結果である可能性があります。 値が大きすぎて .net の Decimal に格納できない場合、このメソッドはオーバーフロー <xref:System.Data.OracleClient.OracleException>例外であるをスローします。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Data.OracleClient.OracleException">値が大きすぎて、.NET の Decimal に格納できません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetValues">
+      <MemberSignature Language="C#" Value="public override int GetValues (object[] values);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance int32 GetValues(object[] values) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.GetValues(System.Object[])" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function GetValues (values As Object()) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override int GetValues(cli::array &lt;System::Object ^&gt; ^ values);" />
+      <MemberSignature Language="F#" Value="override this.GetValues : obj[] -&gt; int" Usage="oracleDataReader.GetValues values" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="values" Type="System.Object[]" />
+      </Parameters>
+      <Docs>
+        <param name="values">属性列のコピー先の <see cref="T:System.Object" /> 型の配列。</param>
+        <summary>オブジェクトの配列に現在行の列値を設定します。</summary>
+        <returns>配列に含まれる <see cref="T:System.Object" /> のインスタンスの数。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ほとんどのアプリケーションでは<xref:System.Data.OracleClient.OracleDataReader.GetValues%2A> 、メソッドは、各列を個別に取得するのではなく、すべての列を取得するための効率的な手段を提供します。  
+  
+ 結果の行に<xref:System.Object>含まれる列数よりも小さい配列を渡すことができます。 配列に保持されるデータ<xref:System.Object>量だけが配列にコピーされます。 また、長さが、 <xref:System.Object>結果の行に含まれる列数よりも多い配列を渡すこともできます。  
+  
+ null データベース列の場合は、<xref:System.DBNull> が返されます。 <xref:System.Object>配列で返される値は、Oracle の Number データ型から .net Decimal 型への変換の結果である可能性があります。 値が大きすぎて .net の Decimal に格納できない場合、このメソッドはオーバーフロー <xref:System.Data.OracleClient.OracleException>例外であるをスローします。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Data.OracleClient.OracleException">値が大きすぎて、.NET の Decimal に格納できません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="HasRows">
+      <MemberSignature Language="C#" Value="public override bool HasRows { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool HasRows" />
+      <MemberSignature Language="DocId" Value="P:System.Data.OracleClient.OracleDataReader.HasRows" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property HasRows As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property bool HasRows { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.HasRows : bool" Usage="System.Data.OracleClient.OracleDataReader.HasRows" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Data.OracleClient.OracleDataReader" /> に 1 行以上の行が格納されているかどうかを示す値を取得します。</summary>
+        <value>1 行以上の行が <see cref="T:System.Data.OracleClient.OracleDataReader" /> に含まれている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsClosed">
+      <MemberSignature Language="C#" Value="public override bool IsClosed { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool IsClosed" />
+      <MemberSignature Language="DocId" Value="P:System.Data.OracleClient.OracleDataReader.IsClosed" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property IsClosed As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property bool IsClosed { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.IsClosed : bool" Usage="System.Data.OracleClient.OracleDataReader.IsClosed" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Data.OracleClient.OracleDataReader" /> が閉じているかどうかを示します。</summary>
+        <value><see cref="T:System.Data.OracleClient.OracleDataReader" /> が閉じている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Data.OracleClient.OracleDataReader.IsClosed%2A>と<xref:System.Data.OracleClient.OracleDataReader.RecordsAffected%2A>は、 <xref:System.Data.OracleClient.OracleDataReader>が閉じられた後に呼び出すことができる唯一のプロパティです。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsDBNull">
+      <MemberSignature Language="C#" Value="public override bool IsDBNull (int i);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool IsDBNull(int32 i) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.IsDBNull(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function IsDBNull (i As Integer) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool IsDBNull(int i);" />
+      <MemberSignature Language="F#" Value="override this.IsDBNull : int -&gt; bool" Usage="oracleDataReader.IsDBNull i" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">0 から始まる列序数。</param>
+        <summary>列に格納されている値が存在しない値または欠損値かどうかを示す値を取得します。</summary>
+        <returns>指定した列の値が <see cref="T:System.DBNull" /> と等価である場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ エラーが発生しないようにするには、このメソッドを呼び出して、型指定された Get メソッド ( <xref:System.Data.OracleClient.OracleDataReader.GetByte%2A>たとえば<xref:System.Data.OracleClient.OracleDataReader.GetChar%2A>、、など) を呼び出す前に、null 列の値を確認します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Item">
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>特定の列の値をネイティブ形式で取得します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Item">
+      <MemberSignature Language="C#" Value="public override object this[int i] { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object Item(int32)" />
+      <MemberSignature Language="DocId" Value="P:System.Data.OracleClient.OracleDataReader.Item(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Default Public Overrides ReadOnly Property Item(i As Integer) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Object ^ default[int] { System::Object ^ get(int i); };" />
+      <MemberSignature Language="F#" Value="member this.Item(int) : obj" Usage="System.Data.OracleClient.OracleDataReader.Item" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">列の序数。</param>
+        <summary>列の序数によって指定した列の値をネイティブ形式で取得します。</summary>
+        <value>指定した列のネイティブ形式での値。</value>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">渡されたインデックスは 0 から <see cref="P:System.Data.IDataRecord.FieldCount" /> の範囲外にあります。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Item">
+      <MemberSignature Language="C#" Value="public override object this[string name] { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object Item(string)" />
+      <MemberSignature Language="DocId" Value="P:System.Data.OracleClient.OracleDataReader.Item(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Default Public Overrides ReadOnly Property Item(name As String) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::Object ^ default[System::String ^] { System::Object ^ get(System::String ^ name); };" />
+      <MemberSignature Language="F#" Value="member this.Item(string) : obj" Usage="System.Data.OracleClient.OracleDataReader.Item" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">列の名前です。</param>
+        <summary>列名によって指定した列の値をネイティブ形式で取得します。</summary>
+        <value>指定した列のネイティブ形式での値。</value>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.IndexOutOfRangeException">指定された名前の列は見つかりませんでした。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="NextResult">
+      <MemberSignature Language="C#" Value="public override bool NextResult ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool NextResult() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.NextResult" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function NextResult () As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool NextResult();" />
+      <MemberSignature Language="F#" Value="override this.NextResult : unit -&gt; bool" Usage="oracleDataReader.NextResult " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Data.OracleClient.OracleDataReader" /> を次の結果に進めます。</summary>
+        <returns>次の結果セットがある場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドを呼び出す`REF CURSOR`ときは、を使用する必要があります。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public override bool Read ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool Read() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.Read" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function Read () As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool Read();" />
+      <MemberSignature Language="F#" Value="override this.Read : unit -&gt; bool" Usage="oracleDataReader.Read " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Data.OracleClient.OracleDataReader" /> を次のレコードに進めます。</summary>
+        <returns>次の行が存在する場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ の既定の<xref:System.Data.OracleClient.OracleDataReader>位置は、最初のレコードよりも前です。 そのため、すべての<xref:System.Data.OracleClient.OracleDataReader.Read%2A>データへのアクセスを開始するには、を呼び出す必要があります。  
+  
+ 任意の時点で、複数のを開くことができます。 <xref:System.Data.OracleClient.OracleDataReader>  
+  
+   
+  
+## Examples  
+ 次の例では<xref:System.Data.OracleClient.OracleConnection>、、 <xref:System.Data.OracleClient.OracleCommand>、および<xref:System.Data.OracleClient.OracleDataReader>を作成します。 この例では、データを読み取り、コンソールに書き込みます。 最後に、この例で<xref:System.Data.OracleClient.OracleDataReader>は、を<xref:System.Data.OracleClient.OracleConnection>閉じてから、を閉じます。  
+  
+ [!code-csharp[Classic WebData IDataReader.Read Example#1](~/samples/snippets/csharp/VS_Snippets_ADO.NET/Classic WebData IDataReader.Read Example/CS/source.cs#1)]
+ [!code-vb[Classic WebData IDataReader.Read Example#1](~/samples/snippets/visualbasic/VS_Snippets_ADO.NET/Classic WebData IDataReader.Read Example/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RecordsAffected">
+      <MemberSignature Language="C#" Value="public override int RecordsAffected { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 RecordsAffected" />
+      <MemberSignature Language="DocId" Value="P:System.Data.OracleClient.OracleDataReader.RecordsAffected" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property RecordsAffected As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property int RecordsAffected { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.RecordsAffected : int" Usage="System.Data.OracleClient.OracleDataReader.RecordsAffected" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>SQL ステートメントの実行によって変更、挿入、または削除された行の数を取得します。</summary>
+        <value>変更、挿入、または削除された行の数。 SELECT ステートメントの場合は -1、影響を受けた行がなかった場合またはステートメントが失敗した場合は 0。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティは、すべての行が読み取られ、 <xref:System.Data.OracleClient.OracleDataReader>を閉じるまで設定されません。 <xref:System.Data.OracleClient.OracleDataReader.RecordsAffected%2A>  
+  
+ <xref:System.Data.OracleClient.OracleDataReader.IsClosed%2A>と<xref:System.Data.OracleClient.OracleDataReader.RecordsAffected%2A>は、 <xref:System.Data.OracleClient.OracleDataReader>が閉じられた後に呼び出すことができる唯一のプロパティです。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="System.Collections.IEnumerable.GetEnumerator">
+      <MemberSignature Language="C#" Value="System.Collections.IEnumerator IEnumerable.GetEnumerator ();" />
+      <MemberSignature Language="ILAsm" Value=".method hidebysig newslot virtual instance class System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Data.OracleClient.OracleDataReader.System#Collections#IEnumerable#GetEnumerator" />
+      <MemberSignature Language="VB.NET" Value="Function GetEnumerator () As IEnumerator Implements IEnumerable.GetEnumerator" />
+      <MemberSignature Language="C++ CLI" Value=" virtual System::Collections::IEnumerator ^ System.Collections.IEnumerable.GetEnumerator() = System::Collections::IEnumerable::GetEnumerator;" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Collections.IEnumerable.GetEnumerator</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Data.OracleClient</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.IEnumerator</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>コレクションを反復処理する列挙子を返します。</summary>
+        <returns>コレクションを反復処理する列挙子。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
