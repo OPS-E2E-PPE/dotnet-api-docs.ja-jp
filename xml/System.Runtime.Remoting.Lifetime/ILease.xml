@@ -1,0 +1,393 @@
+<Type Name="ILease" FullName="System.Runtime.Remoting.Lifetime.ILease">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="4cc9ac93fe0fa4a304787f17734b0a6fb6d0240a" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70730757" /></Metadata><TypeSignature Language="C#" Value="public interface ILease" />
+  <TypeSignature Language="ILAsm" Value=".class public interface auto ansi abstract ILease" />
+  <TypeSignature Language="DocId" Value="T:System.Runtime.Remoting.Lifetime.ILease" />
+  <TypeSignature Language="VB.NET" Value="Public Interface ILease" />
+  <TypeSignature Language="C++ CLI" Value="public interface class ILease" />
+  <TypeSignature Language="F#" Value="type ILease = interface" />
+  <AssemblyInfo>
+    <AssemblyName>mscorlib</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Interfaces />
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+      <AttributeName>System.Runtime.InteropServices.ComVisible(true)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary><span data-ttu-id="b0a7f-101">リモート処理有効期間サービスによって使用される有効期間リース オブジェクトを定義します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-101">Defines a lifetime lease object that is used by the remoting lifetime service.</span></span></summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="b0a7f-102">サーバーアプリケーションを削除できる場合は、分散ガベージコレクションを制御します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-102">Distributed garbage collection controls when server applications can be deleted.</span></span> <span data-ttu-id="b0a7f-103">従来、分散ガベージコレクションでは、制御のために参照カウントと ping が使用されていました。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-103">Traditionally, distributed garbage collection uses reference counts and pinging for control.</span></span> <span data-ttu-id="b0a7f-104">これは、オブジェクトごとに数千のクライアントがある場合に適していますが、各オブジェクトに数千のクライアントがある場合はうまく機能しません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-104">This works well when there are a few clients per object, but does not work well when there are thousands of clients per each object.</span></span> <span data-ttu-id="b0a7f-105">有効期間サービスは、従来の分散ガベージコレクターの機能を引き受けることができ、クライアントの数が増えると適切にスケールされます。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-105">The lifetime service can assume the function of a traditional distributed garbage collector, and scales well when the number of clients increases.</span></span>  
+  
+ <span data-ttu-id="b0a7f-106">有効期間サービスは、リモートでアクティブ化される各オブジェクトにリースを関連付けます。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-106">The lifetime service associates a lease with each remotely activated object.</span></span> <span data-ttu-id="b0a7f-107">リースが期限切れになると、オブジェクトは削除されます。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-107">When the lease expires, the object is removed.</span></span> <span data-ttu-id="b0a7f-108">リースでは、オブジェクトの有効期間が無期限であることを指定できます。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-108">A lease can specify that an object has an infinite lifetime.</span></span>  
+  
+ <span data-ttu-id="b0a7f-109">各<xref:System.AppDomain>には、ドメイン内のリースを管理するリースマネージャーが含まれています。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-109">Each <xref:System.AppDomain> contains a lease manager that administers the leases in the domain.</span></span> <span data-ttu-id="b0a7f-110">リースマネージャーは、時間の有効期限についてリースを定期的に調べます。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-110">The lease manager periodically examines the leases for time expiration.</span></span> <span data-ttu-id="b0a7f-111">リースの有効期限が切れている場合は、リースへの参照を削除するか、1つまたは複数のリーススポンサを呼び出して更新することにより、リースを取り消すことができます。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-111">If a lease has expired, it can either be canceled by removing its reference to the lease, or renewed by invoking one or more of the lease's sponsors.</span></span>  
+  
+ <span data-ttu-id="b0a7f-112">リースには、そのポリシーを決定するプロパティと、リース時間を更新するメソッドが含まれています。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-112">A lease contains properties that determine its policies, and methods that renew the lease time.</span></span> <span data-ttu-id="b0a7f-113">リースは、インターフェイス<xref:System.Runtime.Remoting.Lifetime.ILease>を公開します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-113">The lease exposes the <xref:System.Runtime.Remoting.Lifetime.ILease> interface.</span></span>  
+  
+ <span data-ttu-id="b0a7f-114">インターフェイスの使用方法を示す例に<xref:System.Runtime.Remoting.Lifetime.ILease>ついては、「[有効期間](https://msdn.microsoft.com/library/334a30e5-33cb-4f0f-a38a-ed4abc5560fa)」を参照してください。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-114">For an example showing how to use the <xref:System.Runtime.Remoting.Lifetime.ILease> interface see [Lifetimes](https://msdn.microsoft.com/library/334a30e5-33cb-4f0f-a38a-ed4abc5560fa).</span></span>  
+  
+ ]]></format>
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="CurrentLeaseTime">
+      <MemberSignature Language="C#" Value="public TimeSpan CurrentLeaseTime { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.TimeSpan CurrentLeaseTime" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property CurrentLeaseTime As TimeSpan" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property TimeSpan CurrentLeaseTime { TimeSpan get(); };" />
+      <MemberSignature Language="F#" Value="member this.CurrentLeaseTime : TimeSpan" Usage="System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>get: System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.TimeSpan</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="b0a7f-115">リースの残り時間を取得します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-115">Gets the amount of time remaining on the lease.</span></span></summary>
+        <value><span data-ttu-id="b0a7f-116">リースの残り時間。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-116">The amount of time remaining on the lease.</span></span></value>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.Security.SecurityException"><span data-ttu-id="b0a7f-117">直前の呼び出し元は、インターフェイスへの参照を通じて呼び出しを実行します。この呼び出し元には、インフラストラクチャ アクセス許可がありません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-117">The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.</span></span></exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="b0a7f-118">インフラストラクチャコードを操作する場合。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-118">for operating with infrastructure code.</span></span> <span data-ttu-id="b0a7f-119">要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、アクセス許可値:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span><span class="sxs-lookup"><span data-stu-id="b0a7f-119">Demand value: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />; Permission value: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span></span></permission>
+      </Docs>
+    </Member>
+    <Member MemberName="CurrentState">
+      <MemberSignature Language="C#" Value="public System.Runtime.Remoting.Lifetime.LeaseState CurrentState { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Runtime.Remoting.Lifetime.LeaseState CurrentState" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Remoting.Lifetime.ILease.CurrentState" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property CurrentState As LeaseState" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Runtime::Remoting::Lifetime::LeaseState CurrentState { System::Runtime::Remoting::Lifetime::LeaseState get(); };" />
+      <MemberSignature Language="F#" Value="member this.CurrentState : System.Runtime.Remoting.Lifetime.LeaseState" Usage="System.Runtime.Remoting.Lifetime.ILease.CurrentState" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>get: System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Runtime.Remoting.Lifetime.LeaseState</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="b0a7f-120">リースの現在の <see cref="T:System.Runtime.Remoting.Lifetime.LeaseState" /> を取得します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-120">Gets the current <see cref="T:System.Runtime.Remoting.Lifetime.LeaseState" /> of the lease.</span></span></summary>
+        <value><span data-ttu-id="b0a7f-121">リースの現在の <see cref="T:System.Runtime.Remoting.Lifetime.LeaseState" />。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-121">The current <see cref="T:System.Runtime.Remoting.Lifetime.LeaseState" /> of the lease.</span></span></value>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.Security.SecurityException"><span data-ttu-id="b0a7f-122">直前の呼び出し元は、インターフェイスへの参照を通じて呼び出しを実行します。この呼び出し元には、インフラストラクチャ アクセス許可がありません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-122">The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.</span></span></exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="b0a7f-123">インフラストラクチャコードを操作する場合。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-123">for operating with infrastructure code.</span></span> <span data-ttu-id="b0a7f-124">要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、アクセス許可値:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span><span class="sxs-lookup"><span data-stu-id="b0a7f-124">Demand value: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />; Permission value: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span></span></permission>
+        <altmember cref="T:System.Runtime.Remoting.Lifetime.LeaseState" />
+      </Docs>
+    </Member>
+    <Member MemberName="InitialLeaseTime">
+      <MemberSignature Language="C#" Value="public TimeSpan InitialLeaseTime { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.TimeSpan InitialLeaseTime" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Remoting.Lifetime.ILease.InitialLeaseTime" />
+      <MemberSignature Language="VB.NET" Value="Public Property InitialLeaseTime As TimeSpan" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property TimeSpan InitialLeaseTime { TimeSpan get(); void set(TimeSpan value); };" />
+      <MemberSignature Language="F#" Value="member this.InitialLeaseTime : TimeSpan with get, set" Usage="System.Runtime.Remoting.Lifetime.ILease.InitialLeaseTime" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>get: System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>set: System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.TimeSpan</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="b0a7f-125">リースの初期時間を取得または設定します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-125">Gets or sets the initial time for the lease.</span></span></summary>
+        <value><span data-ttu-id="b0a7f-126">リースの初期時間。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-126">The initial time for the lease.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="b0a7f-127">プロパティがに<xref:System.TimeSpan.Zero?displayProperty=nameWithType>設定されている場合、リースはタイムアウトせず、関連付けられているオブジェクトに無期限の有効期間が設定されます。 <xref:System.Runtime.Remoting.Lifetime.ILease.InitialLeaseTime%2A></span><span class="sxs-lookup"><span data-stu-id="b0a7f-127">If the <xref:System.Runtime.Remoting.Lifetime.ILease.InitialLeaseTime%2A> property is set to <xref:System.TimeSpan.Zero?displayProperty=nameWithType>, then the lease will never time out and the object associated with it will have an infinite lifetime.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.SecurityException"><span data-ttu-id="b0a7f-128">直前の呼び出し元は、インターフェイスへの参照を通じて呼び出しを実行します。この呼び出し元には、インフラストラクチャ アクセス許可がありません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-128">The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.</span></span></exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="b0a7f-129">インフラストラクチャコードを操作する場合。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-129">for operating with infrastructure code.</span></span> <span data-ttu-id="b0a7f-130">要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、アクセス許可値:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span><span class="sxs-lookup"><span data-stu-id="b0a7f-130">Demand value: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />; Permission value: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span></span></permission>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Register">
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><span data-ttu-id="b0a7f-131">リースのスポンサを登録します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-131">Registers a sponsor for the lease.</span></span></summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Register">
+      <MemberSignature Language="C#" Value="public void Register (System.Runtime.Remoting.Lifetime.ISponsor obj);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Register(class System.Runtime.Remoting.Lifetime.ISponsor obj) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Remoting.Lifetime.ILease.Register(System.Runtime.Remoting.Lifetime.ISponsor)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Register (obj As ISponsor)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Register(System::Runtime::Remoting::Lifetime::ISponsor ^ obj);" />
+      <MemberSignature Language="F#" Value="abstract member Register : System.Runtime.Remoting.Lifetime.ISponsor -&gt; unit" Usage="iLease.Register obj" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="obj" Type="System.Runtime.Remoting.Lifetime.ISponsor" />
+      </Parameters>
+      <Docs>
+        <param name="obj"><span data-ttu-id="b0a7f-132">スポンサのコールバック オブジェクト。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-132">The callback object of the sponsor.</span></span></param>
+        <summary><span data-ttu-id="b0a7f-133">リースを更新せずにそのリースのスポンサを登録します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-133">Registers a sponsor for the lease without renewing the lease.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="b0a7f-134">スポンサーが現在のメソッドに登録されている場合、リースは更新されません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-134">If a sponsor is registered with the current method, the lease is not renewed.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.SecurityException"><span data-ttu-id="b0a7f-135">直前の呼び出し元は、インターフェイスへの参照を通じて呼び出しを実行します。この呼び出し元には、インフラストラクチャ アクセス許可がありません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-135">The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.</span></span></exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="b0a7f-136">インフラストラクチャコードを操作する場合。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-136">for operating with infrastructure code.</span></span> <span data-ttu-id="b0a7f-137">要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、アクセス許可値:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span><span class="sxs-lookup"><span data-stu-id="b0a7f-137">Demand value: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />; Permission value: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span></span></permission>
+      </Docs>
+    </Member>
+    <Member MemberName="Register">
+      <MemberSignature Language="C#" Value="public void Register (System.Runtime.Remoting.Lifetime.ISponsor obj, TimeSpan renewalTime);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Register(class System.Runtime.Remoting.Lifetime.ISponsor obj, valuetype System.TimeSpan renewalTime) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Remoting.Lifetime.ILease.Register(System.Runtime.Remoting.Lifetime.ISponsor,System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Register (obj As ISponsor, renewalTime As TimeSpan)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Register(System::Runtime::Remoting::Lifetime::ISponsor ^ obj, TimeSpan renewalTime);" />
+      <MemberSignature Language="F#" Value="abstract member Register : System.Runtime.Remoting.Lifetime.ISponsor * TimeSpan -&gt; unit" Usage="iLease.Register (obj, renewalTime)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="obj" Type="System.Runtime.Remoting.Lifetime.ISponsor" />
+        <Parameter Name="renewalTime" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="obj"><span data-ttu-id="b0a7f-138">スポンサのコールバック オブジェクト。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-138">The callback object of the sponsor.</span></span></param>
+        <param name="renewalTime"><span data-ttu-id="b0a7f-139">リースを更新する時間間隔。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-139">The length of time to renew the lease by.</span></span></param>
+        <summary><span data-ttu-id="b0a7f-140">リースのスポンサを登録し、指定した <see cref="T:System.TimeSpan" /> で更新します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-140">Registers a sponsor for the lease, and renews it by the specified <see cref="T:System.TimeSpan" />.</span></span></summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.Security.SecurityException"><span data-ttu-id="b0a7f-141">直前の呼び出し元は、インターフェイスへの参照を通じて呼び出しを実行します。この呼び出し元には、インフラストラクチャ アクセス許可がありません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-141">The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.</span></span></exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="b0a7f-142">インフラストラクチャコードを操作する場合。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-142">for operating with infrastructure code.</span></span> <span data-ttu-id="b0a7f-143">要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、アクセス許可値:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span><span class="sxs-lookup"><span data-stu-id="b0a7f-143">Demand value: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />; Permission value: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span></span></permission>
+      </Docs>
+    </Member>
+    <Member MemberName="Renew">
+      <MemberSignature Language="C#" Value="public TimeSpan Renew (TimeSpan renewalTime);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance valuetype System.TimeSpan Renew(valuetype System.TimeSpan renewalTime) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Remoting.Lifetime.ILease.Renew(System.TimeSpan)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Renew (renewalTime As TimeSpan) As TimeSpan" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; TimeSpan Renew(TimeSpan renewalTime);" />
+      <MemberSignature Language="F#" Value="abstract member Renew : TimeSpan -&gt; TimeSpan" Usage="iLease.Renew renewalTime" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.TimeSpan</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="renewalTime" Type="System.TimeSpan" />
+      </Parameters>
+      <Docs>
+        <param name="renewalTime"><span data-ttu-id="b0a7f-144">リースを更新する時間間隔。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-144">The length of time to renew the lease by.</span></span></param>
+        <summary><span data-ttu-id="b0a7f-145">指定した時間間隔でリースを更新します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-145">Renews a lease for the specified time.</span></span></summary>
+        <returns><span data-ttu-id="b0a7f-146">リースの新しい有効期限。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-146">The new expiration time of the lease.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="b0a7f-147">リース時間は、 <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A>の最大値または現在の時刻に更新時間を加えた値に設定されます。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-147">The lease time is set to the maximum of the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> or the current time plus the renewal time.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.SecurityException"><span data-ttu-id="b0a7f-148">直前の呼び出し元は、インターフェイスへの参照を通じて呼び出しを実行します。この呼び出し元には、インフラストラクチャ アクセス許可がありません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-148">The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.</span></span></exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="b0a7f-149">インフラストラクチャコードを操作する場合。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-149">for operating with infrastructure code.</span></span> <span data-ttu-id="b0a7f-150">要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、アクセス許可値:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span><span class="sxs-lookup"><span data-stu-id="b0a7f-150">Demand value: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />; Permission value: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span></span></permission>
+      </Docs>
+    </Member>
+    <Member MemberName="RenewOnCallTime">
+      <MemberSignature Language="C#" Value="public TimeSpan RenewOnCallTime { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.TimeSpan RenewOnCallTime" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime" />
+      <MemberSignature Language="VB.NET" Value="Public Property RenewOnCallTime As TimeSpan" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property TimeSpan RenewOnCallTime { TimeSpan get(); void set(TimeSpan value); };" />
+      <MemberSignature Language="F#" Value="member this.RenewOnCallTime : TimeSpan with get, set" Usage="System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>get: System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>set: System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.TimeSpan</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="b0a7f-151">リモート オブジェクトに対する呼び出しによって、<see cref="P:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime" /> が更新されるのにかかる時間を取得または設定します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-151">Gets or sets the amount of time by which a call to the remote object renews the <see cref="P:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime" />.</span></span></summary>
+        <value><span data-ttu-id="b0a7f-152">リモート オブジェクトに対する呼び出しによって、<see cref="P:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime" /> が更新されるのにかかる時間。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-152">The amount of time by which a call to the remote object renews the <see cref="P:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime" />.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="b0a7f-153">リモートオブジェクトへの呼び出しを行う<xref:System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime%2A>と、 <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A>がの下<xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> <xref:System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime%2A>にドロップした場合にのみ、有効期間サービスによってがに追加されます。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-153">When you make a call to a remote object, the lifetime service adds the <xref:System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime%2A> to the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> only if the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> has dropped below the <xref:System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime%2A>.</span></span> <span data-ttu-id="b0a7f-154">したがって、順次呼び出しでは<xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> 、バインドされていないが増加することはありません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-154">Sequential calls therefore do not increase the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> without bound.</span></span> <span data-ttu-id="b0a7f-155">代わりに、任意の呼び出し<xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A>の直後に、が<xref:System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime%2A>以上であることが保証されます。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-155">Instead, immediately after any call, the <xref:System.Runtime.Remoting.Lifetime.ILease.CurrentLeaseTime%2A> is guaranteed to be the <xref:System.Runtime.Remoting.Lifetime.ILease.RenewOnCallTime%2A> or longer.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.SecurityException"><span data-ttu-id="b0a7f-156">直前の呼び出し元は、インターフェイスへの参照を通じて呼び出しを実行します。この呼び出し元には、インフラストラクチャ アクセス許可がありません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-156">The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.</span></span></exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="b0a7f-157">インフラストラクチャコードを操作する場合。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-157">for operating with infrastructure code.</span></span> <span data-ttu-id="b0a7f-158">要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、アクセス許可値:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span><span class="sxs-lookup"><span data-stu-id="b0a7f-158">Demand value: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />; Permission value: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span></span></permission>
+      </Docs>
+    </Member>
+    <Member MemberName="SponsorshipTimeout">
+      <MemberSignature Language="C#" Value="public TimeSpan SponsorshipTimeout { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.TimeSpan SponsorshipTimeout" />
+      <MemberSignature Language="DocId" Value="P:System.Runtime.Remoting.Lifetime.ILease.SponsorshipTimeout" />
+      <MemberSignature Language="VB.NET" Value="Public Property SponsorshipTimeout As TimeSpan" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property TimeSpan SponsorshipTimeout { TimeSpan get(); void set(TimeSpan value); };" />
+      <MemberSignature Language="F#" Value="member this.SponsorshipTimeout : TimeSpan with get, set" Usage="System.Runtime.Remoting.Lifetime.ILease.SponsorshipTimeout" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>get: System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>set: System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.TimeSpan</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="b0a7f-159">スポンサがリースの更新時間を返すまで待機する時間を取得または設定します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-159">Gets or sets the amount of time to wait for a sponsor to return with a lease renewal time.</span></span></summary>
+        <value><span data-ttu-id="b0a7f-160">スポンサがリースの更新時間を返すまで待機する時間。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-160">The amount of time to wait for a sponsor to return with a lease renewal time.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="b0a7f-161"><xref:System.Runtime.Remoting.Lifetime.ILease.SponsorshipTimeout%2A> が <xref:System.TimeSpan.Zero?displayProperty=nameWithType> の場合、このリースはスポンサーを受け取りません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-161">If the <xref:System.Runtime.Remoting.Lifetime.ILease.SponsorshipTimeout%2A> is <xref:System.TimeSpan.Zero?displayProperty=nameWithType>, then this lease will not take sponsors.</span></span>  
+  
+ <span data-ttu-id="b0a7f-162">スポンサが、タイムアウト期間内にリースを更新するための呼び出しに応答しない場合、そのスポンサは配信不能と見なされ、現在のリースのスポンサの一覧から削除されます。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-162">If a sponsor does not respond to a call to renew a lease within the time-out period, it is assumed to be dead and is removed from the list of sponsors for the current lease.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.SecurityException"><span data-ttu-id="b0a7f-163">直前の呼び出し元は、インターフェイスへの参照を通じて呼び出しを実行します。この呼び出し元には、インフラストラクチャ アクセス許可がありません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-163">The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.</span></span></exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="b0a7f-164">インフラストラクチャコードを操作する場合。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-164">for operating with infrastructure code.</span></span> <span data-ttu-id="b0a7f-165">要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、アクセス許可値:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span><span class="sxs-lookup"><span data-stu-id="b0a7f-165">Demand value: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />; Permission value: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span></span></permission>
+      </Docs>
+    </Member>
+    <Member MemberName="Unregister">
+      <MemberSignature Language="C#" Value="public void Unregister (System.Runtime.Remoting.Lifetime.ISponsor obj);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Unregister(class System.Runtime.Remoting.Lifetime.ISponsor obj) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Runtime.Remoting.Lifetime.ILease.Unregister(System.Runtime.Remoting.Lifetime.ISponsor)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Unregister (obj As ISponsor)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Unregister(System::Runtime::Remoting::Lifetime::ISponsor ^ obj);" />
+      <MemberSignature Language="F#" Value="abstract member Unregister : System.Runtime.Remoting.Lifetime.ISponsor -&gt; unit" Usage="iLease.Unregister obj" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecurityCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="obj" Type="System.Runtime.Remoting.Lifetime.ISponsor" />
+      </Parameters>
+      <Docs>
+        <param name="obj"><span data-ttu-id="b0a7f-166">登録を解除する対象のリース スポンサ。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-166">The lease sponsor to unregister.</span></span></param>
+        <summary><span data-ttu-id="b0a7f-167">スポンサ リストからスポンサを削除します。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-167">Removes a sponsor from the sponsor list.</span></span></summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.Security.SecurityException"><span data-ttu-id="b0a7f-168">直前の呼び出し元は、インターフェイスへの参照を通じて呼び出しを実行します。この呼び出し元には、インフラストラクチャ アクセス許可がありません。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-168">The immediate caller makes the call through a reference to the interface and does not have infrastructure permission.</span></span></exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission"><span data-ttu-id="b0a7f-169">インフラストラクチャコードを操作する場合。</span><span class="sxs-lookup"><span data-stu-id="b0a7f-169">for operating with infrastructure code.</span></span> <span data-ttu-id="b0a7f-170">要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、アクセス許可値:<see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span><span class="sxs-lookup"><span data-stu-id="b0a7f-170">Demand value: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />; Permission value: <see cref="F:System.Security.Permissions.SecurityPermissionFlag.Infrastructure" /></span></span></permission>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
