@@ -1,0 +1,353 @@
+<Type Name="SessionStateUtility" FullName="System.Web.SessionState.SessionStateUtility">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="7a54c89eb6c398563a5d0482e7d07c621e726ea6" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70656574" /></Metadata><TypeSignature Language="C#" Value="public static class SessionStateUtility" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit SessionStateUtility extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Web.SessionState.SessionStateUtility" />
+  <TypeSignature Language="VB.NET" Value="Public Class SessionStateUtility" />
+  <TypeSignature Language="C++ CLI" Value="public ref class SessionStateUtility abstract sealed" />
+  <TypeSignature Language="F#" Value="type SessionStateUtility = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>セッション状態モジュールおよびセッション状態ストア プロバイダーで使用されるヘルパー メソッドを提供し、ASP.NET アプリケーションのセッション情報の管理します。 このクラスは継承できません。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ クラス<xref:System.Web.SessionState.SessionStateUtility>には、セッション状態モジュールまたはセッション状態ストアプロバイダーによって使用される静的ヘルパーメソッドが用意されています。 アプリケーション開発者は、コードからこれらのメソッドを呼び出す必要はありません。  
+  
+ 次の表では、セッション状態モジュールおよびセッション状態ストアプロバイダーがメソッドを使用する方法について説明します。  
+  
+|メソッド|使用|  
+|------------|---------|  
+|<xref:System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext%2A> メソッド|カスタムセッション状態モジュールでは、既存のセッションのセッション情報を取得したり、新しいセッションのセッション情報を作成したりするために使用できます。|  
+|<xref:System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext%2A> メソッド|セッション状態モジュールによって呼び出され、セッションデータを現在<xref:System.Web.HttpContext>のに追加し、 <xref:System.Web.HttpContext.Session%2A>プロパティを使用してアプリケーションコードで使用できるようにします。|  
+|<xref:System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext%2A> メソッド|要求の終了時にセッション状態モジュール<xref:System.Web.HttpApplication.ReleaseRequestState> <xref:System.Web.HttpApplication.EndRequest>によって呼び出され、現在<xref:System.Web.HttpContext>のからセッションデータをクリアします。|  
+|<xref:System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects%2A> メソッド|Global.asax ファイルで定義されたオブジェクトに基づいてコレクションへ<xref:System.Web.SessionState.HttpSessionState.StaticObjects%2A>の参照を取得するために、セッション状態モジュールによって呼び出されます。 <xref:System.Web.HttpContext>返される<xref:System.Web.HttpStaticObjectsCollection>コレクションは、現在のに追加されたセッションデータに含まれます。|  
+  
+ セッションデータは、現在<xref:System.Web.HttpContext>のに渡され、 <xref:System.Web.SessionState.HttpSessionStateContainer>オブジェクトまたは<xref:System.Web.SessionState.IHttpSessionState>インターフェイスの有効な実装として取得されます。  
+  
+ セッション状態ストアプロバイダーの実装の詳細については、「[セッション状態ストアプロバイダーの実装](https://msdn.microsoft.com/library/baadfec5-c881-468a-9681-7d8796b05a66)」を参照してください。  
+  
+   
+  
+## Examples  
+ 次のコード例は、を<xref:System.Collections.Hashtable>使用してセッション情報をメモリに格納するカスタムのセッション状態モジュールの実装を示しています。 モジュールは<xref:System.Web.SessionState.SessionStateUtility> 、クラスを使用して現在<xref:System.Web.HttpContext>の<xref:System.Web.SessionState.SessionIDManager>とを参照し<xref:System.Web.HttpStaticObjectsCollection>、現在のを取得して、ASP.NET アプリケーションの global.asax ファイルで定義されている**Session_OnEnd**イベントを発生させます。 このアプリケーションでは、同時 Web 要求が同じセッション識別子を使用するのを防ぐことはできません。  
+  
+ [!code-csharp[System.Web.SessionState.SessionStateUtility#1](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/CS/mysessionstatemodule.cs#1)]
+ [!code-vb[System.Web.SessionState.SessionStateUtility#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/VB/mysessionstatemodule.vb#1)]  
+  
+ ASP.NET アプリケーションでこのカスタムセッション状態モジュールを使用するには、次の例に<xref:System.Web.SessionState.SessionStateModule>示すように、web.config ファイル内の既存の参照を置き換えることができます。  
+  
+```  
+<configuration>  
+  <system.web>  
+    <httpModules>  
+      <remove name="Session" />  
+      <add name="Session"  
+      type="Samples.AspNet.SessionState.MySessionStateModule" />  
+    </httpModules>  
+  </system.web>  
+</configuration>  
+```  
+  
+ ]]></format>
+    </remarks>
+    <related type="Article" href="https://msdn.microsoft.com/library/6d60d381-6521-4e1d-9089-da6464f2a9bc">ASP.NET セッション状態の概要</related>
+  </Docs>
+  <Members>
+    <Member MemberName="AddHttpSessionStateToContext">
+      <MemberSignature Language="C#" Value="public static void AddHttpSessionStateToContext (System.Web.HttpContext context, System.Web.SessionState.IHttpSessionState container);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void AddHttpSessionStateToContext(class System.Web.HttpContext context, class System.Web.SessionState.IHttpSessionState container) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext(System.Web.HttpContext,System.Web.SessionState.IHttpSessionState)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub AddHttpSessionStateToContext (context As HttpContext, container As IHttpSessionState)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void AddHttpSessionStateToContext(System::Web::HttpContext ^ context, System::Web::SessionState::IHttpSessionState ^ container);" />
+      <MemberSignature Language="F#" Value="static member AddHttpSessionStateToContext : System.Web.HttpContext * System.Web.SessionState.IHttpSessionState -&gt; unit" Usage="System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext (context, container)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Web.HttpContext" />
+        <Parameter Name="container" Type="System.Web.SessionState.IHttpSessionState" />
+      </Parameters>
+      <Docs>
+        <param name="context"><see cref="T:System.Web.HttpContext" /> オブジェクトを追加する対象の <see cref="T:System.Web.SessionState.HttpSessionState" /> オブジェクト。</param>
+        <param name="container">指定された HTTP コンテキストに追加する <see cref="T:System.Web.SessionState.IHttpSessionState" /> の実装のインスタンス。</param>
+        <summary>現在の要求のコンテキストにセッション データを適用します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext%2A>は、現在の要求にセッションデータを適用するために、セッション状態モジュールによって使用されます。 これは、要求<xref:System.Web.HttpApplication.AcquireRequestState>の開始時にイベントが発生したときに発生します。 現在の要求のセッションデータは、既存のセッションに対して取得されるか、新しいセッション用に作成されます。 次に、セッションデータが<xref:System.Web.SessionState.IHttpSessionState>実装インスタンスにカプセル化され、現在<xref:System.Web.HttpContext>の<xref:System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext%2A>と共にメソッドに渡されます。 指定されたセッションデータは、現在のコンテキストの<xref:System.Web.HttpContext.Session%2A>プロパティを使用して、アプリケーションコードで使用できるようになります。  
+  
+   
+  
+## Examples  
+ 次のコード例は、カスタムセッション状態<xref:System.Web.HttpApplication.AcquireRequestState>モジュールのイベントのハンドラーを示しています。 カスタムモジュールは、既存のセッション情報を取得するか、新しいセッション<xref:System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext%2A>情報を作成し、メソッド<xref:System.Web.HttpContext>を使用してそれを現在の要求のに追加します。 このコード例は、 <xref:System.Web.SessionState.SessionStateUtility>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Web.SessionState.SessionStateUtility#4](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/CS/mysessionstatemodule.cs#4)]
+ [!code-vb[System.Web.SessionState.SessionStateUtility#4](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/VB/mysessionstatemodule.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Web.HttpException">現在のセッションの <see cref="T:System.Web.SessionState.HttpSessionState" /> オブジェクトは、指定された <paramref name="context" /> に既に追加されています。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetHttpSessionStateFromContext">
+      <MemberSignature Language="C#" Value="public static System.Web.SessionState.IHttpSessionState GetHttpSessionStateFromContext (System.Web.HttpContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Web.SessionState.IHttpSessionState GetHttpSessionStateFromContext(class System.Web.HttpContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext(System.Web.HttpContext)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetHttpSessionStateFromContext (context As HttpContext) As IHttpSessionState" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Web::SessionState::IHttpSessionState ^ GetHttpSessionStateFromContext(System::Web::HttpContext ^ context);" />
+      <MemberSignature Language="F#" Value="static member GetHttpSessionStateFromContext : System.Web.HttpContext -&gt; System.Web.SessionState.IHttpSessionState" Usage="System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext context" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.SessionState.IHttpSessionState</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Web.HttpContext" />
+      </Parameters>
+      <Docs>
+        <param name="context">セッション データの取得元の <see cref="T:System.Web.HttpContext" />。</param>
+        <summary>現在の要求のコンテキストからセッション データを取得します。</summary>
+        <returns>現在の要求のセッション データを含む <see cref="T:System.Web.SessionState.IHttpSessionState" /> の実装のインスタンス。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext%2A>は、現在の要求からセッションデータを取得するために、セッション状態モジュールで使用できます。 これは、要求<xref:System.Web.HttpApplication.ReleaseRequestState>の終了時にイベントが発生したときに発生します。 返されたセッションデータをセッションデータストアに書き込むことができます。 セッションが破棄されている場合は、データストアおよび<xref:System.Web.HttpContext>からセッションデータを削除し、 **Session_OnEnd**イベントを実行できます。  
+  
+   
+  
+## Examples  
+ 次のコード例は、カスタムセッション状態<xref:System.Web.HttpApplication.ReleaseRequestState>モジュールのイベントのハンドラーを示しています。 モジュールは、 <xref:System.Web.SessionState.SessionStateUtility.GetHttpSessionStateFromContext%2A>メソッドを使用し<xref:System.Web.HttpContext>て、から現在の要求のセッションデータを取得します。 このコード例は、 <xref:System.Web.SessionState.SessionStateUtility>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Web.SessionState.SessionStateUtility#5](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/CS/mysessionstatemodule.cs#5)]
+ [!code-vb[System.Web.SessionState.SessionStateUtility#5](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/VB/mysessionstatemodule.vb#5)]  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para><see cref="M:System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext(System.Web.HttpContext)" />メソッドを使用して、内部ストアからセッションデータを削除<see cref="M:System.Web.SessionState.SessionStateUtility.RaiseSessionEnd(System.Web.SessionState.IHttpSessionState,System.Object,System.EventArgs)" />し、メソッドを使用して<see langword="Session_OnEnd" />イベントを発生させることができます。</para></block>
+      </Docs>
+    </Member>
+    <Member MemberName="GetSessionStaticObjects">
+      <MemberSignature Language="C#" Value="public static System.Web.HttpStaticObjectsCollection GetSessionStaticObjects (System.Web.HttpContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Web.HttpStaticObjectsCollection GetSessionStaticObjects(class System.Web.HttpContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects(System.Web.HttpContext)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetSessionStaticObjects (context As HttpContext) As HttpStaticObjectsCollection" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Web::HttpStaticObjectsCollection ^ GetSessionStaticObjects(System::Web::HttpContext ^ context);" />
+      <MemberSignature Language="F#" Value="static member GetSessionStaticObjects : System.Web.HttpContext -&gt; System.Web.HttpStaticObjectsCollection" Usage="System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects context" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.HttpStaticObjectsCollection</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Web.HttpContext" />
+      </Parameters>
+      <Docs>
+        <param name="context">静的オブジェクトのコレクションの取得元となる <see cref="T:System.Web.HttpContext" />。</param>
+        <summary>指定されたコンテキストの静的オブジェクトのコレクションへの参照を取得します。</summary>
+        <returns>指定された <see cref="T:System.Web.HttpStaticObjectsCollection" /> の <see cref="P:System.Web.SessionState.HttpSessionState.StaticObjects" /> プロパティ値を含む <see cref="T:System.Web.HttpContext" /> コレクション。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects%2A>メソッドは、ASP.NET アプリケーションの global.asax ファイルで定義されている静的オブジェクトのコレクションを取得するために使用されます。 セッション状態モジュールの実装は、返さ<xref:System.Web.HttpStaticObjectsCollection>れたコレクションを、 <xref:System.Web.SessionState.IHttpSessionState> <xref:System.Web.SessionState.SessionStateUtility.AddHttpSessionStateToContext%2A>メソッドを使用して現在のコンテキストに追加されている実装インスタンスに渡します。  
+  
+ は<xref:System.Web.SessionState.SessionStateStoreProviderBase> 、オブジェクト<xref:System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects%2A> の <xref:System.Web.SessionState.SessionStateStoreData> 作成時にメソッドを使用することもできます。  
+  
+   
+  
+## Examples  
+ 次のコード例は、カスタムセッション状態<xref:System.Web.HttpApplication.AcquireRequestState>モジュールのイベントのハンドラーを示しています。 モジュールは、既存<xref:System.Web.HttpStaticObjectsCollection> <xref:System.Web.HttpContext>のセッション情報を取得するか、 <xref:System.Web.SessionState.SessionStateUtility.GetSessionStaticObjects%2A>メソッドから返されたコレクションを含む新しいセッション情報を作成し、現在の要求のに追加します。 このコード例は、 <xref:System.Web.SessionState.SessionStateUtility>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Web.SessionState.SessionStateUtility#4](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/CS/mysessionstatemodule.cs#4)]
+ [!code-vb[System.Web.SessionState.SessionStateUtility#4](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/VB/mysessionstatemodule.vb#4)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsSessionStateReadOnly">
+      <MemberSignature Language="C#" Value="public static bool IsSessionStateReadOnly (System.Web.HttpContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsSessionStateReadOnly(class System.Web.HttpContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SessionState.SessionStateUtility.IsSessionStateReadOnly(System.Web.HttpContext)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsSessionStateReadOnly (context As HttpContext) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsSessionStateReadOnly(System::Web::HttpContext ^ context);" />
+      <MemberSignature Language="F#" Value="static member IsSessionStateReadOnly : System.Web.HttpContext -&gt; bool" Usage="System.Web.SessionState.SessionStateUtility.IsSessionStateReadOnly context" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Web.HttpContext" Index="0" FrameworkAlternate="netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      </Parameters>
+      <Docs>
+        <param name="context">確認対象の <see cref="T:System.Web.HttpContext" /> を指定します。</param>
+        <summary>セッション状態が指定した <see cref="T:System.Web.HttpContext" /> で読み取り専用かどうかを示す値を取得します。</summary>
+        <returns>セッション状態が読み取り専用の場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsSessionStateRequired">
+      <MemberSignature Language="C#" Value="public static bool IsSessionStateRequired (System.Web.HttpContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsSessionStateRequired(class System.Web.HttpContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SessionState.SessionStateUtility.IsSessionStateRequired(System.Web.HttpContext)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function IsSessionStateRequired (context As HttpContext) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool IsSessionStateRequired(System::Web::HttpContext ^ context);" />
+      <MemberSignature Language="F#" Value="static member IsSessionStateRequired : System.Web.HttpContext -&gt; bool" Usage="System.Web.SessionState.SessionStateUtility.IsSessionStateRequired context" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Web.HttpContext" Index="0" FrameworkAlternate="netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      </Parameters>
+      <Docs>
+        <param name="context">確認対象の <see cref="T:System.Web.HttpContext" /> を指定します。</param>
+        <summary>指定した <see cref="T:System.Web.HttpContext" /> にセッション状態が必要かどうかを示す値を取得します。</summary>
+        <returns>セッション状態が必要な場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RaiseSessionEnd">
+      <MemberSignature Language="C#" Value="public static void RaiseSessionEnd (System.Web.SessionState.IHttpSessionState session, object eventSource, EventArgs eventArgs);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void RaiseSessionEnd(class System.Web.SessionState.IHttpSessionState session, object eventSource, class System.EventArgs eventArgs) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SessionState.SessionStateUtility.RaiseSessionEnd(System.Web.SessionState.IHttpSessionState,System.Object,System.EventArgs)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void RaiseSessionEnd(System::Web::SessionState::IHttpSessionState ^ session, System::Object ^ eventSource, EventArgs ^ eventArgs);" />
+      <MemberSignature Language="F#" Value="static member RaiseSessionEnd : System.Web.SessionState.IHttpSessionState * obj * EventArgs -&gt; unit" Usage="System.Web.SessionState.SessionStateUtility.RaiseSessionEnd (session, eventSource, eventArgs)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="session" Type="System.Web.SessionState.IHttpSessionState" />
+        <Parameter Name="eventSource" Type="System.Object" />
+        <Parameter Name="eventArgs" Type="System.EventArgs" />
+      </Parameters>
+      <Docs>
+        <param name="session">終了したセッションの <see cref="T:System.Web.SessionState.IHttpSessionState" /> の実装のインスタンス。</param>
+        <param name="eventSource"><see langword="Session_OnEnd" /> イベントに提供するイベント ソース オブジェクト。</param>
+        <param name="eventArgs"><see langword="Session_OnEnd" /> イベントに提供する <see cref="T:System.EventArgs" /> オブジェクト。</param>
+        <summary>ASP.NET アプリケーションの Global.asax ファイルに定義されている **Session_OnEnd** イベントを実行します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Web.SessionState.SessionStateUtility.RaiseSessionEnd%2A>は、ASP.NET アプリケーションの global.asax ファイルで定義されている**Session_OnEnd**イベントを実行するために、セッション状態モジュールによって使用されます。 セッション状態モジュールは、セッションが破棄<xref:System.Web.SessionState.SessionStateUtility.RaiseSessionEnd%2A>されたとき、またはセッションが期限切れになったときに、メソッドを呼び出します。  
+  
+   
+  
+## Examples  
+ 次のコード例は、カスタムセッション状態<xref:System.Web.HttpApplication.ReleaseRequestState>モジュールのイベントのハンドラーを示しています。 セッションが破棄されている場合、モジュールは**** 、 <xref:System.Web.SessionState.SessionStateUtility.RaiseSessionEnd%2A>メソッドを使用して、アプリケーションの global.asax ファイルで定義されている Session_OnEnd イベントを実行します。 このコード例は、 <xref:System.Web.SessionState.SessionStateUtility>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Web.SessionState.SessionStateUtility#5](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/CS/mysessionstatemodule.cs#5)]
+ [!code-vb[System.Web.SessionState.SessionStateUtility#5](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/VB/mysessionstatemodule.vb#5)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveHttpSessionStateFromContext">
+      <MemberSignature Language="C#" Value="public static void RemoveHttpSessionStateFromContext (System.Web.HttpContext context);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void RemoveHttpSessionStateFromContext(class System.Web.HttpContext context) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext(System.Web.HttpContext)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub RemoveHttpSessionStateFromContext (context As HttpContext)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void RemoveHttpSessionStateFromContext(System::Web::HttpContext ^ context);" />
+      <MemberSignature Language="F#" Value="static member RemoveHttpSessionStateFromContext : System.Web.HttpContext -&gt; unit" Usage="System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext context" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="context" Type="System.Web.HttpContext" />
+      </Parameters>
+      <Docs>
+        <param name="context">セッション データを削除する <see cref="T:System.Web.HttpContext" />。</param>
+        <summary>指定されたコンテキストからセッション データを削除します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext%2A>は、指定さ<xref:System.Web.HttpContext>れたからセッションデータを削除します。 セッション状態モジュールは、 <xref:System.Web.SessionState.SessionStateUtility.RemoveHttpSessionStateFromContext%2A> <xref:System.Web.HttpApplication.ReleaseRequestState>イベントのハンドラーでメソッドを呼び出します。  
+  
+   
+  
+## Examples  
+ 次のコード例は、カスタムセッション状態<xref:System.Web.HttpApplication.ReleaseRequestState>モジュールのイベントのハンドラーを示しています。 イベントハンドラーは、現在<xref:System.Web.HttpContext>のからセッションデータを削除します。 このコード例は、 <xref:System.Web.SessionState.SessionStateUtility>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Web.SessionState.SessionStateUtility#5](~/samples/snippets/csharp/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/CS/mysessionstatemodule.cs#5)]
+ [!code-vb[System.Web.SessionState.SessionStateUtility#5](~/samples/snippets/visualbasic/VS_Snippets_WebNet/System.Web.SessionState.SessionStateUtility/VB/mysessionstatemodule.vb#5)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SerializationSurrogateSelector">
+      <MemberSignature Language="C#" Value="public static System.Runtime.Serialization.ISurrogateSelector SerializationSurrogateSelector { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property class System.Runtime.Serialization.ISurrogateSelector SerializationSurrogateSelector" />
+      <MemberSignature Language="DocId" Value="P:System.Web.SessionState.SessionStateUtility.SerializationSurrogateSelector" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Property SerializationSurrogateSelector As ISurrogateSelector" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static property System::Runtime::Serialization::ISurrogateSelector ^ SerializationSurrogateSelector { System::Runtime::Serialization::ISurrogateSelector ^ get(); void set(System::Runtime::Serialization::ISurrogateSelector ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.SerializationSurrogateSelector : System.Runtime.Serialization.ISurrogateSelector with get, set" Usage="System.Web.SessionState.SessionStateUtility.SerializationSurrogateSelector" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Runtime.Serialization.ISurrogateSelector</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>セッション シリアル化のカスタマイズに使用されるシリアル化サロゲート セレクターを取得または設定します。</summary>
+        <value>シリアル化サロゲート セレクター。</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
