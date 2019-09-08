@@ -1,0 +1,331 @@
+<Type Name="PageStatePersister" FullName="System.Web.UI.PageStatePersister">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="f49b7ecb1ed06ac52d52e6f52f00af58a0317546" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70668504" /></Metadata><TypeSignature Language="C#" Value="public abstract class PageStatePersister" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit PageStatePersister extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Web.UI.PageStatePersister" />
+  <TypeSignature Language="VB.NET" Value="Public MustInherit Class PageStatePersister" />
+  <TypeSignature Language="C++ CLI" Value="public ref class PageStatePersister abstract" />
+  <TypeSignature Language="F#" Value="type PageStatePersister = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Web</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>ASP.NET ビューステート永続化機構の基本機能を提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ HTTP 要求と応答は本質的にステートレスです。 HTTP 要求間の状態情報を保持するために、ASP.NET <xref:System.Web.UI.Page>サーバーページは状態を格納できます。 この状態は、ビューステートと呼ばれ、ページおよびコントロールの設定とデータで構成されています。ページとコントロールは、ユーザーが最後にサーバーに対して行ったラウンドトリップで見て操作したものと同じように見えます。 複数のメカニズムがあり、同じページに対する連続した要求の間にビューステートを格納します。 抽象<xref:System.Web.UI.PageStatePersister>クラスは、これらの状態情報格納機構の基本クラスを表します。  
+  
+ ASP.NET の既定のビューステート永続化機構は、ページ上の非表示の HTML 要素 ( `type`属性がに`"hidden"`設定されている要素) で、Base64 でエンコードされた文字列として状態情報を保持することです。 ASP.NET ページでは、 <xref:System.Web.UI.HiddenFieldPageStatePersister>オブジェクトを使用し<xref:System.Web.UI.IStateFormatter>てこの作業を実行し、インスタンスを使用してオブジェクトの状態情報をシリアル化および逆シリアル化します。 または、帯域幅とリソースが限られているモバイル<xref:System.Web.HttpContext.Session%2A>クライアントの<xref:System.Web.UI.SessionPageStatePersister>クラスを使用して、ページのビューステートをサーバーのオブジェクトに格納することもできます。 場合によっては、ビューステートの永続化を完全に無効にすることがあります。 これを行うと、状態の永続化に依存するページやコントロールが正しく動作しなくなることがあります。 ページ状態管理とビューステートの詳細については、「 [ASP.NET State management の概要](https://msdn.microsoft.com/library/0218d965-5d30-445b-b6a6-8870e70e63ce(v=vs.100))」を参照してください。  
+  
+ コントロールを作成する場合は、 <xref:System.Web.UI.Control.ViewState%2A> <xref:System.Web.UI.StateBag>オブジェクトであるディクショナリにコントロールの状態情報を格納できます。 開発者は、プロパティを<xref:System.Web.UI.PageStatePersister.ControlState%2A>使用してコントロールの状態を取得します。 <xref:System.Web.UI.Control.ViewState%2A>プロパティにキーと値を割り当てます。オブジェクトは<xref:System.Web.UI.Page> 、要求間で状態情報をシリアル化します。 コントロールでカスタムの状態処理を実行するには<xref:System.Web.UI.Control.LoadViewState%2A> 、 <xref:System.Web.UI.Control.SaveViewState%2A>メソッドとメソッドをオーバーライドします。 このディクショナリに格納されている状態情報は、ページ開発者によってビューステートが無効にされていると失われます。 この問題を軽減するために、ASP.NET バージョン2.0 では、重大な状態情報を制御状態と呼ばれる別のオブジェクトに格納できます。 コントロールの状態オブジェクトは、ページ開発者によってビューステートが無効にされている場合には影響を受けません。 状態情報をコントロール状態オブジェクトに格納するには、コントロールが<xref:System.Web.UI.Control.LoadControlState%2A>メソッド<xref:System.Web.UI.Control.SaveControlState%2A>とメソッドをオーバーライドし、コントロールが初期化されるたびに状態情報をコントロール状態に格納するようにコントロールを登録する必要があります。 <xref:System.Web.UI.Control.OnInit%2A>メソッドをオーバーライドし、 <xref:System.Web.UI.Page.RegisterRequiresControlState%2A>メソッドを呼び出すことによって、コントロールの状態を使用するようにコントロールを登録できます。 コントロールの開発時に<xref:System.Web.UI.Control.ViewState%2A>プロパティとコントロールの状態を使用する方法の詳細については、「[カスタム ASP.NET サーバーコントロールの開発](https://msdn.microsoft.com/library/fbe26c16-cff4-4089-b3dd-877411f0c0ef)」を参照してください。  
+  
+ 既存のビューステート永続化機構をサポートできないクライアントのビューステートを維持するには<xref:System.Web.UI.PageStatePersister> 、クラスを拡張して独自のビューステート永続化メソッドを導入し、ページアダプターを使用して ASP.NET アプリケーションを構成することができます。ページを提供するクライアントの種類に基づいて、さまざまなビューステートの永続化メカニズムを使用します。 <xref:System.Web.UI.PageStatePersister>クラスから派生するクラスは、抽象<xref:System.Web.UI.PageStatePersister.Save%2A>メソッドをオーバーライドして、ビューステートとコントロールの状態を永続メディアに格納し<xref:System.Web.UI.PageStatePersister.Load%2A> 、メソッドをオーバーライドして抽出する必要があります。 ビューステートとコントロールの状態を文字列にシリアル化する必要がある場合は、 <xref:System.Web.UI.IStateFormatter> <xref:System.Web.UI.PageStatePersister.StateFormatter%2A>プロパティを使用してアクセスするオブジェクトを使用できます。 オブジェクトの状態情報を、Base64 でエンコードされた文字列に効率的にシリアル化および逆シリアル化します。 また、プロパティをオーバーライド<xref:System.Web.UI.PageStatePersister.StateFormatter%2A>して、独自のオブジェクト状態のシリアル化機構を提供することもできます。  
+  
+   
+  
+## Examples  
+ 次のコード例では、Web サーバー <xref:System.Web.UI.PageStatePersister>にビューとコントロールの状態を保存するオブジェクトを作成する方法を示します。 は`StreamPageStatePersister` 、メソッド<xref:System.Web.UI.PageStatePersister.Load%2A> と <xref:System.Web.UI.PageStatePersister.Save%2A> メソッドをオーバーライドして、ビューステート情報を抽出して保存する方法を示しています。 状態の永続`MyPageAdapter` `StreamPageStatePersister`化メカニズムはアダプティブレンダリングとクライアント機能に関連しているため、ASP.NET アプリケーションのをアクティブ化するためにクラスが用意されています。 最後に、ブラウザー機能 (ブラウザー) ファイルが用意されており`MyPageAdapter` 、特定のクラスのクライアント (この場合は既定の Web ブラウザー) 用にアダプターを有効にします。  
+  
+ [!code-csharp[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#1](~/samples/snippets/csharp/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/CS/textfilepagestatepersister.cs#1)]
+ [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#1](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/VB/textfilepagestatepersister.vb#1)]  
+  
+ 次のコード例は、の<xref:System.Web.UI.Adapters.PageAdapter> `StreamPageStatePersister`インスタンスを返すクラスを作成する方法を示しています。これは、ASP.NET Web ページのビューとコントロールの状態を保持するために使用されます。  
+  
+ [!code-csharp[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#5](~/samples/snippets/csharp/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/CS/mypageadapter.cs#5)]
+ [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#5](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/VB/mypageadapter.vb#5)]  
+  
+ 次のコンパイラコマンドラインを使用して、サンプルを実行するために使用できるアセンブリにこれらの2つのクラスをコンパイルします。 コンパイルされたアセンブリが、ASP.NET アプリケーションルートの下の \Bin ディレクトリにあることを確認します。  
+  
+ [!code-csharp[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#6](~/samples/snippets/csharp/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/CS/mypageadapter.cs#6)]
+ [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#6](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/VB/mypageadapter.vb#6)]  
+  
+ 最後に、 `MyPageAdapter`アダプターを有効にするには、ASP.NET アプリケーションルートの下にブラウザーという名前のディレクトリを作成し、構成情報を含むブラウザーファイルをインクルードする必要があります。 構成`<refid>`ファイルの要素は、既定のブラウザー構成ファイルの既定のブラウザーに対して指定された値を構成がオーバーライドすることを示します。 この例では`MyPageAdapter` 、ASP.NET Web ページ (通常、アダプターは使用されません) に対してを使用します。  
+  
+```  
+<browsers>  
+    <browser refid="Default" >  
+        <controlAdapters>  
+            <adapter   
+                controlType="System.Web.UI.Page"                              
+                adapterType="Samples.AspNet.CS.MyPageAdapter" />  
+        </controlAdapters>  
+    </browser>  
+</browsers>  
+```  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Web.UI.ObjectStateFormatter" />
+    <altmember cref="T:System.Web.UI.LosFormatter" />
+    <altmember cref="T:System.Web.UI.Pair" />
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected PageStatePersister (System.Web.UI.Page page);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig specialname rtspecialname instance void .ctor(class System.Web.UI.Page page) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.PageStatePersister.#ctor(System.Web.UI.Page)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; PageStatePersister(System::Web::UI::Page ^ page);" />
+      <MemberSignature Language="F#" Value="new System.Web.UI.PageStatePersister : System.Web.UI.Page -&gt; System.Web.UI.PageStatePersister" Usage="new System.Web.UI.PageStatePersister page" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="page" Type="System.Web.UI.Page" />
+      </Parameters>
+      <Docs>
+        <param name="page">ビューステート永続化機構が作成される <see cref="T:System.Web.UI.Page" />。</param>
+        <summary><see cref="T:System.Web.UI.PageStatePersister" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="page" /> パラメーターが <see langword="null" /> です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="ControlState">
+      <MemberSignature Language="C#" Value="public object ControlState { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object ControlState" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.PageStatePersister.ControlState" />
+      <MemberSignature Language="VB.NET" Value="Public Property ControlState As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Object ^ ControlState { System::Object ^ get(); void set(System::Object ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ControlState : obj with get, set" Usage="System.Web.UI.PageStatePersister.ControlState" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>オブジェクトを取得または設定します。このオブジェクトは、現在の <see cref="T:System.Web.UI.Page" /> オブジェクトによって格納されているコントロールが Web サーバーへの HTTP 要求間で永続化するために使用しているデータを表します。</summary>
+        <value>ビューステート データを格納しているオブジェクト。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ コントロールの状態は、Web サーバーコントロールが機能する必要がある重大なビューステートデータで構成されるオブジェクトであり、通常のビューステート情報とは別のオブジェクトに含まれています。 コントロールの<xref:System.Web.UI.Page>状態データは、ビューステートがレベルで無効になっている場合は影響を受けませんが、を使用するための追加の実装手順が必要です。 コントロールの開発時に<xref:System.Web.UI.Control.ViewState%2A>プロパティとコントロールの状態を使用する方法の詳細については、「[カスタム ASP.NET サーバーコントロールの開発](https://msdn.microsoft.com/library/fbe26c16-cff4-4089-b3dd-877411f0c0ef)」を参照してください。  
+  
+   
+  
+## Examples  
+ <xref:System.Web.UI.PageStatePersister>クラスから派生したクラスがプロパティを<xref:System.Web.UI.PageStatePersister.ControlState%2A>初期化する方法を次のコード例に示します。 この例<xref:System.Web.UI.PageStatePersister.ControlState%2A>では、プロパティが<xref:System.Web.UI.Pair>オブジェクトの<xref:System.Web.UI.Pair.Second>フィールドに割り当てられ、 <xref:System.Web.UI.ObjectStateFormatter>クラスを使用してシリアル化されています。 <xref:System.Web.UI.PageStatePersister.ControlState%2A> <xref:System.Web.UI.Pair> <xref:System.Web.UI.Pair.Second>メソッドが呼び出されると<xref:System.Web.UI.ObjectStateFormatter> 、クラスは、ビューステート情報とコントロール状態情報を逆シリアル化するために使用され、結果のオブジェクトのフィールドからプロパティが初期化されます。 <xref:System.Web.UI.PageStatePersister.Load%2A> このコード例は、 <xref:System.Web.UI.PageStatePersister>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#2](~/samples/snippets/csharp/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/CS/textfilepagestatepersister.cs#2)]
+ [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#2](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/VB/textfilepagestatepersister.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Load">
+      <MemberSignature Language="C#" Value="public abstract void Load ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Load() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.PageStatePersister.Load" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Sub Load ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract void Load();" />
+      <MemberSignature Language="F#" Value="abstract member Load : unit -&gt; unit" Usage="pageStatePersister.Load " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>派生クラスによってオーバーライドされ、<see cref="T:System.Web.UI.Page" /> オブジェクトが自身のコントロール階層を初期化するときに、永続化された状態情報を逆シリアル化して読み込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Web.UI.PageStatePersister>クラスから派生したクラスは、 <xref:System.Web.UI.PageStatePersister.Load%2A>メソッドを実装し<xref:System.Web.UI.PageStatePersister.ViewState%2A>て<xref:System.Web.UI.PageStatePersister.ControlState%2A> 、とのプロパティを永続化された形式から初期化します。  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Web.UI.PageStatePersister>クラスから派生したクラスが、 <xref:System.Web.UI.PageStatePersister.Load%2A>永続メディアからビューステートを読み込むメソッドを実装する方法を示しています。 ストリーム`StreamPageStatePersister`からのデータの読み取りを試みます。 <xref:System.Web.UI.IStateFormatter>オブジェクトを使用して、ビューステートデータを逆シリアル<xref:System.Web.UI.PageStatePersister.ViewState%2A>化し、 <xref:System.Web.UI.PageStatePersister.ControlState%2A>プロパティとプロパティを初期化します。このプロパティは、ページがコントロールを初期化するために使用します。 このコード例は、 <xref:System.Web.UI.PageStatePersister>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#2](~/samples/snippets/csharp/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/CS/textfilepagestatepersister.cs#2)]
+ [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#2](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/VB/textfilepagestatepersister.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Page">
+      <MemberSignature Language="C#" Value="protected System.Web.UI.Page Page { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.UI.Page Page" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.PageStatePersister.Page" />
+      <MemberSignature Language="VB.NET" Value="Protected Property Page As Page" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property System::Web::UI::Page ^ Page { System::Web::UI::Page ^ get(); void set(System::Web::UI::Page ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Page : System.Web.UI.Page with get, set" Usage="System.Web.UI.PageStatePersister.Page" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Web.UI.Page</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ビューステート永続化機構が作成される対象の <see cref="T:System.Web.UI.Page" /> オブジェクトを取得または設定します。</summary>
+        <value><see cref="T:System.Web.UI.Page" /> が関連付けられる <see cref="T:System.Web.UI.PageStatePersister" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Web.UI.PageStatePersister.Page%2A> 現在 <xref:System.Web.HttpContext> のオブジェクトにアクセスするには、プロパティを使用します。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Save">
+      <MemberSignature Language="C#" Value="public abstract void Save ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void Save() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Web.UI.PageStatePersister.Save" />
+      <MemberSignature Language="VB.NET" Value="Public MustOverride Sub Save ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; abstract void Save();" />
+      <MemberSignature Language="F#" Value="abstract member Save : unit -&gt; unit" Usage="pageStatePersister.Save " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>派生クラスによってオーバーライドされ、<see cref="T:System.Web.UI.Page" /> オブジェクトがメモリから読み出されるときに、永続化された状態情報をシリアル化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Web.UI.PageStatePersister>クラスから派生したクラスは、 <xref:System.Web.UI.PageStatePersister.Save%2A>メソッドを実装して、プロパティ<xref:System.Web.UI.PageStatePersister.ViewState%2A>と<xref:System.Web.UI.PageStatePersister.ControlState%2A>プロパティの内容を永続メディアに保持します。  
+  
+   
+  
+## Examples  
+ <xref:System.Web.UI.PageStatePersister>クラスから派生したクラスがメソッドを<xref:System.Web.UI.PageStatePersister.Save%2A>実装して、ビューステートを永続メディアに永続化する方法を次のコード例に示します。 は`StreamPageStatePersister` <xref:System.Web.UI.IStateFormatter> 、オブジェクトを使用して、 <xref:System.Web.UI.PageStatePersister.ViewState%2A>プロパティと<xref:System.Web.UI.PageStatePersister.ControlState%2A>プロパティの内容をシリアル化します。 このコード例は、 <xref:System.Web.UI.PageStatePersister>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#3](~/samples/snippets/csharp/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/CS/textfilepagestatepersister.cs#3)]
+ [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#3](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/VB/textfilepagestatepersister.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="StateFormatter">
+      <MemberSignature Language="C#" Value="protected System.Web.UI.IStateFormatter StateFormatter { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Web.UI.IStateFormatter StateFormatter" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.PageStatePersister.StateFormatter" />
+      <MemberSignature Language="VB.NET" Value="Protected ReadOnly Property StateFormatter As IStateFormatter" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property System::Web::UI::IStateFormatter ^ StateFormatter { System::Web::UI::IStateFormatter ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.StateFormatter : System.Web.UI.IStateFormatter" Usage="System.Web.UI.PageStatePersister.StateFormatter" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Web.UI.IStateFormatter</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Web.UI.IStateFormatter" /> メソッドおよび <see cref="P:System.Web.UI.PageStatePersister.ViewState" /> メッソドへの呼び出しで、<see cref="P:System.Web.UI.PageStatePersister.ControlState" /> プロパティおよび <see cref="M:System.Web.UI.PageStatePersister.Save" /> プロパティに格納されている状態情報のシリアル化と逆シリアル化に使用する <see cref="M:System.Web.UI.PageStatePersister.Load" /> オブジェクトを取得します。</summary>
+        <value>オブジェクトの状態のシリアル化と逆シリアル化に使用する <see cref="T:System.Web.UI.IStateFormatter" /> のインスタンス。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Web.UI.PageStatePersister.StateFormatter%2A>プロパティをオーバーライドして、独自のビューステートフォーマッタを提供できます。  
+  
+   
+  
+## Examples  
+ 次のコード<xref:System.Web.UI.PageStatePersister>例は、クラスから派生するクラスがプロパティに<xref:System.Web.UI.PageStatePersister.StateFormatter%2A>アクセスして<xref:System.Web.UI.ObjectStateFormatter>オブジェクト<xref:System.Web.UI.IStateFormatter>を取得する方法を示しています。これは、インターフェイスの既定の実装であり、シリアル化ビューです。状態と制御状態をストリームにします。 このコード例は、 <xref:System.Web.UI.PageStatePersister>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#3](~/samples/snippets/csharp/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/CS/textfilepagestatepersister.cs#3)]
+ [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#3](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/VB/textfilepagestatepersister.vb#3)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ViewState">
+      <MemberSignature Language="C#" Value="public object ViewState { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance object ViewState" />
+      <MemberSignature Language="DocId" Value="P:System.Web.UI.PageStatePersister.ViewState" />
+      <MemberSignature Language="VB.NET" Value="Public Property ViewState As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Object ^ ViewState { System::Object ^ get(); void set(System::Object ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.ViewState : obj with get, set" Usage="System.Web.UI.PageStatePersister.ViewState" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Web</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>set: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>オブジェクトを取得または設定します。このオブジェクトは、現在の <see cref="T:System.Web.UI.Page" /> オブジェクトによって格納されているコントロールが Web サーバーへの HTTP 要求間で永続化するために使用しているデータを表します。</summary>
+        <value>ビューステート データを格納しているオブジェクト。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ ビューステートは、Web サーバーコントロールが自身で機能してレンダリングする必要がある状態データのディクショナリです。 コントロール開発者は通常、 <xref:System.Web.UI.Control.ViewState%2A>プロパティを使用してビューステートオブジェクトにアクセスします。 ビューステートは、その<xref:System.Web.UI.Page>レベルでビューステートが無効になっていると影響を受けます。その結果、このようなシナリオでは、コントロールが正しく動作しなくなる可能性があります。 コントロールの開発時に<xref:System.Web.UI.Control.ViewState%2A>状態を使用および制御する方法の詳細については、「[カスタム ASP.NET サーバーコントロールの開発](https://msdn.microsoft.com/library/fbe26c16-cff4-4089-b3dd-877411f0c0ef)」を参照してください。  
+  
+   
+  
+## Examples  
+ <xref:System.Web.UI.PageStatePersister>クラスから派生したクラスがプロパティを<xref:System.Web.UI.PageStatePersister.ViewState%2A>初期化する方法を次のコード例に示します。 この<xref:System.Web.UI.PageStatePersister.ViewState%2A>例では、プロパティが<xref:System.Web.UI.Pair>オブジェクトの<xref:System.Web.UI.Pair.First>フィールドに割り当てられ、 <xref:System.Web.UI.IStateFormatter>インターフェイスのインスタンスである<xref:System.Web.UI.ObjectStateFormatter>オブジェクトを使用してシリアル化されています。 <xref:System.Web.UI.PageStatePersister.ViewState%2A> <xref:System.Web.UI.Pair> <xref:System.Web.UI.Pair.First>メソッドが呼び出されると<xref:System.Web.UI.ObjectStateFormatter> 、インターフェイスを使用してビューステート情報が逆シリアル化され、結果のオブジェクトのフィールドからプロパティが初期化されます。 <xref:System.Web.UI.PageStatePersister.Load%2A> このコード例は、 <xref:System.Web.UI.PageStatePersister>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#2](~/samples/snippets/csharp/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/CS/textfilepagestatepersister.cs#2)]
+ [!code-vb[Samples.AspNet.Alexkr.TextFilePageStatePersister_1#2](~/samples/snippets/visualbasic/VS_Snippets_WebNet/Samples.AspNet.Alexkr.TextFilePageStatePersister_1/VB/textfilepagestatepersister.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
