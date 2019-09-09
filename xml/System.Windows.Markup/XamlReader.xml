@@ -1,0 +1,533 @@
+<Type Name="XamlReader" FullName="System.Windows.Markup.XamlReader">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="35c41088e2d1020cd99f7570565c144f44b3e76c" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70500268" /></Metadata><TypeSignature Language="C#" Value="public class XamlReader" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit XamlReader extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Windows.Markup.XamlReader" />
+  <TypeSignature Language="VB.NET" Value="Public Class XamlReader" />
+  <TypeSignature Language="C++ CLI" Value="public ref class XamlReader" />
+  <TypeSignature Language="F#" Value="type XamlReader = class" />
+  <AssemblyInfo>
+    <AssemblyName>PresentationFramework</AssemblyName>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>WPF の既定の XAML リーダーおよび関連付けられている XAML オブジェクト ライターを使用して、XAML 入力を読み取り、オブジェクト グラフを作成します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 同期<xref:System.Windows.Markup.XamlReader.Load%2A>メソッドは静的ですが、非同期<xref:System.Windows.Markup.XamlReader.LoadAsync%2A>メソッドは静的ではなく、使用する<xref:System.Windows.Markup.XamlReader>クラスのインスタンスを必要とします。  
+  
+ `Load`メソッドの出力は、作成されたオブジェクトツリーまたはオブジェクトグラフのルートオブジェクトを表す単一のオブジェクトです。 によって<xref:System.Windows.Markup.XamlReader>作成されたオブジェクトグラフは、通常、実行時に WPF アプリケーションの既存のオブジェクトツリーに追加されます。 それ以外の場合、新しいオブジェクトグラフは、WPF アプリケーションモデルのために切断されたと見なされます。 これは、表示されず、WPF アプリケーションのメインオブジェクトツリー (Api <xref:System.Windows.FrameworkElement.FindName%2A> <xref:System.Windows.LogicalTreeHelper>、、など<xref:System.Windows.Media.VisualTreeHelper>) に適用されるオブジェクトツリー技法を使用してアクセスできないことを意味します。 オブジェクトツリーの概念の詳細については、「 [WPF のツリー](~/docs/framework/wpf/advanced/trees-in-wpf.md)」を参照してください。  
+  
+ <xref:System.Windows.Markup.XamlReader>では、次の主要なシナリオがサポートされています。  
+  
+-   **複製/オブジェクトファクトリ**: 追加の機構を使用しない場合、一般に、WPF オブジェクトツリー内の複数の位置に参照型を含めることはできません。 (WPF での共有または再利用をサポートするその他のメカニズムの例としては<xref:System.Windows.Freezable>、に基づくオブジェクト、の項目<xref:System.Windows.ResourceDictionary>とし<xref:System.Windows.Media.Brush>て参照されるなどの一般的な共有可能オブジェクトのサポートなどがあります)。オブジェクトツリー内に既に存在するオブジェクトを複製する方法の1つは、を<xref:System.Windows.Markup.XamlWriter.Save%2A?displayProperty=nameWithType>使用してオブジェクトをシリアル化することです。 次に、ストリームまたは<xref:System.Windows.Markup.XamlReader.Load%2A> <xref:System.Xml.XmlReader>中間のを使用して、の呼び出しの入力としてシリアル化された文字列を使用します。  
+  
+-   **ジャストインタイム情報に基づいたオブジェクトの構築**: 遅延バインディングまたはユーザー指定の入力を既存のオブジェクトの状態に変更する方法は、多くの場合、他にもあります。 たとえば、同じ値を使用して複数のプロパティを設定したり、データバインディングを使用したりすることができます。 ただし、作成するオブジェクトの型が実行時またはユーザー操作によってのみ determinable されるシナリオでは、多くの場合、入力用の<xref:System.Windows.Markup.XamlReader.Load%2A>文字列を作成することによって、このようなオブジェクトを作成するのが便利です。  
+  
+-   **既存のリソース手法**の使用<xref:System.IO.Stream> : この種類は、アプリケーションの境界を越えてデータやオブジェクトを転送するために他のフレームワークやテクノロジで頻繁に使用されます。 その後、アプリケーションの<xref:System.IO.Stream>一部としてオブジェクトを作成するために最終的に使用する XAML 形式のデータを格納または取得するための手法を使用できます。  
+  
+-   **修正済みドキュメント:** アプリケーションでは、WPF アプリケーションオブジェクトツリーおよび UI に含めるために、ローカルまたはダウンロードされた XPS ドキュメントを読み込む場合があります。  
+  
+> [!NOTE]
+>  このドキュメントでは、オブジェクトツリーではなく、オブジェクトグラフについて説明します。 厳密な親子関係は、実行時の WPF アプリケーションの実行時オブジェクトの関係に常に存在するとは限りません。そのため、オブジェクトグラフは、より広く適用される用語です。 ただし、wpf にも2つの異なる tree 概念化 api<xref:System.Windows.LogicalTreeHelper>( <xref:System.Windows.Media.VisualTreeHelper>) が含まれているため、ツリーの比喩は wpf のほとんどの実際のケースに適切に適用されます。 ただし、xaml 言語の観点からは、多くの場合、オブジェクトグラフは XAML からオブジェクトがどのように作成されるかを考えるのに最適な方法です。 xaml 言語自体では、リレーションシップをツリー構造を再構築します。  
+  
+## <a name="code-access-security-loose-xaml-and-xamlreader"></a>コードアクセスセキュリティ、ルース XAML、XamlReader  
+ XAML は、オブジェクトのインスタンス化と実行を直接表すマークアップ言語です。 そのため、XAML で作成された要素は、同じように生成されたコードと同じように、システムリソース (ネットワークアクセス、ファイルシステム IO など) と対話することができます。  
+  
+ [!INCLUDE[TLA2#tla_winclient](~/includes/tla2sharptla-winclient-md.md)]セキュリティフレームワーク[!INCLUDE[TLA2#tla_net](~/includes/tla2sharptla-net-md.md)] [!INCLUDE[TLA#tla_cas](~/includes/tlasharptla-cas-md.md)]をサポートします。 これは、 [!INCLUDE[TLA2#tla_winclient](~/includes/tla2sharptla-winclient-md.md)]インターネットゾーンで実行されているコンテンツの実行アクセス許可が低下していることを意味します。 "疎 xaml" (xaml ビューアーによって読み込み時に解釈[!INCLUDE[TLA#tla_xbap](~/includes/tlasharptla-xbap-md.md)]される、コンパイルされていない xaml のページ)。通常は、このインターネットゾーンで実行され、同じアクセス許可セットを使用します。  ただし、完全に信頼されたアプリケーションに読み込まれる XAML は、ホストアプリケーションと同じようにシステムリソースにアクセスできます。 詳細については、「 [WPF 部分信頼セキュリティ](~/docs/framework/wpf/wpf-partial-trust-security.md)」を参照してください。  
+  
+ に対するこれらのステートメントの<xref:System.Windows.Markup.XamlReader>影響は、アプリケーションの設計で、読み込む XAML に関する信頼の決定を行う必要があることです。 信頼されていない XAML を読み込む場合は、結果として得られるオブジェクトグラフを読み込む方法について、独自のサンドボックス手法を実装することを検討してください。  
+  
+ <xref:System.Windows.Markup.XamlReader>部分信頼コードによって呼び出すこともできます。 この場合、コードアクセスセキュリティにはインターネットセキュリティゾーンが適用されます。 読み込まれた XAML 内のものがインターネットセキュリティゾーンで無効な場合は、XAML 解析の例外がスローされます。 XBAP や、プラットフォームレベルで部分的に信頼されているその<xref:System.Windows.Markup.XamlReader>他のケースでは、は実行の一部であるため、明示的な部分信頼呼び出しと同じ例外動作が発生します。  
+  
+## <a name="wpf-xaml-xaml-readerswriters-and-xaml-language-versioning"></a>WPF XAML、XAML リーダー/ライター、および XAML 言語のバージョン管理  
+ XAML2009 には、 [x:Reference](~/docs/framework/xaml-services/x-reference-markup-extension.md)や[x:FactoryMethod](~/docs/framework/xaml-services/x-factorymethod-directive.md)などの言語機能が含まれています。 または`Load` `Parse`のシグネチャを使用して、これらの機能を使用する XAML を読み込むことができます。 ただし、これらの言語機能は、マークアップコンパイルが必要な XAML ではサポートされていません (WPF アプリケーションの**ページ**ビルドアクションの xaml、ビルドアクションのマークアップコンパイルタスクを含む xaml など)。  
+  
+ Wpf の内部にアクセスする一般的な概念である wpf の型と wpf テクノロジは、一般にサポートされています。 たとえば、WPF が依存関係プロパティを実装する方法は、効率的な型メンバー参照の内部手法に依存します。 これらの内部構造へのアクセスは、 <xref:System.Windows.Markup.XamlWriter> <xref:System.Windows.Markup>名前空間およびプレゼンテーションフレームワークアセンブリと<xref:System.Windows.Markup.XamlReader>の間で提供される XAML の読み取りおよび書き込み api によって有効になります。 ただし、.xaml アセンブリ (、 <xref:System.Xaml.XamlReader?displayProperty=nameWithType> <xref:System.Xaml.XamlWriter?displayProperty=nameWithType>に基づくクラス) の下位レベルの xaml リーダーおよび xaml ライターには、WPF の内部構造へのアクセス権はありません。 App.xaml と WPF 固有のアセンブリとの依存関係はありません。 WPF の内部構造にアクセスできない場合、システムの Xaml とライターは、wpf のすべての型、または WPF の種類に基づく型を正しくロードまたは保存することはできません。 特に、.Xaml リーダーとライターは、WPF の依存関係プロパティのバッキングプロパティストアなどの概念や、WPF がスタイル、リソースディクショナリ、テンプレートを使用する方法の詳細については理解していません。 そのため、次のような選択肢があります。  
+  
+-   WPF 型を読み込む場合、または、何らかの方法で BAML フォームで XAML を使用する場合は、プレゼンテーションフレームワークの XAML リーダーと XAML ライターを使用します。  
+  
+-   WPF の型や BAML 形式の XAML に依存しておらず、そのフレームワークに固有の理由により、別の特定のテクノロジの XAML リーダーまたは XAML ライターの実装を使用していない場合は、.xaml XAML リーダーと XAML ライターを使用します。  
+  
+## <a name="systemxaml-backing-implementation-in-net-4"></a>.NET 4 でのシステムのバッキング実装  
+ <xref:System.Windows.Markup.XamlReader>は、WPF フレームワークレベルの XAML パーサーの呼び出し可能な API サーフェイスです。 また、同じ基になる xaml パーサーによって、およびを対象[!INCLUDE[net_v30_short](~/includes/net-v30-short-md.md)]と[!INCLUDE[net_v35_short](~/includes/net-v35-short-md.md)]する WPF アプリケーションのランタイム XAML の読み込みと解析も実行されます。  
+  
+ を対象[!INCLUDE[net_v40_short](~/includes/net-v40-short-md.md)]とする場合、外部 API は同じですが、実装の一部は、xaml の解析[!INCLUDE[net_v40_short](~/includes/net-v40-short-md.md)]の技術的およびレポートの側面の多くを改善する、システムの xaml の一般的な実装に基づいて構築されます。 ターゲット[!INCLUDE[net_v40_short](~/includes/net-v40-short-md.md)]を指定する場合は、参照として page.xaml を含める必要があります。また、報告される例外などの実装の詳細は、システムの定義済みの型から取得される場合があります。  
+  
+## Examples  
+ クラスを使用して<xref:System.Windows.Controls.Button>を文字列に変換する例を次に示します。 <xref:System.Windows.Markup.XamlWriter>  次に、 <xref:System.Windows.Controls.Button> <xref:System.Windows.Markup.XamlReader>クラスの静的<xref:System.Windows.Markup.XamlReader.Load%2A>メソッドを使用して、文字列がに再度読み込まれます。  
+  
+ [!code-csharp[xamlreaderwritersnippets#XamlReaderLoadXmlReader](~/samples/snippets/csharp/VS_Snippets_Wpf/XamlReaderWriterSnippets/CSharp/Window1.xaml.cs#xamlreaderloadxmlreader)]
+ [!code-vb[xamlreaderwritersnippets#XamlReaderLoadXmlReader](~/samples/snippets/visualbasic/VS_Snippets_Wpf/XamlReaderWriterSnippets/visualbasic/window1.xaml.vb#xamlreaderloadxmlreader)]  
+  
+ ]]></format>
+    </remarks>
+    <altmember cref="T:System.Windows.Markup.XamlWriter" />
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XamlReader ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; XamlReader();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Windows.Markup.XamlReader" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CancelAsync">
+      <MemberSignature Language="C#" Value="public void CancelAsync ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void CancelAsync() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.CancelAsync" />
+      <MemberSignature Language="VB.NET" Value="Public Sub CancelAsync ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void CancelAsync();" />
+      <MemberSignature Language="F#" Value="member this.CancelAsync : unit -&gt; unit" Usage="xamlReader.CancelAsync " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>非同期読み込み操作が保留中である場合、現在の非同期読み込み操作を中止します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Windows.Markup.XamlReader.CancelAsync%2A>は非同期操作です。そのため、一部の読み込みは、操作が中止される前に発生する場合があります。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetWpfSchemaContext">
+      <MemberSignature Language="C#" Value="public static System.Xaml.XamlSchemaContext GetWpfSchemaContext ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Xaml.XamlSchemaContext GetWpfSchemaContext() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.GetWpfSchemaContext" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetWpfSchemaContext () As XamlSchemaContext" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Xaml::XamlSchemaContext ^ GetWpfSchemaContext();" />
+      <MemberSignature Language="F#" Value="static member GetWpfSchemaContext : unit -&gt; System.Xaml.XamlSchemaContext" Usage="System.Windows.Markup.XamlReader.GetWpfSchemaContext " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Xaml.XamlSchemaContext</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary><see cref="T:System.Xaml.XamlSchemaContext" /> の WPF スキーマ コンテキスト設定を表す <see cref="T:System.Windows.Markup.XamlReader" /> オブジェクトを返します。</summary>
+        <returns><see cref="T:System.Xaml.XamlSchemaContext" /> の WPF スキーマ コンテキスト設定を表す <see cref="T:System.Windows.Markup.XamlReader" /> オブジェクト。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Load">
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>XAML 入力を読み取り、対応するオブジェクト ツリーのルートを返します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Load">
+      <MemberSignature Language="C#" Value="public static object Load (System.IO.Stream stream);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig object Load(class System.IO.Stream stream) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.Load(System.IO.Stream)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Object ^ Load(System::IO::Stream ^ stream);" />
+      <MemberSignature Language="F#" Value="static member Load : System.IO.Stream -&gt; obj" Usage="System.Windows.Markup.XamlReader.Load stream" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="stream" Type="System.IO.Stream" />
+      </Parameters>
+      <Docs>
+        <param name="stream">ストリーム形式の読み込む XAML。</param>
+        <summary>指定した <see cref="T:System.IO.Stream" /> 内の XAML 入力を読み取り、対応するオブジェクト ツリーのルートである <see cref="T:System.Object" /> を返します。</summary>
+        <returns>作成されたオブジェクト ツリーのルートのオブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ クラスを使用して<xref:System.Windows.Controls.Button> <xref:System.IO.MemoryStream>をに保存する例を次<xref:System.Windows.Markup.XamlWriter>に示します。 次に、 <xref:System.Windows.Controls.Button> <xref:System.Windows.Markup.XamlReader>クラスの静的<xref:System.Windows.Markup.XamlReader.Load%2A>メソッドを使用して、ストリームがに再度読み込まれます。  
+  
+ [!code-csharp[XamlReaderWriterSnippets#XamlReaderLoadXmlReader](~/samples/snippets/csharp/VS_Snippets_Wpf/XamlReaderWriterSnippets/CSharp/Window1.xaml.cs#xamlreaderloadxmlreader)]
+ [!code-vb[XamlReaderWriterSnippets#XamlReaderLoadXmlReader](~/samples/snippets/visualbasic/VS_Snippets_Wpf/XamlReaderWriterSnippets/visualbasic/window1.xaml.vb#xamlreaderloadxmlreader)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="stream" /> は <see langword="null" />です。</exception>
+        <altmember cref="T:System.Windows.Markup.XamlWriter" />
+      </Docs>
+    </Member>
+    <Member MemberName="Load">
+      <MemberSignature Language="C#" Value="public static object Load (System.Xaml.XamlReader reader);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig object Load(class System.Xaml.XamlReader reader) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.Load(System.Xaml.XamlReader)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Load (reader As XamlReader) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Object ^ Load(System::Xaml::XamlReader ^ reader);" />
+      <MemberSignature Language="F#" Value="static member Load : System.Xaml.XamlReader -&gt; obj" Usage="System.Windows.Markup.XamlReader.Load reader" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="reader" Type="System.Xaml.XamlReader" Index="0" FrameworkAlternate="netcore-3.0;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
+      </Parameters>
+      <Docs>
+        <param name="reader"><see cref="T:System.Xaml.XamlReader" /> オブジェクト。 入力 XAML で初期化されていることが求められます。</param>
+        <summary>指定した <see cref="T:System.Xaml.XamlReader" /> を使用して XAML 入力を読み取り、対応するオブジェクト ツリーのルートであるオブジェクトを返します。</summary>
+        <returns>作成されたオブジェクト ツリーのルートとなるオブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 入力<xref:System.Xaml.XamlReader>はにする<xref:System.Windows.Baml2006.Baml2006Reader>ことができます。 これは、実行時またはローカライズツールの目的で、BAML を読み込む方法です。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="reader" /> は <see langword="null" />です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Load">
+      <MemberSignature Language="C#" Value="public static object Load (System.Xml.XmlReader reader);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig object Load(class System.Xml.XmlReader reader) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.Load(System.Xml.XmlReader)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Load (reader As XmlReader) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Object ^ Load(System::Xml::XmlReader ^ reader);" />
+      <MemberSignature Language="F#" Value="static member Load : System.Xml.XmlReader -&gt; obj" Usage="System.Windows.Markup.XamlReader.Load reader" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="reader" Type="System.Xml.XmlReader" />
+      </Parameters>
+      <Docs>
+        <param name="reader">XAML 入力を既に XML 形式で読み込んでいる <see cref="T:System.Xml.XmlReader" />。</param>
+        <summary>指定した <see cref="T:System.Xml.XmlReader" /> 内の XAML 入力を読み取り、対応するオブジェクト ツリーのルートであるオブジェクトを返します。</summary>
+        <returns>作成されたオブジェクト ツリーのルートとなるオブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ クラスを使用して<xref:System.Windows.Controls.Button>を文字列に変換する例を次に示します。 <xref:System.Windows.Markup.XamlWriter>  次に、 <xref:System.Windows.Controls.Button> <xref:System.Windows.Markup.XamlReader>クラスの静的<xref:System.Windows.Markup.XamlReader.Load%2A>メソッドを使用して、文字列がに再度読み込まれます。  
+  
+ [!code-csharp[XamlReaderWriterSnippets#XamlReaderLoadXmlReader](~/samples/snippets/csharp/VS_Snippets_Wpf/XamlReaderWriterSnippets/CSharp/Window1.xaml.cs#xamlreaderloadxmlreader)]
+ [!code-vb[XamlReaderWriterSnippets#XamlReaderLoadXmlReader](~/samples/snippets/visualbasic/VS_Snippets_Wpf/XamlReaderWriterSnippets/visualbasic/window1.xaml.vb#xamlreaderloadxmlreader)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="reader" /> が <see langword="null" /> です。</exception>
+        <altmember cref="T:System.Windows.Markup.XamlWriter" />
+      </Docs>
+    </Member>
+    <Member MemberName="Load">
+      <MemberSignature Language="C#" Value="public static object Load (System.IO.Stream stream, System.Windows.Markup.ParserContext parserContext);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig object Load(class System.IO.Stream stream, class System.Windows.Markup.ParserContext parserContext) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.Load(System.IO.Stream,System.Windows.Markup.ParserContext)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Object ^ Load(System::IO::Stream ^ stream, System::Windows::Markup::ParserContext ^ parserContext);" />
+      <MemberSignature Language="F#" Value="static member Load : System.IO.Stream * System.Windows.Markup.ParserContext -&gt; obj" Usage="System.Windows.Markup.XamlReader.Load (stream, parserContext)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="stream" Type="System.IO.Stream" />
+        <Parameter Name="parserContext" Type="System.Windows.Markup.ParserContext" />
+      </Parameters>
+      <Docs>
+        <param name="stream">読み込む XAML 入力を格納しているストリーム。</param>
+        <param name="parserContext">パーサーで使用するコンテキスト情報。</param>
+        <summary>指定した <see cref="T:System.IO.Stream" /> 内の XAML 入力を読み取り、対応するオブジェクト ツリーのルートであるオブジェクトを返します。</summary>
+        <returns>作成されたオブジェクト ツリーのルートとなるオブジェクト。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="stream" /> は <see langword="null" />です。  
+  
+- または - 
+ <paramref name="parserContext" /> は <see langword="null" />です。</exception>
+        <altmember cref="T:System.Windows.Markup.XamlWriter" />
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="LoadAsync">
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>XAML マークアップを読み取り、指定したマークアップのルートに対応するオブジェクトを返します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="LoadAsync">
+      <MemberSignature Language="C#" Value="public object LoadAsync (System.IO.Stream stream);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance object LoadAsync(class System.IO.Stream stream) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.LoadAsync(System.IO.Stream)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Object ^ LoadAsync(System::IO::Stream ^ stream);" />
+      <MemberSignature Language="F#" Value="member this.LoadAsync : System.IO.Stream -&gt; obj" Usage="xamlReader.LoadAsync stream" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="stream" Type="System.IO.Stream" />
+      </Parameters>
+      <Docs>
+        <param name="stream">読み込む XAML 入力を格納しているストリーム。</param>
+        <summary>指定した <see cref="T:System.IO.Stream" /> 内の XAML 入力を読み取り、対応するオブジェクト ツリーのルートを返します。</summary>
+        <returns>作成されたオブジェクト ツリーのルートとなるオブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 非同期 XAML 読み込み操作は、最初は単にルートオブジェクトであるオブジェクトを返します。 非同期的に XAML 解析が続行され、子オブジェクトがルートの下に格納されます。 これは、一般的な WPF XAML 処理の動作と、オブジェクトの有効期間の WPF 概念との相互作用とは対照的です。 一般的な (非同期ではない) 相互作用では、要素を返す前にすべての子コレクションを含むオブジェクトのすべてのプロパティが入力され、読み込まれたものとして報告されます。 この動作は、ルートオブジェクトが使用可能になる最後のオブジェクトであるツリーを作成するためのボトムアップ方式に相当します。  
+  
+ 通常、返されたオブジェクトは、WPF アプリケーションのオブジェクトツリー内のある場所に割り当てられます。これにはコンテンツがまだ埋め込まれている可能性があり、コンテンツ全体が UI の一部として公開されている場合は、レイアウトの増分更新が発生する可能性があります。 このため、通常は、非同期的に読み込まれたオブジェクトを XAML から分離または仮想化し、アプリケーション固有のロジックまたはアプリケーション<xref:System.Windows.Markup.XamlReader.LoadCompleted>の状態を使用してが処理されたときに通知します。  
+  
+ が xaml 入力を非同期に読み込むためには、xaml 入力のルート要素に属性と値`x:SynchronousMode="Async"`が含まれている必要があります。 <xref:System.Windows.Markup.XamlReader.LoadAsync%2A> 値は大文字と小文字を区別して扱われます。 XAML 入力ルートにが含ま`x:SynchronousMode="Async"`れていない場合、例外はスローされず、呼び出しは同期読み込みとして処理されます (「」を参照してください<xref:System.Windows.Markup.XamlReader.Load%28System.IO.Stream%29>)。  
+  
+ 一度に実行できるのは、 <xref:System.Windows.Markup.XamlReader>クラスのインスタンスごとに1つの非同期読み込み操作だけです。  <xref:System.Windows.Markup.XamlReader>クラスの同じインスタンスで複数の非同期操作を実行しようとすると<xref:System.InvalidOperationException> 、がスローされます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="stream" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つの <see cref="T:System.Windows.Markup.XamlReader" /> で、複数の読み込み操作が同時に保留になります。</exception>
+        <altmember cref="T:System.Windows.Markup.XamlWriter" />
+      </Docs>
+    </Member>
+    <Member MemberName="LoadAsync">
+      <MemberSignature Language="C#" Value="public object LoadAsync (System.Xml.XmlReader reader);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance object LoadAsync(class System.Xml.XmlReader reader) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.LoadAsync(System.Xml.XmlReader)" />
+      <MemberSignature Language="VB.NET" Value="Public Function LoadAsync (reader As XmlReader) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Object ^ LoadAsync(System::Xml::XmlReader ^ reader);" />
+      <MemberSignature Language="F#" Value="member this.LoadAsync : System.Xml.XmlReader -&gt; obj" Usage="xamlReader.LoadAsync reader" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="reader" Type="System.Xml.XmlReader" />
+      </Parameters>
+      <Docs>
+        <param name="reader">XAML 入力を既に読み込んでいる (読み取っている) 既存の <see cref="T:System.Xml.XmlReader" />。</param>
+        <summary>指定した <see cref="T:System.Xml.XmlReader" /> 内の XAML 入力を読み取り、対応するオブジェクト ツリーのルートを返します。</summary>
+        <returns>作成されたオブジェクト ツリーのルート。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 非同期 XAML 読み込み操作は、最初は単にルートオブジェクトであるオブジェクトを返します。 非同期的に XAML 解析が続行され、子オブジェクトがルートの下に格納されます。 これは、一般的な WPF XAML 処理の動作と、オブジェクトの有効期間の WPF 概念との相互作用とは対照的です。 一般的な (非同期ではない) 相互作用では、要素を返す前にすべての子コレクションを含むオブジェクトのすべてのプロパティが入力され、読み込まれたものとして報告されます。 この動作は、ルートオブジェクトが使用可能になる最後のオブジェクトであるツリーを作成するためのボトムアップ方式に相当します。  
+  
+ 通常、返されるオブジェクト<xref:System.Windows.Markup.XamlReader.LoadAsync%2A>は、アプリケーションのオブジェクトツリー内のある場所に割り当てられます。その際、コンテンツがまだ入力されている可能性があります。また、コンテンツ全体がUI. このため、通常は、非同期的に読み込まれたオブジェクトを XAML から分離または仮想化し、アプリケーション固有のロジックまたはアプリケーション<xref:System.Windows.Markup.XamlReader.LoadCompleted>の状態を使用してが処理されたときに通知します。  
+  
+ が xaml 入力を非同期に読み込むためには、xaml マークアップのルート要素に属性と値`x:SynchronousMode="Async"`が含まれている必要があります。 <xref:System.Windows.Markup.XamlReader.LoadAsync%2A> 値は大文字と小文字を区別して扱われます。 XAML マークアップルートにが含ま`x:SynchronousMode="Async"`れていない場合、例外はスローされず、呼び出しは同期読み込みとして処理されます (「」を参照してください<xref:System.Windows.Markup.XamlReader.Load%28System.Xml.XmlReader%29>)。  
+  
+ 一度に実行できるのは、 <xref:System.Windows.Markup.XamlReader>クラスのインスタンスごとに1つの非同期読み込み操作だけです。  <xref:System.Windows.Markup.XamlReader>クラスの同じインスタンスで複数の非同期操作を実行しようとすると<xref:System.InvalidOperationException> 、がスローされます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="reader" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つの <see cref="T:System.Windows.Markup.XamlReader" /> で、複数の読み込み操作が同時に実行されます。</exception>
+        <altmember cref="T:System.Windows.Markup.XamlWriter" />
+      </Docs>
+    </Member>
+    <Member MemberName="LoadAsync">
+      <MemberSignature Language="C#" Value="public object LoadAsync (System.IO.Stream stream, System.Windows.Markup.ParserContext parserContext);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance object LoadAsync(class System.IO.Stream stream, class System.Windows.Markup.ParserContext parserContext) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.LoadAsync(System.IO.Stream,System.Windows.Markup.ParserContext)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Object ^ LoadAsync(System::IO::Stream ^ stream, System::Windows::Markup::ParserContext ^ parserContext);" />
+      <MemberSignature Language="F#" Value="member this.LoadAsync : System.IO.Stream * System.Windows.Markup.ParserContext -&gt; obj" Usage="xamlReader.LoadAsync (stream, parserContext)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="stream" Type="System.IO.Stream" />
+        <Parameter Name="parserContext" Type="System.Windows.Markup.ParserContext" />
+      </Parameters>
+      <Docs>
+        <param name="stream">読み込む XAML 入力を格納しているストリーム。</param>
+        <param name="parserContext">パーサーで使用するコンテキスト情報。</param>
+        <summary>指定した <see cref="T:System.IO.Stream" /> 内の XAML 入力を読み取り、対応するオブジェクト ツリーのルートを返します。</summary>
+        <returns>作成されたオブジェクト ツリーのルート。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 非同期 XAML 読み込み操作は、最初は単にルートオブジェクトであるオブジェクトを返します。 非同期的に XAML 解析が続行され、子オブジェクトがルートの下に格納されます。 これは、一般的な WPF XAML 処理の動作と、オブジェクトの有効期間の WPF 概念との相互作用とは対照的です。 一般的な (非同期ではない) 相互作用では、要素を返す前にすべての子コレクションを含むオブジェクトのすべてのプロパティが入力され、読み込まれたものとして報告されます。 この動作は、ルートオブジェクトが使用可能になる最後のオブジェクトであるツリーを作成するためのボトムアップ方式に相当します。  
+  
+ 通常、返されるオブジェクトは、アプリケーションのオブジェクトツリー内のある場所に割り当てられます。これには、コンテンツがまだ入力されている可能性があり、コンテンツ全体が UI の一部として公開されている場合は、レイアウトの増分更新が発生する可能性があります。 このため、通常は、非同期的に読み込まれたオブジェクトを XAML から分離または仮想化し、アプリケーション固有のロジックまたはアプリケーション<xref:System.Windows.Markup.XamlReader.LoadCompleted>の状態を使用してが処理されたときに通知します。  
+  
+ がマーク`x:SynchronousMode="Async"`アップを非同期に読み込むためには、XAML マークアップのルート要素に属性と値が含まれている必要 <xref:System.Windows.Markup.XamlReader.LoadAsync%2A> があります。 値は大文字と小文字を区別して扱われます。 XAML マークアップルートにが含ま`x:SynchronousMode="Async"`れていない場合、例外はスローされず、呼び出しは同期読み込みとして処理されます (「」を参照してください<xref:System.Windows.Markup.XamlReader.Load%28System.IO.Stream%2CSystem.Windows.Markup.ParserContext%29>)。  
+  
+ 一度に実行できるのは、 <xref:System.Windows.Markup.XamlReader>クラスのインスタンスごとに1つの非同期読み込み操作だけです。  <xref:System.Windows.Markup.XamlReader>クラスの同じインスタンスで複数の非同期操作を実行しようとすると<xref:System.InvalidOperationException> 、がスローされます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="stream" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.InvalidOperationException">1 つの <see cref="T:System.Windows.Markup.XamlReader" /> で、複数の読み込み操作が同時に実行されます。</exception>
+        <altmember cref="T:System.Windows.Markup.XamlWriter" />
+      </Docs>
+    </Member>
+    <Member MemberName="LoadCompleted">
+      <MemberSignature Language="C#" Value="public event System.ComponentModel.AsyncCompletedEventHandler LoadCompleted;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.ComponentModel.AsyncCompletedEventHandler LoadCompleted" />
+      <MemberSignature Language="DocId" Value="E:System.Windows.Markup.XamlReader.LoadCompleted" />
+      <MemberSignature Language="VB.NET" Value="Public Event LoadCompleted As AsyncCompletedEventHandler " />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; event System::ComponentModel::AsyncCompletedEventHandler ^ LoadCompleted;" />
+      <MemberSignature Language="F#" Value="member this.LoadCompleted : System.ComponentModel.AsyncCompletedEventHandler " Usage="member this.LoadCompleted : System.ComponentModel.AsyncCompletedEventHandler " />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.ComponentModel.AsyncCompletedEventHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>非同期の読み込み操作の完了時に発生します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Windows.Markup.XamlReader.LoadCompleted>は、非同期読み込み操作が中止されたときにも発生します。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.ComponentModel.AsyncCompletedEventHandler" />
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Parse">
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>指定したテキスト文字列内のマークアップを読み取り、指定したマークアップのルートに対応するオブジェクトを返します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Parse">
+      <MemberSignature Language="C#" Value="public static object Parse (string xamlText);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig object Parse(string xamlText) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.Parse(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Parse (xamlText As String) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Object ^ Parse(System::String ^ xamlText);" />
+      <MemberSignature Language="F#" Value="static member Parse : string -&gt; obj" Usage="System.Windows.Markup.XamlReader.Parse xamlText" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="xamlText" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="xamlText">単一のテキスト文字列としての入力 XAML。</param>
+        <summary>指定したテキスト文字列内の XAML 入力を読み取り、指定したマークアップのルートに対応するオブジェクトを返します。</summary>
+        <returns>作成されたオブジェクト ツリーのルート。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ の実装は<xref:System.Windows.Markup.XamlReader.Load%2A> 、文字列からストリームを作成した後に、内部的にを呼び出します。 考え<xref:System.Windows.Markup.XamlReader.Load%2A>られる例外などの追加情報については、「」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Parse">
+      <MemberSignature Language="C#" Value="public static object Parse (string xamlText, System.Windows.Markup.ParserContext parserContext);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig object Parse(string xamlText, class System.Windows.Markup.ParserContext parserContext) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Windows.Markup.XamlReader.Parse(System.String,System.Windows.Markup.ParserContext)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Object ^ Parse(System::String ^ xamlText, System::Windows::Markup::ParserContext ^ parserContext);" />
+      <MemberSignature Language="F#" Value="static member Parse : string * System.Windows.Markup.ParserContext -&gt; obj" Usage="System.Windows.Markup.XamlReader.Parse (xamlText, parserContext)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>PresentationFramework</AssemblyName>
+        <AssemblyVersion>3.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="xamlText" Type="System.String" />
+        <Parameter Name="parserContext" Type="System.Windows.Markup.ParserContext" />
+      </Parameters>
+      <Docs>
+        <param name="xamlText">単一のテキスト文字列としての入力 XAML。</param>
+        <param name="parserContext">パーサーで使用するコンテキスト情報。</param>
+        <summary>指定したテキスト文字列 (指定した <see cref="T:System.Windows.Markup.ParserContext" /> を使用) 内の XAML マークアップを読み取り、指定したマークアップのルートに対応するオブジェクトを返します。</summary>
+        <returns>作成されたオブジェクト ツリーのルート。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ の実装は<xref:System.Windows.Markup.XamlReader.Load%2A> 、文字列からストリームを作成した後に、内部的にを呼び出します。 考え<xref:System.Windows.Markup.XamlReader.Load%2A>られる例外などの追加情報については、「」を参照してください。  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

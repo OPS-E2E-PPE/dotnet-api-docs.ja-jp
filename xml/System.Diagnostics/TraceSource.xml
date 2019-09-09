@@ -1,0 +1,1174 @@
+<Type Name="TraceSource" FullName="System.Diagnostics.TraceSource">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="ef7cea92fac30ff5b18e766889b1d3938d0a1eff" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70681524" /></Metadata><TypeSignature Language="C#" Value="public class TraceSource" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit TraceSource extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Diagnostics.TraceSource" />
+  <TypeSignature Language="VB.NET" Value="Public Class TraceSource" />
+  <TypeSignature Language="C++ CLI" Value="public ref class TraceSource" />
+  <TypeSignature Language="F#" Value="type TraceSource = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>アプリケーションでコードの実行をトレースしてトレース メッセージをソースに関連付けることができるようにする、メソッドおよびプロパティのセットを提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <xref:System.Diagnostics.TraceSource> クラスをアプリケーションで使用すると、アプリケーションに関連付けることができるトレースを生成できます。 <xref:System.Diagnostics.TraceSource> は、イベントのトレース、データのトレース、および情報トレースの発行を簡単に実行できるトレース メソッドを提供します。 からのトレース<xref:System.Diagnostics.TraceSource>出力は、構成ファイルの設定によって制御できます。 構成ファイルは、アプリケーションの実行可能ファイルが格納されているフォルダーにあり、アプリケーションの名前に .config ファイル名拡張子が追加されています。 たとえば、TraceSourceSample の構成ファイルの名前は、TraceSourceSample になります。構成ファイルを使用すると、トレース情報を送信する場所とトレースするアクティビティのレベルを決定できます。 次の例は、サンプルアプリケーション構成ファイルの内容を示しています。  
+  
+```xml  
+<configuration>  
+  <system.diagnostics>  
+    <sources>  
+      <source name="TraceTest" switchName="SourceSwitch"   
+        switchType="System.Diagnostics.SourceSwitch" >  
+        <listeners>  
+          <add name="console" />  
+          <remove name ="Default" />  
+        </listeners>  
+      </source>  
+    </sources>  
+    <switches>  
+      <!-- You can set the level at which tracing is to occur -->  
+      <add name="SourceSwitch" value="Warning" />  
+        <!-- You can turn tracing off -->  
+        <!--add name="SourceSwitch" value="Off" -->  
+    </switches>  
+    <sharedListeners>  
+      <add name="console"   
+        type="System.Diagnostics.ConsoleTraceListener"   
+        initializeData="false"/>  
+    </sharedListeners>  
+    <trace autoflush="true" indentsize="4">  
+      <listeners>  
+        <add name="console" />  
+      </listeners>  
+    </trace>  
+  </system.diagnostics>  
+</configuration>  
+```  
+  
+ <xref:System.Diagnostics.TraceSource>クラスは、通常はアプリケーションの名前である、ソースの名前によって識別されます。  特定のコンポーネントからのトレース メッセージは、特定のトレース ソースによって開始されるので、そのコンポーネントからのメッセージを簡単に識別することができます。  
+  
+ <xref:System.Diagnostics.TraceSource> は、トレース メソッドを定義しますが、実際にトレース データを生成して格納する、特定のメカニズムは提供されません。 トレースデータは、トレースソースによって読み込むことができるプラグインであるトレースリスナーによって生成されます。  
+  
+> [!NOTE]
+>  ファイナライゼーション処理中にトレース メソッドを呼び出すべきではありません。 <xref:System.ObjectDisposedException> がスローされる結果になります。  
+  
+ <xref:System.Diagnostics.TraceListener> インスタンスが格納されているコレクション <xref:System.Diagnostics.TraceSource.Listeners%2A?displayProperty=nameWithType> プロパティに追加または削除することによって、トレース出力のターゲットをカスタマイズすることができます。 既定では、<xref:System.Diagnostics.DefaultTraceListener> クラスのインスタンスを使用して、トレース出力が生成されます。 前の構成ファイルの例では、トレース ソースから <xref:System.Diagnostics.DefaultTraceListener> を削除して、トレース出力を生成するために、<xref:System.Diagnostics.ConsoleTraceListener> を追加しています。 詳細については、[&lt;リスナー&gt;](~/docs/framework/configure-apps/file-schema/trace-debug/listeners-element-for-source.md)と[&lt;上 sharedListeners&gt;](~/docs/framework/configure-apps/file-schema/trace-debug/sharedlisteners-element.md)を参照してください。  
+  
+> [!NOTE]
+>  <xref:System.Diagnostics.TraceSource.Listeners%2A> コレクションにトレース リスナーを追加することで、トレース リスナーによって使用されるリソースが利用できない場合、トレース中に例外を発生させることになります。 条件とスローされる例外は、トレース リスナーに依存し、このトピックで列挙することはできません。 トレース リスナーから例外を検出し、処理するために、<xref:System.Diagnostics.TraceSource> メソッドの呼び出しを`try` / `catch`ブロックに配置することができます。  
+  
+ <xref:System.Diagnostics.SourceSwitch>クラスには、トレース出力を動的に制御するための手段が用意されています。 上記の構成ファイルの例では、トレース ソースとするトレース レベルが発生したコントロールからのトレースを無効にすることができる方法を示します。  アプリケーションを再コンパイルしなくてもソース スイッチの値を変更できます。 スイッチを設定する構成ファイルの使用方法の詳細については、<xref:System.Diagnostics.Switch>と[スイッチおよび方法: トレーススイッチを作成、初期化、および構成する](~/docs/framework/debug-trace-profile/how-to-create-initialize-and-configure-trace-switches.md)を参照してください。  
+  
+> [!NOTE]
+>  アプリケーションの実行中に構成ファイルを変更する場合、アプリケーションを停止して再起動するか、新しい設定を有効にするために、<xref:System.Diagnostics.Trace.Refresh%2A> メソッドを呼び出す必要があります。  
+  
+ <xref:System.Diagnostics.TraceEventType>列挙体は、トレースメッセージのイベントの種類を定義するために使用されます。 トレース フィルターを使用して、<xref:System.Diagnostics.TraceEventType> をトレース リスナーがトレース メッセージを生成する必要があるかどうかを判断します。  
+  
+ トレースリスナーは、トレースフィルターを使用して、必要に応じてフィルター処理のレイヤーを追加できます。  トレースリスナーに関連付けられたフィルターがある場合、 <xref:System.Diagnostics.TraceFilter.ShouldTrace%2A>リスナーはそのフィルターのメソッドを呼び出して、トレース情報を生成するかどうかを判断します。  
+  
+ トレースリスナー <xref:System.Diagnostics.Trace>は、クラス<xref:System.Diagnostics.Trace.IndentSize%2A>プロパティ<xref:System.Diagnostics.Trace.Indent%2A>、、および<xref:System.Diagnostics.Trace.AutoFlush%2A>の値を使用して、トレース出力を書式設定します。 構成ファイルの属性を使用して、 <xref:System.Diagnostics.Trace.Indent%2A> <xref:System.Diagnostics.Trace.IndentSize%2A>、、および<xref:System.Diagnostics.Trace.AutoFlush%2A>の各プロパティを設定できます。 次の例では<xref:System.Diagnostics.Trace.AutoFlush%2A> 、プロパティ`false`をに<xref:System.Diagnostics.Trace.IndentSize%2A> 、プロパティを3に設定します。  
+  
+```xml  
+<configuration>  
+  <system.diagnostics>  
+    <trace autoflush="false" indentsize="3" />  
+  </system.diagnostics>  
+</configuration>  
+```  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Diagnostics.TraceSource>クラスを使用してトレースをリスナーに転送する方法を示しています。  この例では、スイッチとフィルターの使用方法も示しています。  
+  
+ [!code-cpp[System.Diagnostics.TraceSource2#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CPP/tracesource2.cpp#1)]
+ [!code-csharp[System.Diagnostics.TraceSource2#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CS/program.cs#1)]
+ [!code-vb[System.Diagnostics.TraceSource2#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/VB/program.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe>この型はスレッド セーフです。</threadsafe>
+    <related type="Article" href="~/docs/framework/configure-apps/file-schema/trace-debug/index.md">トレースおよびデバッグ設定のスキーマ</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Diagnostics.TraceSource" /> クラスの新しいインスタンスを初期化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public TraceSource (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.#ctor(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (name As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; TraceSource(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="new System.Diagnostics.TraceSource : string -&gt; System.Diagnostics.TraceSource" Usage="new System.Diagnostics.TraceSource name" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">ソースの名前 (通常はアプリケーションの名前)。</param>
+        <summary>指定したソースの名前を使用して、<see cref="T:System.Diagnostics.TraceSource" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ トレースを識別するために、ソース名が使用されます。 トレースリスナーがトレースを<xref:System.Diagnostics.SourceFilter>生成する必要があるかどうかを判断するために、によって使用されます。 ソース名としてアプリケーション名を使用することをお勧めします。  
+  
+> [!NOTE]
+>  トレース要求ごとに新しい<xref:System.Diagnostics.TraceSource>インスタンスを作成する必要はありません。 インスタンスを<xref:System.Diagnostics.TraceSource> 1 つ作成し、アプリケーションのすべてのトレース要求に使用します。  
+  
+   
+  
+## Examples  
+ <xref:System.Diagnostics.TraceSource.%23ctor%2A>コンストラクターを使用して新しい<xref:System.Diagnostics.TraceSource>オブジェクトを作成する方法を次のコード例に示します。 このコード例は、 <xref:System.Diagnostics.TraceSource>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource2#9](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CS/program.cs#9)]
+ [!code-vb[System.Diagnostics.TraceSource2#9](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/VB/program.vb#9)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="name" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="name" /> が空の文字列 ("") です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public TraceSource (string name, System.Diagnostics.SourceLevels defaultLevel);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string name, valuetype System.Diagnostics.SourceLevels defaultLevel) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.#ctor(System.String,System.Diagnostics.SourceLevels)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (name As String, defaultLevel As SourceLevels)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; TraceSource(System::String ^ name, System::Diagnostics::SourceLevels defaultLevel);" />
+      <MemberSignature Language="F#" Value="new System.Diagnostics.TraceSource : string * System.Diagnostics.SourceLevels -&gt; System.Diagnostics.TraceSource" Usage="new System.Diagnostics.TraceSource (name, defaultLevel)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="defaultLevel" Type="System.Diagnostics.SourceLevels" />
+      </Parameters>
+      <Docs>
+        <param name="name">ソースの名前 (通常はアプリケーションの名前)。</param>
+        <param name="defaultLevel">トレースする既定のソース レベルを指定する列挙値のビットごとの組み合わせ。</param>
+        <summary>ソースの指定された名前、およびトレースが発生する既定のソース レベルを使用して、<see cref="T:System.Diagnostics.TraceSource" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ トレースを識別するために、ソース名が使用されます。 トレースを発生させるか<xref:System.Diagnostics.SourceSwitch>どうかを判断したり<xref:System.Diagnostics.SourceFilter> 、トレースを生成するかどうかを判断したりするために、で使用できます。 既定のソースレベルは、トレースする<xref:System.Diagnostics.EventTypeFilter>メッセージのソースレベルに基づいてトレースが行われるかどうかを判断するために、によって使用されます。  
+  
+> [!NOTE]
+>  トレース要求ごとに新しい<xref:System.Diagnostics.TraceSource>インスタンスを作成する必要はありません。 インスタンスを<xref:System.Diagnostics.TraceSource> 1 つ作成し、アプリケーションのすべてのトレース要求に使用します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="name" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="name" /> が空の文字列 ("") です。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="Attributes">
+      <MemberSignature Language="C#" Value="public System.Collections.Specialized.StringDictionary Attributes { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Collections.Specialized.StringDictionary Attributes" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.TraceSource.Attributes" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Attributes As StringDictionary" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Collections::Specialized::StringDictionary ^ Attributes { System::Collections::Specialized::StringDictionary ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Attributes : System.Collections.Specialized.StringDictionary" Usage="System.Diagnostics.TraceSource.Attributes" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Specialized.StringDictionary</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>アプリケーション構成ファイルに定義されているカスタム スイッチ属性を取得します。</summary>
+        <value>トレース スイッチのカスタム属性を格納している <see cref="T:System.Collections.Specialized.StringDictionary" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティ<xref:System.Diagnostics.TraceSource.Attributes%2A>は、アプリケーションの構成ファイルで参照されるカスタム属性を識別します。 参照されていないカスタム属性は列挙されません。 <xref:System.Diagnostics.TraceSource>クラスを継承するクラスでは、 <xref:System.Diagnostics.Switch.GetSupportedAttributes%2A?displayProperty=nameWithType>メソッドをオーバーライドし、カスタム属性名の文字列配列を返すことによって、カスタム属性を追加できます。  
+  
+ カスタム属性`SecondTraceSourceAttribute`を指定するトレースソース要素の例を次に示します。  
+  
+```xml  
+<sources>  
+  <source name="TraceTest" switchName="TestSourceSwitch"   
+    switchType="Testing.MySourceSwitch, TraceSample"   
+    SecondTraceSourceAttribute="two">  
+  </source>  
+</sources>  
+```  
+  
+   
+  
+## Examples  
+ 次のコードサンプルは、の<xref:System.Diagnostics.TraceSource>カスタム属性を表示する方法を示しています。  このコード例は、 <xref:System.Diagnostics.TraceSource>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource2#14](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CS/program.cs#14)]
+ [!code-vb[System.Diagnostics.TraceSource2#14](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/VB/program.vb#14)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Close">
+      <MemberSignature Language="C#" Value="public void Close ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void Close() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.Close" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Close ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Close();" />
+      <MemberSignature Language="F#" Value="member this.Close : unit -&gt; unit" Usage="traceSource.Close " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>トレース リスナー コレクション内のすべてのトレース リスナーを閉じます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Diagnostics.TraceSource.Close%2A>は、 <xref:System.Diagnostics.TraceSource.Listeners%2A>コレクション<xref:System.Diagnostics.TraceListener.Close%2A>内の各トレースリスナーのメソッドを呼び出します。  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Diagnostics.TraceSource.Close%2A>メソッドを使用して、コレクション内のすべてのリスナーを閉じる方法を示しています。 このコード例は、 <xref:System.Diagnostics.TraceSource>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource2#33](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CS/program.cs#33)]
+ [!code-vb[System.Diagnostics.TraceSource2#33](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/VB/program.vb#33)]  
+  
+ ]]></format>
+        </remarks>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージコードを操作するために使用します。 要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、関連付けられ<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" />た列挙型:。</permission>
+      </Docs>
+    </Member>
+    <Member MemberName="Flush">
+      <MemberSignature Language="C#" Value="public void Flush ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void Flush() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.Flush" />
+      <MemberSignature Language="VB.NET" Value="Public Sub Flush ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void Flush();" />
+      <MemberSignature Language="F#" Value="member this.Flush : unit -&gt; unit" Usage="traceSource.Flush " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>トレース リスナー コレクション内のすべてのトレース リスナーをフラッシュします。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Diagnostics.TraceSource.Flush%2A>は、 <xref:System.Diagnostics.TraceSource.Listeners%2A>コレクション<xref:System.Diagnostics.TraceListener.Flush%2A>内の各トレースリスナーのメソッドを呼び出します。  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Diagnostics.TraceSource.Flush%2A>メソッドを使用して、コレクション内のすべてのリスナーをフラッシュする方法を示しています。 このコード例は、 <xref:System.Diagnostics.TraceSource>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource2#33](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CS/program.cs#33)]
+ [!code-vb[System.Diagnostics.TraceSource2#33](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/VB/program.vb#33)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">終了処理時にイベントをトレースしようとしました。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="GetSupportedAttributes">
+      <MemberSignature Language="C#" Value="protected internal virtual string[] GetSupportedAttributes ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyorassemblyhidebysig newslot virtual instance string[] GetSupportedAttributes() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.GetSupportedAttributes" />
+      <MemberSignature Language="VB.NET" Value="Protected Friend Overridable Function GetSupportedAttributes () As String()" />
+      <MemberSignature Language="C++ CLI" Value="protected public:&#xA; virtual cli::array &lt;System::String ^&gt; ^ GetSupportedAttributes();" />
+      <MemberSignature Language="F#" Value="abstract member GetSupportedAttributes : unit -&gt; string[]&#xA;override this.GetSupportedAttributes : unit -&gt; string[]" Usage="traceSource.GetSupportedAttributes " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String[]</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>トレース ソースによってサポートされるカスタム属性を取得します。</summary>
+        <returns>トレース ソースにサポートされるカスタム属性を指定する文字列配列。カスタム属性がない場合は <see langword="null" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ の<xref:System.Diagnostics.TraceSource.GetSupportedAttributes%2A>既定の実装で`null`は、が返されます。  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Diagnostics.TraceSource.GetSupportedAttributes%2A>メソッドをオーバーライドして、 `MyTraceSource`クラスのカスタム属性を識別する方法を示しています。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource#33](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource/CS/program.cs#33)]
+ [!code-vb[System.Diagnostics.TraceSource#33](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource/VB/program.vb#33)]  
+  
+ ]]></format>
+        </remarks>
+        <block subset="none" type="overrides"><para><see cref="T:System.Diagnostics.TraceSource" />クラスまたは派生クラスから継承する場合、 <see cref="M:System.Diagnostics.TraceSource.GetSupportedAttributes" />メソッドをオーバーライドしてクラスのカスタム属性を提供できます。</para></block>
+      </Docs>
+    </Member>
+    <Member MemberName="Listeners">
+      <MemberSignature Language="C#" Value="public System.Diagnostics.TraceListenerCollection Listeners { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Diagnostics.TraceListenerCollection Listeners" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.TraceSource.Listeners" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Listeners As TraceListenerCollection" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Diagnostics::TraceListenerCollection ^ Listeners { System::Diagnostics::TraceListenerCollection ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Listeners : System.Diagnostics.TraceListenerCollection" Usage="System.Diagnostics.TraceSource.Listeners" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Diagnostics.TraceListenerCollection</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>トレース ソースのトレース リスナーのコレクションを取得します。</summary>
+        <value>ソースに関連付けられたアクティブなトレース リスナーを格納する <see cref="T:System.Diagnostics.TraceListenerCollection" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティを使用して、トレースリスナーに対してアクセスし、操作を実行します。  
+  
+ ]]></format>
+        </remarks>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージコードを操作するために使用します。 要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、関連付けられ<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" />た列挙型:。</permission>
+      </Docs>
+    </Member>
+    <Member MemberName="Name">
+      <MemberSignature Language="C#" Value="public string Name { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Name" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.TraceSource.Name" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property Name As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::String ^ Name { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.Name : string" Usage="System.Diagnostics.TraceSource.Name" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>get: System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>トレース ソースの名前を取得します。</summary>
+        <value>トレース ソースの名前。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 名前は、コンストラクターに渡さ`name`れたパラメーターによって設定されます。 構成ファイルの`name`属性を使用して、トレースソースを参照できます。  
+  
+ 次の XML 要素は、構成ファイル内のトレースソースを参照していることを示しています。  
+  
+```xml  
+<configuration>  
+  <system.diagnostics>  
+    <sources>  
+      <source name="TraceTest">  
+      </source>  
+    </sources>  
+  </system.diagnostics>  
+</configuration>  
+```  
+  
+   
+  
+## Examples  
+ 次のコードサンプルは、コンストラクター呼び出しでトレースソースに名前を指定する方法を示しています。  このコード例は、 <xref:System.Diagnostics.TraceSource>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource2#9](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CS/program.cs#9)]
+ [!code-vb[System.Diagnostics.TraceSource2#9](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/VB/program.vb#9)]  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Switch">
+      <MemberSignature Language="C#" Value="public System.Diagnostics.SourceSwitch Switch { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Diagnostics.SourceSwitch Switch" />
+      <MemberSignature Language="DocId" Value="P:System.Diagnostics.TraceSource.Switch" />
+      <MemberSignature Language="VB.NET" Value="Public Property Switch As SourceSwitch" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Diagnostics::SourceSwitch ^ Switch { System::Diagnostics::SourceSwitch ^ get(); void set(System::Diagnostics::SourceSwitch ^ value); };" />
+      <MemberSignature Language="F#" Value="member this.Switch : System.Diagnostics.SourceSwitch with get, set" Usage="System.Diagnostics.TraceSource.Switch" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Diagnostics.SourceSwitch</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ソース スイッチ値を取得または設定します。</summary>
+        <value>ソース スイッチ値を表す <see cref="T:System.Diagnostics.SourceSwitch" /> オブジェクト。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ プロパティ<xref:System.Diagnostics.TraceSource.Switch%2A>を使用すると、トレースソースがリスナーを呼び出す前に、メッセージをフィルター処理できます。  
+  
+ このスイッチは、トレース呼び出しを生成するか無視するかを確認するために使用されます。 各トレースメソッドは、 <xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A>のメソッドを<xref:System.Diagnostics.SourceSwitch>呼び出して、トレースを続行するかどうかを決定します。 呼び出しでが返さ`true`れると、リスナーが呼び出されます。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><see cref="P:System.Diagnostics.TraceSource.Switch" /> が <see langword="null" /> に設定されます。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージコードを操作するために使用します。 要求の値<see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />:、関連付けられ<see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" />た列挙型:。</permission>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TraceData">
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>トレース データを <see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクション内のトレース リスナーに書き込みます。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TraceData">
+      <MemberSignature Language="C#" Value="public void TraceData (System.Diagnostics.TraceEventType eventType, int id, object data);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void TraceData(valuetype System.Diagnostics.TraceEventType eventType, int32 id, object data) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.TraceData(System.Diagnostics.TraceEventType,System.Int32,System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub TraceData (eventType As TraceEventType, id As Integer, data As Object)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void TraceData(System::Diagnostics::TraceEventType eventType, int id, System::Object ^ data);" />
+      <MemberSignature Language="F#" Value="member this.TraceData : System.Diagnostics.TraceEventType * int * obj -&gt; unit" Usage="traceSource.TraceData (eventType, id, data)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.Diagnostics.Conditional("TRACE")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="eventType" Type="System.Diagnostics.TraceEventType" />
+        <Parameter Name="id" Type="System.Int32" />
+        <Parameter Name="data" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="eventType">トレース データのイベントの種類を指定する列挙値の 1 つ。</param>
+        <param name="id">イベントの数値識別子。</param>
+        <param name="data">トレース データ。</param>
+        <summary>指定されたイベントの種類、イベント識別子、およびトレース データを使用して、トレース データを <see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクション内のトレース リスナーに書き込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、 <xref:System.Diagnostics.TraceSource.TraceEvent%2A>メソッドと同様に、自動化されたツールを対象としていますが、例外インスタンスなどの追加のオブジェクトをトレースにアタッチすることもできます。 <xref:System.Diagnostics.TraceSource.TraceData%2A>  
+  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceData%2A>は、 <xref:System.Diagnostics.TraceSource.Switch%2A>プロパティ<xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A?displayProperty=nameWithType>によって<xref:System.Diagnostics.SourceSwitch>返されるオブジェクトのメソッドを呼び出します。 が<xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A>を`true`返す<xref:System.Diagnostics.TraceSource.TraceData%2A>場合、は<xref:System.Diagnostics.TraceListener.TraceData%2A> 、すべてのリスナーで対応するメソッドを呼び出します。 それ以外<xref:System.Diagnostics.TraceSource.TraceData%2A>の場合は、リスナーのメソッドを呼び出さずにを返します。  
+  
+> [!NOTE]
+>  オブジェクト<xref:System.Diagnostics.EventLogTraceListener>は、最大`id`値の65535に制限されています。 指定された<xref:System.Diagnostics.EventLogTraceListener> 値が65535より大きい場合、オブジェクトは65535を使用します。 `id`  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Diagnostics.TraceSource.TraceData%28System.Diagnostics.TraceEventType%2CSystem.Int32%2CSystem.Object%29>メソッドを使用して、トレースメッセージをフィルター処理し、リスナーに転送する方法を示しています。 このコード例は、 <xref:System.Diagnostics.TraceSource>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource2#28](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CS/program.cs#28)]
+ [!code-vb[System.Diagnostics.TraceSource2#28](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/VB/program.vb#28)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">終了処理時にイベントをトレースしようとしました。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="TraceData">
+      <MemberSignature Language="C#" Value="public void TraceData (System.Diagnostics.TraceEventType eventType, int id, params object[] data);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void TraceData(valuetype System.Diagnostics.TraceEventType eventType, int32 id, object[] data) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.TraceData(System.Diagnostics.TraceEventType,System.Int32,System.Object[])" />
+      <MemberSignature Language="VB.NET" Value="Public Sub TraceData (eventType As TraceEventType, id As Integer, ParamArray data As Object())" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void TraceData(System::Diagnostics::TraceEventType eventType, int id, ... cli::array &lt;System::Object ^&gt; ^ data);" />
+      <MemberSignature Language="F#" Value="member this.TraceData : System.Diagnostics.TraceEventType * int * obj[] -&gt; unit" Usage="traceSource.TraceData (eventType, id, data)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.Diagnostics.Conditional("TRACE")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="eventType" Type="System.Diagnostics.TraceEventType" />
+        <Parameter Name="id" Type="System.Int32" />
+        <Parameter Name="data" Type="System.Object[]">
+          <Attributes>
+            <Attribute FrameworkAlternate="netcore-1.0">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="eventType">トレース データのイベントの種類を指定する列挙値の 1 つ。</param>
+        <param name="id">イベントの数値識別子。</param>
+        <param name="data">トレース データが格納されているオブジェクト配列。</param>
+        <summary>指定されたイベントの種類、イベント識別子、およびトレース データ配列を使用して、トレース データを <see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクション内のトレース リスナーに書き込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッドは、 <xref:System.Diagnostics.TraceSource.TraceEvent%2A>メソッドと同様に、自動化されたツールを対象としていますが、例外インスタンスやスタックトレースなどの追加のオブジェクトをトレースにアタッチすることもできます。 <xref:System.Diagnostics.TraceSource.TraceData%2A>  
+  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceData%2A>は、 <xref:System.Diagnostics.TraceSource.Switch%2A>プロパティ<xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A>によって<xref:System.Diagnostics.SourceSwitch>返されるオブジェクトのメソッドを呼び出します。 が<xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A>を`true`返す<xref:System.Diagnostics.TraceSource.TraceData%2A>場合、は<xref:System.Diagnostics.TraceListener.TraceData%2A> 、すべてのリスナーで対応するメソッドを呼び出します。 それ以外<xref:System.Diagnostics.TraceSource.TraceData%2A>の場合は、リスナーのメソッドを呼び出さずにを返します。  
+  
+> [!NOTE]
+>  オブジェクト<xref:System.Diagnostics.EventLogTraceListener>は、最大`id`値の65535に制限されています。 指定された<xref:System.Diagnostics.EventLogTraceListener> 値が65535より大きい場合、オブジェクトは65535を使用します。 `id`  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">終了処理時にイベントをトレースしようとしました。</exception>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TraceEvent">
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>トレース イベント メッセージを <see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクションのトレース リスナーに書き込みます。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TraceEvent">
+      <MemberSignature Language="C#" Value="public void TraceEvent (System.Diagnostics.TraceEventType eventType, int id);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void TraceEvent(valuetype System.Diagnostics.TraceEventType eventType, int32 id) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.TraceEvent(System.Diagnostics.TraceEventType,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub TraceEvent (eventType As TraceEventType, id As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void TraceEvent(System::Diagnostics::TraceEventType eventType, int id);" />
+      <MemberSignature Language="F#" Value="member this.TraceEvent : System.Diagnostics.TraceEventType * int -&gt; unit" Usage="traceSource.TraceEvent (eventType, id)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.Diagnostics.Conditional("TRACE")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="eventType" Type="System.Diagnostics.TraceEventType" />
+        <Parameter Name="id" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="eventType">トレース データのイベントの種類を指定する列挙値の 1 つ。</param>
+        <param name="id">イベントの数値識別子。</param>
+        <summary>指定されたイベントの種類およびイベント識別子を使用して、トレース イベント メッセージを <see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクション内のトレース リスナーに書き込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceEvent%2A>は、ツールによって自動的に処理できるイベントをトレースすることを目的としています。 たとえば、特定のイベントが特定のソースによってトレースされている場合、監視ツールから管理者に通知することができます。  
+  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceEvent%2A>は、 <xref:System.Diagnostics.TraceSource.Switch%2A>プロパティ<xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A>によって<xref:System.Diagnostics.SourceSwitch>返されるオブジェクトのメソッドを呼び出します。 が<xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A>を`true`返す<xref:System.Diagnostics.TraceSource.TraceEvent%2A>場合、は<xref:System.Diagnostics.TraceListener.TraceEvent%2A>各リスナーの対応するメソッドを呼び出します。 それ以外<xref:System.Diagnostics.TraceSource.TraceEvent%2A>の場合は、リスナーのメソッドを呼び出さずにを返します。  
+  
+ トレースコンテンツはリスナー固有です。 メソッドがリスナー実装によってオーバーライドされない場合、既定の出力はトレースソースの名前、数値 id、およびイベントの種類です。  追加のトレースコンテンツは、リスナーの<xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A>プロパティ値に依存します。  
+  
+> [!NOTE]
+>  オブジェクト<xref:System.Diagnostics.EventLogTraceListener>は、最大`id`値の65535に制限されています。 指定された<xref:System.Diagnostics.EventLogTraceListener> 値が65535より大きい場合、は65535を使用します。 `id`  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Diagnostics.TraceSource.TraceEvent%28System.Diagnostics.TraceEventType%2CSystem.Int32%29>メソッドを使用して、トレースイベントをリスナーに渡す方法を示しています。 このコード例は、 <xref:System.Diagnostics.TraceSource>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource2#17](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CS/program.cs#17)]
+ [!code-vb[System.Diagnostics.TraceSource2#17](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/VB/program.vb#17)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">終了処理時にイベントをトレースしようとしました。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="TraceEvent">
+      <MemberSignature Language="C#" Value="public void TraceEvent (System.Diagnostics.TraceEventType eventType, int id, string message);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void TraceEvent(valuetype System.Diagnostics.TraceEventType eventType, int32 id, string message) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.TraceEvent(System.Diagnostics.TraceEventType,System.Int32,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub TraceEvent (eventType As TraceEventType, id As Integer, message As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void TraceEvent(System::Diagnostics::TraceEventType eventType, int id, System::String ^ message);" />
+      <MemberSignature Language="F#" Value="member this.TraceEvent : System.Diagnostics.TraceEventType * int * string -&gt; unit" Usage="traceSource.TraceEvent (eventType, id, message)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.Diagnostics.Conditional("TRACE")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="eventType" Type="System.Diagnostics.TraceEventType" />
+        <Parameter Name="id" Type="System.Int32" />
+        <Parameter Name="message" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="eventType">トレース データのイベントの種類を指定する列挙値の 1 つ。</param>
+        <param name="id">イベントの数値識別子。</param>
+        <param name="message">書き込むトレース メッセージ。</param>
+        <summary>指定されたイベントの種類、イベント識別子、およびメッセージを使用して、トレース イベント メッセージを <see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクション内のトレース リスナーに書き込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceEvent%2A>は、ツールによって自動的に処理できるイベントをトレースすることを目的としています。 たとえば、特定のイベントが特定のソースによってトレースされている場合、監視ツールから管理者に通知することができます。  
+  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceEvent%2A>は、 <xref:System.Diagnostics.TraceSource.Switch%2A>プロパティ<xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A>によって<xref:System.Diagnostics.SourceSwitch>返されるオブジェクトのメソッドを呼び出します。 が<xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A>を`true`返す<xref:System.Diagnostics.TraceSource.TraceEvent%2A>場合、は<xref:System.Diagnostics.TraceListener.TraceEvent%2A>各リスナーの対応するメソッドを呼び出します。 それ以外<xref:System.Diagnostics.TraceSource.TraceEvent%2A>の場合は、リスナーのメソッドを呼び出さずにを返します。  
+  
+ トレースコンテンツはリスナー固有です。 メソッドがリスナー実装によってオーバーライドされない場合、既定の出力は、トレースソース、その数値 id、イベントの種類、およびメッセージの名前になります。  追加のトレースコンテンツは、リスナーの<xref:System.Diagnostics.TraceListener.TraceOutputOptions%2A>プロパティ値に依存します。  
+  
+> [!NOTE]
+>  オブジェクト<xref:System.Diagnostics.EventLogTraceListener>は、最大`id`値の65535に制限されています。 指定された<xref:System.Diagnostics.EventLogTraceListener> 値が65535より大きい場合、オブジェクトは65535を使用します。 `id`  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Diagnostics.TraceSource.TraceEvent%28System.Diagnostics.TraceEventType%2CSystem.Int32%29>メソッドを使用して、トレースイベントをリスナーに渡す方法を示しています。 このコード例は、 <xref:System.Diagnostics.TraceSource>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource2#18](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CS/program.cs#18)]
+ [!code-vb[System.Diagnostics.TraceSource2#18](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/VB/program.vb#18)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">終了処理時にイベントをトレースしようとしました。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="TraceEvent">
+      <MemberSignature Language="C#" Value="public void TraceEvent (System.Diagnostics.TraceEventType eventType, int id, string format, params object[] args);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void TraceEvent(valuetype System.Diagnostics.TraceEventType eventType, int32 id, string format, object[] args) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.TraceEvent(System.Diagnostics.TraceEventType,System.Int32,System.String,System.Object[])" />
+      <MemberSignature Language="VB.NET" Value="Public Sub TraceEvent (eventType As TraceEventType, id As Integer, format As String, ParamArray args As Object())" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void TraceEvent(System::Diagnostics::TraceEventType eventType, int id, System::String ^ format, ... cli::array &lt;System::Object ^&gt; ^ args);" />
+      <MemberSignature Language="F#" Value="member this.TraceEvent : System.Diagnostics.TraceEventType * int * string * obj[] -&gt; unit" Usage="traceSource.TraceEvent (eventType, id, format, args)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.Diagnostics.Conditional("TRACE")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="eventType" Type="System.Diagnostics.TraceEventType" />
+        <Parameter Name="id" Type="System.Int32" />
+        <Parameter Name="format" Type="System.String" />
+        <Parameter Name="args" Type="System.Object[]">
+          <Attributes>
+            <Attribute FrameworkAlternate="netcore-1.0">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="eventType">トレース データのイベントの種類を指定する列挙値の 1 つ。</param>
+        <param name="id">イベントの数値識別子。</param>
+        <param name="format">0 個以上の書式項目が混在したテキストを含む複合書式指定文字列。各書式項目は、<paramref name="args" /> 配列内のオブジェクトに対応します。</param>
+        <param name="args">0 個以上の書式設定対象オブジェクトを含んだ <see langword="object" /> 配列。</param>
+        <summary>指定されたイベントの種類、イベント識別子、および引数配列と書式設定を使用して、トレース イベントを <see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクション内のトレース リスナーに書き込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ パラメーターの`format`詳細については、「[複合書式指定](~/docs/standard/base-types/composite-formatting.md)」を参照してください。  
+  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceEvent%2A>は、ツールによって自動的に処理できるイベントをトレースすることを目的としています。 たとえば、特定のイベントが特定のソースによってトレースされている場合、監視ツールから管理者に通知することができます。  
+  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceEvent%2A>は、 <xref:System.Diagnostics.TraceSource.Switch%2A>プロパティ<xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A>によって<xref:System.Diagnostics.SourceSwitch>返されるオブジェクトのメソッドを呼び出します。 が<xref:System.Diagnostics.SourceSwitch.ShouldTrace%2A>を`true`返す<xref:System.Diagnostics.TraceSource.TraceEvent%2A>場合、は<xref:System.Diagnostics.TraceListener.TraceEvent%2A>各リスナーの対応するメソッドを呼び出します。 それ以外<xref:System.Diagnostics.TraceSource.TraceEvent%2A>の場合は、リスナーのメソッドを呼び出さずにを返します。  
+  
+ トレースコンテンツはリスナー固有です。 既定<xref:System.Diagnostics.TraceListener.TraceEvent%28System.Diagnostics.TraceEventCache%2CSystem.String%2CSystem.Diagnostics.TraceEventType%2CSystem.Int32%2CSystem.String%2CSystem.Object%5B%5D%29>のメソッドは、ソース名、イベントの種類、および数値 id をトレースヘッダーに書き込み、次<xref:System.String.Format%28System.IFormatProvider%2CSystem.String%2CSystem.Object%5B%5D%29?displayProperty=nameWithType>にメソッドを呼び出し`format` 、文字列`args`と配列を渡し<xref:System.Globalization.CultureInfo.InvariantCulture?displayProperty=nameWithType> 、プロパティを使用して、メッセージ出力としての文字列。  
+  
+> [!NOTE]
+>  オブジェクト<xref:System.Diagnostics.EventLogTraceListener>は、最大`id`値の65535に制限されています。 指定された<xref:System.Diagnostics.EventLogTraceListener> 値が65535より大きい場合、オブジェクトは65535を使用します。 `id`  
+  
+   
+  
+## Examples  
+ 次のコード例は、 <xref:System.Diagnostics.TraceSource.TraceEvent%28System.Diagnostics.TraceEventType%2CSystem.Int32%29>メソッドを使用して、トレースイベントをリスナーに渡す方法を示しています。 このコード例は、 <xref:System.Diagnostics.TraceSource>クラスに対して提供される大規模な例の一部です。  
+  
+ [!code-csharp[System.Diagnostics.TraceSource2#24](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/CS/program.cs#24)]
+ [!code-vb[System.Diagnostics.TraceSource2#24](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Diagnostics.TraceSource2/VB/program.vb#24)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="format" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.FormatException"><paramref name="format" /> が無効です。  
+  
+または 
+書式設定する引数を示す数が 0 より小さいか、書式設定する指定されたオブジェクトの数以上です。</exception>
+        <exception cref="T:System.ObjectDisposedException">終了処理時にイベントをトレースしようとしました。</exception>
+        <related type="Article" href="~/docs/standard/base-types/composite-formatting.md">複合書式指定</related>
+        <related type="Article" href="~/docs/standard/base-types/standard-numeric-format-strings.md">標準の数値書式指定文字列</related>
+        <related type="Article" href="~/docs/standard/base-types/custom-numeric-format-strings.md">カスタム数値書式指定文字列</related>
+        <related type="Article" href="~/docs/standard/base-types/standard-date-and-time-format-strings.md">標準の DateTime 書式指定文字列</related>
+        <related type="Article" href="~/docs/standard/base-types/custom-date-and-time-format-strings.md">カスタムの DateTime 書式指定文字列</related>
+        <related type="Article" href="~/docs/standard/base-types/enumeration-format-strings.md">列挙型書式指定文字列</related>
+        <related type="Article" href="~/docs/standard/base-types/formatting-types.md">.NET での型の書式設定</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TraceInformation">
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>情報メッセージを <see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクションのトレース リスナーに書き込みます。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TraceInformation">
+      <MemberSignature Language="C#" Value="public void TraceInformation (string message);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void TraceInformation(string message) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.TraceInformation(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub TraceInformation (message As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void TraceInformation(System::String ^ message);" />
+      <MemberSignature Language="F#" Value="member this.TraceInformation : string -&gt; unit" Usage="traceSource.TraceInformation message" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.Diagnostics.Conditional("TRACE")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="message" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="message">書き込む情報メッセージ。</param>
+        <summary>指定されたメッセージを使用して、情報メッセージを <see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクションのトレース リスナーに書き込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceInformation%2A>は、ツールではなく、ユーザーによる読み取りを目的とした情報メッセージを提供します。  
+  
+ <xref:System.Diagnostics.TraceSource.TraceInformation%28System.String%29>メソッドを呼び出し、を`eventType`に<xref:System.Diagnostics.TraceEventType.Information?displayProperty=nameWithType>設定し、情報メッセージをメッセージ文字列として渡します。 <xref:System.Diagnostics.TraceSource.TraceEvent%28System.Diagnostics.TraceEventType%2CSystem.Int32%2CSystem.String%29> さら<xref:System.Diagnostics.TraceSource.TraceEvent%28System.Diagnostics.TraceEventType%2CSystem.Int32%2CSystem.String%29>に、メソッドは各<xref:System.Diagnostics.TraceListener.TraceEvent%28System.Diagnostics.TraceEventCache%2CSystem.String%2CSystem.Diagnostics.TraceEventType%2CSystem.Int32%2CSystem.String%29>トレースリスナーのメソッドを呼び出します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ObjectDisposedException">終了処理時にイベントをトレースしようとしました。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="TraceInformation">
+      <MemberSignature Language="C#" Value="public void TraceInformation (string format, params object[] args);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void TraceInformation(string format, object[] args) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.TraceInformation(System.String,System.Object[])" />
+      <MemberSignature Language="VB.NET" Value="Public Sub TraceInformation (format As String, ParamArray args As Object())" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void TraceInformation(System::String ^ format, ... cli::array &lt;System::Object ^&gt; ^ args);" />
+      <MemberSignature Language="F#" Value="member this.TraceInformation : string * obj[] -&gt; unit" Usage="traceSource.TraceInformation (format, args)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.Diagnostics.Conditional("TRACE")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="format" Type="System.String" />
+        <Parameter Name="args" Type="System.Object[]">
+          <Attributes>
+            <Attribute FrameworkAlternate="netcore-1.0">
+              <AttributeName>System.ParamArray</AttributeName>
+            </Attribute>
+          </Attributes>
+        </Parameter>
+      </Parameters>
+      <Docs>
+        <param name="format">0 個以上の書式項目が混在したテキストを含む複合書式指定文字列。各書式項目は、<paramref name="args" /> 配列内のオブジェクトに対応します。</param>
+        <param name="args">0 個以上の書式設定対象オブジェクトを含んだ配列。</param>
+        <summary>指定されたオブジェクトの配列および書式設定情報を使用して、<see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクションのトレース リスナーに情報メッセージを書き込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ パラメーターの`format`詳細については、「[複合書式指定](~/docs/standard/base-types/composite-formatting.md)」を参照してください。  
+  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceInformation%2A>は、ツールではなく、ユーザーによる読み取りを目的とした情報メッセージを提供します。  
+  
+ <xref:System.Diagnostics.TraceSource.TraceInformation%28System.String%2CSystem.Object%5B%5D%29>メソッドを呼び出し、を`eventType`に<xref:System.Diagnostics.TraceEventType.Information?displayProperty=nameWithType>設定し、書式設定情報を含むオブジェクト配列としてメッセージの内容を渡します。 <xref:System.Diagnostics.TraceSource.TraceEvent%28System.Diagnostics.TraceEventType%2CSystem.Int32%2CSystem.String%2CSystem.Object%5B%5D%29> さら<xref:System.Diagnostics.TraceSource.TraceEvent%28System.Diagnostics.TraceEventType%2CSystem.Int32%2CSystem.String%2CSystem.Object%5B%5D%29>に、メソッドは各<xref:System.Diagnostics.TraceListener.TraceEvent%28System.Diagnostics.TraceEventCache%2CSystem.String%2CSystem.Diagnostics.TraceEventType%2CSystem.Int32%2CSystem.String%2CSystem.Object%5B%5D%29>トレースリスナーのメソッドを呼び出します。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="format" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.FormatException"><paramref name="format" /> が無効です。  
+  
+- または - 
+書式設定する引数を示す数が 0 より小さいか、書式設定する指定されたオブジェクトの数以上です。</exception>
+        <exception cref="T:System.ObjectDisposedException">終了処理時にイベントをトレースしようとしました。</exception>
+        <related type="Article" href="~/docs/standard/base-types/composite-formatting.md">複合書式指定</related>
+        <related type="Article" href="~/docs/standard/base-types/standard-numeric-format-strings.md">標準の数値書式指定文字列</related>
+        <related type="Article" href="~/docs/standard/base-types/custom-numeric-format-strings.md">カスタム数値書式指定文字列</related>
+        <related type="Article" href="~/docs/standard/base-types/standard-date-and-time-format-strings.md">標準の DateTime 書式指定文字列</related>
+        <related type="Article" href="~/docs/standard/base-types/custom-date-and-time-format-strings.md">カスタムの DateTime 書式指定文字列</related>
+        <related type="Article" href="~/docs/standard/base-types/enumeration-format-strings.md">列挙型書式指定文字列</related>
+        <related type="Article" href="~/docs/standard/base-types/formatting-types.md">.NET での型の書式設定</related>
+      </Docs>
+    </Member>
+    <Member MemberName="TraceTransfer">
+      <MemberSignature Language="C#" Value="public void TraceTransfer (int id, string message, Guid relatedActivityId);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void TraceTransfer(int32 id, string message, valuetype System.Guid relatedActivityId) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Diagnostics.TraceSource.TraceTransfer(System.Int32,System.String,System.Guid)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub TraceTransfer (id As Integer, message As String, relatedActivityId As Guid)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void TraceTransfer(int id, System::String ^ message, Guid relatedActivityId);" />
+      <MemberSignature Language="F#" Value="member this.TraceTransfer : int * string * Guid -&gt; unit" Usage="traceSource.TraceTransfer (id, message, relatedActivityId)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Diagnostics.TraceSource</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netstandard-2.1">
+          <AttributeName>System.Diagnostics.Conditional("TRACE")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="id" Type="System.Int32" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="message" Type="System.String" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+        <Parameter Name="relatedActivityId" Type="System.Guid" Index="2" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="id">イベントの数値識別子。</param>
+        <param name="message">書き込むトレース メッセージ。</param>
+        <param name="relatedActivityId">関連する動作を識別する構造体。</param>
+        <summary>指定された数値識別子、メッセージ、および関連する動作識別子を使用して、トレース転送メッセージを <see cref="P:System.Diagnostics.TraceSource.Listeners" /> コレクションのトレース リスナーに書き込みます。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Diagnostics.TraceSource.TraceTransfer%2A>は、プロパティ<xref:System.Diagnostics.TraceListener.TraceTransfer%2A>の<xref:System.Diagnostics.TraceSource.Listeners%2A>各トレースリスナーのメソッドを呼び出して、トレース情報を書き込みます。 <xref:System.Diagnostics.TraceListener.TraceTransfer%2A>基底`relatedActivityId` `eventType` <xref:System.Diagnostics.TraceListener.TraceEvent%28System.Diagnostics.TraceEventCache%2CSystem.String%2CSystem.Diagnostics.TraceEventType%2CSystem.Int32%2CSystem.String%29?displayProperty=nameWithType> <xref:System.Diagnostics.TraceEventType.Transfer?displayProperty=nameWithType> `message`クラスの既定のメソッドは、メソッドを呼び出して呼び出しを処理し、に設定し、GUID の文字列形式をに追加します。 <xref:System.Diagnostics.TraceListener>  
+  
+ <xref:System.Diagnostics.TraceSource.TraceTransfer%2A>は、 <xref:System.Diagnostics.CorrelationManager>の論理操作と共に使用することを目的としています。 パラメーター `relatedActivityId`は、 <xref:System.Diagnostics.CorrelationManager>オブジェクトの<xref:System.Diagnostics.CorrelationManager.ActivityId%2A>プロパティに関連します。 論理操作が1つのアクティビティで開始され、別のアクティビティに転送される場合、2 <xref:System.Diagnostics.TraceSource.TraceTransfer%2A>番目のアクティビティはメソッドを呼び出して転送をログに記録します。 この<xref:System.Diagnostics.TraceSource.TraceTransfer%2A>呼び出しでは、新しいアクティビティ id が前の id に関連付けられます。 この機能のコンシューマーとして最も可能性が高いのは、複数のアクティビティにまたがる論理操作を報告できるトレースビューアーです。  
+  
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Diagnostics.XmlWriterTraceListener" />
+        <altmember cref="T:System.Diagnostics.EventSchemaTraceListener" />
+        <altmember cref="T:System.Diagnostics.DelimitedListTraceListener" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>
