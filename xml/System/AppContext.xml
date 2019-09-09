@@ -1,0 +1,468 @@
+<Type Name="AppContext" FullName="System.AppContext">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="905e0055c1e6a26875980d42e921145f959a9ad3" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70646994" /></Metadata><TypeSignature Language="C#" Value="public static class AppContext" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit AppContext extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.AppContext" />
+  <TypeSignature Language="VB.NET" Value="Public Class AppContext" />
+  <TypeSignature Language="C++ CLI" Value="public ref class AppContext abstract sealed" />
+  <TypeSignature Language="F#" Value="type AppContext = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.AppContext</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>mscorlib</AssemblyName>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Runtime</AssemblyName>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary><span data-ttu-id="c1c90-101">アプリケーションのコンテキストについてのデータを設定したり取得したりするためのメンバーを提供します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-101">Provides members for setting and retrieving data about an application's context.</span></span></summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[
+
+## Remarks
+ <span data-ttu-id="c1c90-102"><xref:System.AppContext>クラスを使用すると、ライブラリの作成者は、ユーザーに新しい機能を提供するための統一されたオプトアウトメカニズムを提供できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-102">The <xref:System.AppContext> class enables library writers to provide a uniform opt-out mechanism for new functionality for their users.</span></span> <span data-ttu-id="c1c90-103">これは、オプトアウト要求を伝達するために、コンポーネント間に疎結合のコントラクトを確立します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-103">It establishes a loosely-coupled contract between components in order to communicate an opt-out request.</span></span> <span data-ttu-id="c1c90-104">通常、この機能は既存の機能が変更されるときに重要となります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-104">This capability is typically important when a change is made to existing functionality.</span></span> <span data-ttu-id="c1c90-105">それに対して、新しい機能には暗黙のオプトインが既に存在しています。</span><span class="sxs-lookup"><span data-stu-id="c1c90-105">Conversely, there is already an implicit opt-in for new functionality.</span></span>
+
+## <a name="appcontext-for-library-developers"></a><span data-ttu-id="c1c90-106">ライブラリ開発者のための AppContext</span><span class="sxs-lookup"><span data-stu-id="c1c90-106">AppContext for library developers</span></span>
+ <span data-ttu-id="c1c90-107">ライブラリは<xref:System.AppContext> 、クラスを使用して互換性スイッチを定義および公開します。一方、ライブラリユーザーは、これらのスイッチを設定してライブラリの動作に影響を与えることができます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-107">Libraries use  the <xref:System.AppContext> class to define and expose compatibility switches, while library users can set those switches to affect the library behavior.</span></span> <span data-ttu-id="c1c90-108">ライブラリは、既定では新しい機能を提供し、スイッチが設定されている場合のみそれを変更する (つまり以前の機能を提供する) ことができます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-108">By default, libraries provide the new functionality, and they only alter it (that is, they provide the previous functionality) if the switch is set.</span></span>  <span data-ttu-id="c1c90-109">これにより、ライブラリは既存の API に新しい動作を提供しながら、以前の動作に依存する呼び出し元のサポートを継続できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-109">This allows libraries to provide new behavior for an existing API while continuing to support callers who depend on the previous behavior.</span></span>
+
+### <a name="defining-the-switch-name"></a><span data-ttu-id="c1c90-110">スイッチ名の定義</span><span class="sxs-lookup"><span data-stu-id="c1c90-110">Defining the switch name</span></span>
+ <span data-ttu-id="c1c90-111">ライブラリのコンシューマーが動作の変更をオプトアウトできるようにする最も一般的な方法は、名前付きスイッチを定義することです。</span><span class="sxs-lookup"><span data-stu-id="c1c90-111">The most common way to allow consumers of your library to opt out of a change of behavior is to define a named switch.</span></span>  <span data-ttu-id="c1c90-112">この要素は、スイッチの名前とその<xref:System.Boolean>値で構成される名前と値のペアです。 `value`</span><span class="sxs-lookup"><span data-stu-id="c1c90-112">Its `value` element is a name/value pair that consists of the name of a switch and its <xref:System.Boolean> value.</span></span>  <span data-ttu-id="c1c90-113">既定では、スイッチは常に`false`暗黙的に使用されます。これにより新しい動作が提供され、既定では新しい動作がオプトインされます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-113">By default, the switch is always implicitly `false`, which provides the new behavior (and makes the new behavior opt-in by default).</span></span> <span data-ttu-id="c1c90-114">スイッチをに設定`true`すると、従来の動作が提供されるようになります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-114">Setting the switch to `true` enables it, which provides the legacy behavior.</span></span> <span data-ttu-id="c1c90-115">スイッチを明示的に`false`に設定すると、新しい動作も提供されます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-115">Explicitly setting the switch to `false` also provides the new behavior.</span></span>
+
+ <span data-ttu-id="c1c90-116">スイッチ名には、ライブラリによって公開される正式なコントラクトであるため、一貫した形式を使用することをお勧めします。</span><span class="sxs-lookup"><span data-stu-id="c1c90-116">It's beneficial to use a consistent format for switch names, since they are a formal contract exposed by a library.</span></span> <span data-ttu-id="c1c90-117">2 つの明確な形式を次に示します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-117">The following are two obvious formats.</span></span>
+
+-   <span data-ttu-id="c1c90-118">*Switch*.*namespace*.*switchname*</span><span class="sxs-lookup"><span data-stu-id="c1c90-118">*Switch*.*namespace*.*switchname*</span></span>
+
+-   <span data-ttu-id="c1c90-119">*Switch*.*library*.*switchname*</span><span class="sxs-lookup"><span data-stu-id="c1c90-119">*Switch*.*library*.*switchname*</span></span>
+
+ <span data-ttu-id="c1c90-120">スイッチを定義してドキュメント化すると、呼び出し元は、アプリケーション構成ファイルに[ \<appcontextswitchoverrides >](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)要素を追加する<xref:System.AppContext.SetSwitch%28System.String%2CSystem.Boolean%29?displayProperty=nameWithType>か、プログラムによってメソッドを呼び出すことによって、レジストリを使用してそのスイッチを使用できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-120">Once you define and document the switch, callers can use it by using the registry, by adding an  [\<AppContextSwitchOverrides>](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md) element to their application configuration file, or by calling the  <xref:System.AppContext.SetSwitch%28System.String%2CSystem.Boolean%29?displayProperty=nameWithType> method programmatically.</span></span> <span data-ttu-id="c1c90-121">呼び出し元がを使用して構成スイッチの<xref:System.AppContext>値を設定する方法の詳細については、「[ライブラリコンシューマーの appcontext](#ForConsumers) 」セクションを参照してください。</span><span class="sxs-lookup"><span data-stu-id="c1c90-121">See the [AppContext for library consumers](#ForConsumers) section for more information about how callers use and set the value of <xref:System.AppContext> configuration switches.</span></span>
+
+ <span data-ttu-id="c1c90-122">共通言語ランタイムがアプリケーションを実行すると、アプリケーションの<xref:System.AppContext>インスタンスを設定するために、レジストリの互換性設定が自動的に読み取られ、アプリケーション構成ファイルが読み込まれます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-122">When the common language runtime runs an application, it automatically reads the registry's compatibility settings and loads the application configuration file in order to populate the application's <xref:System.AppContext> instance.</span></span> <span data-ttu-id="c1c90-123">インスタンスは、呼び出し元またはランタイムによってプログラムによって設定されるため、 <xref:System.AppContext>インスタンスを構成するために、メソッド<xref:System.AppContext.SetSwitch%2A>の呼び出しなどの操作を行う必要はありません。 <xref:System.AppContext></span><span class="sxs-lookup"><span data-stu-id="c1c90-123">Because the <xref:System.AppContext> instance is populated either programmatically by the caller or by the runtime, you do not have to take any action, such as calling the <xref:System.AppContext.SetSwitch%2A> method,  to configure the <xref:System.AppContext> instance.</span></span>
+
+### <a name="checking-the-setting"></a><span data-ttu-id="c1c90-124">設定を確認しています</span><span class="sxs-lookup"><span data-stu-id="c1c90-124">Checking the setting</span></span>
+ <span data-ttu-id="c1c90-125">その後、コンシューマーがスイッチの値を宣言したかどうかを確認し、 <xref:System.AppContext.TryGetSwitch%2A?displayProperty=nameWithType>メソッドを呼び出すことによって適切に動作させることができます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-125">You can then check if a consumer has declared the value of the switch and act appropriately by calling the <xref:System.AppContext.TryGetSwitch%2A?displayProperty=nameWithType> method.</span></span> <span data-ttu-id="c1c90-126">引数が見つかっ`true`た`isEnabled`場合、メソッドはを返します。メソッドから制御が戻ったときに、その引数がスイッチの値を示します。 `switchName`</span><span class="sxs-lookup"><span data-stu-id="c1c90-126">The method returns `true` if the `switchName` argument is found, and when the method returns, its `isEnabled` argument indicates the value of the switch.</span></span>  <span data-ttu-id="c1c90-127">それ以外の場合、メソッドは `false` を返します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-127">Otherwise, the method returns `false`.</span></span>
+
+### <a name="an-example"></a><span data-ttu-id="c1c90-128">使用例</span><span class="sxs-lookup"><span data-stu-id="c1c90-128">An example</span></span>
+ <span data-ttu-id="c1c90-129">次の例は、 <xref:System.AppContext>クラスを使用して、顧客がライブラリメソッドの元の動作を選択できるようにする方法を示しています。</span><span class="sxs-lookup"><span data-stu-id="c1c90-129">The following example illustrates the use of the <xref:System.AppContext> class to allow the customer to choose the original behavior of a library method.</span></span>   <span data-ttu-id="c1c90-130">次に、という名前`StringLibrary`のライブラリのバージョン1.0 を示します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-130">The following is version 1.0 of a library named `StringLibrary`.</span></span> <span data-ttu-id="c1c90-131">これは、 `SubstringStartsAt`序数による比較を実行して、より大きな文字列内の部分文字列の開始インデックスを決定するメソッドを定義します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-131">It defines a `SubstringStartsAt` method that performs an ordinal comparison to determine the starting index of a substring within a larger string.</span></span>
+
+ [!code-csharp[System.AppContext.Class#4](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/Example4.cs#4)]
+ [!code-vb[System.AppContext.Class#4](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/Example4.vb#4)]
+
+ <span data-ttu-id="c1c90-132">次の例では、ライブラリを使用して、"the archaeologist" の部分文字列 "arch æ" の開始インデックスを検索します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-132">The following example then uses the library to find the starting index of the substring "archæ" in "The archaeologist".</span></span> <span data-ttu-id="c1c90-133">メソッドは序数による比較を実行するため、部分文字列は見つかりません。</span><span class="sxs-lookup"><span data-stu-id="c1c90-133">Because the method performs an ordinal comparison, the substring cannot be found.</span></span>
+
+ [!code-csharp[System.AppContext.Class#5](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/Example4.cs#5)]
+ [!code-vb[System.AppContext.Class#5](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/Example4.vb#5)]
+
+ <span data-ttu-id="c1c90-134">ただし、ライブラリのバージョン2では、カルチャ`SubstringStartsAt`に依存した比較を使用するようにメソッドを変更します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-134">Version 2 of the library, however, changes the `SubstringStartsAt` method to use culture-sensitive comparison.</span></span>
+
+ [!code-csharp[System.AppContext.Class#6](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/Example6.cs#6)]
+ [!code-vb[System.AppContext.Class#6](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/Example6.vb#6)]
+
+ <span data-ttu-id="c1c90-135">新しいバージョンのライブラリに対して実行するようにアプリを再コンパイルすると、"the archaeologist" のインデックス4に部分文字列 "arch æ" があることが報告されるようになりました。</span><span class="sxs-lookup"><span data-stu-id="c1c90-135">When the app is recompiled to run against the new version of the library, it now reports that the substring "archæ" is found at index 4 in "The archaeologist".</span></span>
+
+ [!code-csharp[System.AppContext.Class#7](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/Example6.cs#7)]
+ [!code-vb[System.AppContext.Class#7](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/Example6.vb#7)]
+
+ <span data-ttu-id="c1c90-136">この変更により、 [ \<appcontextswitchoverrides >](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)スイッチを定義することによって、元の動作に依存するアプリケーションが中断されるのを防ぐことができます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-136">This change can be prevented from breaking the applications that depend on the original behavior by defining an [\<AppContextSwitchOverrides>](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md) switch.</span></span> <span data-ttu-id="c1c90-137">この場合、スイッチにはという`StringLibrary.DoNotUseCultureSensitiveComparison`名前が付けられます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-137">In this case, the switch is named `StringLibrary.DoNotUseCultureSensitiveComparison`.</span></span> <span data-ttu-id="c1c90-138">既定値`false`は、ライブラリがバージョン2.0 のカルチャに依存した比較を実行する必要があることを示します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-138">Its default value, `false`, indicates that the library should perform its version 2.0 culture-sensitive comparison.</span></span> <span data-ttu-id="c1c90-139">`true`ライブラリがバージョン1.0 の序数比較を実行する必要があることを示します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-139">`true` indicates that the library should perform its version 1.0 ordinal comparison.</span></span>  <span data-ttu-id="c1c90-140">前のコードを少し変更することで、ライブラリコンシューマーはスイッチを設定して、メソッドが実行する比較の種類を決定できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-140">A slight modification of the previous code allows the library consumer to set the switch to determine the kind of comparison the method performs.</span></span>
+
+ [!code-csharp[System.AppContext.Class#8](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/Example8.cs#8)]
+ [!code-vb[System.AppContext.Class#8](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/Example8.vb#8)]
+
+ <span data-ttu-id="c1c90-141">アプリケーションで次の構成ファイルを使用して、バージョン1.0 の動作を復元できる場合。</span><span class="sxs-lookup"><span data-stu-id="c1c90-141">If application can then use the following configuration file to restore the version 1.0 behavior.</span></span>
+
+```xml
+
+<configuration>
+   <runtime>
+      <AppContextSwitchOverrides value="StringLibrary.DoNotUseCultureSensitiveComparison=true" />
+   </runtime>
+</configuration>
+
+```
+
+ <span data-ttu-id="c1c90-142">構成ファイルが存在するアプリケーションを実行すると、次の出力が生成されます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-142">When the application is run with the configuration file present, it produces the following output:</span></span>
+
+```
+'archæ' not found in 'The archaeologist'
+```
+
+<a name="ForConsumers"></a>
+## <a name="appcontext-for-library-consumers"></a><span data-ttu-id="c1c90-143">ライブラリコンシューマーの AppContext</span><span class="sxs-lookup"><span data-stu-id="c1c90-143">AppContext for library consumers</span></span>
+ <span data-ttu-id="c1c90-144">ライブラリを使用している場合、 <xref:System.AppContext>クラスを使用すると、ライブラリまたはライブラリのメソッドのオプトアウトメカニズムを利用して新しい機能を利用できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-144">If you are the consumer of a library, the <xref:System.AppContext> class  allows you to take advantage of a library or library method's opt-out mechanism for new functionality.</span></span>   <span data-ttu-id="c1c90-145">呼び出し元のクラスライブラリの個々のメソッドは、新しい動作を有効または無効にする特定のスイッチを定義します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-145">Individual methods of the class library that you are calling define particular switches that enable or disable a new behavior.</span></span> <span data-ttu-id="c1c90-146">スイッチの値はブール値です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-146">The value of the switch  is a Boolean.</span></span> <span data-ttu-id="c1c90-147">既定値である場合は、新しい動作が有効になります。これが`true`の場合、新しい動作は無効になり、メンバーは以前と同じように動作します。 `false`</span><span class="sxs-lookup"><span data-stu-id="c1c90-147">If it is `false`, which is typically the default value, the new behavior is enabled; if it is `true`, the new behavior is disabled, and the member behaves as it did previously.</span></span>
+
+ <span data-ttu-id="c1c90-148">スイッチの値は、次の4つの方法のいずれかで設定できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-148">You can set the value of a switch in one of four ways:</span></span>
+
+-   <span data-ttu-id="c1c90-149">コード内で<xref:System.AppContext.SetSwitch%28System.String%2CSystem.Boolean%29?displayProperty=nameWithType>メソッドを呼び出します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-149">By calling the <xref:System.AppContext.SetSwitch%28System.String%2CSystem.Boolean%29?displayProperty=nameWithType> method in your code.</span></span>  <span data-ttu-id="c1c90-150">引数`switchName`はスイッチ名を定義し、プロパティ`isEnabled`はスイッチの値を定義します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-150">The `switchName` argument defines the switch name, and the `isEnabled` property defines the value of the switch.</span></span> <span data-ttu-id="c1c90-151">は<xref:System.AppContext>静的クラスであるため、アプリケーションドメインごとに使用できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-151">Because <xref:System.AppContext> is a static class, it is available on a per-application domain basis.</span></span>
+
+     <span data-ttu-id="c1c90-152">を呼び<xref:System.AppContext.SetSwitch%28System.String%2CSystem.Boolean%29?displayProperty=nameWithType>出すと、アプリケーションスコープが適用されます。つまり、アプリケーションにのみ影響します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-152">Calling the <xref:System.AppContext.SetSwitch%28System.String%2CSystem.Boolean%29?displayProperty=nameWithType> has application scope; that is, it affects only the application.</span></span>
+
+-   <span data-ttu-id="c1c90-153">App.config ファイルの`<AppContextSwitchOverrides>` [ \<ランタイム >](~/docs/framework/configure-apps/file-schema/runtime/runtime-element.md)セクションに要素を追加します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-153">By adding an `<AppContextSwitchOverrides>` element to the [\<runtime>](~/docs/framework/configure-apps/file-schema/runtime/runtime-element.md) section of your app.config file.</span></span> <span data-ttu-id="c1c90-154">スイッチには1つの属性`value`があります。この属性の値は、スイッチ名とその値の両方を含むキーと値のペアを表す文字列です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-154">The switch has a single attribute, `value`, whose value is a string that represents a key/value pair containing both the switch name and its value.</span></span>
+
+     <span data-ttu-id="c1c90-155">複数のスイッチを定義するには、 [ \<appcontextswitchoverrides](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)各スイッチのキーと値のペアを`value`分離し、> 要素の属性をセミコロンで区切ります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-155">To define multiple switches, separate each switch's key/value pair in the [\<AppContextSwitchOverrides>](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md) element's `value` attribute with a semicolon.</span></span> <span data-ttu-id="c1c90-156">その場合、要素の`<AppContextSwitchOverrides>`形式は次のようになります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-156">In that case, the `<AppContextSwitchOverrides>` element has the following format:</span></span>
+
+    ```xml
+    <AppContextSwitchOverrides value="switchName1=value1;switchName2=value2" />
+    ```
+
+     <span data-ttu-id="c1c90-157">`<AppContextSwitchOverrides>`要素を使用して構成設定を定義するには、アプリケーションスコープを使用します。つまり、アプリケーションにのみ影響します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-157">Using the `<AppContextSwitchOverrides>` element to define a configuration setting has application scope; that is, it affects only the application.</span></span>
+
+    > [!NOTE]
+    > <span data-ttu-id="c1c90-158">.NET Framework によって定義されるスイッチの詳細については、「 [ \<appcontextswitchoverrides > 要素](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)」を参照してください。</span><span class="sxs-lookup"><span data-stu-id="c1c90-158">For information on the switches defined by the .NET Framework, see the [\<AppContextSwitchOverrides> element](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md).</span></span>
+
+-   <span data-ttu-id="c1c90-159">名前がレジストリ内の`HKLM\SOFTWARE\Microsoft\.NETFramework\AppContext`キーへのスイッチの名前である文字列値を追加します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-159">By adding a string value whose name is the name of the switch to the `HKLM\SOFTWARE\Microsoft\.NETFramework\AppContext` key in the registry.</span></span> <span data-ttu-id="c1c90-160">この値は、 <xref:System.Boolean> <xref:System.Boolean.Parse%2A?displayProperty=nameWithType>メソッドによって解析できるの文字列表現である必要があります。つまり、"true"、"true"、"false"、または "false" である必要があります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-160">Its value must be the string representation of a <xref:System.Boolean> that can be parsed by the <xref:System.Boolean.Parse%2A?displayProperty=nameWithType> method; that is, it must be "True", "true", "False", or "false".</span></span> <span data-ttu-id="c1c90-161">ランタイムがその他の値を検出した場合、スイッチは無視されます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-161">If the runtime encounters any other value, it ignores the switch.</span></span>
+
+     <span data-ttu-id="c1c90-162">レジストリを使用して<xref:System.AppContext>スイッチを定義すると、マシンのスコープを持つことになります。つまり、コンピューター上で実行されているすべてのアプリケーションに影響します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-162">Using the registry to define an <xref:System.AppContext> switch has machine scope; that is, it affects every application running on the machine.</span></span>
+
+- <span data-ttu-id="c1c90-163">ASP.NET アプリケーションの場合は、web.config ファイルの[ \<appSettings >](~/docs/framework/configure-apps/file-schema/appsettings/index.md)セクションに[ \<add >](~/docs/framework/configure-apps/file-schema/appsettings/add-element-for-appsettings.md)要素を追加します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-163">For ASP.NET applications, you add an [\<Add>](~/docs/framework/configure-apps/file-schema/appsettings/add-element-for-appsettings.md) element to the [\<appSettings>](~/docs/framework/configure-apps/file-schema/appsettings/index.md) section of the web.config file.</span></span> <span data-ttu-id="c1c90-164">次に例を示します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-164">For example:</span></span>
+
+   ```xml
+   <appSettings>
+      <add key="AppContext.SetSwitch:switchName1" value="switchValue1" />
+      <add key="AppContext.SetSwitch:switchName2" value="switchValue2" />
+   </appSettings>
+   ```
+
+ <span data-ttu-id="c1c90-165">同じスイッチを複数の方法で設定した場合、他の設定をオーバーライドする設定を決定する優先順位は次のようになります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-165">If you set the same switch in more than one way, the order of precedence for determining which setting overrides the others is:</span></span>
+
+1.  <span data-ttu-id="c1c90-166">プログラム設定。</span><span class="sxs-lookup"><span data-stu-id="c1c90-166">The programmatic setting.</span></span>
+
+2.  <span data-ttu-id="c1c90-167">アプリ構成ファイルまたは web.config ファイル内の設定。</span><span class="sxs-lookup"><span data-stu-id="c1c90-167">The setting in the app config file or the web.config file.</span></span>
+
+3.  <span data-ttu-id="c1c90-168">レジストリ設定です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-168">The registry setting.</span></span>
+
+ <span data-ttu-id="c1c90-169">次に示すのは、ファイルの URI を<xref:System.IO.Path.GetDirectoryName%2A?displayProperty=nameWithType>メソッドに渡す単純なアプリケーションです。</span><span class="sxs-lookup"><span data-stu-id="c1c90-169">The following is a simple application that passes a file URI to the <xref:System.IO.Path.GetDirectoryName%2A?displayProperty=nameWithType> method.</span></span>  <span data-ttu-id="c1c90-170">.NET Framework 4.6 で実行すると、はファイルパス<xref:System.ArgumentException>の`file://`有効な部分ではなくなったため、をスローします。</span><span class="sxs-lookup"><span data-stu-id="c1c90-170">When run under the .NET Framework 4.6, it throws an <xref:System.ArgumentException> because `file://` is no longer a valid part of a file path.</span></span>
+
+ [!code-csharp[System.AppContext.Class#10](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/ForConsumers1.cs#10)]
+ [!code-vb[System.AppContext.Class#10](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/ForConsumers1.vb#10)]
+
+ <span data-ttu-id="c1c90-171">メソッドの以前の動作を復元し、例外を回避するには、 `Switch.System.IO.UseLegacyPathHandling`次の例のように、アプリケーション構成ファイルにスイッチを追加します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-171">To restore the method's previous behavior and prevent the exception, you can add the `Switch.System.IO.UseLegacyPathHandling` switch to the application configuration file for the example:</span></span>
+
+```xml
+<configuration>
+    <runtime>
+        <AppContextSwitchOverrides value="Switch.System.IO.UseLegacyPathHandling=true" />
+    </runtime>
+</configuration>
+```
+## <a name="see-also"></a><span data-ttu-id="c1c90-172">関連項目</span><span class="sxs-lookup"><span data-stu-id="c1c90-172">See also</span></span>
+[<span data-ttu-id="c1c90-173">AppContext スイッチ</span><span class="sxs-lookup"><span data-stu-id="c1c90-173">AppContext switch</span></span>](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)
+
+ ]]></format>
+    </remarks>
+    <related type="Article" href="https://msdn.microsoft.com/library/1eb2fae3-de4b-45b6-852f-517c39b751bd"><span data-ttu-id="c1c90-174">&lt;runtime&gt;要素</span><span class="sxs-lookup"><span data-stu-id="c1c90-174">&lt;runtime&gt; Element</span></span></related>
+    <related type="Article" href="https://msdn.microsoft.com/library/4ce07f47-7ddb-4d91-b067-501bd8b88752"><span data-ttu-id="c1c90-175">&lt;Appcontextswitchoverrides&gt;要素</span><span class="sxs-lookup"><span data-stu-id="c1c90-175">&lt;AppContextSwitchOverrides&gt; Element</span></span></related>
+  </Docs>
+  <Members>
+    <Member MemberName="BaseDirectory">
+      <MemberSignature Language="C#" Value="public static string BaseDirectory { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property string BaseDirectory" />
+      <MemberSignature Language="DocId" Value="P:System.AppContext.BaseDirectory" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly Property BaseDirectory As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static property System::String ^ BaseDirectory { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.BaseDirectory : string" Usage="System.AppContext.BaseDirectory" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.AppContext</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="c1c90-176">アセンブリを探すためにアセンブリ リゾルバーが使用するベース ディレクトリのパス名を取得します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-176">Gets the pathname of the base directory that the assembly resolver uses to probe for assemblies.</span></span></summary>
+        <value><span data-ttu-id="c1c90-177">アセンブリを探すためにアセンブリ リゾルバーが使用するベース ディレクトリのパス名。</span><span class="sxs-lookup"><span data-stu-id="c1c90-177">the pathname of the base directory that the assembly resolver uses to probe for assemblies.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+ <span data-ttu-id="c1c90-178">これは、アプリケーションドメインごとのプロパティです。</span><span class="sxs-lookup"><span data-stu-id="c1c90-178">This is a per application domain property.</span></span> <span data-ttu-id="c1c90-179">この値は<xref:System.AppDomain.BaseDirectory%2A?displayProperty=nameWithType> 、現在のアプリケーションドメインのプロパティに対応します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-179">Its value corresponds to the <xref:System.AppDomain.BaseDirectory%2A?displayProperty=nameWithType> property of the current application domain.</span></span>
+
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetData">
+      <MemberSignature Language="C#" Value="public static object GetData (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig object GetData(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.AppContext.GetData(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetData (name As String) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Object ^ GetData(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="static member GetData : string -&gt; obj" Usage="System.AppContext.GetData name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.AppContext</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netstandard-2.0">
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="name"><span data-ttu-id="c1c90-180">データ要素の名前。</span><span class="sxs-lookup"><span data-stu-id="c1c90-180">The name of the data element.</span></span></param>
+        <summary><span data-ttu-id="c1c90-181">現在のアプリケーション ドメインに割り当てられている名前付きデータ要素の値を返します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-181">Returns the value of the named data element assigned to the current application domain.</span></span></summary>
+        <returns><span data-ttu-id="c1c90-182"><paramref name="name" /> が名前付きの値を識別する場合は <paramref name="name" /> の値。それ以外の場合は <see langword="null" />。</span><span class="sxs-lookup"><span data-stu-id="c1c90-182">The value of <paramref name="name" />, if <paramref name="name" /> identifies a named value; otherwise, <see langword="null" />.</span></span></returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetSwitch">
+      <MemberSignature Language="C#" Value="public static void SetSwitch (string switchName, bool isEnabled);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void SetSwitch(string switchName, bool isEnabled) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.AppContext.SetSwitch(System.String,System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub SetSwitch (switchName As String, isEnabled As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void SetSwitch(System::String ^ switchName, bool isEnabled);" />
+      <MemberSignature Language="F#" Value="static member SetSwitch : string * bool -&gt; unit" Usage="System.AppContext.SetSwitch (switchName, isEnabled)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.AppContext</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="switchName" Type="System.String" />
+        <Parameter Name="isEnabled" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="switchName"><span data-ttu-id="c1c90-183">スイッチの名前です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-183">The name of the switch.</span></span></param>
+        <param name="isEnabled"><span data-ttu-id="c1c90-184">スイッチの値です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-184">The value of the switch.</span></span></param>
+        <summary><span data-ttu-id="c1c90-185">スイッチの値を設定します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-185">Sets the value of a switch.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+ <span data-ttu-id="c1c90-186"><xref:System.AppContext>クラスを使用すると、ライブラリの作成者は、ユーザーに新しい機能を提供するための統一されたオプトアウトメカニズムを提供できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-186">The <xref:System.AppContext> class enables library writers to provide a uniform opt-out mechanism for new functionality for their users.</span></span> <span data-ttu-id="c1c90-187">これは、オプトアウト要求を伝達するために、コンポーネント間に疎結合のコントラクトを確立します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-187">It establishes a loosely-coupled contract between components in order to communicate an opt-out request.</span></span> <span data-ttu-id="c1c90-188">通常、この機能は既存の機能が変更されるときに重要となります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-188">This capability is typically important when a change is made to existing functionality.</span></span> <span data-ttu-id="c1c90-189">それに対して、新しい機能には暗黙のオプトインが既に存在しています。</span><span class="sxs-lookup"><span data-stu-id="c1c90-189">Conversely, there is already an implicit opt-in for new functionality.</span></span>
+
+ <span data-ttu-id="c1c90-190">メソッドは、依存ライブラリによって定義されるスイッチ ( <xref:System.Boolean>常に値) の値を宣言するために、アプリケーション (またはライブラリ) によって呼び出されます。 <xref:System.AppContext.SetSwitch%2A></span><span class="sxs-lookup"><span data-stu-id="c1c90-190">The <xref:System.AppContext.SetSwitch%2A> method is called by an application (or a library) to declare the value of a switch (which is always a <xref:System.Boolean> value) that a dependent library defines.</span></span> <span data-ttu-id="c1c90-191">スイッチは常に暗黙的`false`に行われ、新しい動作を提供します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-191">The switch is always implicitly `false`, which provides the new behavior.</span></span> <span data-ttu-id="c1c90-192">スイッチをに設定`true`すると、従来の動作が提供されるようになります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-192">Setting the switch to `true` enables it, which provides the legacy behavior.</span></span> <span data-ttu-id="c1c90-193">スイッチを明示的に`false`に設定すると、新しい動作も提供されます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-193">Explicitly setting the switch to `false` also provides the new behavior.</span></span> <span data-ttu-id="c1c90-194">その後、依存ライブラリは<xref:System.AppContext.TryGetSwitch%2A>メソッドを呼び出して、スイッチの値を確認できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-194">The dependent library can then check the value of the switch by calling the <xref:System.AppContext.TryGetSwitch%2A> method.</span></span>
+
+> [!NOTE]
+> <span data-ttu-id="c1c90-195">スイッチ名には、ライブラリによって公開される正式なコントラクトであるため、一貫した形式を使用することをお勧めします。</span><span class="sxs-lookup"><span data-stu-id="c1c90-195">It's beneficial to use a consistent format for switch names, since they are a formal contract exposed by a library.</span></span> <span data-ttu-id="c1c90-196">2 つの明確な形式を次に示します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-196">The following are two obvious formats.</span></span>
+>
+> -   <span data-ttu-id="c1c90-197">*Switch*.*namespace*.*switchname*</span><span class="sxs-lookup"><span data-stu-id="c1c90-197">*Switch*.*namespace*.*switchname*</span></span>
+> -   <span data-ttu-id="c1c90-198">*Switch*.*library*.*switchname*</span><span class="sxs-lookup"><span data-stu-id="c1c90-198">*Switch*.*library*.*switchname*</span></span>
+
+ <span data-ttu-id="c1c90-199">.NET Framework で実行されているアプリケーションでは、スイッチの値をプログラムで設定するだけでなく、次のように設定することもできます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-199">For applications running on the .NET Framework, in addition to setting the value of a switch programmatically, it can also be set:</span></span>
+
+-   <span data-ttu-id="c1c90-200">スイッチの名前と値を[ \<appcontextswitchoverrides](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)に追加することにより、アプリケーション構成ファイルの[ \<ランタイム >](~/docs/framework/configure-apps/file-schema/runtime/runtime-element.md)セクションの > 要素をオーバーライドします。</span><span class="sxs-lookup"><span data-stu-id="c1c90-200">By adding the switch name and value to the [\<AppContextSwitchOverrides>](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md) element in the [\<runtime>](~/docs/framework/configure-apps/file-schema/runtime/runtime-element.md) section of an application configuration file.</span></span> <span data-ttu-id="c1c90-201">たとえば、次の例では、と`Libraries.FPLibrary.UseExactFloatingPointComparison`いう値を`False`持つという名前のスイッチを定義しています。</span><span class="sxs-lookup"><span data-stu-id="c1c90-201">For example, the following defines a switch named `Libraries.FPLibrary.UseExactFloatingPointComparison` whose value is `False`.</span></span>
+
+    ```xml
+
+    <configuration>
+       <runtime>
+          <AppContextSwitchOverrides value="Libraries.FPLibrary.UseExactFloatingPointComparison=false" />
+       </runtime>
+    </configuration>
+
+    ```
+
+-   <span data-ttu-id="c1c90-202">名前がレジストリ内の`HKLM\SOFTWARE\Microsoft\.NETFramework\AppContext`キーへのスイッチの名前である文字列値を追加します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-202">By adding a string value whose name is the name of the switch to the `HKLM\SOFTWARE\Microsoft\.NETFramework\AppContext` key in the registry.</span></span> <span data-ttu-id="c1c90-203">この値は、 <xref:System.Boolean> <xref:System.Boolean.Parse%2A?displayProperty=nameWithType>メソッドによって解析できるの文字列表現である必要があります。つまり、"true"、"true"、"false"、または "false" である必要があります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-203">Its value must be the string representation of a <xref:System.Boolean> that can be parsed by the <xref:System.Boolean.Parse%2A?displayProperty=nameWithType> method; that is, it must be "True", "true", "False", or "false".</span></span>
+
+ <span data-ttu-id="c1c90-204">が`switchName`既に存在する場合は、 `isEnabled`引数によってその値が上書きされます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-204">If `switchName` already exists, its value is overwritten by the `isEnabled` argument.</span></span>  <span data-ttu-id="c1c90-205">つまり、メソッドの<xref:System.AppContext.SetSwitch%2A>最後の呼び出しでは、レジストリ、アプリ構成ファイル、またはメソッドの<xref:System.AppContext.SetSwitch%2A>以前の呼び出しで定義されている値がオーバーライドされます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-205">That is, the most recent call to the <xref:System.AppContext.SetSwitch%2A> method overrides the value defined in the registry, in an app configuration file, or by previous calls to the <xref:System.AppContext.SetSwitch%2A> method.</span></span>
+
+ ### <a name="appcontextsetswitch-and-net-core"></a><span data-ttu-id="c1c90-206">AppContext. SetSwitch と .NET Core</span><span class="sxs-lookup"><span data-stu-id="c1c90-206">AppContext.SetSwitch and .NET Core</span></span>
+
+<span data-ttu-id="c1c90-207">.Net Core は、 <xref:System.AppContext.SetSwitch%2A>メソッドのみを使用したプログラムによる呼び出しをサポートしています。</span><span class="sxs-lookup"><span data-stu-id="c1c90-207">.NET Core supports programmatic calls with the <xref:System.AppContext.SetSwitch%2A> method only.</span></span> <span data-ttu-id="c1c90-208">次のスイッチがサポートされています。</span><span class="sxs-lookup"><span data-stu-id="c1c90-208">The following switches are supported:</span></span>
+
+|<span data-ttu-id="c1c90-209">Switch</span><span class="sxs-lookup"><span data-stu-id="c1c90-209">Switch</span></span>|<span data-ttu-id="c1c90-210">値</span><span class="sxs-lookup"><span data-stu-id="c1c90-210">Values</span></span>|<span data-ttu-id="c1c90-211">説明</span><span class="sxs-lookup"><span data-stu-id="c1c90-211">Description</span></span>|
+|--|--|--|
+|`System.Net.Http.SocketsHttpHandler.Http2Support`|<span data-ttu-id="c1c90-212">`true` または `false`</span><span class="sxs-lookup"><span data-stu-id="c1c90-212">`true` or `false`</span></span>|<span data-ttu-id="c1c90-213">HTTP/2 プロトコルのサポートが有効`true`かどうかを示します () または無効 (`false`)。</span><span class="sxs-lookup"><span data-stu-id="c1c90-213">Indicates whether support for the HTTP/2 protocol is enabled (`true`) or disabled (`false`).</span></span> <span data-ttu-id="c1c90-214">既定値は disabled です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-214">The default is disabled.</span></span> <span data-ttu-id="c1c90-215">スイッチは、を<xref:System.Net.Http.HttpClient>初めて使用する前に設定する必要があります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-215">The switch must be set before the first use of <xref:System.Net.Http.HttpClient>.</span></span> <span data-ttu-id="c1c90-216">.NET Core 3.0 Preview 4 以降で使用できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-216">Available starting with .NET Core 3.0 Preview 4.</span></span>|
+|`System.Net.Http.UseSocketsHttpHandler` |<span data-ttu-id="c1c90-217">`true` または `false`</span><span class="sxs-lookup"><span data-stu-id="c1c90-217">`true` or `false`</span></span>|<span data-ttu-id="c1c90-218"><xref:System.Net.Http.HttpClient> <xref:System.Net.Http.SocketsHttpHandler?displayProperty=nameWithType> ( ) や <xref:System.Net.Http.HttpClientHandler?displayProperty=nameWithType>  () などの高レベルのネットワーク api を使用するかどうかを決定します `false` 。`true`</span><span class="sxs-lookup"><span data-stu-id="c1c90-218">Determines whether high-level networking APIs such as <xref:System.Net.Http.HttpClient> use <xref:System.Net.Http.SocketsHttpHandler?displayProperty=nameWithType> (`true`) or <xref:System.Net.Http.HttpClientHandler?displayProperty=nameWithType> (`false`).</span></span>|
+
+## Examples
+ <span data-ttu-id="c1c90-219">次のコード行では、という`Switch.AmazingLib.ThrowOnException`名前`true`のスイッチをに設定します。これにより、従来の動作が有効になります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-219">The following line of code sets a switch named `Switch.AmazingLib.ThrowOnException` to `true`, which enables a legacy behavior.</span></span> <span data-ttu-id="c1c90-220">ライブラリは、メソッドを<xref:System.AppContext.TryGetSwitch%2A>呼び出すことによって、ライブラリコンシューマーがスイッチの値を設定したかどうかを確認できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-220">The library can then check whether a library consumer has set the value of the switch by calling the <xref:System.AppContext.TryGetSwitch%2A> method.</span></span>
+
+ [!code-csharp[System.AppContext.Class#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/TestValue1.cs#1)]
+ [!code-vb[System.AppContext.Class#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/TestValue1.vb#1)]
+
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="c1c90-221"><paramref name="switchName" /> は <see langword="null" />です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-221"><paramref name="switchName" /> is <see langword="null" />.</span></span></exception>
+        <exception cref="T:System.ArgumentException"><span data-ttu-id="c1c90-222"><paramref name="switchName" /> は <see cref="F:System.String.Empty" />です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-222"><paramref name="switchName" /> is <see cref="F:System.String.Empty" />.</span></span></exception>
+        <altmember cref="M:System.AppContext.TryGetSwitch(System.String,System.Boolean@)" />
+      </Docs>
+    </Member>
+    <Member MemberName="TargetFrameworkName">
+      <MemberSignature Language="C#" Value="public static string TargetFrameworkName { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property string TargetFrameworkName" />
+      <MemberSignature Language="DocId" Value="P:System.AppContext.TargetFrameworkName" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly Property TargetFrameworkName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static property System::String ^ TargetFrameworkName { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.TargetFrameworkName : string" Usage="System.AppContext.TargetFrameworkName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.AppContext</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netstandard-2.0">
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><span data-ttu-id="c1c90-223">現在のアプリケーションの対象となるフレームワークのバージョンの名前を取得します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-223">Gets the name of the framework version targeted by the current application.</span></span></summary>
+        <value><span data-ttu-id="c1c90-224">現在のアプリケーションの対象となるフレームワークのバージョンの名前。</span><span class="sxs-lookup"><span data-stu-id="c1c90-224">The name of the framework version targeted by the current application.</span></span></value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+ <span data-ttu-id="c1c90-225">ターゲットフレームワークのバージョンの名前は、 <xref:System.Runtime.Versioning.TargetFrameworkAttribute.FrameworkName%2A?displayProperty=nameWithType>プロパティの値に対応します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-225">The name of the target framework version corresponds to the value of the <xref:System.Runtime.Versioning.TargetFrameworkAttribute.FrameworkName%2A?displayProperty=nameWithType> property.</span></span> <span data-ttu-id="c1c90-226">.NET Framework のターゲットフレームワーク名の一覧については、 [ &lt;&gt; supportedruntime 要素](~/docs/framework/configure-apps/file-schema/startup/supportedruntime-element.md)の要素を参照してください。</span><span class="sxs-lookup"><span data-stu-id="c1c90-226">For a list of target framework names for the .NET Framework, see the [&lt;supportedRuntime&gt; Element](~/docs/framework/configure-apps/file-schema/startup/supportedruntime-element.md) element.</span></span>
+
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Runtime.Versioning.TargetFrameworkAttribute" />
+        <altmember cref="P:System.Runtime.Versioning.TargetFrameworkAttribute.FrameworkName" />
+      </Docs>
+    </Member>
+    <Member MemberName="TryGetSwitch">
+      <MemberSignature Language="C#" Value="public static bool TryGetSwitch (string switchName, out bool isEnabled);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool TryGetSwitch(string switchName, [out] bool&amp; isEnabled) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.AppContext.TryGetSwitch(System.String,System.Boolean@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryGetSwitch (switchName As String, ByRef isEnabled As Boolean) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool TryGetSwitch(System::String ^ switchName, [Runtime::InteropServices::Out] bool % isEnabled);" />
+      <MemberSignature Language="F#" Value="static member TryGetSwitch : string *  -&gt; bool" Usage="System.AppContext.TryGetSwitch (switchName, isEnabled)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.AppContext</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="switchName" Type="System.String" />
+        <Parameter Name="isEnabled" Type="System.Boolean" RefType="out" />
+      </Parameters>
+      <Docs>
+        <param name="switchName"><span data-ttu-id="c1c90-227">スイッチの名前です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-227">The name of the switch.</span></span></param>
+        <param name="isEnabled"><span data-ttu-id="c1c90-228">このメソッドが返されるときに <paramref name="switchName" /> が見つかった場合、<paramref name="switchName" /> の値が含まれます。<paramref name="switchName" /> が見つからなかった場合は <see langword="false" />。</span><span class="sxs-lookup"><span data-stu-id="c1c90-228">When this method returns, contains the value of <paramref name="switchName" /> if <paramref name="switchName" /> was found, or <see langword="false" /> if <paramref name="switchName" /> was not found.</span></span> <span data-ttu-id="c1c90-229">このパラメーターは初期化せずに渡されます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-229">This parameter is passed uninitialized.</span></span></param>
+        <summary><span data-ttu-id="c1c90-230">スイッチの値の取得を試みます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-230">Tries to get the value of a switch.</span></span></summary>
+        <returns><span data-ttu-id="c1c90-231"><paramref name="switchName" /> が設定され、<paramref name="isEnabled" /> の引数にスイッチの値が含まれている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</span><span class="sxs-lookup"><span data-stu-id="c1c90-231"><see langword="true" /> if <paramref name="switchName" /> was set and the <paramref name="isEnabled" /> argument contains the value of the switch; otherwise, <see langword="false" />.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+ <span data-ttu-id="c1c90-232"><xref:System.AppContext>クラスを使用すると、ライブラリの作成者は、ユーザーに新しい機能を提供するための統一されたオプトアウトメカニズムを提供できます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-232">The <xref:System.AppContext> class enables library writers to provide a uniform opt-out mechanism for new functionality for their users.</span></span> <span data-ttu-id="c1c90-233">これは、オプトアウト要求を伝達するために、コンポーネント間に疎結合のコントラクトを確立します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-233">It establishes a loosely-coupled contract between components in order to communicate an opt-out request.</span></span> <span data-ttu-id="c1c90-234">通常、この機能は既存の機能が変更されるときに重要となります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-234">This capability is typically important when a change is made to existing functionality.</span></span> <span data-ttu-id="c1c90-235">それに対して、新しい機能には暗黙のオプトインが既に存在しています。</span><span class="sxs-lookup"><span data-stu-id="c1c90-235">Conversely, there is already an implicit opt-in for new functionality.</span></span>
+
+ <span data-ttu-id="c1c90-236">共通言語ランタイムは、レジストリとアプリケーションの構成ファイル<xref:System.AppContext>を読み取って、インスタンスに割り当てられたスイッチを自動的に設定します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-236">The common language runtime automatically populates the switches assigned to an <xref:System.AppContext> instance by reading the registry and the application's configuration file.</span></span> <span data-ttu-id="c1c90-237">その後、これらのスイッチの値をオーバーライドし、新しいスイッチを追加して<xref:System.AppContext.SetSwitch%2A> 、メソッドを呼び出すことができます。</span><span class="sxs-lookup"><span data-stu-id="c1c90-237">The value of these switches can then be overridden, and new switches added, by calling the <xref:System.AppContext.SetSwitch%2A> method.</span></span>
+
+ <span data-ttu-id="c1c90-238">ライブラリは、 <xref:System.AppContext.TryGetSwitch%2A>メソッドを呼び出して、コンシューマーがスイッチの値を宣言したかどうかを確認し、適切に操作します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-238">A library calls the <xref:System.AppContext.TryGetSwitch%2A> method to check whether its consumers have declared the value of the switch and then act appropriately on it.</span></span>  <span data-ttu-id="c1c90-239">既定では、スイッチが定義されていない場合は、新しい機能が有効になります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-239">By default, if the switch is not defined, the new functionality is enabled..</span></span> <span data-ttu-id="c1c90-240">スイッチが定義され、その値が`false`の場合は、新しい機能も有効になります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-240">If the switch is defined and its value is `false`, the new functionality is also enabled.</span></span> <span data-ttu-id="c1c90-241">値が`true`の場合は、従来の動作が有効になります。</span><span class="sxs-lookup"><span data-stu-id="c1c90-241">If its value is `true`, the legacy behavior is enabled.</span></span>
+
+
+
+## Examples
+ <span data-ttu-id="c1c90-242">次の例では、ライブラリコンシューマーがという名前`Switch.AmazingLib.ThrowOnException`のスイッチを設定しているかどうかを確認します。</span><span class="sxs-lookup"><span data-stu-id="c1c90-242">The following example determines whether a library consumer has set a switch named `Switch.AmazingLib.ThrowOnException`.</span></span>
+
+ [!code-csharp[System.AppContext.Class#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/TestValue1.cs#2)]
+ [!code-vb[System.AppContext.Class#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/TestValue1.vb#2)]
+
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><span data-ttu-id="c1c90-243"><paramref name="switchName" /> が <see langword="null" /> です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-243"><paramref name="switchName" /> is <see langword="null" />.</span></span></exception>
+        <exception cref="T:System.ArgumentException"><span data-ttu-id="c1c90-244"><paramref name="switchName" /> は <see cref="F:System.String.Empty" />です。</span><span class="sxs-lookup"><span data-stu-id="c1c90-244"><paramref name="switchName" /> is <see cref="F:System.String.Empty" />.</span></span></exception>
+        <altmember cref="M:System.AppContext.SetSwitch(System.String,System.Boolean)" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>
