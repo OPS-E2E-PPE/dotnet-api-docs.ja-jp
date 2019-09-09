@@ -1,0 +1,2060 @@
+<Type Name="RSACryptoServiceProvider" FullName="System.Security.Cryptography.RSACryptoServiceProvider">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="3c7876fd9f0724d87ff588bec397620a076285ce" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70503323" /></Metadata><TypeSignature Language="C#" Value="public sealed class RSACryptoServiceProvider : System.Security.Cryptography.RSA, System.Security.Cryptography.ICspAsymmetricAlgorithm" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit RSACryptoServiceProvider extends System.Security.Cryptography.RSA implements class System.Security.Cryptography.ICspAsymmetricAlgorithm" />
+  <TypeSignature Language="DocId" Value="T:System.Security.Cryptography.RSACryptoServiceProvider" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class RSACryptoServiceProvider&#xA;Inherits RSA&#xA;Implements ICspAsymmetricAlgorithm" />
+  <TypeSignature Language="C++ CLI" Value="public ref class RSACryptoServiceProvider sealed : System::Security::Cryptography::RSA, System::Security::Cryptography::ICspAsymmetricAlgorithm" />
+  <TypeSignature Language="F#" Value="type RSACryptoServiceProvider = class&#xA;    inherit RSA&#xA;    interface ICspAsymmetricAlgorithm" />
+  <AssemblyInfo>
+    <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>mscorlib</AssemblyName>
+    <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Security.Cryptography.RSA</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>System.Security.Cryptography.ICspAsymmetricAlgorithm</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+      <AttributeName>System.Runtime.InteropServices.ComVisible(true)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>暗号サービス プロバイダー (CSP : Cryptographic Service Provider) によって提供された <see cref="T:System.Security.Cryptography.RSA" /> アルゴリズムの実装を使用して、非対称暗号化および復号化を実行します。 このクラスは継承できません。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ これは、の既定の<xref:System.Security.Cryptography.RSA>実装です。  
+  
+ Microsoft <xref:System.Security.Cryptography.RSACryptoServiceProvider> Enhanced Cryptographic Provider がインストールされている場合、では、384ビットから16384ビットまでのキーサイズを8ビット単位でサポートします。  Microsoft Base Cryptographic Provider がインストールされている場合、384ビットから512ビットまでのキーサイズを8ビット単位でサポートします。  
+  
+ 有効なキーサイズは、 <xref:System.Security.Cryptography.RSACryptoServiceProvider>インスタンスによって使用される暗号化サービスプロバイダー (CSP) に依存します。 Windows csp [!INCLUDE[win81](~/includes/win81-md.md)]では、より前の windows バージョンでは 384 ~ 16384 ビットのキーサイズが有効になり、で[!INCLUDE[win81](~/includes/win81-md.md)]は512から16384ビットのキーサイズが有効になります。 詳細については、Windows ドキュメントの「 [Cryptgenkey](https://msdn.microsoft.com/library/aa379941\(v=vs.85\).aspx)関数」を参照してください。  
+  
+## <a name="interoperation-with-the-microsoft-cryptographic-api-capi"></a>Microsoft Cryptographic API (CAPI) との相互運用  
+ アンマネージ CAPI の RSA 実装とは異なり<xref:System.Security.Cryptography.RSACryptoServiceProvider> 、クラスは、暗号化の後、復号化の前に、暗号化されたバイト配列の順序を逆にします。  既定<xref:System.Security.Cryptography.RSACryptoServiceProvider>では、クラスによって暗号化されたデータを capi `CryptDecrypt`関数で復号化することはできません。また<xref:System.Security.Cryptography.RSACryptoServiceProvider> 、capi `CryptEncrypt`メソッドによって暗号化されたデータをクラスで復号化することはできません。  
+  
+ Api 間の相互運用時に逆順の順序付けを補正しない<xref:System.Security.Cryptography.RSACryptoServiceProvider>場合、クラス<xref:System.Security.Cryptography.CryptographicException>はをスローします。  
+  
+ CAPI と相互運用するには、暗号化されたデータを別の API と相互運用する前に、暗号化されたバイトの順序を手動で逆にする必要があります。  マネージバイト配列の順序を逆にするには、 <xref:System.Array.Reverse%2A?displayProperty=nameWithType>メソッドを呼び出します。  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Security.Cryptography.RSACryptoServiceProvider> 、クラスを使用して、文字列をバイト配列に暗号化した後、バイトを文字列に復号化します。  
+  
+ [!code-cpp[System.Security.Cryptography.RSACryptoServiceProvider#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider/CPP/sample.cpp#1)]
+ [!code-csharp[System.Security.Cryptography.RSACryptoServiceProvider#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider/CS/sample.cs#1)]
+ [!code-vb[System.Security.Cryptography.RSACryptoServiceProvider#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider/VB/sample.vb#1)]  
+  
+ 次のコード例では、 <xref:System.Security.Cryptography.RSACryptoServiceProvider>を使用して作成されたキー情報を<xref:System.Security.Cryptography.RSAParameters>オブジェクトにエクスポートします。  
+  
+ [!code-cpp[System.Security.Cryptography.RSACryptoServiceProvider.ExportParameters#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.ExportParameters/CPP/sample.cpp#1)]
+ [!code-csharp[System.Security.Cryptography.RSACryptoServiceProvider.ExportParameters#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.ExportParameters/CS/sample.cs#1)]
+ [!code-vb[System.Security.Cryptography.RSACryptoServiceProvider.ExportParameters#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.ExportParameters/VB/sample.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Security.Cryptography.RSACryptoServiceProvider" /> クラスの新しいインスタンスを初期化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public RSACryptoServiceProvider ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.#ctor" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New ()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; RSACryptoServiceProvider();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters />
+      <Docs>
+        <summary>既定のキーを使用して、<see cref="T:System.Security.Cryptography.RSACryptoServiceProvider" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 既定のキーが見つからない場合は、新しいキーが作成されます。  
+  
+ このコンストラクターは、 <xref:System.Security.Cryptography.KeyNumber.Exchange>セッションキーを暗号化するのに適したキーペアを作成して、他のユーザーと安全に格納したり、他のユーザーと交換したりできるようにします。  生成されたキーは、アンマネージ Microsoft `AT_KEYEXCHANGE` Cryptographic API (CAPI) で使用される値を使用して生成されたキーに対応します。  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Security.Cryptography.RSACryptoServiceProvider> 、クラスを使用して、文字列をバイト配列に暗号化した後、バイトを文字列に復号化します。  
+  
+ [!code-cpp[System.Security.Cryptography.RSACryptoServiceProvider#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider/CPP/sample.cpp#1)]
+ [!code-csharp[System.Security.Cryptography.RSACryptoServiceProvider#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider/CS/sample.cs#1)]
+ [!code-vb[System.Security.Cryptography.RSACryptoServiceProvider#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider/VB/sample.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">暗号化サービス プロバイダー (CSP) を取得できません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public RSACryptoServiceProvider (int dwKeySize);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(int32 dwKeySize) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.#ctor(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (dwKeySize As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; RSACryptoServiceProvider(int dwKeySize);" />
+      <MemberSignature Language="F#" Value="new System.Security.Cryptography.RSACryptoServiceProvider : int -&gt; System.Security.Cryptography.RSACryptoServiceProvider" Usage="new System.Security.Cryptography.RSACryptoServiceProvider dwKeySize" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="dwKeySize" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="dwKeySize">使用するキーのサイズ (ビット単位)。</param>
+        <summary>キーのサイズを指定して、<see cref="T:System.Security.Cryptography.RSACryptoServiceProvider" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 既定のキーが見つからない場合は、新しいキーが作成されます。  
+  
+ このコンストラクターは、 <xref:System.Security.Cryptography.KeyNumber.Exchange>セッションキーを暗号化するのに適したキーペアを作成して、他のユーザーと安全に格納したり、他のユーザーと交換したりできるようにします。  生成されたキーは、アンマネージ Microsoft `AT_KEYEXCHANGE` Cryptographic API (CAPI) で使用される値を使用して生成されたキーに対応します。  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Security.Cryptography.RSACryptoServiceProvider>、を作成し、新しいキーを生成して、キーコンテナーに格納します。  
+  
+ [!code-cpp[Cryptography.RSACSP.ctor-int32-2#1](~/samples/snippets/cpp/VS_Snippets_CLR/Cryptography.RSACSP.ctor-int32-2/CPP/example.cpp#1)]
+ [!code-csharp[Cryptography.RSACSP.ctor-int32-2#1](~/samples/snippets/csharp/VS_Snippets_CLR/Cryptography.RSACSP.ctor-int32-2/CS/example.cs#1)]
+ [!code-vb[Cryptography.RSACSP.ctor-int32-2#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/Cryptography.RSACSP.ctor-int32-2/VB/example.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">暗号化サービス プロバイダー (CSP) を取得できません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public RSACryptoServiceProvider (System.Security.Cryptography.CspParameters parameters);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class System.Security.Cryptography.CspParameters parameters) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.#ctor(System.Security.Cryptography.CspParameters)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (parameters As CspParameters)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; RSACryptoServiceProvider(System::Security::Cryptography::CspParameters ^ parameters);" />
+      <MemberSignature Language="F#" Value="new System.Security.Cryptography.RSACryptoServiceProvider : System.Security.Cryptography.CspParameters -&gt; System.Security.Cryptography.RSACryptoServiceProvider" Usage="new System.Security.Cryptography.RSACryptoServiceProvider parameters" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="parameters" Type="System.Security.Cryptography.CspParameters" />
+      </Parameters>
+      <Docs>
+        <param name="parameters">暗号サービス プロバイダー (CSP) に渡すパラメーター。</param>
+        <summary>指定したパラメーターを使用して、<see cref="T:System.Security.Cryptography.RSACryptoServiceProvider" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このコンストラクターは、 <xref:System.Security.Cryptography.CspParameters.KeyContainerName> `parameters`パラメーターのフィールドを使用して指定されたキーコンテナーを作成または再利用します。  
+  
+ 既定では、このコンストラクターは<xref:System.Security.Cryptography.KeyNumber.Exchange> 、セッションキーを暗号化するのに適したキーペアを作成して、他のユーザーと安全に格納したり、他のユーザーと交換したりできるようにします。  生成されたキーは、アンマネージ Microsoft `AT_KEYEXCHANGE` Cryptographic API (CAPI) で使用される値を使用して生成されたキーに対応します。  
+  
+ パラメーター `parameters`  <xref:System.Security.Cryptography.KeyNumber.Signature> <xref:System.Security.Cryptography.CspParameters.KeyNumber> のフィールドを値に設定することによって、メッセージまたはファイルの認証 (デジタル署名) に適したキーペアを <xref:System.Security.Cryptography.KeyNumber.Signature> 作成できます。 この種類のキーは、CAPI `AT_SIGNATURE`で使用される値に対応しています。  
+  
+ 指定された<xref:System.Security.Cryptography.RSACryptoServiceProvider> <xref:System.Security.Cryptography.KeyNumber.Exchange>値を使用してオブジェクトを作成し<xref:System.Security.Cryptography.RSACryptoServiceProvider>た後で<xref:System.Security.Cryptography.KeyNumber.Signature> 、値を指定して別のオブジェクトを作成した場合、両方のオブジェクトが同じキーコンテナー名を指定すると、両方のキーが1つのコンテナーに配置されます。.  
+  
+ <xref:System.Security.Cryptography.RSACryptoServiceProvider>クラスを使用して厳密な名前の署名と互換性のあるキーを作成するには<xref:System.Security.Cryptography.KeyNumber.Signature> 、キーペアを作成する必要があります。  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Security.Cryptography.RSACryptoServiceProvider> 、オブジェクトを作成し、新しいキーを生成して、キーコンテナーに格納します。  
+  
+ [!code-cpp[Cryptography.RSACSP.ctor-csp#1](~/samples/snippets/cpp/VS_Snippets_CLR/Cryptography.RSACSP.ctor-csp/CPP/example.cpp#1)]
+ [!code-csharp[Cryptography.RSACSP.ctor-csp#1](~/samples/snippets/csharp/VS_Snippets_CLR/Cryptography.RSACSP.ctor-csp/CS/example.cs#1)]
+ [!code-vb[Cryptography.RSACSP.ctor-csp#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/Cryptography.RSACSP.ctor-csp/VB/example.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">CSP を取得できません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public RSACryptoServiceProvider (int dwKeySize, System.Security.Cryptography.CspParameters parameters);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(int32 dwKeySize, class System.Security.Cryptography.CspParameters parameters) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.#ctor(System.Int32,System.Security.Cryptography.CspParameters)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (dwKeySize As Integer, parameters As CspParameters)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; RSACryptoServiceProvider(int dwKeySize, System::Security::Cryptography::CspParameters ^ parameters);" />
+      <MemberSignature Language="F#" Value="new System.Security.Cryptography.RSACryptoServiceProvider : int * System.Security.Cryptography.CspParameters -&gt; System.Security.Cryptography.RSACryptoServiceProvider" Usage="new System.Security.Cryptography.RSACryptoServiceProvider (dwKeySize, parameters)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="dwKeySize" Type="System.Int32" />
+        <Parameter Name="parameters" Type="System.Security.Cryptography.CspParameters" />
+      </Parameters>
+      <Docs>
+        <param name="dwKeySize">使用するキーのサイズ (ビット単位)。</param>
+        <param name="parameters">暗号サービス プロバイダー (CSP) に渡すパラメーター。</param>
+        <summary>キー サイズとパラメーターを指定して、<see cref="T:System.Security.Cryptography.RSACryptoServiceProvider" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このコンストラクターは、 <xref:System.Security.Cryptography.CspParameters.KeyContainerName> `parameters`パラメーターのフィールドを使用して指定されたキーコンテナーを作成または再利用します。  
+  
+ 既定では、このコンストラクターは<xref:System.Security.Cryptography.KeyNumber.Exchange> 、セッションキーを暗号化するのに適したキーペアを作成して、他のユーザーと安全に格納したり、他のユーザーと交換したりできるようにします。  生成されたキーは、アンマネージ Microsoft `AT_KEYEXCHANGE` Cryptographic API (CAPI) で使用される値を使用して生成されたキーに対応します。  
+  
+ パラメーター `parameters`  <xref:System.Security.Cryptography.KeyNumber.Signature> <xref:System.Security.Cryptography.CspParameters.KeyNumber> のフィールドを値に設定することによって、メッセージまたはファイルの認証 (デジタル署名) に適したキーペアを <xref:System.Security.Cryptography.KeyNumber.Signature> 作成できます。 この種類のキーは、CAPI `AT_SIGNATURE`で使用される値に対応しています。  
+  
+ 指定された<xref:System.Security.Cryptography.RSACryptoServiceProvider> <xref:System.Security.Cryptography.KeyNumber.Exchange>値を使用してオブジェクトを作成し<xref:System.Security.Cryptography.RSACryptoServiceProvider>た後で<xref:System.Security.Cryptography.KeyNumber.Signature> 、値を指定して別のオブジェクトを作成した場合、両方のオブジェクトが同じキーコンテナー名を指定すると、両方のキーが1つのコンテナーに配置されます。.  
+  
+ <xref:System.Security.Cryptography.RSACryptoServiceProvider>クラスを使用して厳密な名前の署名と互換性のあるキーを作成するには<xref:System.Security.Cryptography.KeyNumber.Signature> 、キーペアを作成する必要があります。  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Security.Cryptography.RSACryptoServiceProvider>、を作成し、新しいキーを生成して、キーコンテナーに格納します。  
+  
+ [!code-cpp[Cryptography.RSACSP.ctor-int32-csp#1](~/samples/snippets/cpp/VS_Snippets_CLR/Cryptography.RSACSP.ctor-int32-csp/CPP/example.cpp#1)]
+ [!code-csharp[Cryptography.RSACSP.ctor-int32-csp#1](~/samples/snippets/csharp/VS_Snippets_CLR/Cryptography.RSACSP.ctor-int32-csp/CS/example.cs#1)]
+ [!code-vb[Cryptography.RSACSP.ctor-int32-csp#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/Cryptography.RSACSP.ctor-int32-csp/VB/example.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">CSP を取得できません。  
+  
+ - または -  
+  
+ キーを作成できません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="CspKeyContainerInfo">
+      <MemberSignature Language="C#" Value="public System.Security.Cryptography.CspKeyContainerInfo CspKeyContainerInfo { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Security.Cryptography.CspKeyContainerInfo CspKeyContainerInfo" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.RSACryptoServiceProvider.CspKeyContainerInfo" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property CspKeyContainerInfo As CspKeyContainerInfo" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property System::Security::Cryptography::CspKeyContainerInfo ^ CspKeyContainerInfo { System::Security::Cryptography::CspKeyContainerInfo ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.CspKeyContainerInfo : System.Security.Cryptography.CspKeyContainerInfo" Usage="System.Security.Cryptography.RSACryptoServiceProvider.CspKeyContainerInfo" />
+      <MemberType>Property</MemberType>
+      <Implements>
+        <InterfaceMember>P:System.Security.Cryptography.ICspAsymmetricAlgorithm.CspKeyContainerInfo</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>get: System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Security.Cryptography.CspKeyContainerInfo</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>暗号化キーの組に関する追加情報を説明する <see cref="T:System.Security.Cryptography.CspKeyContainerInfo" /> オブジェクトを取得します。</summary>
+        <value>暗号化キーの組に関する追加情報を説明する <see cref="T:System.Security.Cryptography.CspKeyContainerInfo" /> オブジェクト。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 暗号化キー <xref:System.Security.Cryptography.RSACryptoServiceProvider.CspKeyContainerInfo%2A>のペアに関する追加情報を取得するには、プロパティを使用します。  返される<xref:System.Security.Cryptography.CspKeyContainerInfo>オブジェクトは、キーがエクスポート可能かどうかを示し、キーコンテナー名、プロバイダーに関する情報、およびその他の情報を指定します。  
+  
+ ランダムキーが生成される場合、キーを使用するメソッドを呼び出すまで、キーコンテナーは作成されません。  プロパティによって<xref:System.Security.Cryptography.CspKeyContainerInfo>返されるオブジェクトのプロパティによって<xref:System.Security.Cryptography.CryptographicException>は、キーコンテナーが作成されていない場合にがスローされます。 <xref:System.Security.Cryptography.DSACryptoServiceProvider.CspKeyContainerInfo%2A>  キーコンテナーが確実に作成されていることを確認するには<xref:System.Security.Cryptography.RSACryptoServiceProvider.Encrypt%2A>、 <xref:System.Security.Cryptography.DSACryptoServiceProvider.CspKeyContainerInfo%2A>プロパティ<xref:System.Security.Cryptography.RSACryptoServiceProvider.SignData%2A>を<xref:System.Security.Cryptography.DSACryptoServiceProvider.SignHash%2A>呼び出す前に、、、、などのメソッド<xref:System.Security.Cryptography.RSACryptoServiceProvider.Decrypt%2A>を呼び出します。  
+  
+   
+  
+## Examples  
+ <xref:System.Security.Cryptography.CspKeyContainerInfo>プロパティを呼び出す方法を次のコード例に示します。  
+  
+ [!code-cpp[Cryptography.RsaCryptoServiceProvider.CspKeyContainerInfo#1](~/samples/snippets/cpp/VS_Snippets_CLR/Cryptography.RsaCryptoServiceProvider.CspKeyContainerInfo/CPP/sample.cpp#1)]
+ [!code-csharp[Cryptography.RsaCryptoServiceProvider.CspKeyContainerInfo#1](~/samples/snippets/csharp/VS_Snippets_CLR/Cryptography.RsaCryptoServiceProvider.CspKeyContainerInfo/CS/sample.cs#1)]
+ [!code-vb[Cryptography.RsaCryptoServiceProvider.CspKeyContainerInfo#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/Cryptography.RsaCryptoServiceProvider.CspKeyContainerInfo/VB/sample.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Decrypt">
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>以前に暗号化されたデータを復号化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Decrypt">
+      <MemberSignature Language="C#" Value="public byte[] Decrypt (byte[] rgb, bool fOAEP);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance unsigned int8[] Decrypt(unsigned int8[] rgb, bool fOAEP) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.Decrypt(System.Byte[],System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Decrypt (rgb As Byte(), fOAEP As Boolean) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; cli::array &lt;System::Byte&gt; ^ Decrypt(cli::array &lt;System::Byte&gt; ^ rgb, bool fOAEP);" />
+      <MemberSignature Language="F#" Value="override this.Decrypt : byte[] * bool -&gt; byte[]" Usage="rSACryptoServiceProvider.Decrypt (rgb, fOAEP)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rgb" Type="System.Byte[]" />
+        <Parameter Name="fOAEP" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="rgb">復号化するデータ。</param>
+        <param name="fOAEP">Microsoft Windows XP 以降を実行するコンピューターだけで使用できる OAEP パディングを使用して、直接 <see cref="T:System.Security.Cryptography.RSA" /> 復号化を実行する場合は <see langword="true" />。それ以外の場合は、PKCS#1 v1.5 パディングを使用することを表す <see langword="false" />。</param>
+        <summary><see cref="T:System.Security.Cryptography.RSA" /> アルゴリズムでデータの暗号化を解除します。</summary>
+        <returns>暗号化を解除されたデータ。これは、暗号化前の元のプレーンテキストです。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ この<xref:System.Security.Cryptography.RSACryptoServiceProvider.Encrypt%2A>メソッドを使用して復号化するデータを暗号化するには、を使用します。  
+  
+   
+  
+## Examples  
+ 次のコード例では、データの暗号化と復号化を行います。  
+  
+ この例では<xref:System.Text.ASCIIEncoding>クラスを使用します<xref:System.Text.UnicodeEncoding>が、大規模なデータ操作ではクラスが適している場合があります。 暗号化された値は、Microsoft SQL Server `nvarchar` 2005 でデータ型として保存できます。  
+  
+ [!code-cpp[Cryptography.RSACSP.Decrypt#1](~/samples/snippets/cpp/VS_Snippets_CLR/Cryptography.RSACSP.Decrypt/CPP/example.cpp#1)]
+ [!code-csharp[Cryptography.RSACSP.Decrypt#1](~/samples/snippets/csharp/VS_Snippets_CLR/Cryptography.RSACSP.Decrypt/CS/example.cs#1)]
+ [!code-vb[Cryptography.RSACSP.Decrypt#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/Cryptography.RSACSP.Decrypt/VB/example.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">暗号化サービス プロバイダー (CSP) を取得できません。  
+  
+- または - 
+<paramref name="fOAEP" /> パラメーターが <see langword="true" /> であり、<paramref name="rgb" /> パラメーターの長さが <see cref="P:System.Security.Cryptography.RSACryptoServiceProvider.KeySize" /> を超える値です。  
+  
+または 
+<paramref name="fOAEP" /> パラメーターが <see langword="true" /> で、OAEP がサポートされていません。  
+  
+または 
+キーが、暗号化されたデータと一致しません。 ただし、例外の表現は正確でない場合があります。 たとえば、<c>このコマンドを処理するのに必要な記憶域をサーバーで確保できません</c>と表示される場合があります。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rgb" /> が <see langword="null" /> です。</exception>
+        <permission cref="T:System.Security.Permissions.KeyContainerPermissionAccessEntryCollection">暗号化を解除する権限。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.KeyContainerPermissionFlags.Decrypt" /></permission>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Decrypt">
+      <MemberSignature Language="C#" Value="public override byte[] Decrypt (byte[] data, System.Security.Cryptography.RSAEncryptionPadding padding);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance unsigned int8[] Decrypt(unsigned int8[] data, class System.Security.Cryptography.RSAEncryptionPadding padding) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.Decrypt(System.Byte[],System.Security.Cryptography.RSAEncryptionPadding)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function Decrypt (data As Byte(), padding As RSAEncryptionPadding) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override cli::array &lt;System::Byte&gt; ^ Decrypt(cli::array &lt;System::Byte&gt; ^ data, System::Security::Cryptography::RSAEncryptionPadding ^ padding);" />
+      <MemberSignature Language="F#" Value="override this.Decrypt : byte[] * System.Security.Cryptography.RSAEncryptionPadding -&gt; byte[]" Usage="rSACryptoServiceProvider.Decrypt (data, padding)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="data" Type="System.Byte[]" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="padding" Type="System.Security.Cryptography.RSAEncryptionPadding" Index="1" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="data">復号化するデータ。</param>
+        <param name="padding">パディング。</param>
+        <summary>指定された埋め込みを使用した <see cref="T:System.Security.Cryptography.RSA" /> アルゴリズムで暗号化されたデータを復号化します。</summary>
+        <returns>復号化されるデータ。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `padding`または<xref:System.Security.Cryptography.RSAEncryptionPadding.Pkcs1%2A?displayProperty=nameWithType> <xref:System.Security.Cryptography.RSAEncryptionPadding.OaepSHA1%2A?displayProperty=nameWithType>のいずれかである必要があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="data" /> が <see langword="null" /> です。  
+  
+- または - 
+ <paramref name="padding" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">そのパディング モードはサポートされていません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="DecryptValue">
+      <MemberSignature Language="C#" Value="public override byte[] DecryptValue (byte[] rgb);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance unsigned int8[] DecryptValue(unsigned int8[] rgb) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.DecryptValue(System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function DecryptValue (rgb As Byte()) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override cli::array &lt;System::Byte&gt; ^ DecryptValue(cli::array &lt;System::Byte&gt; ^ rgb);" />
+      <MemberSignature Language="F#" Value="override this.DecryptValue : byte[] -&gt; byte[]" Usage="rSACryptoServiceProvider.DecryptValue rgb" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rgb" Type="System.Byte[]" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="rgb">復号化するデータ。</param>
+        <summary>このメソッドは、現在のバージョンではサポートされていません。</summary>
+        <returns>暗号化を解除されたデータ。これは、暗号化前の元のプレーンテキストです。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.NotSupportedException">このメソッドは、現在のバージョンではサポートされていません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Dispose">
+      <MemberSignature Language="C#" Value="protected override void Dispose (bool disposing);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void Dispose(bool disposing) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.Dispose(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Sub Dispose (disposing As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override void Dispose(bool disposing);" />
+      <MemberSignature Language="F#" Value="override this.Dispose : bool -&gt; unit" Usage="rSACryptoServiceProvider.Dispose disposing" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="disposing" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="disposing">マネージド リソースとアンマネージド リソースの両方を解放する場合は <see langword="true" />。アンマネージド リソースだけを解放する場合は <see langword="false" />。</param>
+        <summary><see cref="T:System.Security.Cryptography.RSACryptoServiceProvider" /> クラスによって使用されているアンマネージド リソースを解放し、オプションでマネージド リソースも解放します。</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Encrypt">
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Security.Cryptography.RSA" /> アルゴリズムでデータを暗号化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Encrypt">
+      <MemberSignature Language="C#" Value="public byte[] Encrypt (byte[] rgb, bool fOAEP);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance unsigned int8[] Encrypt(unsigned int8[] rgb, bool fOAEP) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.Encrypt(System.Byte[],System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Encrypt (rgb As Byte(), fOAEP As Boolean) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; cli::array &lt;System::Byte&gt; ^ Encrypt(cli::array &lt;System::Byte&gt; ^ rgb, bool fOAEP);" />
+      <MemberSignature Language="F#" Value="override this.Encrypt : byte[] * bool -&gt; byte[]" Usage="rSACryptoServiceProvider.Encrypt (rgb, fOAEP)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rgb" Type="System.Byte[]" />
+        <Parameter Name="fOAEP" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="rgb">暗号化するデータ。</param>
+        <param name="fOAEP">OAEP パディング (Windows XP 以降を実行しているコンピューターでのみ使用可能) を使用して、直接 <see cref="T:System.Security.Cryptography.RSA" /> を暗号化する場合は <see langword="true" />。それ以外の場合で、PKCS#1 v1.5 パディングを使用するには <see langword="false" />。</param>
+        <summary><see cref="T:System.Security.Cryptography.RSA" /> アルゴリズムでデータを暗号化します。</summary>
+        <returns>暗号化するデータ。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 次の表では、さまざまなバージョンの Microsoft Windows でサポートされるパディングと`rgb` 、オペレーティングシステムと埋め込みのさまざまな組み合わせで許容される最大長について説明します。  
+  
+|[間隔]|サポートされているオペレーティングシステム|Rgb パラメーターの最大長|  
+|-------------|--------------------------------|-------------------------------------|  
+|OAEP padding (PKCS # 1 v2)|Windows XP 以降。|剰余サイズ-2-2 * hLen (hLen はハッシュのサイズ)。|  
+|直接暗号化 (PKCS # 1 v 1.5)|Microsoft Windows 2000 以降 (高暗号化パックがインストールされている)。|剰余サイズ-11。 (11 バイトは、可能な最小の埋め込みです)。|  
+|Direct Encryption と OAEP padding はサポートされていません|Microsoft Windows 98、Windows Millennium Edition、または Windows 2000 以降 (高暗号化パックがインストールされていない場合)。|対称キーに許可される最大サイズ。|  
+  
+ この<xref:System.Security.Cryptography.RSACryptoServiceProvider.Decrypt%2A>メソッドの結果の暗号化を解除するには、を使用します。  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Security.Cryptography.RSACryptoServiceProvider> 、(別のパーティによって送信される) 公開キーの値にオブジェクトを初期化し<xref:System.Security.Cryptography.RijndaelManaged> 、アルゴリズムを使用してセッションキーを生成<xref:System.Security.Cryptography.RSACryptoServiceProvider>した後、オブジェクトを使用してセッションキーを暗号化します。  このスキームを使用して、セッションキーを秘密の RSA キーの所有者に送り返すことができます。また、この2つの当事者は、セッションキーを使用して暗号化されたデータを交換できます。  
+  
+ [!code-cpp[System.Security.Cryptography.RSACryptoServiceProvider.Encrypt#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.Encrypt/CPP/sample.cpp#1)]
+ [!code-csharp[System.Security.Cryptography.RSACryptoServiceProvider.Encrypt#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.Encrypt/CS/sample.cs#1)]
+ [!code-vb[System.Security.Cryptography.RSACryptoServiceProvider.Encrypt#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.Encrypt/VB/sample.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">暗号化サービス プロバイダー (CSP) を取得できません。  
+  
+- または - 
+<paramref name="rgb" /> パラメーターの長さが、許容最大長を超えています。  
+  
+または 
+<paramref name="fOAEP" /> パラメーターが <see langword="true" /> であり、OAEP がサポートされていません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rgb" /> は <see langword="null" />です。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Encrypt">
+      <MemberSignature Language="C#" Value="public override byte[] Encrypt (byte[] data, System.Security.Cryptography.RSAEncryptionPadding padding);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance unsigned int8[] Encrypt(unsigned int8[] data, class System.Security.Cryptography.RSAEncryptionPadding padding) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.Encrypt(System.Byte[],System.Security.Cryptography.RSAEncryptionPadding)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function Encrypt (data As Byte(), padding As RSAEncryptionPadding) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override cli::array &lt;System::Byte&gt; ^ Encrypt(cli::array &lt;System::Byte&gt; ^ data, System::Security::Cryptography::RSAEncryptionPadding ^ padding);" />
+      <MemberSignature Language="F#" Value="override this.Encrypt : byte[] * System.Security.Cryptography.RSAEncryptionPadding -&gt; byte[]" Usage="rSACryptoServiceProvider.Encrypt (data, padding)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="data" Type="System.Byte[]" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="padding" Type="System.Security.Cryptography.RSAEncryptionPadding" Index="1" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="data">暗号化するデータ。</param>
+        <param name="padding">パディング。</param>
+        <summary>指定されたパディングを使用した <see cref="T:System.Security.Cryptography.RSA" /> アルゴリズムでデータを暗号化します。</summary>
+        <returns>暗号化するデータ。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ `padding`または<xref:System.Security.Cryptography.RSAEncryptionPadding.Pkcs1%2A?displayProperty=nameWithType> <xref:System.Security.Cryptography.RSAEncryptionPadding.OaepSHA1%2A?displayProperty=nameWithType>のいずれかである必要があります。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="data" /> は <see langword="null" />です。  
+  
+- または - 
+ <paramref name="padding" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">そのパディング モードはサポートされていません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="EncryptValue">
+      <MemberSignature Language="C#" Value="public override byte[] EncryptValue (byte[] rgb);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance unsigned int8[] EncryptValue(unsigned int8[] rgb) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.EncryptValue(System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function EncryptValue (rgb As Byte()) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override cli::array &lt;System::Byte&gt; ^ EncryptValue(cli::array &lt;System::Byte&gt; ^ rgb);" />
+      <MemberSignature Language="F#" Value="override this.EncryptValue : byte[] -&gt; byte[]" Usage="rSACryptoServiceProvider.EncryptValue rgb" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rgb" Type="System.Byte[]" Index="0" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="rgb">暗号化するデータ。</param>
+        <summary>このメソッドは、現在のバージョンではサポートされていません。</summary>
+        <returns>暗号化するデータ。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.NotSupportedException">このメソッドは、現在のバージョンではサポートされていません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="ExportCspBlob">
+      <MemberSignature Language="C#" Value="public byte[] ExportCspBlob (bool includePrivateParameters);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance unsigned int8[] ExportCspBlob(bool includePrivateParameters) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.ExportCspBlob(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Function ExportCspBlob (includePrivateParameters As Boolean) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual cli::array &lt;System::Byte&gt; ^ ExportCspBlob(bool includePrivateParameters);" />
+      <MemberSignature Language="F#" Value="abstract member ExportCspBlob : bool -&gt; byte[]&#xA;override this.ExportCspBlob : bool -&gt; byte[]" Usage="rSACryptoServiceProvider.ExportCspBlob includePrivateParameters" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Security.Cryptography.ICspAsymmetricAlgorithm.ExportCspBlob(System.Boolean)</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="includePrivateParameters" Type="System.Boolean" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="includePrivateParameters">秘密キーを含める場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</param>
+        <summary><see cref="T:System.Security.Cryptography.RSACryptoServiceProvider" /> オブジェクトに関連付けられたキー情報を含む BLOB をエクスポートします。</summary>
+        <returns><see cref="T:System.Security.Cryptography.RSACryptoServiceProvider" /> オブジェクトに関連付けられたキー情報を含むバイト配列。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Security.Cryptography.RSACryptoServiceProvider.ExportCspBlob%2A>は、アンマネージ Microsoft Cryptographic API (CAPI) と互換性のあるキー情報を含む blob を返します。  
+  
+ ]]></format>
+        </remarks>
+        <permission cref="T:System.Security.Permissions.KeyContainerPermissionAccessEntryCollection">秘密キーをエクスポートするときに、キーコンテナーにアクセスするためのアクセス許可。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.KeyContainerPermissionFlags.Export" /></permission>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="ExportParameters">
+      <MemberSignature Language="C#" Value="public override System.Security.Cryptography.RSAParameters ExportParameters (bool includePrivateParameters);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance valuetype System.Security.Cryptography.RSAParameters ExportParameters(bool includePrivateParameters) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.ExportParameters(System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function ExportParameters (includePrivateParameters As Boolean) As RSAParameters" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override System::Security::Cryptography::RSAParameters ExportParameters(bool includePrivateParameters);" />
+      <MemberSignature Language="F#" Value="override this.ExportParameters : bool -&gt; System.Security.Cryptography.RSAParameters" Usage="rSACryptoServiceProvider.ExportParameters includePrivateParameters" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Security.Cryptography.RSAParameters</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="includePrivateParameters" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="includePrivateParameters">プライベート パラメーターを含める場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</param>
+        <summary><see cref="T:System.Security.Cryptography.RSAParameters" /> をエクスポートします。</summary>
+        <returns><see cref="T:System.Security.Cryptography.RSA" /> のパラメーター。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ 次のコード例では、 <xref:System.Security.Cryptography.RSACryptoServiceProvider>を使用して作成されたキー情報を<xref:System.Security.Cryptography.RSAParameters>オブジェクトにエクスポートします。  
+  
+ [!code-cpp[System.Security.Cryptography.RSACryptoServiceProvider.ExportParameters#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.ExportParameters/CPP/sample.cpp#1)]
+ [!code-csharp[System.Security.Cryptography.RSACryptoServiceProvider.ExportParameters#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.ExportParameters/CS/sample.cs#1)]
+ [!code-vb[System.Security.Cryptography.RSACryptoServiceProvider.ExportParameters#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.ExportParameters/VB/sample.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">キーをエクスポートできません。</exception>
+        <permission cref="T:System.Security.Permissions.KeyContainerPermissionAccessEntryCollection">キーをエクスポートする権限。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.KeyContainerPermissionFlags.Export" /></permission>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Finalize">
+      <MemberSignature Language="C#" Value="~RSACryptoServiceProvider ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance void Finalize() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.Finalize" />
+      <MemberSignature Language="VB.NET" Value="Finalize ()" />
+      <MemberSignature Language="C++ CLI" Value="!RSACryptoServiceProvider ()" />
+      <MemberSignature Language="F#" Value="override this.Finalize : unit -&gt; unit" Usage="rSACryptoServiceProvider.Finalize " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="HashData">
+      <MemberSignature Language="C#" Value="protected override byte[] HashData (System.IO.Stream data, System.Security.Cryptography.HashAlgorithmName hashAlgorithm);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance unsigned int8[] HashData(class System.IO.Stream data, valuetype System.Security.Cryptography.HashAlgorithmName hashAlgorithm) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.HashData(System.IO.Stream,System.Security.Cryptography.HashAlgorithmName)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function HashData (data As Stream, hashAlgorithm As HashAlgorithmName) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override cli::array &lt;System::Byte&gt; ^ HashData(System::IO::Stream ^ data, System::Security::Cryptography::HashAlgorithmName hashAlgorithm);" />
+      <MemberSignature Language="F#" Value="override this.HashData : System.IO.Stream * System.Security.Cryptography.HashAlgorithmName -&gt; byte[]" Usage="rSACryptoServiceProvider.HashData (data, hashAlgorithm)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="data" Type="System.IO.Stream" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="hashAlgorithm" Type="System.Security.Cryptography.HashAlgorithmName" Index="1" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="data">To be added.</param>
+        <param name="hashAlgorithm">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="HashData">
+      <MemberSignature Language="C#" Value="protected override byte[] HashData (byte[] data, int offset, int count, System.Security.Cryptography.HashAlgorithmName hashAlgorithm);" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig virtual instance unsigned int8[] HashData(unsigned int8[] data, int32 offset, int32 count, valuetype System.Security.Cryptography.HashAlgorithmName hashAlgorithm) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.HashData(System.Byte[],System.Int32,System.Int32,System.Security.Cryptography.HashAlgorithmName)" />
+      <MemberSignature Language="VB.NET" Value="Protected Overrides Function HashData (data As Byte(), offset As Integer, count As Integer, hashAlgorithm As HashAlgorithmName) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; override cli::array &lt;System::Byte&gt; ^ HashData(cli::array &lt;System::Byte&gt; ^ data, int offset, int count, System::Security::Cryptography::HashAlgorithmName hashAlgorithm);" />
+      <MemberSignature Language="F#" Value="override this.HashData : byte[] * int * int * System.Security.Cryptography.HashAlgorithmName -&gt; byte[]" Usage="rSACryptoServiceProvider.HashData (data, offset, count, hashAlgorithm)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="data" Type="System.Byte[]" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="offset" Type="System.Int32" Index="1" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="count" Type="System.Int32" Index="2" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="hashAlgorithm" Type="System.Security.Cryptography.HashAlgorithmName" Index="3" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="data">To be added.</param>
+        <param name="offset">To be added.</param>
+        <param name="count">To be added.</param>
+        <param name="hashAlgorithm">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ImportCspBlob">
+      <MemberSignature Language="C#" Value="public void ImportCspBlob (byte[] keyBlob);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance void ImportCspBlob(unsigned int8[] keyBlob) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.ImportCspBlob(System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Public Sub ImportCspBlob (keyBlob As Byte())" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual void ImportCspBlob(cli::array &lt;System::Byte&gt; ^ keyBlob);" />
+      <MemberSignature Language="F#" Value="abstract member ImportCspBlob : byte[] -&gt; unit&#xA;override this.ImportCspBlob : byte[] -&gt; unit" Usage="rSACryptoServiceProvider.ImportCspBlob keyBlob" />
+      <MemberType>Method</MemberType>
+      <Implements>
+        <InterfaceMember>M:System.Security.Cryptography.ICspAsymmetricAlgorithm.ImportCspBlob(System.Byte[])</InterfaceMember>
+      </Implements>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="keyBlob" Type="System.Byte[]" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="keyBlob">RSA キー BLOB を表すバイト配列。</param>
+        <summary>RSA キー情報を表す BLOB をインポートします。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Security.Cryptography.RSACryptoServiceProvider.ImportCspBlob%2A>は、アンマネージ Microsoft Cryptographic API <xref:System.Security.Cryptography.RSACryptoServiceProvider> (CAPI) と互換性のある blob を使用して、オブジェクトのキーデータを初期化します。  
+  
+ ]]></format>
+        </remarks>
+        <permission cref="T:System.Security.Permissions.KeyContainerPermissionAccessEntryCollection">キーをインポートするときに、キーコンテナーにアクセスするためのアクセス許可。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.KeyContainerPermissionFlags.Import" /></permission>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="ImportParameters">
+      <MemberSignature Language="C#" Value="public override void ImportParameters (System.Security.Cryptography.RSAParameters parameters);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance void ImportParameters(valuetype System.Security.Cryptography.RSAParameters parameters) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.ImportParameters(System.Security.Cryptography.RSAParameters)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Sub ImportParameters (parameters As RSAParameters)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override void ImportParameters(System::Security::Cryptography::RSAParameters parameters);" />
+      <MemberSignature Language="F#" Value="override this.ImportParameters : System.Security.Cryptography.RSAParameters -&gt; unit" Usage="rSACryptoServiceProvider.ImportParameters parameters" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="parameters" Type="System.Security.Cryptography.RSAParameters" />
+      </Parameters>
+      <Docs>
+        <param name="parameters"><see cref="T:System.Security.Cryptography.RSA" /> のパラメーター。</param>
+        <summary>指定した <see cref="T:System.Security.Cryptography.RSAParameters" /> をインポートします。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Examples  
+ 次のコード例では、 <xref:System.Security.Cryptography.RSAParameters>オブジェクトから作成されたキー情報<xref:System.Security.Cryptography.RSACryptoServiceProvider>をオブジェクトにインポートします。  
+  
+ [!code-cpp[System.Security.Cryptography.RSACryptoServiceProvider.ImportParameters#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.ImportParameters/CPP/sample.cpp#1)]
+ [!code-csharp[System.Security.Cryptography.RSACryptoServiceProvider.ImportParameters#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.ImportParameters/CS/sample.cs#1)]
+ [!code-vb[System.Security.Cryptography.RSACryptoServiceProvider.ImportParameters#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Security.Cryptography.RSACryptoServiceProvider.ImportParameters/VB/sample.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">暗号化サービス プロバイダー (CSP) を取得できません。  
+  
+- または - 
+<paramref name="parameters" /> パラメーターに欠落しているフィールドがあります。</exception>
+        <permission cref="T:System.Security.Permissions.KeyContainerPermissionAccessEntryCollection">キーをインポートする権限。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.KeyContainerPermissionFlags.Import" /></permission>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="KeyExchangeAlgorithm">
+      <MemberSignature Language="C#" Value="public override string KeyExchangeAlgorithm { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string KeyExchangeAlgorithm" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.RSACryptoServiceProvider.KeyExchangeAlgorithm" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property KeyExchangeAlgorithm As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ KeyExchangeAlgorithm { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.KeyExchangeAlgorithm : string" Usage="System.Security.Cryptography.RSACryptoServiceProvider.KeyExchangeAlgorithm" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Security.Cryptography.RSA" /> のこの実装で使用可能なキー交換アルゴリズムの名前を取得します。</summary>
+        <value>存在する場合はキー交換アルゴリズムの名前。それ以外の場合は <see langword="null" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティは、型ではなく、アルゴリズムの名前を示します。 たとえば、PKCS1-KeyEx はキー交換アルゴリズムの名前です。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="KeySize">
+      <MemberSignature Language="C#" Value="public override int KeySize { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance int32 KeySize" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.RSACryptoServiceProvider.KeySize" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property KeySize As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property int KeySize { int get(); };" />
+      <MemberSignature Language="F#" Value="member this.KeySize : int" Usage="System.Security.Cryptography.RSACryptoServiceProvider.KeySize" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>get: System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>現在のキーのサイズを取得します。</summary>
+        <value>キーのサイズ (ビット単位)。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ Microsoft <xref:System.Security.Cryptography.RSACryptoServiceProvider> Enhanced Cryptographic Provider がインストールされている場合、では、384ビットから16384ビットまでのキーサイズを8ビット単位でサポートします。  Microsoft Base Cryptographic Provider がインストールされている場合、384ビットから512ビットまでのキーサイズを8ビット単位でサポートします。  
+  
+ 有効なキーサイズは、 <xref:System.Security.Cryptography.RSACryptoServiceProvider>インスタンスによって使用される暗号化サービスプロバイダー (CSP) に依存します。 Windows csp [!INCLUDE[win81](~/includes/win81-md.md)]では、より前の windows バージョンでは 384 ~ 16384 ビットのキーサイズが有効になり、で[!INCLUDE[win81](~/includes/win81-md.md)]は512から16384ビットのキーサイズが有効になります。 詳細については、Windows ドキュメントの「 [Cryptgenkey](https://msdn.microsoft.com/library/aa379941\(v=vs.85\).aspx)関数」を参照してください。  
+  
+ クラスでは、 <xref:System.Security.Cryptography.RSACryptoServiceProvider.KeySize%2A>プロパティを使用してキーのサイズを変更することはできません。 <xref:System.Security.Cryptography.RSACryptoServiceProvider>  このプロパティに書き込まれた値は、エラーなしでプロパティを更新できません。  キーサイズを変更するには、コンストラクターのオーバーロードのいずれかを使用します。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="LegalKeySizes">
+      <MemberSignature Language="C#" Value="public override System.Security.Cryptography.KeySizes[] LegalKeySizes { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Security.Cryptography.KeySizes[] LegalKeySizes" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.RSACryptoServiceProvider.LegalKeySizes" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property LegalKeySizes As KeySizes()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property cli::array &lt;System::Security::Cryptography::KeySizes ^&gt; ^ LegalKeySizes { cli::array &lt;System::Security::Cryptography::KeySizes ^&gt; ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.LegalKeySizes : System.Security.Cryptography.KeySizes[]" Usage="System.Security.Cryptography.RSACryptoServiceProvider.LegalKeySizes" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Security.Cryptography.KeySizes[]</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PersistKeyInCsp">
+      <MemberSignature Language="C#" Value="public bool PersistKeyInCsp { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool PersistKeyInCsp" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.RSACryptoServiceProvider.PersistKeyInCsp" />
+      <MemberSignature Language="VB.NET" Value="Public Property PersistKeyInCsp As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool PersistKeyInCsp { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.PersistKeyInCsp : bool with get, set" Usage="System.Security.Cryptography.RSACryptoServiceProvider.PersistKeyInCsp" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>get: System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>set: System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>暗号サービス プロバイダー (CSP) でキーを永続化する必要があるかどうかを示す値を取得または設定します。</summary>
+        <value>キーを CSP で永続化する場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ キーコンテナーのキーを永続化するには、このプロパティを使用します。  
+  
+ <xref:System.Security.Cryptography.RSACryptoServiceProvider.PersistKeyInCsp%2A> `true` <xref:System.Security.Cryptography.RSACryptoServiceProvider>オブジェクトのフィールド <xref:System.Security.Cryptography.CspParameters.KeyContainerName> にキーコンテナー名を指定し、それを使用してコンストラクターの1つを呼び出すことによってオブジェクトを初期化すると、プロパティは自動的にに設定されます。 <xref:System.Security.Cryptography.CspParameters>  `parameters`パラメーター。  
+  
+ オブジェクトが <xref:System.Security.Cryptography.RSACryptoServiceProvider.PersistKeyInCsp%2A> キーコンテナー名を使用して作成されている場合、プロパティは無効です。 `null`  <xref:System.Security.Cryptography.RSACryptoServiceProvider>  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Security.Cryptography.RSACryptoServiceProvider> 、オブジェクトを作成し、キーをキーコンテナーに永続化します。  
+  
+ [!code-cpp[Cryptography.RSACSP.PersistKey#1](~/samples/snippets/cpp/VS_Snippets_CLR/Cryptography.RSACSP.PersistKey/CPP/example.cpp#1)]
+ [!code-csharp[Cryptography.RSACSP.PersistKey#1](~/samples/snippets/csharp/VS_Snippets_CLR/Cryptography.RSACSP.PersistKey/CS/example.cs#1)]
+ [!code-vb[Cryptography.RSACSP.PersistKey#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/Cryptography.RSACSP.PersistKey/VB/example.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <permission cref="T:System.Security.Permissions.KeyContainerPermissionAccessEntryCollection">キーを削除する権限。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.KeyContainerPermissionFlags.Delete" />  
+  
+- または - 
+キーを作成する権限。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.KeyContainerPermissionFlags.Create" /></permission>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="PublicOnly">
+      <MemberSignature Language="C#" Value="public bool PublicOnly { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance bool PublicOnly" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.RSACryptoServiceProvider.PublicOnly" />
+      <MemberSignature Language="VB.NET" Value="Public ReadOnly Property PublicOnly As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property bool PublicOnly { bool get(); };" />
+      <MemberSignature Language="F#" Value="member this.PublicOnly : bool" Usage="System.Security.Cryptography.RSACryptoServiceProvider.PublicOnly" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8">
+          <AttributeName>get: System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Security.Cryptography.RSACryptoServiceProvider" /> オブジェクトに格納されているのが公開キーだけかどうかを示す値を取得します。</summary>
+        <value><see cref="T:System.Security.Cryptography.RSACryptoServiceProvider" /> オブジェクトに公開キーだけが格納されている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ クラス<xref:System.Security.Cryptography.RSACryptoServiceProvider>は、公開キーのみを使用して、または公開キーと秘密キーの両方を指定して初期化できます。  <xref:System.Security.Cryptography.RSACryptoServiceProvider.PublicOnly%2A>プロパティを使用して、現在のインスタンスに公開キーのみ、または公開キーと秘密キーの両方が含まれているかどうかを確認します。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="SignatureAlgorithm">
+      <MemberSignature Language="C#" Value="public override string SignatureAlgorithm { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string SignatureAlgorithm" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.RSACryptoServiceProvider.SignatureAlgorithm" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides ReadOnly Property SignatureAlgorithm As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual property System::String ^ SignatureAlgorithm { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.SignatureAlgorithm : string" Usage="System.Security.Cryptography.RSACryptoServiceProvider.SignatureAlgorithm" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary><see cref="T:System.Security.Cryptography.RSA" /> のこの実装で使用可能なキー交換アルゴリズムの名前を取得します。</summary>
+        <value>署名アルゴリズムの名前。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティは、アルゴリズム URI を示すために XML デジタル署名クラスで使用されます。 この実装では、このプロパティは常に http://www.w3.org/2000/09/xmldsig#rsa-sha1 を返します。  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="SignData">
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>指定したデータのハッシュ値を計算し、それに署名します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="SignData">
+      <MemberSignature Language="C#" Value="public byte[] SignData (byte[] buffer, object halg);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance unsigned int8[] SignData(unsigned int8[] buffer, object halg) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.SignData(System.Byte[],System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Public Function SignData (buffer As Byte(), halg As Object) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; cli::array &lt;System::Byte&gt; ^ SignData(cli::array &lt;System::Byte&gt; ^ buffer, System::Object ^ halg);" />
+      <MemberSignature Language="F#" Value="override this.SignData : byte[] * obj -&gt; byte[]" Usage="rSACryptoServiceProvider.SignData (buffer, halg)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="buffer" Type="System.Byte[]" />
+        <Parameter Name="halg" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="buffer">ハッシュを計算する対象の入力データ。</param>
+        <param name="halg">ハッシュ値を作成するために使用するハッシュ アルゴリズム。</param>
+        <summary>指定したハッシュ アルゴリズムを使用して、指定したバイト配列のハッシュ値を計算し、結果ハッシュ値に署名します。</summary>
+        <returns>指定したデータに対する <see cref="T:System.Security.Cryptography.RSA" /> 署名。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、 <xref:System.Security.Cryptography.RSACryptoServiceProvider.VerifyData%2A>メソッドを使用して検証されるデジタル署名を作成します。  
+  
+ パラメーター `halg` <xref:System.String>は、 <xref:System.Security.Cryptography.HashAlgorithm> 、 、またはを受け取ることができます。 <xref:System.Type>  
+  
+   
+  
+## Examples  
+ 次のコード例では、データの署名と検証を行います。  
+  
+ [!code-cpp[Cryptography.RSACSP.SignData2#1](~/samples/snippets/cpp/VS_Snippets_CLR/Cryptography.RSACSP.SignData2/CPP/example.cpp#1)]
+ [!code-csharp[Cryptography.RSACSP.SignData2#1](~/samples/snippets/csharp/VS_Snippets_CLR/Cryptography.RSACSP.SignData2/CS/example.cs#1)]
+ [!code-vb[Cryptography.RSACSP.SignData2#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/Cryptography.RSACSP.SignData2/VB/example.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="halg" /> パラメーターが <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="halg" /> パラメーターの型が有効ではありません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="SignData">
+      <MemberSignature Language="C#" Value="public byte[] SignData (System.IO.Stream inputStream, object halg);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance unsigned int8[] SignData(class System.IO.Stream inputStream, object halg) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.SignData(System.IO.Stream,System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Public Function SignData (inputStream As Stream, halg As Object) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; cli::array &lt;System::Byte&gt; ^ SignData(System::IO::Stream ^ inputStream, System::Object ^ halg);" />
+      <MemberSignature Language="F#" Value="override this.SignData : System.IO.Stream * obj -&gt; byte[]" Usage="rSACryptoServiceProvider.SignData (inputStream, halg)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="inputStream" Type="System.IO.Stream" />
+        <Parameter Name="halg" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="inputStream">ハッシュを計算する対象の入力データ。</param>
+        <param name="halg">ハッシュ値を作成するために使用するハッシュ アルゴリズム。</param>
+        <summary>指定したハッシュ アルゴリズムを使用して、指定した入力ストリームのハッシュ値を計算し、結果ハッシュ値に署名します。</summary>
+        <returns>指定したデータに対する <see cref="T:System.Security.Cryptography.RSA" /> 署名。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ パラメーター `halg` <xref:System.String>は、 <xref:System.Security.Cryptography.HashAlgorithm> 、 、またはを受け取ることができます。 <xref:System.Type>  
+  
+   
+  
+## Examples  
+ 次のコード例では、データの署名と検証を行います。  
+  
+ [!code-cpp[Cryptography.RSACSP.SignData3#1](~/samples/snippets/cpp/VS_Snippets_CLR/Cryptography.RSACSP.SignData3/CPP/example.cpp#1)]
+ [!code-csharp[Cryptography.RSACSP.SignData3#1](~/samples/snippets/csharp/VS_Snippets_CLR/Cryptography.RSACSP.SignData3/CS/example.cs#1)]
+ [!code-vb[Cryptography.RSACSP.SignData3#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/Cryptography.RSACSP.SignData3/VB/example.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="halg" /> パラメーターが <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="halg" /> パラメーターの型が有効ではありません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="SignData">
+      <MemberSignature Language="C#" Value="public byte[] SignData (byte[] buffer, int offset, int count, object halg);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance unsigned int8[] SignData(unsigned int8[] buffer, int32 offset, int32 count, object halg) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.SignData(System.Byte[],System.Int32,System.Int32,System.Object)" />
+      <MemberSignature Language="VB.NET" Value="Public Function SignData (buffer As Byte(), offset As Integer, count As Integer, halg As Object) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; cli::array &lt;System::Byte&gt; ^ SignData(cli::array &lt;System::Byte&gt; ^ buffer, int offset, int count, System::Object ^ halg);" />
+      <MemberSignature Language="F#" Value="override this.SignData : byte[] * int * int * obj -&gt; byte[]" Usage="rSACryptoServiceProvider.SignData (buffer, offset, count, halg)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="buffer" Type="System.Byte[]" />
+        <Parameter Name="offset" Type="System.Int32" />
+        <Parameter Name="count" Type="System.Int32" />
+        <Parameter Name="halg" Type="System.Object" />
+      </Parameters>
+      <Docs>
+        <param name="buffer">ハッシュを計算する対象の入力データ。</param>
+        <param name="offset">使用するデータの先頭位置を示す、配列内のオフセット。</param>
+        <param name="count">配列内でデータとして使用されるバイトの数。</param>
+        <param name="halg">ハッシュ値を作成するために使用するハッシュ アルゴリズム。</param>
+        <summary>指定したハッシュ アルゴリズムを使用して、指定したバイト配列のサブセットのハッシュ値を計算し、結果のハッシュ値に署名します。</summary>
+        <returns>指定したデータに対する <see cref="T:System.Security.Cryptography.RSA" /> 署名。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、 <xref:System.Security.Cryptography.RSACryptoServiceProvider.VerifyData%2A>メソッドを使用して検証されるデジタル署名を作成します。  
+  
+ パラメーター `halg` <xref:System.String>は、 <xref:System.Security.Cryptography.HashAlgorithm> 、 、またはを受け取ることができます。 <xref:System.Type> 文字列値には、次のいずれかを指定できます。  
+  
+-   使用するハッシュアルゴリズムのオブジェクト識別子 (OID) のフレンドリ名。暗号化構成ファイルに登録された名前、または Crypto API OID テーブル内の名前のいずれかです。  
+  
+-   OID の値。 OID は、Crypto API によって認識される必要があります。  
+  
+ たとえば、SignData (new byte [5]、"1.3.14.3.2.26") または SignData (new byte [5]、"sha1")、または SignData (new byte [5], "SHA1") を使用できます。  
+  
+   
+  
+## Examples  
+ 次のコード例では、データの署名と検証を行います。  
+  
+ [!code-cpp[Cryptography.RSACSP.SignData1#1](~/samples/snippets/cpp/VS_Snippets_CLR/Cryptography.RSACSP.SignData1/CPP/example.cpp#1)]
+ [!code-csharp[Cryptography.RSACSP.SignData1#1](~/samples/snippets/csharp/VS_Snippets_CLR/Cryptography.RSACSP.SignData1/CS/example.cs#1)]
+ [!code-vb[Cryptography.RSACSP.SignData1#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/Cryptography.RSACSP.SignData1/VB/example.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="halg" /> パラメーターが <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="halg" /> パラメーターの型が有効ではありません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="SignHash">
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>指定したハッシュ値を秘密キーで暗号化することにより、そのハッシュ値の署名を計算します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="SignHash">
+      <MemberSignature Language="C#" Value="public byte[] SignHash (byte[] rgbHash, string str);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance unsigned int8[] SignHash(unsigned int8[] rgbHash, string str) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.SignHash(System.Byte[],System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Function SignHash (rgbHash As Byte(), str As String) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; cli::array &lt;System::Byte&gt; ^ SignHash(cli::array &lt;System::Byte&gt; ^ rgbHash, System::String ^ str);" />
+      <MemberSignature Language="F#" Value="override this.SignHash : byte[] * string -&gt; byte[]" Usage="rSACryptoServiceProvider.SignHash (rgbHash, str)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rgbHash" Type="System.Byte[]" />
+        <Parameter Name="str" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="rgbHash">署名されたデータのハッシュ値。</param>
+        <param name="str">データのハッシュ値の作成に使用するハッシュ アルゴリズム識別子 (OID)。</param>
+        <summary>指定したハッシュ値を秘密キーで暗号化することにより、そのハッシュ値の署名を計算します。</summary>
+        <returns>指定したハッシュ値に対する <see cref="T:System.Security.Cryptography.RSA" /> 署名。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、 <xref:System.Security.Cryptography.RSACryptoServiceProvider.VerifyHash%2A>メソッドを使用して検証されるデジタル署名を作成します。  
+  
+ 有効なハッシュアルゴリズムは<xref:System.Security.Cryptography.SHA1>と<xref:System.Security.Cryptography.MD5>です。 アルゴリズム識別子は、 <xref:System.Security.Cryptography.CryptoConfig.MapNameToOID%2A>メソッドを使用してハッシュ名から派生させることができます。  
+  
+ SHA1 と MD5 の衝突の問題により、SHA256 以上に基づくセキュリティモデルをお勧めします。  
+  
+## Examples  
+ 次のコード例では、一部のデータを暗号化し、暗号化されたデータのハッシュを作成した後、デジタル署名を使用してハッシュに署名します。  
+  
+ [!code-cpp[System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example/CPP/class1.cpp#1)]
+ [!code-csharp[System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example/CS/class1.cs#1)]
+ [!code-vb[System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example/VB/class1.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rgbHash" /> パラメーターが <see langword="null" /> です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">暗号化サービス プロバイダー (CSP) を取得できません。  
+  
+ - または -  
+  
+ 秘密キーがありません。</exception>
+        <permission cref="T:System.Security.Permissions.KeyContainerPermissionAccessEntryCollection">キーを使用してファイルに署名するためのアクセス許可。 セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型:<see cref="F:System.Security.Permissions.KeyContainerPermissionFlags.Sign" /></permission>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="SignHash">
+      <MemberSignature Language="C#" Value="public override byte[] SignHash (byte[] hash, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, System.Security.Cryptography.RSASignaturePadding padding);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance unsigned int8[] SignHash(unsigned int8[] hash, valuetype System.Security.Cryptography.HashAlgorithmName hashAlgorithm, class System.Security.Cryptography.RSASignaturePadding padding) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.SignHash(System.Byte[],System.Security.Cryptography.HashAlgorithmName,System.Security.Cryptography.RSASignaturePadding)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function SignHash (hash As Byte(), hashAlgorithm As HashAlgorithmName, padding As RSASignaturePadding) As Byte()" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override cli::array &lt;System::Byte&gt; ^ SignHash(cli::array &lt;System::Byte&gt; ^ hash, System::Security::Cryptography::HashAlgorithmName hashAlgorithm, System::Security::Cryptography::RSASignaturePadding ^ padding);" />
+      <MemberSignature Language="F#" Value="override this.SignHash : byte[] * System.Security.Cryptography.HashAlgorithmName * System.Security.Cryptography.RSASignaturePadding -&gt; byte[]" Usage="rSACryptoServiceProvider.SignHash (hash, hashAlgorithm, padding)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="hash" Type="System.Byte[]" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="hashAlgorithm" Type="System.Security.Cryptography.HashAlgorithmName" Index="1" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="padding" Type="System.Security.Cryptography.RSASignaturePadding" Index="2" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="hash">署名されたデータのハッシュ値。</param>
+        <param name="hashAlgorithm">データのハッシュ値を作成するために使用されるハッシュ アルゴリズム名。</param>
+        <param name="padding">パディング。</param>
+        <summary>指定したパディングを使用して秘密キーで暗号化し、指定したハッシュ値の署名を計算します。</summary>
+        <returns>指定したハッシュ値に対する <see cref="T:System.Security.Cryptography.RSA" /> 署名。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="hashAlgorithm" /> が <see langword="null" /> または <see cref="F:System.String.Empty" /> です。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="hash" /> は <see langword="null" />です。  
+  
+- または - 
+ <paramref name="padding" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="padding" /> は <see cref="P:System.Security.Cryptography.RSASignaturePadding.Pkcs1" /> と一致しません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="UseMachineKeyStore">
+      <MemberSignature Language="C#" Value="public static bool UseMachineKeyStore { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property bool UseMachineKeyStore" />
+      <MemberSignature Language="DocId" Value="P:System.Security.Cryptography.RSACryptoServiceProvider.UseMachineKeyStore" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Property UseMachineKeyStore As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static property bool UseMachineKeyStore { bool get(); void set(bool value); };" />
+      <MemberSignature Language="F#" Value="member this.UseMachineKeyStore : bool with get, set" Usage="System.Security.Cryptography.RSACryptoServiceProvider.UseMachineKeyStore" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>ユーザー プロファイル ストアの代わりに、コンピューターのキー ストアでキーを永続化する必要があるかどうかを示す値を取得または設定します。</summary>
+        <value>キーをコンピューターのキー ストアで永続化する必要がある場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このプロパティをに`true`設定することは、 <xref:System.Security.Cryptography.CspProviderFlags.UseMachineKeyStore>フラグを<xref:System.Security.Cryptography.CspParameters>オブジェクトに渡すことと同じです。 プロパティ<xref:System.Security.Cryptography.RSACryptoServiceProvider.UseMachineKeyStore%2A>は、現在のアプリケーションドメインのすべてのコードに適用さ<xref:System.Security.Cryptography.CspParameters>れます。一方、オブジェクトは、明示的に参照するクラスにのみ適用されます。 これらの設定は、ユーザープロファイルが読み込まれていないアカウントで権限を借用する場合や実行する場合に便利です。 設定<xref:System.Security.Cryptography.RSACryptoServiceProvider.UseMachineKeyStore%2A>は、がパラメーターなしで初期化<xref:System.Security.Cryptography.RSACryptoServiceProvider>された場合にのみ、キーストアの場所に影響します。  
+  
+   
+  
+## Examples  
+ 次のコード例では<xref:System.Security.Cryptography.RSACryptoServiceProvider> 、オブジェクトを作成し<xref:System.Security.Cryptography.RSACryptoServiceProvider.UseMachineKeyStore%2A> 、ユーザープロファイルキーストアではなくコンピューターキーストアを使用するように静的プロパティを設定します。  
+  
+ [!code-cpp[Cryptography.RSACSP.UseMachineKey#2](~/samples/snippets/cpp/VS_Snippets_CLR/Cryptography.RSACSP.UseMachineKey/CPP/example2.cpp#2)]
+ [!code-csharp[Cryptography.RSACSP.UseMachineKey#2](~/samples/snippets/csharp/VS_Snippets_CLR/Cryptography.RSACSP.UseMachineKey/CS/example2.cs#2)]
+ [!code-vb[Cryptography.RSACSP.UseMachineKey#2](~/samples/snippets/visualbasic/VS_Snippets_CLR/Cryptography.RSACSP.UseMachineKey/VB/example2.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="VerifyData">
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>デジタル署名が有効であることを確認します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="VerifyData">
+      <MemberSignature Language="C#" Value="public bool VerifyData (byte[] buffer, object halg, byte[] signature);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool VerifyData(unsigned int8[] buffer, object halg, unsigned int8[] signature) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.VerifyData(System.Byte[],System.Object,System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function VerifyData (buffer As Byte(), halg As Object, signature As Byte()) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool VerifyData(cli::array &lt;System::Byte&gt; ^ buffer, System::Object ^ halg, cli::array &lt;System::Byte&gt; ^ signature);" />
+      <MemberSignature Language="F#" Value="override this.VerifyData : byte[] * obj * byte[] -&gt; bool" Usage="rSACryptoServiceProvider.VerifyData (buffer, halg, signature)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="buffer" Type="System.Byte[]" />
+        <Parameter Name="halg" Type="System.Object" />
+        <Parameter Name="signature" Type="System.Byte[]" />
+      </Parameters>
+      <Docs>
+        <param name="buffer">署名されたデータ。</param>
+        <param name="halg">データのハッシュ値を作成するために使用するハッシュ アルゴリズムの名前。</param>
+        <param name="signature">検証する署名データ。</param>
+        <summary>デジタル署名が有効であることを確認するには、提供された公開キーを使用し、提供されたデータのハッシュ値と比較して、署名のハッシュ値を判別します。</summary>
+        <returns>署名が有効な場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、 <xref:System.Security.Cryptography.RSA> <xref:System.Security.Cryptography.RSACryptoServiceProvider.SignData%2A>メソッドによって生成されたデジタル署名を検証します。 署名は、署名された公開キーを使用して署名からハッシュ値を取得し、その値を指定されたデータのハッシュ値と比較することによって検証されます。  
+  
+ パラメーター `halg` <xref:System.String>は、 <xref:System.Security.Cryptography.HashAlgorithm> 、 、またはを受け取ることができます。 <xref:System.Type>  
+  
+   
+  
+## Examples  
+ 次の例は、 <xref:System.Security.Cryptography.RSACryptoServiceProvider.VerifyData%2A>メソッドを使用して署名を検証する方法を示しています。 このコード例は、 <xref:System.Security.Cryptography.RSACryptoServiceProvider.SignHash%2A>メソッドに提供されているより大きな例の一部です。  
+  
+ [!code-cpp[System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example/CPP/class1.cpp#2)]
+ [!code-csharp[System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example/CS/class1.cs#2)]
+ [!code-vb[System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example/VB/class1.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="halg" /> パラメーターが <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="halg" /> パラメーターの型が有効ではありません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="VerifyHash">
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>デジタル署名が有効であることを確認します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="VerifyHash">
+      <MemberSignature Language="C#" Value="public bool VerifyHash (byte[] rgbHash, string str, byte[] rgbSignature);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool VerifyHash(unsigned int8[] rgbHash, string str, unsigned int8[] rgbSignature) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.VerifyHash(System.Byte[],System.String,System.Byte[])" />
+      <MemberSignature Language="VB.NET" Value="Public Function VerifyHash (rgbHash As Byte(), str As String, rgbSignature As Byte()) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; bool VerifyHash(cli::array &lt;System::Byte&gt; ^ rgbHash, System::String ^ str, cli::array &lt;System::Byte&gt; ^ rgbSignature);" />
+      <MemberSignature Language="F#" Value="override this.VerifyHash : byte[] * string * byte[] -&gt; bool" Usage="rSACryptoServiceProvider.VerifyHash (rgbHash, str, rgbSignature)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>1.0.5000.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rgbHash" Type="System.Byte[]" />
+        <Parameter Name="str" Type="System.String" />
+        <Parameter Name="rgbSignature" Type="System.Byte[]" />
+      </Parameters>
+      <Docs>
+        <param name="rgbHash">署名されたデータのハッシュ値。</param>
+        <param name="str">データのハッシュ値の作成に使用するハッシュ アルゴリズム識別子 (OID)。</param>
+        <param name="rgbSignature">検証する署名データ。</param>
+        <summary>デジタル署名が有効であることを確認するには、提供された公開キーを使用し、提供されたハッシュ値と比較して、署名のハッシュ値を判別します。</summary>
+        <returns>署名が有効な場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このメソッドは、 <xref:System.Security.Cryptography.RSA> <xref:System.Security.Cryptography.RSACryptoServiceProvider.SignHash%2A>メソッドによって生成されたデジタル署名を検証します。 署名は、署名された公開キーを使用して署名からハッシュ値を取得し、その値を指定されたデータのハッシュ値と比較することによって検証されます。  
+  
+ 有効なハッシュアルゴリズムは<xref:System.Security.Cryptography.SHA1>と<xref:System.Security.Cryptography.MD5>です。 アルゴリズム識別子は、 <xref:System.Security.Cryptography.CryptoConfig.MapNameToOID%2A>メソッドを使用してハッシュ名から派生させることができます。  
+  
+ SHA1 と MD5 の衝突の問題により、SHA256 以上に基づくセキュリティモデルをお勧めします。    
+  
+## Examples  
+ 次の例は、 <xref:System.Security.Cryptography.RSACryptoServiceProvider.VerifyHash%2A>メソッドを使用して署名を検証する方法を示しています。 このコード例は、 <xref:System.Security.Cryptography.RSACryptoServiceProvider.SignHash%2A>メソッドに提供されているより大きな例の一部です。  
+  
+ [!code-cpp[System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example/CPP/class1.cpp#2)]
+ [!code-csharp[System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example/CS/class1.cs#2)]
+ [!code-vb[System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.Security.Cryptography.RSACryptoServiceProvider ManualHash Example/VB/class1.vb#2)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="rgbHash" /> パラメーターが <see langword="null" /> です。  
+  
+- または - 
+<paramref name="rgbSignature" /> パラメーターが <see langword="null" /> です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException">暗号化サービス プロバイダー (CSP) を取得できません。  
+  
+ - または -  
+  
+ 署名を検証できません。</exception>
+        <related type="Article" href="~/docs/standard/security/cryptographic-services.md">暗号化サービス</related>
+      </Docs>
+    </Member>
+    <Member MemberName="VerifyHash">
+      <MemberSignature Language="C#" Value="public override bool VerifyHash (byte[] hash, byte[] signature, System.Security.Cryptography.HashAlgorithmName hashAlgorithm, System.Security.Cryptography.RSASignaturePadding padding);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance bool VerifyHash(unsigned int8[] hash, unsigned int8[] signature, valuetype System.Security.Cryptography.HashAlgorithmName hashAlgorithm, class System.Security.Cryptography.RSASignaturePadding padding) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Security.Cryptography.RSACryptoServiceProvider.VerifyHash(System.Byte[],System.Byte[],System.Security.Cryptography.HashAlgorithmName,System.Security.Cryptography.RSASignaturePadding)" />
+      <MemberSignature Language="VB.NET" Value="Public Overrides Function VerifyHash (hash As Byte(), signature As Byte(), hashAlgorithm As HashAlgorithmName, padding As RSASignaturePadding) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; override bool VerifyHash(cli::array &lt;System::Byte&gt; ^ hash, cli::array &lt;System::Byte&gt; ^ signature, System::Security::Cryptography::HashAlgorithmName hashAlgorithm, System::Security::Cryptography::RSASignaturePadding ^ padding);" />
+      <MemberSignature Language="F#" Value="override this.VerifyHash : byte[] * byte[] * System.Security.Cryptography.HashAlgorithmName * System.Security.Cryptography.RSASignaturePadding -&gt; bool" Usage="rSACryptoServiceProvider.VerifyHash (hash, signature, hashAlgorithm, padding)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Security.Cryptography.Csp</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="hash" Type="System.Byte[]" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="signature" Type="System.Byte[]" Index="1" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="hashAlgorithm" Type="System.Security.Cryptography.HashAlgorithmName" Index="2" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="padding" Type="System.Security.Cryptography.RSASignaturePadding" Index="3" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="hash">署名されたデータのハッシュ値。</param>
+        <param name="signature">検証する署名データ。</param>
+        <param name="hashAlgorithm">ハッシュ値を作成するために使用するハッシュ アルゴリズム名。</param>
+        <param name="padding">パディング。</param>
+        <summary>指定したハッシュ アルゴリズムとパディングを使用して、署名のハッシュ値を決定し、これを指定したハッシュ値と比較することによって、デジタル署名が有効であることを確認します。</summary>
+        <returns>署名が有効な場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="hashAlgorithm" /> が <see langword="null" /> または <see cref="F:System.String.Empty" /> です。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="hash" /> は <see langword="null" />です。  
+  
+- または - 
+ <paramref name="padding" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="padding" /> は <see cref="P:System.Security.Cryptography.RSASignaturePadding.Pkcs1" /> と一致しません。</exception>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
