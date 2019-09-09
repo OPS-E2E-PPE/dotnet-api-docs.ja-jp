@@ -1,0 +1,1643 @@
+<Type Name="Volatile" FullName="System.Threading.Volatile">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="9b7add34f0fb3f46000bec226abf37058fae4f20" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70515203" /></Metadata><TypeSignature Language="C#" Value="public static class Volatile" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit Volatile extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.Threading.Volatile" />
+  <TypeSignature Language="VB.NET" Value="Public Class Volatile" />
+  <TypeSignature Language="C++ CLI" Value="public ref class Volatile abstract sealed" />
+  <TypeSignature Language="F#" Value="type Volatile = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.Threading</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.10.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>mscorlib</AssemblyName>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary><span data-ttu-id="2f856-101">揮発性メモリの操作を実行するためのメソッドを格納します。</span><span class="sxs-lookup"><span data-stu-id="2f856-101">Contains methods for performing volatile memory operations.</span></span></summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-102">マルチプロセッサシステムでは、揮発性書き込み操作によって、メモリ位置に書き込まれた値がすべてのプロセッサに直ちに表示されるようになります。</span><span class="sxs-lookup"><span data-stu-id="2f856-102">On a multiprocessor system, a volatile write operation ensures that a value written to a memory location is immediately visible to all processors.</span></span> <span data-ttu-id="2f856-103">揮発性読み取り操作では、任意のプロセッサによってメモリ位置に書き込まれた最新の値が取得されます。</span><span class="sxs-lookup"><span data-stu-id="2f856-103">A volatile read operation obtains the very latest value written to a memory location by any processor.</span></span> <span data-ttu-id="2f856-104">これらの操作では、パフォーマンスに影響する可能性があるプロセッサキャッシュのフラッシュが必要になる場合があります。</span><span class="sxs-lookup"><span data-stu-id="2f856-104">These operations might require flushing processor caches, which can affect performance.</span></span>  
+  
+> [!NOTE]
+>  <span data-ttu-id="2f856-105">ユニプロセッサシステムでは、揮発性読み取りと書き込みによって、値の読み取りまたは書き込みがメモリに対して行われ、キャッシュされません (たとえば、プロセッサレジスタなど)。</span><span class="sxs-lookup"><span data-stu-id="2f856-105">On a uniprocessor system, volatile reads and writes ensure that a value is read or written to memory and not cached (for example, in a processor register).</span></span> <span data-ttu-id="2f856-106">そのため、これらの操作を使用して、別のスレッドまたはハードウェアによって更新できるフィールドへのアクセスを同期することができます。</span><span class="sxs-lookup"><span data-stu-id="2f856-106">Thus, you can use these operations to synchronize access to a field that can be updated by another thread or by hardware.</span></span>  
+  
+ <span data-ttu-id="2f856-107">揮発性メモリの操作は、同期の特殊なケースに対して行われます。通常のロックは許容される代替手段ではありません。</span><span class="sxs-lookup"><span data-stu-id="2f856-107">Volatile memory operations are for special cases of synchronization, where normal locking is not an acceptable alternative.</span></span> <span data-ttu-id="2f856-108">通常C# `lock`の状況下では、ステートメント、 `SyncLock` Visual Basic ステートメント、および<xref:System.Threading.Monitor>クラスにより、データへのアクセスを同期する最も簡単でエラーが発生し<xref:System.Lazy%601>やすい方法が提供され、クラスは二重チェックされたロックを直接使用せずに、遅延初期化コードを記述する簡単な方法です。</span><span class="sxs-lookup"><span data-stu-id="2f856-108">Under normal circumstances, the C# `lock` statement, the Visual Basic `SyncLock` statement, and the <xref:System.Threading.Monitor> class provide the easiest and least error-prone way of synchronizing access to data, and the <xref:System.Lazy%601> class provides a simple way to write lazy initialization code without directly using double-checked locking.</span></span>  
+  
+ <span data-ttu-id="2f856-109">および<xref:System.Threading.Volatile.Read%2A?displayProperty=nameWithType>メソッド<xref:System.Threading.Volatile.Write%2A?displayProperty=nameWithType>を使用すると、言語でサポートされていない機能が有効になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-109">The <xref:System.Threading.Volatile.Read%2A?displayProperty=nameWithType> and <xref:System.Threading.Volatile.Write%2A?displayProperty=nameWithType> methods enable functionality that is not supported in languages.</span></span> <span data-ttu-id="2f856-110">次に例を示します。</span><span class="sxs-lookup"><span data-stu-id="2f856-110">For example:</span></span>  
+  
+-   <span data-ttu-id="2f856-111">Visual Basic などの一部の言語では、揮発性メモリ操作の概念が認識されません。</span><span class="sxs-lookup"><span data-stu-id="2f856-111">Some languages, such as Visual Basic, do not recognize the concept of volatile memory operations.</span></span> <span data-ttu-id="2f856-112">クラス<xref:System.Threading.Volatile>は、そのような言語でその機能を提供します。</span><span class="sxs-lookup"><span data-stu-id="2f856-112">The <xref:System.Threading.Volatile> class provides that functionality in such languages.</span></span>  
+  
+    > [!NOTE]
+    >  <span data-ttu-id="2f856-113">これらのメソッドのいずれかを呼び出すと、1つのメモリアクセスだけに影響します。</span><span class="sxs-lookup"><span data-stu-id="2f856-113">Calling one of these methods affects only a single memory access.</span></span> <span data-ttu-id="2f856-114">フィールドへの有効な同期を提供するには、フィールドへの<xref:System.Threading.Volatile.Read%2A?displayProperty=nameWithType>すべて<xref:System.Threading.Volatile.Write%2A?displayProperty=nameWithType>のアクセスでとが使用されている必要があります。</span><span class="sxs-lookup"><span data-stu-id="2f856-114">To provide effective synchronization for a field, all access to the field must use <xref:System.Threading.Volatile.Read%2A?displayProperty=nameWithType> and <xref:System.Threading.Volatile.Write%2A?displayProperty=nameWithType>.</span></span>  
+  
+-   <span data-ttu-id="2f856-115">でC#は、フィールド`volatile`に対して修飾子を使用すると、そのフィールドへのすべてのアクセスが揮発性メモリ`volatile`操作であることが保証されますが、修飾子は配列要素には適用できません。</span><span class="sxs-lookup"><span data-stu-id="2f856-115">In C#, using the `volatile` modifier on a field guarantees that every access to that field is a volatile memory operation, but the `volatile` modifier cannot be applied to array elements.</span></span> <span data-ttu-id="2f856-116">メソッド<xref:System.Threading.Volatile.Read%2A?displayProperty=nameWithType> と <xref:System.Threading.Volatile.Write%2A?displayProperty=nameWithType> メソッドは、配列要素で使用できます。</span><span class="sxs-lookup"><span data-stu-id="2f856-116">The <xref:System.Threading.Volatile.Read%2A?displayProperty=nameWithType> and <xref:System.Threading.Volatile.Write%2A?displayProperty=nameWithType> methods can be used on array elements.</span></span>  
+  
+ ]]></format>
+    </remarks>
+    <related type="Article" href="/dotnet/csharp/language-reference/keywords/volatile"><span data-ttu-id="2f856-117">volatile キーワード (C#リファレンス)</span><span class="sxs-lookup"><span data-stu-id="2f856-117">volatile keyword (C# Reference)</span></span></related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName="Read">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><span data-ttu-id="2f856-118">フィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-118">Reads the value of a field.</span></span> <span data-ttu-id="2f856-119">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-119">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static bool Read (ref bool location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool Read(bool&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.Boolean@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As Boolean) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool Read(bool % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; bool" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Boolean" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-120">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-120">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-121">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-121">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-122">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-122">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-123">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-123">The value that was read.</span></span> <span data-ttu-id="2f856-124">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-124">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-125">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-125">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static byte Read (ref byte location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int8 Read(unsigned int8&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.Byte@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As Byte) As Byte" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Byte Read(System::Byte % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; byte" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Byte</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Byte" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-126">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-126">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-127">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-127">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-128">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-128">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-129">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-129">The value that was read.</span></span> <span data-ttu-id="2f856-130">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-130">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-131">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-131">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static double Read (ref double location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig float64 Read(float64&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.Double@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As Double) As Double" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static double Read(double % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; double" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Double" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-132">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-132">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-133">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-133">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-134">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-134">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-135">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-135">The value that was read.</span></span> <span data-ttu-id="2f856-136">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-136">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-137">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-137">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static short Read (ref short location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int16 Read(int16&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.Int16@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As Short) As Short" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static short Read(short % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; int16" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int16</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Int16" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-138">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-138">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-139">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-139">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-140">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-140">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-141">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-141">The value that was read.</span></span> <span data-ttu-id="2f856-142">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-142">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-143">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-143">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static int Read (ref int location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int32 Read(int32&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.Int32@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As Integer) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static int Read(int % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; int" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Int32" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-144">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-144">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-145">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-145">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-146">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-146">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-147">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-147">The value that was read.</span></span> <span data-ttu-id="2f856-148">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-148">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-149">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-149">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static long Read (ref long location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int64 Read(int64&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.Int64@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As Long) As Long" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static long Read(long % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; int64" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Int64" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-150">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-150">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-151">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-151">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-152">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-152">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-153">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-153">The value that was read.</span></span> <span data-ttu-id="2f856-154">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-154">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-155">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-155">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static IntPtr Read (ref IntPtr location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig native int Read(native int&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.IntPtr@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As IntPtr) As IntPtr" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static IntPtr Read(IntPtr % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; nativeint" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.IntPtr</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.IntPtr" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-156">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-156">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-157">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-157">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-158">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-158">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-159">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-159">The value that was read.</span></span> <span data-ttu-id="2f856-160">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-160">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-161">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-161">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static sbyte Read (ref sbyte location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig int8 Read(int8&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.SByte@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As SByte) As SByte" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::SByte Read(System::SByte % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; sbyte" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.SByte</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.SByte" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-162">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-162">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-163">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-163">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-164">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-164">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-165">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-165">The value that was read.</span></span> <span data-ttu-id="2f856-166">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-166">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-167">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-167">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static float Read (ref float location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig float32 Read(float32&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.Single@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As Single) As Single" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static float Read(float % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; single" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Single</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Single" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-168">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-168">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-169">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-169">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-170">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-170">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-171">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-171">The value that was read.</span></span> <span data-ttu-id="2f856-172">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-172">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-173">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-173">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static ushort Read (ref ushort location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int16 Read(unsigned int16&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.UInt16@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As UShort) As UShort" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::UInt16 Read(System::UInt16 % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; uint16" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.UInt16</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.UInt16" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-174">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-174">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-175">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-175">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-176">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-176">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-177">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-177">The value that was read.</span></span> <span data-ttu-id="2f856-178">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-178">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-179">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-179">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altCompliant cref="M:System.Threading.Volatile.Read(System.Int16@)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static uint Read (ref uint location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int32 Read(unsigned int32&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.UInt32@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As UInteger) As UInteger" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::UInt32 Read(System::UInt32 % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; uint32" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.UInt32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.UInt32" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-180">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-180">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-181">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-181">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-182">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-182">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-183">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-183">The value that was read.</span></span> <span data-ttu-id="2f856-184">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-184">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-185">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-185">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altCompliant cref="M:System.Threading.Volatile.Read(System.Int32@)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static ulong Read (ref ulong location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int64 Read(unsigned int64&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.UInt64@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As ULong) As ULong" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::UInt64 Read(System::UInt64 % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; uint64" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.UInt64</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.UInt64" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-186">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-186">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-187">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-187">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-188">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-188">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-189">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-189">The value that was read.</span></span> <span data-ttu-id="2f856-190">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-190">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-191">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-191">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altCompliant cref="M:System.Threading.Volatile.Read(System.Int64@)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public static UIntPtr Read (ref UIntPtr location);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig native unsigned int Read(native unsigned int&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read(System.UIntPtr@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read (ByRef location As UIntPtr) As UIntPtr" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static UIntPtr Read(UIntPtr % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; unativeint" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.UIntPtr</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.UIntPtr" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-192">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-192">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-193">指定されたフィールドの値を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-193">Reads the value of the specified field.</span></span> <span data-ttu-id="2f856-194">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-194">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-195">読み取られた値。</span><span class="sxs-lookup"><span data-stu-id="2f856-195">The value that was read.</span></span> <span data-ttu-id="2f856-196">この値は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-196">This value is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-197">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-197">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altCompliant cref="M:System.Threading.Volatile.Read(System.IntPtr@)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Read&lt;T&gt;">
+      <MemberSignature Language="C#" Value="public static T Read&lt;T&gt; (ref T location) where T : class;" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig !!T Read&lt;class T&gt;(!!T&amp; location) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Read``1(``0@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function Read(Of T As Class) (ByRef location As T) As T" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA;generic &lt;typename T&gt;&#xA; where T : class static T Read(T % location);" />
+      <MemberSignature Language="F#" Value="static member Read :  -&gt; 'T (requires 'T : null)" Usage="System.Threading.Volatile.Read location" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>T</ReturnType>
+      </ReturnValue>
+      <TypeParameters>
+        <TypeParameter Name="T">
+          <Constraints>
+            <ParameterAttribute>ReferenceTypeConstraint</ParameterAttribute>
+          </Constraints>
+        </TypeParameter>
+      </TypeParameters>
+      <Parameters>
+        <Parameter Name="location" Type="T" RefType="ref" />
+      </Parameters>
+      <Docs>
+        <typeparam name="T"><span data-ttu-id="2f856-198">読み取るフィールドの型。</span><span class="sxs-lookup"><span data-stu-id="2f856-198">The type of field to read.</span></span> <span data-ttu-id="2f856-199">この型は、値型ではなく、参照型である必要があります。</span><span class="sxs-lookup"><span data-stu-id="2f856-199">This must be a reference type, not a value type.</span></span></typeparam>
+        <param name="location"><span data-ttu-id="2f856-200">読み取るフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-200">The field to read.</span></span></param>
+        <summary><span data-ttu-id="2f856-201">指定したフィールドからオブジェクト参照を読み取ります。</span><span class="sxs-lookup"><span data-stu-id="2f856-201">Reads the object reference from the specified field.</span></span> <span data-ttu-id="2f856-202">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの後に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの前に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-202">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears after this method in the code, the processor cannot move it before this method.</span></span></summary>
+        <returns><span data-ttu-id="2f856-203">読み取られた <paramref name="T" /> への参照。</span><span class="sxs-lookup"><span data-stu-id="2f856-203">The reference to <paramref name="T" /> that was read.</span></span> <span data-ttu-id="2f856-204">この参照は、プロセッサの数やプロセッサ キャッシュの状態にかかわらず、コンピューター内のいずれかのプロセッサによって書き込まれた最新の値です。</span><span class="sxs-lookup"><span data-stu-id="2f856-204">This reference is the latest written by any processor in the computer, regardless of the number of processors or the state of processor cache.</span></span></returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-205">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-205">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Write">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><span data-ttu-id="2f856-206">フィールドに値を書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-206">Writes a value to a field.</span></span> <span data-ttu-id="2f856-207">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-207">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref bool location, bool value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(bool&amp; location, bool value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.Boolean@,System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As Boolean, value As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(bool % location, bool value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * bool -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Boolean" RefType="ref" />
+        <Parameter Name="value" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-208">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-208">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-209">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-209">The value to write.</span></span> <span data-ttu-id="2f856-210">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-210">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-211">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-211">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-212">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-212">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-213">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-213">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref byte location, byte value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(unsigned int8&amp; location, unsigned int8 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.Byte@,System.Byte)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As Byte, value As Byte)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(System::Byte % location, System::Byte value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * byte -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Byte" RefType="ref" />
+        <Parameter Name="value" Type="System.Byte" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-214">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-214">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-215">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-215">The value to write.</span></span> <span data-ttu-id="2f856-216">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-216">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-217">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-217">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-218">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-218">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-219">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-219">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref double location, double value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(float64&amp; location, float64 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.Double@,System.Double)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As Double, value As Double)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(double % location, double value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * double -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Double" RefType="ref" />
+        <Parameter Name="value" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-220">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-220">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-221">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-221">The value to write.</span></span> <span data-ttu-id="2f856-222">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-222">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-223">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-223">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-224">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-224">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-225">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-225">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref short location, short value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(int16&amp; location, int16 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.Int16@,System.Int16)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As Short, value As Short)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(short % location, short value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * int16 -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Int16" RefType="ref" />
+        <Parameter Name="value" Type="System.Int16" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-226">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-226">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-227">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-227">The value to write.</span></span> <span data-ttu-id="2f856-228">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-228">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-229">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-229">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-230">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-230">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-231">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-231">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref int location, int value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(int32&amp; location, int32 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.Int32@,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As Integer, value As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(int % location, int value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * int -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Int32" RefType="ref" />
+        <Parameter Name="value" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-232">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-232">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-233">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-233">The value to write.</span></span> <span data-ttu-id="2f856-234">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-234">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-235">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-235">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-236">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-236">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-237">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-237">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref long location, long value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(int64&amp; location, int64 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.Int64@,System.Int64)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As Long, value As Long)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(long % location, long value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * int64 -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Int64" RefType="ref" />
+        <Parameter Name="value" Type="System.Int64" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-238">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-238">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-239">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-239">The value to write.</span></span> <span data-ttu-id="2f856-240">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-240">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-241">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-241">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-242">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-242">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-243">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-243">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref IntPtr location, IntPtr value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(native int&amp; location, native int value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.IntPtr@,System.IntPtr)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As IntPtr, value As IntPtr)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(IntPtr % location, IntPtr value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * nativeint -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.IntPtr" RefType="ref" />
+        <Parameter Name="value" Type="System.IntPtr" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-244">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-244">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-245">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-245">The value to write.</span></span> <span data-ttu-id="2f856-246">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-246">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-247">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-247">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-248">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-248">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-249">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-249">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref sbyte location, sbyte value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(int8&amp; location, int8 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.SByte@,System.SByte)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As SByte, value As SByte)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(System::SByte % location, System::SByte value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * sbyte -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.SByte" RefType="ref" />
+        <Parameter Name="value" Type="System.SByte" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-250">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-250">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-251">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-251">The value to write.</span></span> <span data-ttu-id="2f856-252">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-252">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-253">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-253">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-254">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-254">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-255">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-255">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref float location, float value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(float32&amp; location, float32 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.Single@,System.Single)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As Single, value As Single)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(float % location, float value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * single -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.Single" RefType="ref" />
+        <Parameter Name="value" Type="System.Single" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-256">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-256">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-257">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-257">The value to write.</span></span> <span data-ttu-id="2f856-258">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-258">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-259">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-259">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-260">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-260">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-261">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-261">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref ushort location, ushort value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(unsigned int16&amp; location, unsigned int16 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.UInt16@,System.UInt16)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As UShort, value As UShort)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(System::UInt16 % location, System::UInt16 value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * uint16 -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.UInt16" RefType="ref" />
+        <Parameter Name="value" Type="System.UInt16" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-262">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-262">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-263">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-263">The value to write.</span></span> <span data-ttu-id="2f856-264">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-264">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-265">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-265">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-266">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-266">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-267">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-267">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altCompliant cref="M:System.Threading.Volatile.Write(System.Int16@,System.Int16)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref uint location, uint value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(unsigned int32&amp; location, unsigned int32 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.UInt32@,System.UInt32)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As UInteger, value As UInteger)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(System::UInt32 % location, System::UInt32 value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * uint32 -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.UInt32" RefType="ref" />
+        <Parameter Name="value" Type="System.UInt32" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-268">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-268">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-269">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-269">The value to write.</span></span> <span data-ttu-id="2f856-270">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-270">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-271">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-271">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-272">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-272">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-273">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-273">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altCompliant cref="M:System.Threading.Volatile.Write(System.Int32@,System.Int32)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref ulong location, ulong value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(unsigned int64&amp; location, unsigned int64 value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.UInt64@,System.UInt64)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As ULong, value As ULong)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(System::UInt64 % location, System::UInt64 value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * uint64 -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.UInt64" RefType="ref" />
+        <Parameter Name="value" Type="System.UInt64" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-274">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-274">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-275">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-275">The value to write.</span></span> <span data-ttu-id="2f856-276">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-276">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-277">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-277">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-278">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-278">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-279">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-279">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altCompliant cref="M:System.Threading.Volatile.Write(System.Int64@,System.Int64)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public static void Write (ref UIntPtr location, UIntPtr value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write(native unsigned int&amp; location, native unsigned int value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write(System.UIntPtr@,System.UIntPtr)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write (ByRef location As UIntPtr, value As UIntPtr)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void Write(UIntPtr % location, UIntPtr value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * unativeint -&gt; unit" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netcore-2.2;dotnet-uwp-10.0;netcore-3.0;netstandard-2.1">
+          <AttributeName>System.CLSCompliant(false)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="location" Type="System.UIntPtr" RefType="ref" />
+        <Parameter Name="value" Type="System.UIntPtr" />
+      </Parameters>
+      <Docs>
+        <param name="location"><span data-ttu-id="2f856-280">値を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-280">The field where the value is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-281">書き込む値。</span><span class="sxs-lookup"><span data-stu-id="2f856-281">The value to write.</span></span> <span data-ttu-id="2f856-282">値は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-282">The value is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-283">指定した値を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-283">Writes the specified value to the specified field.</span></span> <span data-ttu-id="2f856-284">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-284">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-285">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-285">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+        <altCompliant cref="M:System.Threading.Volatile.Write(System.IntPtr@,System.IntPtr)" />
+      </Docs>
+    </Member>
+    <Member MemberName="Write&lt;T&gt;">
+      <MemberSignature Language="C#" Value="public static void Write&lt;T&gt; (ref T location, T value) where T : class;" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Write&lt;class T&gt;(!!T&amp; location, !!T value) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Volatile.Write``1(``0@,``0)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub Write(Of T As Class) (ByRef location As T, value As T)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA;generic &lt;typename T&gt;&#xA; where T : class static void Write(T % location, T value);" />
+      <MemberSignature Language="F#" Value="static member Write :  * 'T -&gt; unit (requires 'T : null)" Usage="System.Threading.Volatile.Write (location, value)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-1.0;netstandard-1.1;netstandard-1.2;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <TypeParameters>
+        <TypeParameter Name="T">
+          <Constraints>
+            <ParameterAttribute>ReferenceTypeConstraint</ParameterAttribute>
+          </Constraints>
+        </TypeParameter>
+      </TypeParameters>
+      <Parameters>
+        <Parameter Name="location" Type="T" RefType="ref" />
+        <Parameter Name="value" Type="T" />
+      </Parameters>
+      <Docs>
+        <typeparam name="T"><span data-ttu-id="2f856-286">書き込むフィールドの型。</span><span class="sxs-lookup"><span data-stu-id="2f856-286">The type of field to write.</span></span> <span data-ttu-id="2f856-287">この型は、値型ではなく、参照型である必要があります。</span><span class="sxs-lookup"><span data-stu-id="2f856-287">This must be a reference type, not a value type.</span></span></typeparam>
+        <param name="location"><span data-ttu-id="2f856-288">オブジェクト参照を書き込むフィールド。</span><span class="sxs-lookup"><span data-stu-id="2f856-288">The field where the object reference is written.</span></span></param>
+        <param name="value"><span data-ttu-id="2f856-289">書き込むオブジェクト参照。</span><span class="sxs-lookup"><span data-stu-id="2f856-289">The object reference to write.</span></span> <span data-ttu-id="2f856-290">参照は即座に書き込まれるため、コンピューター内のすべてのプロセッサに対して可視になります。</span><span class="sxs-lookup"><span data-stu-id="2f856-290">The reference is written immediately so that it is visible to all processors in the computer.</span></span></param>
+        <summary><span data-ttu-id="2f856-291">指定したオブジェクト参照を指定したフィールドに書き込みます。</span><span class="sxs-lookup"><span data-stu-id="2f856-291">Writes the specified object reference to the specified field.</span></span> <span data-ttu-id="2f856-292">システムに必要な場合は、次のようにプロセッサがメモリ操作を並べ替えるのを防ぐメモリ バリアを挿入します。コード内でこのメソッドの前に読み取りまたは書き込みが配置されている場合、プロセッサはそれをこのメソッドの後に移動することはできません。</span><span class="sxs-lookup"><span data-stu-id="2f856-292">On systems that require it, inserts a memory barrier that prevents the processor from reordering memory operations as follows: If a read or write appears before this method in the code, the processor cannot move it after this method.</span></span></summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ <span data-ttu-id="2f856-293">詳細については、<xref:System.Threading.Volatile> クラスを参照してください。</span><span class="sxs-lookup"><span data-stu-id="2f856-293">For more information, see the <xref:System.Threading.Volatile> class.</span></span>  
+  
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
