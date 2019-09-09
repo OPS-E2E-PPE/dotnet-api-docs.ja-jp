@@ -1,0 +1,468 @@
+<Type Name="AppContext" FullName="System.AppContext">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="905e0055c1e6a26875980d42e921145f959a9ad3" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70646994" /></Metadata><TypeSignature Language="C#" Value="public static class AppContext" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit AppContext extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:System.AppContext" />
+  <TypeSignature Language="VB.NET" Value="Public Class AppContext" />
+  <TypeSignature Language="C++ CLI" Value="public ref class AppContext abstract sealed" />
+  <TypeSignature Language="F#" Value="type AppContext = class" />
+  <AssemblyInfo>
+    <AssemblyName>System.AppContext</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>mscorlib</AssemblyName>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System.Runtime</AssemblyName>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <AssemblyVersion>4.2.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>アプリケーションのコンテキストについてのデータを設定したり取得したりするためのメンバーを提供します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[
+
+## Remarks
+ <xref:System.AppContext>クラスを使用すると、ライブラリの作成者は、ユーザーに新しい機能を提供するための統一されたオプトアウトメカニズムを提供できます。 これは、オプトアウト要求を伝達するために、コンポーネント間に疎結合のコントラクトを確立します。 通常、この機能は既存の機能が変更されるときに重要となります。 それに対して、新しい機能には暗黙のオプトインが既に存在しています。
+
+## <a name="appcontext-for-library-developers"></a>ライブラリ開発者のための AppContext
+ ライブラリは<xref:System.AppContext> 、クラスを使用して互換性スイッチを定義および公開します。一方、ライブラリユーザーは、これらのスイッチを設定してライブラリの動作に影響を与えることができます。 ライブラリは、既定では新しい機能を提供し、スイッチが設定されている場合のみそれを変更する (つまり以前の機能を提供する) ことができます。  これにより、ライブラリは既存の API に新しい動作を提供しながら、以前の動作に依存する呼び出し元のサポートを継続できます。
+
+### <a name="defining-the-switch-name"></a>スイッチ名の定義
+ ライブラリのコンシューマーが動作の変更をオプトアウトできるようにする最も一般的な方法は、名前付きスイッチを定義することです。  この要素は、スイッチの名前とその<xref:System.Boolean>値で構成される名前と値のペアです。 `value`  既定では、スイッチは常に`false`暗黙的に使用されます。これにより新しい動作が提供され、既定では新しい動作がオプトインされます。 スイッチをに設定`true`すると、従来の動作が提供されるようになります。 スイッチを明示的に`false`に設定すると、新しい動作も提供されます。
+
+ スイッチ名には、ライブラリによって公開される正式なコントラクトであるため、一貫した形式を使用することをお勧めします。 2 つの明確な形式を次に示します。
+
+-   *Switch*.*namespace*.*switchname*
+
+-   *Switch*.*library*.*switchname*
+
+ スイッチを定義してドキュメント化すると、呼び出し元は、アプリケーション構成ファイルに[ \<appcontextswitchoverrides >](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)要素を追加する<xref:System.AppContext.SetSwitch%28System.String%2CSystem.Boolean%29?displayProperty=nameWithType>か、プログラムによってメソッドを呼び出すことによって、レジストリを使用してそのスイッチを使用できます。 呼び出し元がを使用して構成スイッチの<xref:System.AppContext>値を設定する方法の詳細については、「[ライブラリコンシューマーの appcontext](#ForConsumers) 」セクションを参照してください。
+
+ 共通言語ランタイムがアプリケーションを実行すると、アプリケーションの<xref:System.AppContext>インスタンスを設定するために、レジストリの互換性設定が自動的に読み取られ、アプリケーション構成ファイルが読み込まれます。 インスタンスは、呼び出し元またはランタイムによってプログラムによって設定されるため、 <xref:System.AppContext>インスタンスを構成するために、メソッド<xref:System.AppContext.SetSwitch%2A>の呼び出しなどの操作を行う必要はありません。 <xref:System.AppContext>
+
+### <a name="checking-the-setting"></a>設定を確認しています
+ その後、コンシューマーがスイッチの値を宣言したかどうかを確認し、 <xref:System.AppContext.TryGetSwitch%2A?displayProperty=nameWithType>メソッドを呼び出すことによって適切に動作させることができます。 引数が見つかっ`true`た`isEnabled`場合、メソッドはを返します。メソッドから制御が戻ったときに、その引数がスイッチの値を示します。 `switchName`  それ以外の場合、メソッドは `false` を返します。
+
+### <a name="an-example"></a>使用例
+ 次の例は、 <xref:System.AppContext>クラスを使用して、顧客がライブラリメソッドの元の動作を選択できるようにする方法を示しています。   次に、という名前`StringLibrary`のライブラリのバージョン1.0 を示します。 これは、 `SubstringStartsAt`序数による比較を実行して、より大きな文字列内の部分文字列の開始インデックスを決定するメソッドを定義します。
+
+ [!code-csharp[System.AppContext.Class#4](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/Example4.cs#4)]
+ [!code-vb[System.AppContext.Class#4](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/Example4.vb#4)]
+
+ 次の例では、ライブラリを使用して、"the archaeologist" の部分文字列 "arch æ" の開始インデックスを検索します。 メソッドは序数による比較を実行するため、部分文字列は見つかりません。
+
+ [!code-csharp[System.AppContext.Class#5](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/Example4.cs#5)]
+ [!code-vb[System.AppContext.Class#5](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/Example4.vb#5)]
+
+ ただし、ライブラリのバージョン2では、カルチャ`SubstringStartsAt`に依存した比較を使用するようにメソッドを変更します。
+
+ [!code-csharp[System.AppContext.Class#6](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/Example6.cs#6)]
+ [!code-vb[System.AppContext.Class#6](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/Example6.vb#6)]
+
+ 新しいバージョンのライブラリに対して実行するようにアプリを再コンパイルすると、"the archaeologist" のインデックス4に部分文字列 "arch æ" があることが報告されるようになりました。
+
+ [!code-csharp[System.AppContext.Class#7](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/Example6.cs#7)]
+ [!code-vb[System.AppContext.Class#7](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/Example6.vb#7)]
+
+ この変更により、 [ \<appcontextswitchoverrides >](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)スイッチを定義することによって、元の動作に依存するアプリケーションが中断されるのを防ぐことができます。 この場合、スイッチにはという`StringLibrary.DoNotUseCultureSensitiveComparison`名前が付けられます。 既定値`false`は、ライブラリがバージョン2.0 のカルチャに依存した比較を実行する必要があることを示します。 `true`ライブラリがバージョン1.0 の序数比較を実行する必要があることを示します。  前のコードを少し変更することで、ライブラリコンシューマーはスイッチを設定して、メソッドが実行する比較の種類を決定できます。
+
+ [!code-csharp[System.AppContext.Class#8](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/Example8.cs#8)]
+ [!code-vb[System.AppContext.Class#8](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/Example8.vb#8)]
+
+ アプリケーションで次の構成ファイルを使用して、バージョン1.0 の動作を復元できる場合。
+
+```xml
+
+<configuration>
+   <runtime>
+      <AppContextSwitchOverrides value="StringLibrary.DoNotUseCultureSensitiveComparison=true" />
+   </runtime>
+</configuration>
+
+```
+
+ 構成ファイルが存在するアプリケーションを実行すると、次の出力が生成されます。
+
+```
+'archæ' not found in 'The archaeologist'
+```
+
+<a name="ForConsumers"></a>
+## <a name="appcontext-for-library-consumers"></a>ライブラリコンシューマーの AppContext
+ ライブラリを使用している場合、 <xref:System.AppContext>クラスを使用すると、ライブラリまたはライブラリのメソッドのオプトアウトメカニズムを利用して新しい機能を利用できます。   呼び出し元のクラスライブラリの個々のメソッドは、新しい動作を有効または無効にする特定のスイッチを定義します。 スイッチの値はブール値です。 既定値である場合は、新しい動作が有効になります。これが`true`の場合、新しい動作は無効になり、メンバーは以前と同じように動作します。 `false`
+
+ スイッチの値は、次の4つの方法のいずれかで設定できます。
+
+-   コード内で<xref:System.AppContext.SetSwitch%28System.String%2CSystem.Boolean%29?displayProperty=nameWithType>メソッドを呼び出します。  引数`switchName`はスイッチ名を定義し、プロパティ`isEnabled`はスイッチの値を定義します。 は<xref:System.AppContext>静的クラスであるため、アプリケーションドメインごとに使用できます。
+
+     を呼び<xref:System.AppContext.SetSwitch%28System.String%2CSystem.Boolean%29?displayProperty=nameWithType>出すと、アプリケーションスコープが適用されます。つまり、アプリケーションにのみ影響します。
+
+-   App.config ファイルの`<AppContextSwitchOverrides>` [ \<ランタイム >](~/docs/framework/configure-apps/file-schema/runtime/runtime-element.md)セクションに要素を追加します。 スイッチには1つの属性`value`があります。この属性の値は、スイッチ名とその値の両方を含むキーと値のペアを表す文字列です。
+
+     複数のスイッチを定義するには、 [ \<appcontextswitchoverrides](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)各スイッチのキーと値のペアを`value`分離し、> 要素の属性をセミコロンで区切ります。 その場合、要素の`<AppContextSwitchOverrides>`形式は次のようになります。
+
+    ```xml
+    <AppContextSwitchOverrides value="switchName1=value1;switchName2=value2" />
+    ```
+
+     `<AppContextSwitchOverrides>`要素を使用して構成設定を定義するには、アプリケーションスコープを使用します。つまり、アプリケーションにのみ影響します。
+
+    > [!NOTE]
+    > .NET Framework によって定義されるスイッチの詳細については、「 [ \<appcontextswitchoverrides > 要素](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)」を参照してください。
+
+-   名前がレジストリ内の`HKLM\SOFTWARE\Microsoft\.NETFramework\AppContext`キーへのスイッチの名前である文字列値を追加します。 この値は、 <xref:System.Boolean> <xref:System.Boolean.Parse%2A?displayProperty=nameWithType>メソッドによって解析できるの文字列表現である必要があります。つまり、"true"、"true"、"false"、または "false" である必要があります。 ランタイムがその他の値を検出した場合、スイッチは無視されます。
+
+     レジストリを使用して<xref:System.AppContext>スイッチを定義すると、マシンのスコープを持つことになります。つまり、コンピューター上で実行されているすべてのアプリケーションに影響します。
+
+- ASP.NET アプリケーションの場合は、web.config ファイルの[ \<appSettings >](~/docs/framework/configure-apps/file-schema/appsettings/index.md)セクションに[ \<add >](~/docs/framework/configure-apps/file-schema/appsettings/add-element-for-appsettings.md)要素を追加します。 次に例を示します。
+
+   ```xml
+   <appSettings>
+      <add key="AppContext.SetSwitch:switchName1" value="switchValue1" />
+      <add key="AppContext.SetSwitch:switchName2" value="switchValue2" />
+   </appSettings>
+   ```
+
+ 同じスイッチを複数の方法で設定した場合、他の設定をオーバーライドする設定を決定する優先順位は次のようになります。
+
+1.  プログラム設定。
+
+2.  アプリ構成ファイルまたは web.config ファイル内の設定。
+
+3.  レジストリ設定です。
+
+ 次に示すのは、ファイルの URI を<xref:System.IO.Path.GetDirectoryName%2A?displayProperty=nameWithType>メソッドに渡す単純なアプリケーションです。  .NET Framework 4.6 で実行すると、はファイルパス<xref:System.ArgumentException>の`file://`有効な部分ではなくなったため、をスローします。
+
+ [!code-csharp[System.AppContext.Class#10](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/ForConsumers1.cs#10)]
+ [!code-vb[System.AppContext.Class#10](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/ForConsumers1.vb#10)]
+
+ メソッドの以前の動作を復元し、例外を回避するには、 `Switch.System.IO.UseLegacyPathHandling`次の例のように、アプリケーション構成ファイルにスイッチを追加します。
+
+```xml
+<configuration>
+    <runtime>
+        <AppContextSwitchOverrides value="Switch.System.IO.UseLegacyPathHandling=true" />
+    </runtime>
+</configuration>
+```
+## <a name="see-also"></a>関連項目
+[AppContext スイッチ](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)
+
+ ]]></format>
+    </remarks>
+    <related type="Article" href="https://msdn.microsoft.com/library/1eb2fae3-de4b-45b6-852f-517c39b751bd">&lt;runtime&gt;要素</related>
+    <related type="Article" href="https://msdn.microsoft.com/library/4ce07f47-7ddb-4d91-b067-501bd8b88752">&lt;Appcontextswitchoverrides&gt;要素</related>
+  </Docs>
+  <Members>
+    <Member MemberName="BaseDirectory">
+      <MemberSignature Language="C#" Value="public static string BaseDirectory { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property string BaseDirectory" />
+      <MemberSignature Language="DocId" Value="P:System.AppContext.BaseDirectory" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly Property BaseDirectory As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static property System::String ^ BaseDirectory { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.BaseDirectory : string" Usage="System.AppContext.BaseDirectory" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.AppContext</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>アセンブリを探すためにアセンブリ リゾルバーが使用するベース ディレクトリのパス名を取得します。</summary>
+        <value>アセンブリを探すためにアセンブリ リゾルバーが使用するベース ディレクトリのパス名。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+ これは、アプリケーションドメインごとのプロパティです。 この値は<xref:System.AppDomain.BaseDirectory%2A?displayProperty=nameWithType> 、現在のアプリケーションドメインのプロパティに対応します。
+
+ ]]></format>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetData">
+      <MemberSignature Language="C#" Value="public static object GetData (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig object GetData(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.AppContext.GetData(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function GetData (name As String) As Object" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Object ^ GetData(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="static member GetData : string -&gt; obj" Usage="System.AppContext.GetData name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.AppContext</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netstandard-2.0">
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Object</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" Index="0" FrameworkAlternate="netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.6;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;netstandard-2.1" />
+      </Parameters>
+      <Docs>
+        <param name="name">データ要素の名前。</param>
+        <summary>現在のアプリケーション ドメインに割り当てられている名前付きデータ要素の値を返します。</summary>
+        <returns><paramref name="name" /> が名前付きの値を識別する場合は <paramref name="name" /> の値。それ以外の場合は <see langword="null" />。</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetSwitch">
+      <MemberSignature Language="C#" Value="public static void SetSwitch (string switchName, bool isEnabled);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void SetSwitch(string switchName, bool isEnabled) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.AppContext.SetSwitch(System.String,System.Boolean)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Sub SetSwitch (switchName As String, isEnabled As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static void SetSwitch(System::String ^ switchName, bool isEnabled);" />
+      <MemberSignature Language="F#" Value="static member SetSwitch : string * bool -&gt; unit" Usage="System.AppContext.SetSwitch (switchName, isEnabled)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.AppContext</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="switchName" Type="System.String" />
+        <Parameter Name="isEnabled" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="switchName">スイッチの名前です。</param>
+        <param name="isEnabled">スイッチの値です。</param>
+        <summary>スイッチの値を設定します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+ <xref:System.AppContext>クラスを使用すると、ライブラリの作成者は、ユーザーに新しい機能を提供するための統一されたオプトアウトメカニズムを提供できます。 これは、オプトアウト要求を伝達するために、コンポーネント間に疎結合のコントラクトを確立します。 通常、この機能は既存の機能が変更されるときに重要となります。 それに対して、新しい機能には暗黙のオプトインが既に存在しています。
+
+ メソッドは、依存ライブラリによって定義されるスイッチ ( <xref:System.Boolean>常に値) の値を宣言するために、アプリケーション (またはライブラリ) によって呼び出されます。 <xref:System.AppContext.SetSwitch%2A> スイッチは常に暗黙的`false`に行われ、新しい動作を提供します。 スイッチをに設定`true`すると、従来の動作が提供されるようになります。 スイッチを明示的に`false`に設定すると、新しい動作も提供されます。 その後、依存ライブラリは<xref:System.AppContext.TryGetSwitch%2A>メソッドを呼び出して、スイッチの値を確認できます。
+
+> [!NOTE]
+> スイッチ名には、ライブラリによって公開される正式なコントラクトであるため、一貫した形式を使用することをお勧めします。 2 つの明確な形式を次に示します。
+>
+> -   *Switch*.*namespace*.*switchname*
+> -   *Switch*.*library*.*switchname*
+
+ .NET Framework で実行されているアプリケーションでは、スイッチの値をプログラムで設定するだけでなく、次のように設定することもできます。
+
+-   スイッチの名前と値を[ \<appcontextswitchoverrides](~/docs/framework/configure-apps/file-schema/runtime/appcontextswitchoverrides-element.md)に追加することにより、アプリケーション構成ファイルの[ \<ランタイム >](~/docs/framework/configure-apps/file-schema/runtime/runtime-element.md)セクションの > 要素をオーバーライドします。 たとえば、次の例では、と`Libraries.FPLibrary.UseExactFloatingPointComparison`いう値を`False`持つという名前のスイッチを定義しています。
+
+    ```xml
+
+    <configuration>
+       <runtime>
+          <AppContextSwitchOverrides value="Libraries.FPLibrary.UseExactFloatingPointComparison=false" />
+       </runtime>
+    </configuration>
+
+    ```
+
+-   名前がレジストリ内の`HKLM\SOFTWARE\Microsoft\.NETFramework\AppContext`キーへのスイッチの名前である文字列値を追加します。 この値は、 <xref:System.Boolean> <xref:System.Boolean.Parse%2A?displayProperty=nameWithType>メソッドによって解析できるの文字列表現である必要があります。つまり、"true"、"true"、"false"、または "false" である必要があります。
+
+ が`switchName`既に存在する場合は、 `isEnabled`引数によってその値が上書きされます。  つまり、メソッドの<xref:System.AppContext.SetSwitch%2A>最後の呼び出しでは、レジストリ、アプリ構成ファイル、またはメソッドの<xref:System.AppContext.SetSwitch%2A>以前の呼び出しで定義されている値がオーバーライドされます。
+
+ ### <a name="appcontextsetswitch-and-net-core"></a>AppContext. SetSwitch と .NET Core
+
+.Net Core は、 <xref:System.AppContext.SetSwitch%2A>メソッドのみを使用したプログラムによる呼び出しをサポートしています。 次のスイッチがサポートされています。
+
+|Switch|値|説明|
+|--|--|--|
+|`System.Net.Http.SocketsHttpHandler.Http2Support`|`true` または `false`|HTTP/2 プロトコルのサポートが有効`true`かどうかを示します () または無効 (`false`)。 既定値は disabled です。 スイッチは、を<xref:System.Net.Http.HttpClient>初めて使用する前に設定する必要があります。 .NET Core 3.0 Preview 4 以降で使用できます。|
+|`System.Net.Http.UseSocketsHttpHandler` |`true` または `false`|<xref:System.Net.Http.HttpClient> <xref:System.Net.Http.SocketsHttpHandler?displayProperty=nameWithType> ( ) や <xref:System.Net.Http.HttpClientHandler?displayProperty=nameWithType>  () などの高レベルのネットワーク api を使用するかどうかを決定します `false` 。`true`|
+
+## Examples
+ 次のコード行では、という`Switch.AmazingLib.ThrowOnException`名前`true`のスイッチをに設定します。これにより、従来の動作が有効になります。 ライブラリは、メソッドを<xref:System.AppContext.TryGetSwitch%2A>呼び出すことによって、ライブラリコンシューマーがスイッチの値を設定したかどうかを確認できます。
+
+ [!code-csharp[System.AppContext.Class#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/TestValue1.cs#1)]
+ [!code-vb[System.AppContext.Class#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/TestValue1.vb#1)]
+
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="switchName" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="switchName" /> は <see cref="F:System.String.Empty" />です。</exception>
+        <altmember cref="M:System.AppContext.TryGetSwitch(System.String,System.Boolean@)" />
+      </Docs>
+    </Member>
+    <Member MemberName="TargetFrameworkName">
+      <MemberSignature Language="C#" Value="public static string TargetFrameworkName { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property string TargetFrameworkName" />
+      <MemberSignature Language="DocId" Value="P:System.AppContext.TargetFrameworkName" />
+      <MemberSignature Language="VB.NET" Value="Public Shared ReadOnly Property TargetFrameworkName As String" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static property System::String ^ TargetFrameworkName { System::String ^ get(); };" />
+      <MemberSignature Language="F#" Value="member this.TargetFrameworkName : string" Usage="System.AppContext.TargetFrameworkName" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.AppContext</AssemblyName>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netstandard-2.0">
+          <AttributeName>System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>現在のアプリケーションの対象となるフレームワークのバージョンの名前を取得します。</summary>
+        <value>現在のアプリケーションの対象となるフレームワークのバージョンの名前。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+ ターゲットフレームワークのバージョンの名前は、 <xref:System.Runtime.Versioning.TargetFrameworkAttribute.FrameworkName%2A?displayProperty=nameWithType>プロパティの値に対応します。 .NET Framework のターゲットフレームワーク名の一覧については、 [ &lt;&gt; supportedruntime 要素](~/docs/framework/configure-apps/file-schema/startup/supportedruntime-element.md)の要素を参照してください。
+
+ ]]></format>
+        </remarks>
+        <altmember cref="T:System.Runtime.Versioning.TargetFrameworkAttribute" />
+        <altmember cref="P:System.Runtime.Versioning.TargetFrameworkAttribute.FrameworkName" />
+      </Docs>
+    </Member>
+    <Member MemberName="TryGetSwitch">
+      <MemberSignature Language="C#" Value="public static bool TryGetSwitch (string switchName, out bool isEnabled);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool TryGetSwitch(string switchName, [out] bool&amp; isEnabled) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.AppContext.TryGetSwitch(System.String,System.Boolean@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryGetSwitch (switchName As String, ByRef isEnabled As Boolean) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool TryGetSwitch(System::String ^ switchName, [Runtime::InteropServices::Out] bool % isEnabled);" />
+      <MemberSignature Language="F#" Value="static member TryGetSwitch : string *  -&gt; bool" Usage="System.AppContext.TryGetSwitch (switchName, isEnabled)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.AppContext</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>mscorlib</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Runtime</AssemblyName>
+        <AssemblyVersion>4.2.0.0</AssemblyVersion>
+        <AssemblyVersion>4.2.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="switchName" Type="System.String" />
+        <Parameter Name="isEnabled" Type="System.Boolean" RefType="out" />
+      </Parameters>
+      <Docs>
+        <param name="switchName">スイッチの名前です。</param>
+        <param name="isEnabled">このメソッドが返されるときに <paramref name="switchName" /> が見つかった場合、<paramref name="switchName" /> の値が含まれます。<paramref name="switchName" /> が見つからなかった場合は <see langword="false" />。 このパラメーターは初期化せずに渡されます。</param>
+        <summary>スイッチの値の取得を試みます。</summary>
+        <returns><paramref name="switchName" /> が設定され、<paramref name="isEnabled" /> の引数にスイッチの値が含まれている場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[
+
+## Remarks
+ <xref:System.AppContext>クラスを使用すると、ライブラリの作成者は、ユーザーに新しい機能を提供するための統一されたオプトアウトメカニズムを提供できます。 これは、オプトアウト要求を伝達するために、コンポーネント間に疎結合のコントラクトを確立します。 通常、この機能は既存の機能が変更されるときに重要となります。 それに対して、新しい機能には暗黙のオプトインが既に存在しています。
+
+ 共通言語ランタイムは、レジストリとアプリケーションの構成ファイル<xref:System.AppContext>を読み取って、インスタンスに割り当てられたスイッチを自動的に設定します。 その後、これらのスイッチの値をオーバーライドし、新しいスイッチを追加して<xref:System.AppContext.SetSwitch%2A> 、メソッドを呼び出すことができます。
+
+ ライブラリは、 <xref:System.AppContext.TryGetSwitch%2A>メソッドを呼び出して、コンシューマーがスイッチの値を宣言したかどうかを確認し、適切に操作します。  既定では、スイッチが定義されていない場合は、新しい機能が有効になります。 スイッチが定義され、その値が`false`の場合は、新しい機能も有効になります。 値が`true`の場合は、従来の動作が有効になります。
+
+
+
+## Examples
+ 次の例では、ライブラリコンシューマーがという名前`Switch.AmazingLib.ThrowOnException`のスイッチを設定しているかどうかを確認します。
+
+ [!code-csharp[System.AppContext.Class#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/System.AppContext.Class/cs/TestValue1.cs#2)]
+ [!code-vb[System.AppContext.Class#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/System.AppContext.Class/vb/TestValue1.vb#2)]
+
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="switchName" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="switchName" /> は <see cref="F:System.String.Empty" />です。</exception>
+        <altmember cref="M:System.AppContext.SetSwitch(System.String,System.Boolean)" />
+      </Docs>
+    </Member>
+  </Members>
+</Type>

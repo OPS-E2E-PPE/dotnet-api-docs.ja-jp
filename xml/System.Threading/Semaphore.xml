@@ -1,0 +1,988 @@
+<Type Name="Semaphore" FullName="System.Threading.Semaphore">
+  <Metadata><Meta Name="ms.openlocfilehash" Value="4d612444124f1e9e0d4b84aef281ef295eb335ce" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70608814" /></Metadata><TypeSignature Language="C#" Value="public sealed class Semaphore : System.Threading.WaitHandle" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit Semaphore extends System.Threading.WaitHandle" />
+  <TypeSignature Language="DocId" Value="T:System.Threading.Semaphore" />
+  <TypeSignature Language="VB.NET" Value="Public NotInheritable Class Semaphore&#xA;Inherits WaitHandle" />
+  <TypeSignature Language="C++ CLI" Value="public ref class Semaphore sealed : System::Threading::WaitHandle" />
+  <TypeSignature Language="F#" Value="type Semaphore = class&#xA;    inherit WaitHandle" />
+  <AssemblyInfo>
+    <AssemblyName>System.Threading</AssemblyName>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <AssemblyVersion>4.0.10.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>System</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <AssemblyInfo>
+    <AssemblyName>netstandard</AssemblyName>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Threading.WaitHandle</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Attributes>
+    <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+      <AttributeName>System.Runtime.InteropServices.ComVisible(false)</AttributeName>
+    </Attribute>
+  </Attributes>
+  <Docs>
+    <summary>リソースまたはリソースのプールに同時にアクセスできるスレッドの数を制限します。</summary>
+    <remarks>
+      <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ クラスを<xref:System.Threading.Semaphore>使用して、リソースのプールへのアクセスを制御します。 スレッドは、 <xref:System.Threading.WaitHandle>クラスから継承さ<xref:System.Threading.WaitHandle.WaitOne%2A>れたメソッドを呼び出してセマフォに入り、 <xref:System.Threading.Semaphore.Release%2A>メソッドを呼び出してセマフォを解放します。  
+  
+ セマフォのカウントは、スレッドがセマフォに入るたびに減少し、スレッドがセマフォを解放するとインクリメントされます。 カウントがゼロの場合、後続の要求は他のスレッドがセマフォを解放するまでブロックされます。 すべてのスレッドがセマフォを解放すると、セマフォの作成時に指定された最大値にカウントされます。  
+  
+ ブロックされたスレッドがセマフォに入る、FIFO や LIFO などの保証された順序はありません。  
+  
+ スレッドは、 <xref:System.Threading.WaitHandle.WaitOne%2A>メソッドを繰り返し呼び出して、セマフォに複数回入ることができます。 これらのエントリの一部またはすべてを解放するために、スレッド<xref:System.Threading.Semaphore.Release>は、パラメーターなしのメソッドオーバーロードを複数回<xref:System.Threading.Semaphore.Release%28System.Int32%29>呼び出すことができます。また、解放されるエントリの数を指定するメソッドオーバーロードを呼び出すこともできます。  
+  
+ クラス<xref:System.Threading.Semaphore>で<xref:System.Threading.WaitHandle.WaitOne%2A>は、または<xref:System.Threading.Semaphore.Release%2A>の呼び出しにスレッド id は適用されません。 プログラマは、スレッドが何回もセマフォを解放しないようにする必要があります。 たとえば、セマフォの最大カウントが 2 で、スレッド A とスレッド B が両方ともセマフォに入るとします。 スレッド B のプログラミングエラーによってが2回<xref:System.Threading.Semaphore.Release%2A>呼び出される場合、両方の呼び出しが成功します。 セマフォのカウントがいっぱいになっているときに、スレッド A も <xref:System.Threading.Semaphore.Release%2A> を呼び出すと、<xref:System.Threading.SemaphoreFullException> がスローされます。  
+  
+ セマフォには、ローカルセマフォと名前付きシステムセマフォの2種類があります。 名前を受け入れるコンストラクター <xref:System.Threading.Semaphore>を使用してオブジェクトを作成した場合は、その名前のオペレーティングシステムセマフォに関連付けられます。 名前付きシステムセマフォはオペレーティングシステム全体で表示され、プロセスの動作を同期するために使用できます。 同じ名前付きシステム<xref:System.Threading.Semaphore>セマフォを表す複数のオブジェクトを作成できます。また、 <xref:System.Threading.Semaphore.OpenExisting%2A>メソッドを使用して、既存の名前付きシステムセマフォを開くことができます。  
+  
+ ローカルセマフォは、プロセス内にのみ存在します。 ローカル <xref:System.Threading.Semaphore> オブジェクトを参照するプロセス内のすべてのスレッドから使用できます。 各<xref:System.Threading.Semaphore>オブジェクトは個別のローカルセマフォです。  
+  
+   
+  
+## Examples  
+ 次のコード例では、最大数が3で、初期カウントが0のセマフォを作成します。 この例では、5つのスレッドを開始します。これは、セマフォを待機しています。 メインスレッドは、 <xref:System.Threading.Semaphore.Release%28System.Int32%29>メソッドオーバーロードを使用してセマフォ数を最大値に増やし、3つのスレッドがセマフォに入ることができるようにします。 各スレッドは、 <xref:System.Threading.Thread.Sleep%2A?displayProperty=nameWithType>メソッドを使用して1秒間待機し、作業をシミュレートし<xref:System.Threading.Semaphore.Release>た後、メソッドオーバーロードを呼び出してセマフォを解放します。 セマフォが解放されるたびに、前のセマフォ数が表示されます。 コンソールメッセージは、セマフォの使用を追跡します。 シミュレートされた作業間隔は、出力を読みやすくするために、スレッドごとに若干増加します。  
+  
+ [!code-cpp[System.Threading.Semaphore2#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore2/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore2#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore2/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore2#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore2/VB/source.vb#1)]  
+  
+ ]]></format>
+    </remarks>
+    <threadsafe>この型はスレッド セーフです。</threadsafe>
+    <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+    <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+  </Docs>
+  <Members>
+    <MemberGroup MemberName=".ctor">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary><see cref="T:System.Threading.Semaphore" /> クラスの新しいインスタンスを初期化します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Semaphore (int initialCount, int maximumCount);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(int32 initialCount, int32 maximumCount) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.#ctor(System.Int32,System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (initialCount As Integer, maximumCount As Integer)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Semaphore(int initialCount, int maximumCount);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Semaphore : int * int -&gt; System.Threading.Semaphore" Usage="new System.Threading.Semaphore (initialCount, maximumCount)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Security.SecuritySafeCritical</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="initialCount" Type="System.Int32" />
+        <Parameter Name="maximumCount" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="initialCount">同時に許可されるセマフォの要求の初期数。</param>
+        <param name="maximumCount">同時に許可されるセマフォの要求の最大数。</param>
+        <summary>エントリ数の初期値と同時実行エントリの最大数を指定して、<see cref="T:System.Threading.Semaphore" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このコンストラクターは、名前のないセマフォを初期化します。 このようなセマフォのインスタンスを使用するすべてのスレッドは、インスタンスへの参照を持っている必要があります。  
+  
+ が`initialCount`より<xref:System.Threading.WaitHandle.WaitOne%2A> `maximumCount` `initialCount`小さい場合、効果は、現在のスレッドが (負の値を引いた) 時間を呼び出した場合と同じです。 `maximumCount` セマフォを作成するスレッドのエントリを予約しない場合は、と`maximumCount` `initialCount`の同じ数値を使用します。  
+  
+   
+  
+## Examples  
+ 次の例では、最大数が3で、初期カウントが0のセマフォを作成します。 この例では、5つのスレッドを開始します。これは、セマフォを待機しています。 メインスレッドは、 <xref:System.Threading.Semaphore.Release%28System.Int32%29>メソッドオーバーロードを使用してセマフォ数を最大値に増やし、3つのスレッドがセマフォに入ることができるようにします。 各スレッドは、 <xref:System.Threading.Thread.Sleep%2A?displayProperty=nameWithType>メソッドを使用して1秒間待機し、作業をシミュレートし<xref:System.Threading.Semaphore.Release>た後、メソッドオーバーロードを呼び出してセマフォを解放します。 セマフォが解放されるたびに、前のセマフォ数が表示されます。 コンソールメッセージは、セマフォの使用を追跡します。 シミュレートされた作業間隔は、出力を読みやすくするために、スレッドごとに若干増加します。  
+  
+ [!code-cpp[System.Threading.Semaphore2#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore2/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore2#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore2/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore2#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore2/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="initialCount" /> が <paramref name="maximumCount" /> より大きくなっています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="maximumCount" /> が 1 未満です。  
+  
+- または - 
+ <paramref name="initialCount" /> が 0 未満です。</exception>
+        <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+        <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Semaphore (int initialCount, int maximumCount, string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(int32 initialCount, int32 maximumCount, string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.#ctor(System.Int32,System.Int32,System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (initialCount As Integer, maximumCount As Integer, name As String)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Semaphore(int initialCount, int maximumCount, System::String ^ name);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Semaphore : int * int * string -&gt; System.Threading.Semaphore" Usage="new System.Threading.Semaphore (initialCount, maximumCount, name)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="initialCount" Type="System.Int32" />
+        <Parameter Name="maximumCount" Type="System.Int32" />
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="initialCount">同時に許可されるセマフォの要求の初期数。</param>
+        <param name="maximumCount">同時に許可されるセマフォの要求の最大数。</param>
+        <param name="name">名前付きシステム セマフォ オブジェクトの名前。</param>
+        <summary>エントリ数の初期値と同時実行エントリの最大数を指定し、オプションでシステム セマフォ オブジェクトの名前を指定して、<see cref="T:System.Threading.Semaphore" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このコンストラクターは、 <xref:System.Threading.Semaphore>名前付きシステムセマフォを表すオブジェクトを初期化します。 同じ名前付きシステム<xref:System.Threading.Semaphore>セマフォを表す複数のオブジェクトを作成できます。  
+  
+ 名前付きシステムセマフォが存在しない場合は、と`initialCount` `maximumCount`で指定された初期カウントと最大カウントを使用して作成されます。 名前付きシステムセマフォが既に存在`initialCount` `maximumCount`し、使用されていない場合でも、無効な値によって例外が発生します。 名前付きシステムセマフォが作成されたかどうかを判断する必要が<xref:System.Threading.Semaphore.%23ctor%28System.Int32%2CSystem.Int32%2CSystem.String%2CSystem.Boolean%40%29>ある場合は、代わりにコンストラクターのオーバーロードを使用します。  
+  
+> [!IMPORTANT]
+>  このコンストラクターのオーバーロードを使用する場合、と`initialCount` `maximumCount`に同じ数値を指定することをお勧めします。 が`initialCount`より<xref:System.Threading.WaitHandle.WaitOne%2A> `maximumCount` `initialCount`小さい場合、および名前付きシステムセマフォが作成されると、その効果は、現在のスレッドが (負の値から) を呼び出した場合と同じになります。 `maximumCount` ただし、このコンストラクターのオーバーロードでは、名前付きシステムセマフォが作成されたかどうかを判断する方法はありません。  
+  
+ またはに`null`空の`name`文字列を指定すると、 <xref:System.Threading.Semaphore.%23ctor%28System.Int32%2CSystem.Int32%29>コンストラクターのオーバーロードを呼び出した場合と同様に、ローカルセマフォが作成されます。  
+  
+ 名前付きセマフォはオペレーティングシステム全体にわたって表示されるため、プロセスの境界を越えてリソースの使用量を調整するために使用できます。  
+  
+ 名前付きシステムセマフォが存在するかどうかを確認するには<xref:System.Threading.Semaphore.OpenExisting%2A> 、メソッドを使用します。 メソッド<xref:System.Threading.Semaphore.OpenExisting%2A>は、既存の名前付きセマフォを開こうとし、システムセマフォが存在しない場合は例外をスローします。  
+  
+   
+  
+## Examples  
+ 名前付きセマフォのプロセス間の動作を示すコード例を次に示します。 この例では、最大数が5で、初期カウントが5である名前付きセマフォを作成します。 このプログラムは、 <xref:System.Threading.WaitHandle.WaitOne%2A>メソッドを3回呼び出します。 したがって、コンパイルされた例を2つのコマンドウィンドウから実行した場合、2番目<xref:System.Threading.WaitHandle.WaitOne%2A>のコピーはの3回目の呼び出しでブロックされます。 プログラムの最初のコピーの1つ以上のエントリを解放して、2番目のブロックのブロックを解除します。  
+  
+ [!code-cpp[System.Threading.Semaphore.ctor named 3#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 3/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore.ctor named 3#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 3/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore.ctor named 3#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 3/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="initialCount" /> が <paramref name="maximumCount" /> より大きくなっています。  
+  
+- または - 
+ <paramref name="name" /> が 260 文字を超えています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="maximumCount" /> が 1 未満です。  
+  
+または 
+ <paramref name="initialCount" /> が 0 未満です。</exception>
+        <exception cref="T:System.IO.IOException">Win32 エラーが発生しました。</exception>
+        <exception cref="T:System.UnauthorizedAccessException">アクセス制御セキュリティを使用した名前付きセマフォが存在しており、ユーザーに <see cref="F:System.Security.AccessControl.SemaphoreRights.FullControl" /> がありません。</exception>
+        <exception cref="T:System.Threading.WaitHandleCannotBeOpenedException">名前付きセマフォを作成できません。原因として、別の型の待機ハンドルに同じ名前が付けられていることが考えられます。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージコードを呼び出して名前付きシステムセマフォを作成する場合。 <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /> (関連する列挙体)  
+  
+セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />。</permission>
+        <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+        <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Semaphore (int initialCount, int maximumCount, string name, out bool createdNew);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(int32 initialCount, int32 maximumCount, string name, [out] bool&amp; createdNew) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.#ctor(System.Int32,System.Int32,System.String,System.Boolean@)" />
+      <MemberSignature Language="VB.NET" Value="Public Sub New (initialCount As Integer, maximumCount As Integer, name As String, ByRef createdNew As Boolean)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Semaphore(int initialCount, int maximumCount, System::String ^ name, [Runtime::InteropServices::Out] bool % createdNew);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Semaphore : int * int * string *  -&gt; System.Threading.Semaphore" Usage="new System.Threading.Semaphore (initialCount, maximumCount, name, createdNew)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <Parameters>
+        <Parameter Name="initialCount" Type="System.Int32" />
+        <Parameter Name="maximumCount" Type="System.Int32" />
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="createdNew" Type="System.Boolean" RefType="out" />
+      </Parameters>
+      <Docs>
+        <param name="initialCount">同時に満たされるセマフォの要求の初期数。</param>
+        <param name="maximumCount">同時に満たされるセマフォの要求の最大数。</param>
+        <param name="name">名前付きシステム セマフォ オブジェクトの名前。</param>
+        <param name="createdNew">このメソッドから制御が戻るときに、ローカル セマフォが作成された場合 (<paramref name="name" /> が <see langword="null" /> または空の文字列の場合)、または指定した名前付きシステム セマフォが作成された場合は <see langword="true" /> が格納されます。指定した名前付きシステム セマフォが既に存在する場合は <see langword="false" /> が格納されます。 このパラメーターは初期化せずに渡されます。</param>
+        <summary>エントリ数の初期値と同時実行エントリの最大数を指定し、オプションでシステム セマフォ オブジェクトの名前を指定し、新しいシステム セマフォが作成されたかどうかを示す値を受け取る変数を指定して、<see cref="T:System.Threading.Semaphore" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このコンストラクターは、 <xref:System.Threading.Semaphore>名前付きシステムセマフォを表すオブジェクトを初期化します。 同じ名前付きシステム<xref:System.Threading.Semaphore>セマフォを表す複数のオブジェクトを作成できます。  
+  
+ 名前付きシステムセマフォが存在しない場合は、と`initialCount` `maximumCount`で指定された初期カウントと最大カウントを使用して作成されます。 名前付きシステムセマフォが既に存在`initialCount` `maximumCount`し、使用されていない場合でも、無効な値によって例外が発生します。 システム`createdNew`セマフォが作成されたかどうかを判断するには、を使用します。  
+  
+ が`initialCount`より`createdNew` `maximumCount` <xref:System.Threading.WaitHandle.WaitOne%2A>小さい場合、 `initialCount`が`true`である場合、効果は、現在のスレッドが (負の) 時間を呼び出した場合と同じになります。 `maximumCount`  
+  
+ またはに`null`空の`name`文字列を指定すると、 <xref:System.Threading.Semaphore.%23ctor%28System.Int32%2CSystem.Int32%29>コンストラクターのオーバーロードを呼び出した場合と同様に、ローカルセマフォが作成されます。 この場合、 `createdNew`は常に`true`です。  
+  
+ 名前付きセマフォはオペレーティングシステム全体にわたって表示されるため、プロセスの境界を越えてリソースの使用量を調整するために使用できます。  
+  
+   
+  
+## Examples  
+ 名前付きセマフォのプロセス間の動作を示すコード例を次に示します。 この例では、最大数が5で、初期カウントが2である名前付きセマフォを作成します。 つまり、コンストラクターを呼び出すスレッドに対して、3つのエントリが予約されます。 <xref:System.Threading.WaitHandle.WaitOne%2A>が`createNew` の `false` 場合、プログラムはメソッドを3回呼び出します。 したがって、コンパイルされた例を2つのコマンドウィンドウから実行した場合、2番目<xref:System.Threading.WaitHandle.WaitOne%2A>のコピーはの3回目の呼び出しでブロックされます。 プログラムの最初のコピーの1つ以上のエントリを解放して、2番目のブロックのブロックを解除します。  
+  
+ [!code-cpp[System.Threading.Semaphore.ctor named 4#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 4/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore.ctor named 4#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 4/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore.ctor named 4#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 4/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="initialCount" /> が <paramref name="maximumCount" /> より大きくなっています。  
+  
+または 
+ <paramref name="name" /> が 260 文字を超えています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="maximumCount" /> が 1 未満です。  
+  
+または 
+ <paramref name="initialCount" /> が 0 未満です。</exception>
+        <exception cref="T:System.IO.IOException">Win32 エラーが発生しました。</exception>
+        <exception cref="T:System.UnauthorizedAccessException">アクセス制御セキュリティを使用した名前付きセマフォが存在しており、ユーザーに <see cref="F:System.Security.AccessControl.SemaphoreRights.FullControl" /> がありません。</exception>
+        <exception cref="T:System.Threading.WaitHandleCannotBeOpenedException">名前付きセマフォを作成できません。原因として、別の型の待機ハンドルに同じ名前が付けられていることが考えられます。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージコードを呼び出して名前付きシステムセマフォを作成する場合。 <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /> (関連する列挙体)  
+  
+セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />。</permission>
+        <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+        <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Semaphore (int initialCount, int maximumCount, string name, out bool createdNew, System.Security.AccessControl.SemaphoreSecurity semaphoreSecurity);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(int32 initialCount, int32 maximumCount, string name, [out] bool&amp; createdNew, class System.Security.AccessControl.SemaphoreSecurity semaphoreSecurity) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.#ctor(System.Int32,System.Int32,System.String,System.Boolean@,System.Security.AccessControl.SemaphoreSecurity)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Semaphore(int initialCount, int maximumCount, System::String ^ name, [Runtime::InteropServices::Out] bool % createdNew, System::Security::AccessControl::SemaphoreSecurity ^ semaphoreSecurity);" />
+      <MemberSignature Language="F#" Value="new System.Threading.Semaphore : int * int * string *  * System.Security.AccessControl.SemaphoreSecurity -&gt; System.Threading.Semaphore" Usage="new System.Threading.Semaphore (initialCount, maximumCount, name, createdNew, semaphoreSecurity)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="initialCount" Type="System.Int32" Index="0" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="maximumCount" Type="System.Int32" Index="1" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="name" Type="System.String" Index="2" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="createdNew" Type="System.Boolean" RefType="out" Index="3" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="semaphoreSecurity" Type="System.Security.AccessControl.SemaphoreSecurity" Index="4" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="initialCount">同時に満たされるセマフォの要求の初期数。</param>
+        <param name="maximumCount">同時に満たされるセマフォの要求の最大数。</param>
+        <param name="name">名前付きシステム セマフォ オブジェクトの名前。</param>
+        <param name="createdNew">このメソッドから制御が戻るときに、ローカル セマフォが作成された場合 (<paramref name="name" /> が <see langword="null" /> または空の文字列の場合)、または指定した名前付きシステム セマフォが作成された場合は <see langword="true" /> が格納されます。指定した名前付きシステム セマフォが既に存在する場合は <see langword="false" /> が格納されます。 このパラメーターは初期化せずに渡されます。</param>
+        <param name="semaphoreSecurity">名前付きシステム セマフォに適用するアクセス制御セキュリティを表す <see cref="T:System.Security.AccessControl.SemaphoreSecurity" /> オブジェクト。</param>
+        <summary>エントリ数の初期値と同時実行エントリの最大数を指定し、オプションでシステム セマフォ オブジェクトの名前を指定し、新しいシステム セマフォが作成されたかどうかを示す値を受け取る変数を指定し、システム セマフォのセキュリティ アクセス制御を指定して、<see cref="T:System.Threading.Semaphore" /> クラスの新しいインスタンスを初期化します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ このコンストラクターを使用して、名前付きシステムセマフォの作成時にアクセス制御セキュリティを適用し、他のコードがセマフォを制御できないようにします。  
+  
+ このコンストラクターは、 <xref:System.Threading.Semaphore>名前付きシステムセマフォを表すオブジェクトを初期化します。 同じ名前付きシステム<xref:System.Threading.Semaphore>セマフォを表す複数のオブジェクトを作成できます。  
+  
+ 名前付きシステムセマフォが存在しない場合は、指定されたアクセス制御セキュリティを使用して作成されます。 名前付きセマフォが存在する場合、指定されたアクセス制御セキュリティは無視されます。  
+  
+> [!NOTE]
+>  が現在のユーザーに対して一部の<xref:System.Threading.Semaphore>アクセス権を`semaphoreSecurity`拒否または許可しない場合でも、呼び出し元は、新しく作成されたオブジェクトを完全に制御できます。 ただし、コンストラクター <xref:System.Threading.Semaphore.OpenExisting%2A>またはメソッドを使用して<xref:System.Threading.Semaphore> 、現在のユーザーが同じ名前のセマフォを表す別のオブジェクトを取得しようとすると、Windows アクセス制御セキュリティが適用されます。  
+  
+ 名前付きシステムセマフォが存在しない場合は、と`initialCount` `maximumCount`で指定された初期カウントと最大カウントを使用して作成されます。 名前付きシステムセマフォが既に存在`initialCount` `maximumCount`し、使用されていない場合でも、無効な値によって例外が発生します。 `createdNew`パラメーターを使用して、システムセマフォがこのコンストラクターによって作成されたかどうかを確認します。  
+  
+ が`initialCount`より`createdNew` `maximumCount` <xref:System.Threading.WaitHandle.WaitOne%2A>小さい場合、 `initialCount`が`true`である場合、効果は、現在のスレッドが (負の) 時間を呼び出した場合と同じになります。 `maximumCount`  
+  
+ またはに`null`空の`name`文字列を指定すると、 <xref:System.Threading.Semaphore.%23ctor%28System.Int32%2CSystem.Int32%29>コンストラクターのオーバーロードを呼び出した場合と同様に、ローカルセマフォが作成されます。 この場合、 `createdNew`は常に`true`です。  
+  
+ 名前付きセマフォはオペレーティングシステム全体にわたって表示されるため、プロセスの境界を越えてリソースの使用量を調整するために使用できます。  
+  
+   
+  
+## Examples  
+ 次のコード例では、アクセス制御セキュリティを使用した名前付きセマフォのプロセス間の動作を示します。 この例では<xref:System.Threading.Semaphore.OpenExisting%28System.String%29> 、メソッドオーバーロードを使用して、名前付きセマフォが存在するかどうかをテストします。 セマフォが存在しない場合は、最大カウント2とアクセス制御セキュリティを使用して作成され、現在のユーザーがセマフォを使用する権限を拒否しますが、セマフォに対するアクセス許可の読み取りと変更の権限を付与します。 コンパイルされた例を2つのコマンドウィンドウから実行した場合、2番目のコピーでは、 <xref:System.Threading.Semaphore.OpenExisting%28System.String%29>メソッドの呼び出しでアクセス違反例外がスローされます。 例外がキャッチされ、この例では<xref:System.Threading.Semaphore.OpenExisting%28System.String%2CSystem.Security.AccessControl.SemaphoreRights%29>メソッドオーバーロードを使用して、アクセス許可の読み取りと変更に必要な権限を持つセマフォを開きます。  
+  
+ アクセス許可が変更されると、セマフォを入力して解放するために必要な権限を使用してセマフォが開かれます。 コンパイルされた例を3番目のコマンドウィンドウから実行すると、新しいアクセス許可を使用して実行されます。  
+  
+ [!code-cpp[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="initialCount" /> が <paramref name="maximumCount" /> より大きくなっています。  
+  
+または 
+ <paramref name="name" /> が 260 文字を超えています。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="maximumCount" /> が 1 未満です。  
+  
+- または - 
+ <paramref name="initialCount" /> が 0 未満です。</exception>
+        <exception cref="T:System.UnauthorizedAccessException">アクセス制御セキュリティを使用した名前付きセマフォが存在しており、ユーザーに <see cref="F:System.Security.AccessControl.SemaphoreRights.FullControl" /> がありません。</exception>
+        <exception cref="T:System.IO.IOException">Win32 エラーが発生しました。</exception>
+        <exception cref="T:System.Threading.WaitHandleCannotBeOpenedException">名前付きセマフォを作成できません。原因として、別の型の待機ハンドルに同じ名前が付けられていることが考えられます。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージコードを呼び出して名前付きシステムセマフォを作成する場合。 <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /> (関連する列挙体) セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />。</permission>
+        <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+        <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+      </Docs>
+    </Member>
+    <Member MemberName="GetAccessControl">
+      <MemberSignature Language="C#" Value="public System.Security.AccessControl.SemaphoreSecurity GetAccessControl ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Security.AccessControl.SemaphoreSecurity GetAccessControl() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.GetAccessControl" />
+      <MemberSignature Language="VB.NET" Value="Public Function GetAccessControl () As SemaphoreSecurity" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; System::Security::AccessControl::SemaphoreSecurity ^ GetAccessControl();" />
+      <MemberSignature Language="F#" Value="member this.GetAccessControl : unit -&gt; System.Security.AccessControl.SemaphoreSecurity" Usage="semaphore.GetAccessControl " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Security.AccessControl.SemaphoreSecurity</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>名前付きシステム セマフォのアクセス制御セキュリティを取得します。</summary>
+        <returns>名前付きシステム セマフォのアクセス制御セキュリティを表す <see cref="T:System.Security.AccessControl.SemaphoreSecurity" /> オブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Threading.Semaphore.GetAccessControl%2A> <xref:System.Security.AccessControl.AccessControlSections.Access?displayProperty=nameWithType>は、、 <xref:System.Security.AccessControl.AccessControlSections.Owner?displayProperty=nameWithType>、および <xref:System.Security.AccessControl.AccessControlSections.Group?displayProperty=nameWithType> の各フラグの組み合わせを使用して、アクセス許可を検索します (ビットごとの or 演算を使用します)。  
+  
+ ユーザーは、この<xref:System.Security.AccessControl.SemaphoreRights.ReadPermissions?displayProperty=nameWithType>メソッドを呼び出すための権限を持っている必要があり<xref:System.Security.AccessControl.SemaphoreRights.ReadPermissions?displayProperty=nameWithType>ます。また、セマフォが権限で開かれている必要があります。  
+  
+ ローカルセマフォでは、アクセス制御セキュリティは無関係です。 オブジェクトが名前付きシステムセマフォを表していない場合、このメソッド<xref:System.Security.AccessControl.SemaphoreSecurity>は、すべてのユーザーに対してすべての権限を付与するオブジェクトを返します。 <xref:System.Threading.Semaphore>  
+  
+   
+  
+## Examples  
+ 次のコード例では、アクセス制御セキュリティを使用した名前付きセマフォのプロセス間の動作を示します。 この例では<xref:System.Threading.Semaphore.OpenExisting%28System.String%29> 、メソッドオーバーロードを使用して、名前付きセマフォが存在するかどうかをテストします。  
+  
+ セマフォが存在しない場合は、最大カウント2とアクセス制御セキュリティを使用して作成され、現在のユーザーがセマフォを使用する権限を拒否します。ただし、セマフォに対するアクセス許可を読み取り、変更する権限を付与します。  
+  
+ コンパイルされた例を2つのコマンドウィンドウから実行した場合、2番目のコピーでは、 <xref:System.Threading.Semaphore.OpenExisting%28System.String%29>メソッドの呼び出しでアクセス違反例外がスローされます。 例外がキャッチされ、この例では<xref:System.Threading.Semaphore.OpenExisting%28System.String%2CSystem.Security.AccessControl.SemaphoreRights%29>メソッドオーバーロードを使用して、アクセス許可の読み取りと変更に必要な権限を持つセマフォを開きます。 システムセマフォのアクセス制御セキュリティは、 <xref:System.Threading.Semaphore.GetAccessControl%2A>メソッドを使用して取得されます。  
+  
+ アクセス許可が変更されると、セマフォを入力して解放するために必要な権限を使用してセマフォが開かれます。 コンパイルされた例を3番目のコマンドウィンドウから実行すると、新しいアクセス許可を使用して実行されます。  
+  
+ [!code-cpp[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.UnauthorizedAccessException">現在の <see cref="T:System.Threading.Semaphore" /> オブジェクトは名前付きシステム セマフォを表していますが、ユーザーに <see cref="F:System.Security.AccessControl.SemaphoreRights.ReadPermissions" /> 権限がありません。  
+  
+- または - 
+現在の <see cref="T:System.Threading.Semaphore" /> オブジェクトは名前付きシステム セマフォを表しており、<see cref="F:System.Security.AccessControl.SemaphoreRights.ReadPermissions" /> 権限で開かれませんでした。</exception>
+        <exception cref="T:System.NotSupportedException">Windows 98 または Windows Millennium Edition はサポートされていません。</exception>
+        <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+        <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="OpenExisting">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>既に存在する場合は、指定した名前付きセマフォを開きます。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="OpenExisting">
+      <MemberSignature Language="C#" Value="public static System.Threading.Semaphore OpenExisting (string name);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Semaphore OpenExisting(string name) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.OpenExisting(System.String)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function OpenExisting (name As String) As Semaphore" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Threading::Semaphore ^ OpenExisting(System::String ^ name);" />
+      <MemberSignature Language="F#" Value="static member OpenExisting : string -&gt; System.Threading.Semaphore" Usage="System.Threading.Semaphore.OpenExisting name" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Threading.Semaphore</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">開くシステム セマフォの名前。</param>
+        <summary>既に存在する場合は、指定した名前付きセマフォを開きます。</summary>
+        <returns>名前付きシステム セマフォを表すオブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ メソッド<xref:System.Threading.Semaphore.OpenExisting%2A>は、指定された名前付きセマフォを開こうとします。 システムセマフォが存在しない場合、このメソッドはシステムセマフォを作成するのではなく、例外をスローします。 システムセマフォがまだ存在しない場合に作成するには、パラメーターを<xref:System.Threading.Semaphore.%23ctor%2A> `name`持つコンストラクターのいずれかを使用します。  
+  
+ の同じ値を使用するこのメソッドの複数の`name`呼び出しでは、返される<xref:System.Threading.Semaphore>オブジェクトが同じ名前付きシステムセマフォを表す場合でも、必ずしも同じオブジェクトを返すとは限りません。  
+  
+ このメソッドのオーバーロードは、メソッドの<xref:System.Threading.Semaphore.OpenExisting%2A>オーバーロードを呼び出し、 <xref:System.Security.AccessControl.SemaphoreRights.Synchronize?displayProperty=nameWithType> and <xref:System.Security.AccessControl.SemaphoreRights.Modify?displayProperty=nameWithType>権限を指定して、ビットごとの or 演算を使用して組み合わせたものです。  
+  
+ フラグを指定すると、スレッドはセマフォに入ることができ<xref:System.Security.AccessControl.SemaphoreRights.Modify?displayProperty=nameWithType> 、フラグを指定すると、 <xref:System.Threading.Semaphore.Release%2A>スレッドはメソッドを呼び出すことができます。 <xref:System.Security.AccessControl.SemaphoreRights.Synchronize?displayProperty=nameWithType>  
+  
+   
+  
+## Examples  
+ 次のコード例では、アクセス制御セキュリティを使用した名前付きセマフォのプロセス間の動作を示します。 この例では<xref:System.Threading.Semaphore.OpenExisting%28System.String%29> 、メソッドオーバーロードを使用して、名前付きセマフォが存在するかどうかをテストします。  
+  
+ セマフォが存在しない場合は、最大カウント2とアクセス制御セキュリティを使用して作成されます。これにより、現在のユーザーがセマフォを使用する権限を拒否しますが、セマフォに対するアクセス許可の読み取りと変更の権限が付与されます。  
+  
+ コンパイルされた例を2つのコマンドウィンドウから実行した場合、2番目のコピーでは、 <xref:System.Threading.Semaphore.OpenExisting%28System.String%29>メソッドオーバーロードの呼び出しでアクセス違反例外がスローされます。 例外がキャッチされ、この例では<xref:System.Threading.Semaphore.OpenExisting%28System.String%2CSystem.Security.AccessControl.SemaphoreRights%29>メソッドオーバーロードを使用して、アクセス許可の読み取りと変更に必要な権限を持つセマフォを開きます。  
+  
+ アクセス許可が変更されると、セマフォを入力および解放するために必要な権限を使用してセマフォが開かれます。 コンパイルされた例を3番目のコマンドウィンドウから実行すると、新しいアクセス許可を使用して実行されます。  
+  
+ [!code-cpp[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="name" /> が空の文字列です。  
+  
+- または - 
+ <paramref name="name" /> が 260 文字を超えています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="name" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.Threading.WaitHandleCannotBeOpenedException">名前付きセマフォが存在しません。</exception>
+        <exception cref="T:System.IO.IOException">Win32 エラーが発生しました。</exception>
+        <exception cref="T:System.UnauthorizedAccessException">名前付きセマフォは存在しますが、それを使用するために必要なセキュリティ アクセスがユーザーにありません。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージコードを呼び出して名前付きシステムセマフォを開く場合。 <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /> (関連する列挙体)  
+  
+セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />。</permission>
+        <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+        <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+      </Docs>
+    </Member>
+    <Member MemberName="OpenExisting">
+      <MemberSignature Language="C#" Value="public static System.Threading.Semaphore OpenExisting (string name, System.Security.AccessControl.SemaphoreRights rights);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Semaphore OpenExisting(string name, valuetype System.Security.AccessControl.SemaphoreRights rights) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.OpenExisting(System.String,System.Security.AccessControl.SemaphoreRights)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function OpenExisting (name As String, rights As SemaphoreRights) As Semaphore" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static System::Threading::Semaphore ^ OpenExisting(System::String ^ name, System::Security::AccessControl::SemaphoreRights rights);" />
+      <MemberSignature Language="F#" Value="static member OpenExisting : string * System.Security.AccessControl.SemaphoreRights -&gt; System.Threading.Semaphore" Usage="System.Threading.Semaphore.OpenExisting (name, rights)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Threading.Semaphore</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" Index="0" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="rights" Type="System.Security.AccessControl.SemaphoreRights" Index="1" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="name">開くシステム セマフォの名前。</param>
+        <param name="rights">必要なセキュリティ アクセス権を表す列挙値のビットごとの組み合わせ。</param>
+        <summary>既に存在する場合は、必要なセキュリティ アクセスで指定した名前付きセマフォを開きます。</summary>
+        <returns>名前付きシステム セマフォを表すオブジェクト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ パラメーターには、スレッド<xref:System.Security.AccessControl.SemaphoreRights.Synchronize?displayProperty=nameWithType>がセマフォに入ることを許可するフラグと<xref:System.Security.AccessControl.SemaphoreRights.Modify?displayProperty=nameWithType> 、スレッドが<xref:System.Threading.Semaphore.Release%2A>メソッドを呼び出すことを許可するフラグを含める必要があります。 `rights`  
+  
+ メソッド<xref:System.Threading.Semaphore.OpenExisting%2A>は、既存の名前付きセマフォを開こうとします。 システムセマフォが存在しない場合、このメソッドはシステムセマフォを作成するのではなく、例外をスローします。 システムセマフォがまだ存在しない場合に作成するには、パラメーターを<xref:System.Threading.Semaphore.%23ctor%2A> `name`持つコンストラクターのいずれかを使用します。  
+  
+ の同じ値を使用するこのメソッドの複数の`name`呼び出しでは、返される<xref:System.Threading.Semaphore>オブジェクトが同じ名前付きシステムセマフォを表す場合でも、必ずしも同じオブジェクトを返すとは限りません。  
+  
+   
+  
+## Examples  
+ 次のコード例では、アクセス制御セキュリティを使用した名前付きセマフォのプロセス間の動作を示します。 この例では<xref:System.Threading.Semaphore.OpenExisting%28System.String%29> 、メソッドオーバーロードを使用して、名前付きセマフォが存在するかどうかをテストします。  
+  
+ セマフォが存在しない場合は、最大カウント2とアクセス制御セキュリティを使用して作成され、現在のユーザーがセマフォを使用する権限を拒否します。ただし、セマフォに対するアクセス許可を読み取り、変更する権限を付与します。  
+  
+ コンパイルされた例を2つのコマンドウィンドウから実行した場合、2番目のコピーでは、 <xref:System.Threading.Semaphore.OpenExisting%28System.String%29>メソッドの呼び出しでアクセス違反例外がスローされます。 例外がキャッチされ、この例では<xref:System.Threading.Semaphore.OpenExisting%28System.String%2CSystem.Security.AccessControl.SemaphoreRights%29>メソッドオーバーロードを使用して、アクセス許可の読み取りと変更に必要な権限を持つセマフォを開きます。  
+  
+ アクセス許可が変更されると、セマフォを入力および解放するために必要な権限を使用してセマフォが開かれます。 コンパイルされた例を3番目のコマンドウィンドウから実行すると、新しいアクセス許可を使用して実行されます。  
+  
+ [!code-cpp[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="name" /> が空の文字列です。  
+  
+- または - 
+ <paramref name="name" /> が 260 文字を超えています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="name" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.Threading.WaitHandleCannotBeOpenedException">名前付きセマフォが存在しません。</exception>
+        <exception cref="T:System.IO.IOException">Win32 エラーが発生しました。</exception>
+        <exception cref="T:System.UnauthorizedAccessException">名前付きセマフォは存在しますが、必要なセキュリティ アクセス権がユーザーにありません。</exception>
+        <permission cref="T:System.Security.Permissions.SecurityPermission">アンマネージコードを呼び出して名前付きシステムセマフォを作成する場合。 <see cref="F:System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode" /> (関連する列挙体)  
+  
+セキュリティアクション: <see cref="F:System.Security.Permissions.SecurityAction.LinkDemand" />。</permission>
+        <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+        <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="Release">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>セマフォから出ます。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="Release">
+      <MemberSignature Language="C#" Value="public int Release ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance int32 Release() cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.Release" />
+      <MemberSignature Language="VB.NET" Value="Public Function Release () As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; int Release();" />
+      <MemberSignature Language="F#" Value="member this.Release : unit -&gt; int" Usage="semaphore.Release " />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netstandard-2.0;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8;netstandard-2.1">
+          <AttributeName>System.Runtime.ConstrainedExecution.PrePrepareMethod</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="netframework-4.0">
+          <AttributeName>System.Runtime.TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>セマフォから出て、前のカウントを返します。</summary>
+        <returns><see cref="Overload:System.Threading.Semaphore.Release" /> メソッドが呼び出される前のセマフォのカウント。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ スレッドは通常、 <xref:System.Threading.WaitHandle.WaitOne%2A>メソッドを使用してセマフォに入ります。通常、スレッドはこのメソッドオーバーロードを使用して終了します。  
+  
+ <xref:System.Threading.SemaphoreFullException>がメソッド <xref:System.Threading.Semaphore.Release%2A> によってスローされた場合、必ずしも呼び出し元のスレッドに問題があるとは限りません。 別のスレッドでプログラミングエラーが発生したため、スレッドは、入力した数よりも多くのスレッドを終了している可能性があります。  
+  
+ 現在<xref:System.Threading.Semaphore>のオブジェクトが名前付きシステムセマフォを表している場合、 <xref:System.Security.AccessControl.SemaphoreRights.Modify?displayProperty=nameWithType>ユーザーは権限を持っている必要が<xref:System.Security.AccessControl.SemaphoreRights.Modify?displayProperty=nameWithType>あり、セマフォは権限で開かれている必要があります。  
+  
+   
+  
+## Examples  
+ 次のコード例では、最大数が3で、初期カウントが0のセマフォを作成します。 この例では、5つのスレッドを開始します。これは、セマフォを待機しています。 メインスレッドは、 <xref:System.Threading.Semaphore.Release%28System.Int32%29>メソッドオーバーロードを使用してセマフォ数を最大値に増やし、3つのスレッドがセマフォに入ることができるようにします。 各スレッドは、 <xref:System.Threading.Thread.Sleep%2A?displayProperty=nameWithType>メソッドを使用して1秒間待機し、作業をシミュレートし<xref:System.Threading.Semaphore.Release>た後、メソッドオーバーロードを呼び出してセマフォを解放します。  
+  
+ セマフォが解放されるたびに、前のセマフォ数が表示されます。 コンソールメッセージは、セマフォの使用を追跡します。 シミュレートされた作業間隔は、出力を読みやすくするために、スレッドごとに若干増加します。  
+  
+ [!code-cpp[System.Threading.Semaphore2#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore2/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore2#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore2/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore2#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore2/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.Threading.SemaphoreFullException">セマフォのカウントは既に最大値です。</exception>
+        <exception cref="T:System.IO.IOException">名前付きセマフォで Win32 エラーが発生しました。</exception>
+        <exception cref="T:System.UnauthorizedAccessException">現在のセマフォは名前付きシステム セマフォを表していますが、ユーザーに <see cref="F:System.Security.AccessControl.SemaphoreRights.Modify" /> がありません。  
+  
+- または - 
+現在のセマフォは名前付きシステム セマフォを表していますが、<see cref="F:System.Security.AccessControl.SemaphoreRights.Modify" /> で開かれませんでした。</exception>
+        <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+        <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+      </Docs>
+    </Member>
+    <Member MemberName="Release">
+      <MemberSignature Language="C#" Value="public int Release (int releaseCount);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance int32 Release(int32 releaseCount) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.Release(System.Int32)" />
+      <MemberSignature Language="VB.NET" Value="Public Function Release (releaseCount As Integer) As Integer" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; int Release(int releaseCount);" />
+      <MemberSignature Language="F#" Value="member this.Release : int -&gt; int" Usage="semaphore.Release releaseCount" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Attributes>
+        <Attribute FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0;netframework-4.8">
+          <AttributeName>System.Runtime.ConstrainedExecution.ReliabilityContract(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)</AttributeName>
+        </Attribute>
+      </Attributes>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="releaseCount" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="releaseCount">セマフォから出る回数。</param>
+        <summary>指定した回数だけセマフォから出て、前のカウントを返します。</summary>
+        <returns><see cref="Overload:System.Threading.Semaphore.Release" /> メソッドが呼び出される前のセマフォのカウント。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ スレッドがセマフォに複数回入力した場合、このメソッドオーバーロードを使用すると、1回の呼び出しでセマフォ全体のカウントを復元できます。  
+  
+ <xref:System.Threading.SemaphoreFullException>がメソッド <xref:System.Threading.Semaphore.Release%2A> によってスローされた場合、必ずしも呼び出し元のスレッドに問題があるとは限りません。 別のスレッドでプログラミングエラーが発生したため、スレッドは、入力した数よりも多くのスレッドを終了している可能性があります。  
+  
+ 現在<xref:System.Threading.Semaphore>のオブジェクトが名前付きシステムセマフォを表している場合、 <xref:System.Security.AccessControl.SemaphoreRights.Modify?displayProperty=nameWithType>ユーザーは権限を持っている必要が<xref:System.Security.AccessControl.SemaphoreRights.Modify?displayProperty=nameWithType>あり、セマフォは権限で開かれている必要があります。  
+  
+   
+  
+## Examples  
+ 次のコード例では、最大数が3で、初期カウントが0のセマフォを作成します。 この例では、5つのスレッドを開始します。これは、セマフォを待機しています。 メインスレッドは、 <xref:System.Threading.Semaphore.Release%28System.Int32%29>メソッドオーバーロードを使用してセマフォ数を最大値に増やし、3つのスレッドがセマフォに入ることができるようにします。 各スレッドは、 <xref:System.Threading.Thread.Sleep%2A?displayProperty=nameWithType>メソッドを使用して1秒間待機し、作業をシミュレートし<xref:System.Threading.Semaphore.Release>た後、メソッドオーバーロードを呼び出してセマフォを解放します。  
+  
+ セマフォが解放されるたびに、前のセマフォ数が表示されます。 コンソールメッセージは、セマフォの使用を追跡します。 シミュレートされた作業間隔は、出力を読みやすくするために、スレッドごとに若干増加します。  
+  
+ [!code-cpp[System.Threading.Semaphore2#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore2/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore2#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore2/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore2#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore2/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="releaseCount" /> が 1 未満です。</exception>
+        <exception cref="T:System.Threading.SemaphoreFullException">セマフォのカウントは既に最大値です。</exception>
+        <exception cref="T:System.IO.IOException">名前付きセマフォで Win32 エラーが発生しました。</exception>
+        <exception cref="T:System.UnauthorizedAccessException">現在のセマフォは名前付きシステム セマフォを表していますが、ユーザーに <see cref="F:System.Security.AccessControl.SemaphoreRights.Modify" /> 権限がありません。  
+  
+- または - 
+現在のセマフォは名前付きシステム セマフォを表していますが、<see cref="F:System.Security.AccessControl.SemaphoreRights.Modify" /> 権限で開かれませんでした。</exception>
+        <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+        <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+      </Docs>
+    </Member>
+    <Member MemberName="SetAccessControl">
+      <MemberSignature Language="C#" Value="public void SetAccessControl (System.Security.AccessControl.SemaphoreSecurity semaphoreSecurity);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance void SetAccessControl(class System.Security.AccessControl.SemaphoreSecurity semaphoreSecurity) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.SetAccessControl(System.Security.AccessControl.SemaphoreSecurity)" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; void SetAccessControl(System::Security::AccessControl::SemaphoreSecurity ^ semaphoreSecurity);" />
+      <MemberSignature Language="F#" Value="member this.SetAccessControl : System.Security.AccessControl.SemaphoreSecurity -&gt; unit" Usage="semaphore.SetAccessControl semaphoreSecurity" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="semaphoreSecurity" Type="System.Security.AccessControl.SemaphoreSecurity" Index="0" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="semaphoreSecurity">名前付きシステム セマフォに適用するアクセス制御セキュリティを表す <see cref="T:System.Security.AccessControl.SemaphoreSecurity" /> オブジェクト。</param>
+        <summary>名前付きシステム セマフォのアクセス制御セキュリティを設定します。</summary>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ アクセス制御セキュリティは、名前付きシステム<xref:System.Threading.Semaphore>セマフォを表すオブジェクトに対してのみ設定できます。  
+  
+ ユーザーは、この<xref:System.Security.AccessControl.SemaphoreRights.ChangePermissions?displayProperty=nameWithType>メソッドを呼び出すための権限を持っている必要があり<xref:System.Security.AccessControl.SemaphoreRights.ChangePermissions?displayProperty=nameWithType>ます。また、セマフォが権限で開かれている必要があります。  
+  
+   
+  
+## Examples  
+ 次のコード例では、アクセス制御セキュリティを使用した名前付きセマフォのプロセス間の動作を示します。 この例では<xref:System.Threading.Semaphore.OpenExisting%28System.String%29> 、メソッドオーバーロードを使用して、名前付きセマフォが存在するかどうかをテストします。  
+  
+ セマフォが存在しない場合は、最大カウント2とアクセス制御セキュリティを使用して作成され、現在のユーザーがセマフォを使用する権限を拒否しますが、セマフォに対するアクセス許可の読み取りと変更の権限を付与します。  
+  
+ コンパイルされた例を2つのコマンドウィンドウから実行した場合、2番目のコピーでは、 <xref:System.Threading.Semaphore.OpenExisting%28System.String%29>メソッドの呼び出しでアクセス違反例外がスローされます。 例外がキャッチされ、この例では<xref:System.Threading.Semaphore.OpenExisting%28System.String%2CSystem.Security.AccessControl.SemaphoreRights%29>メソッドオーバーロードを使用して、アクセス許可の読み取りと変更に必要な権限を持つセマフォを開きます。  
+  
+ アクセス許可が変更された後<xref:System.Threading.Semaphore.SetAccessControl%2A> 、メソッドを使用して、セマフォを入力および解放するために必要な権限を使用して開きます。 コンパイルされた例を3番目のコマンドウィンドウから実行すると、新しいアクセス許可を使用して実行されます。  
+  
+ [!code-cpp[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/CPP/source.cpp#1)]
+ [!code-csharp[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/CS/source.cs#1)]
+ [!code-vb[System.Threading.Semaphore.ctor named 5a#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.Threading.Semaphore.ctor named 5a/VB/source.vb#1)]  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="semaphoreSecurity" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.UnauthorizedAccessException">ユーザーに <see cref="F:System.Security.AccessControl.SemaphoreRights.ChangePermissions" /> 権限がありません。  
+  
+- または - 
+セマフォは <see cref="F:System.Security.AccessControl.SemaphoreRights.ChangePermissions" /> 権限で開かれませんでした。</exception>
+        <exception cref="T:System.NotSupportedException">現在の <see cref="T:System.Threading.Semaphore" /> オブジェクトは名前付きシステム セマフォを表していません。</exception>
+        <related type="Article" href="~/docs/standard/threading/index.md">マネージド スレッド処理</related>
+        <related type="Article" href="~/docs/standard/threading/semaphore-and-semaphoreslim.md">Semaphore</related>
+      </Docs>
+    </Member>
+    <MemberGroup MemberName="TryOpenExisting">
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Docs>
+        <summary>既に存在する場合は、指定した名前付きセマフォを開き操作が成功したかどうかを示す値を返します。</summary>
+      </Docs>
+    </MemberGroup>
+    <Member MemberName="TryOpenExisting">
+      <MemberSignature Language="C#" Value="public static bool TryOpenExisting (string name, out System.Threading.Semaphore result);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool TryOpenExisting(string name, [out] class System.Threading.Semaphore&amp; result) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.TryOpenExisting(System.String,System.Threading.Semaphore@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryOpenExisting (name As String, ByRef result As Semaphore) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool TryOpenExisting(System::String ^ name, [Runtime::InteropServices::Out] System::Threading::Semaphore ^ % result);" />
+      <MemberSignature Language="F#" Value="static member TryOpenExisting : string *  -&gt; bool" Usage="System.Threading.Semaphore.TryOpenExisting (name, result)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+        <AssemblyVersion>4.0.10.0</AssemblyVersion>
+        <AssemblyVersion>4.1.0.0</AssemblyVersion>
+        <AssemblyVersion>4.1.1.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" Index="0" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="result" Type="System.Threading.Semaphore" RefType="out" Index="1" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="name">開くシステム セマフォの名前。</param>
+        <param name="result">このメソッドから制御が戻るときに、呼び出しに成功した場合は名前付きセマフォを表す <see cref="T:System.Threading.Semaphore" /> オブジェクトが格納されます。呼び出しに失敗した場合は <see langword="null" /> が格納されます。 このパラメーターは初期化前として処理されます。</param>
+        <summary>既に存在する場合は、指定した名前付きセマフォを開き操作が成功したかどうかを示す値を返します。</summary>
+        <returns>名前付きのセマフォが正常に開かれた場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 名前付きセマフォが存在しない場合、このメソッドはそれを作成しません。 システムセマフォがまだ存在しない場合に作成するには、パラメーターを<xref:System.Threading.Semaphore.%23ctor%2A> `name`持つコンストラクターのいずれかを使用します。  
+  
+ 名前付きセマフォが存在するかどうかが不明な場合は、 <xref:System.Threading.Semaphore.OpenExisting%28System.String%29>メソッドオーバーロードではなく、このメソッドオーバーロードを使用します。これにより、セマフォが存在しない場合に例外がスローされます。  
+  
+ このメソッドのオーバーロードは、メソッドの<xref:System.Threading.Semaphore.TryOpenExisting%2A>オーバーロードを呼び出し、 <xref:System.Security.AccessControl.SemaphoreRights.Synchronize?displayProperty=nameWithType> and <xref:System.Security.AccessControl.SemaphoreRights.Modify?displayProperty=nameWithType>権限を指定して、ビットごとの or 演算を使用して組み合わせたものです。 フラグを指定すると、スレッドはセマフォに入ることができ<xref:System.Security.AccessControl.SemaphoreRights.Modify?displayProperty=nameWithType> 、フラグを指定すると、 <xref:System.Threading.Semaphore.Release%2A>スレッドはメソッドを呼び出すことができます。 <xref:System.Security.AccessControl.SemaphoreRights.Synchronize?displayProperty=nameWithType>  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="name" /> が空の文字列です。  
+  
+- または - 
+ <paramref name="name" /> が 260 文字を超えています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="name" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.IO.IOException">Win32 エラーが発生しました。</exception>
+        <exception cref="T:System.UnauthorizedAccessException">名前付きセマフォは存在しますが、それを使用するために必要なセキュリティ アクセスがユーザーにありません。</exception>
+      </Docs>
+    </Member>
+    <Member MemberName="TryOpenExisting">
+      <MemberSignature Language="C#" Value="public static bool TryOpenExisting (string name, System.Security.AccessControl.SemaphoreRights rights, out System.Threading.Semaphore result);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool TryOpenExisting(string name, valuetype System.Security.AccessControl.SemaphoreRights rights, [out] class System.Threading.Semaphore&amp; result) cil managed" />
+      <MemberSignature Language="DocId" Value="M:System.Threading.Semaphore.TryOpenExisting(System.String,System.Security.AccessControl.SemaphoreRights,System.Threading.Semaphore@)" />
+      <MemberSignature Language="VB.NET" Value="Public Shared Function TryOpenExisting (name As String, rights As SemaphoreRights, ByRef result As Semaphore) As Boolean" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; static bool TryOpenExisting(System::String ^ name, System::Security::AccessControl::SemaphoreRights rights, [Runtime::InteropServices::Out] System::Threading::Semaphore ^ % result);" />
+      <MemberSignature Language="F#" Value="static member TryOpenExisting : string * System.Security.AccessControl.SemaphoreRights *  -&gt; bool" Usage="System.Threading.Semaphore.TryOpenExisting (name, rights, result)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>System</AssemblyName>
+        <AssemblyVersion>2.0.5.0</AssemblyVersion>
+        <AssemblyVersion>4.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>System.Threading</AssemblyName>
+      </AssemblyInfo>
+      <AssemblyInfo>
+        <AssemblyName>netstandard</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" Index="0" FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="rights" Type="System.Security.AccessControl.SemaphoreRights" Index="1" FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+        <Parameter Name="result" Type="System.Threading.Semaphore" RefType="out" Index="2" FrameworkAlternate="netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      </Parameters>
+      <Docs>
+        <param name="name">開くシステム セマフォの名前。</param>
+        <param name="rights">必要なセキュリティ アクセス権を表す列挙値のビットごとの組み合わせ。</param>
+        <param name="result">このメソッドから制御が戻るときに、呼び出しに成功した場合は名前付きセマフォを表す <see cref="T:System.Threading.Semaphore" /> オブジェクトが格納されます。呼び出しに失敗した場合は <see langword="null" /> が格納されます。 このパラメーターは初期化前として処理されます。</param>
+        <summary>既に存在する場合は、必要なセキュリティ アクセスを使って指定した名前付きセマフォを開き、操作が成功したかどうかを示す値を返します。</summary>
+        <returns>名前付きのセマフォが正常に開かれた場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+ 名前付きセマフォが存在しない場合、このメソッドはそれを作成しません。 システムセマフォがまだ存在しない場合に作成するには、パラメーターを<xref:System.Threading.Semaphore.%23ctor%2A> `name`持つコンストラクターのいずれかを使用します。  
+  
+ 名前付きセマフォが存在するかどうかが不明な場合は、 <xref:System.Threading.Semaphore.OpenExisting%28System.String%2CSystem.Security.AccessControl.SemaphoreRights%29>メソッドオーバーロードではなく、このメソッドオーバーロードを使用します。これにより、セマフォが存在しない場合に例外がスローされます。  
+  
+ パラメーターには、スレッド<xref:System.Security.AccessControl.SemaphoreRights.Synchronize?displayProperty=nameWithType>がセマフォに入ることを許可するフラグと<xref:System.Security.AccessControl.SemaphoreRights.Modify?displayProperty=nameWithType> 、スレッドが<xref:System.Threading.Semaphore.Release%2A>メソッドを呼び出すことを許可するフラグを含める必要があります。 `rights`  
+  
+ の同じ値を使用するこのメソッドの複数の`name`呼び出しでは、返される<xref:System.Threading.Semaphore>オブジェクトが同じ名前付きシステムセマフォを表す場合でも、必ずしも同じオブジェクトを返すとは限りません。  
+  
+ ]]></format>
+        </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="name" /> が空の文字列です。  
+  
+または 
+ <paramref name="name" /> が 260 文字を超えています。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="name" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.IO.IOException">Win32 エラーが発生しました。</exception>
+        <exception cref="T:System.UnauthorizedAccessException">名前付きセマフォは存在しますが、それを使用するために必要なセキュリティ アクセスがユーザーにありません。</exception>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
