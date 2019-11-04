@@ -1,5 +1,5 @@
 <Type Name="Exception" FullName="System.Exception">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="982c48cb4df4baf1eb52eafe07c62c028e3863a6" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70400788" /></Metadata><TypeSignature Language="C#" Value="public class Exception : System.Runtime.InteropServices._Exception, System.Runtime.Serialization.ISerializable" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="1cbaac51e2d67a2a333fc68e2a9e671bf8377ab9" /><Meta Name="ms.sourcegitcommit" Value="0084afad1b3b1cb2c8ad2c142ae3597d08bad4a7" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="10/31/2019" /><Meta Name="ms.locfileid" Value="73400008" /></Metadata><TypeSignature Language="C#" Value="public class Exception : System.Runtime.InteropServices._Exception, System.Runtime.Serialization.ISerializable" />
   <TypeSignature Language="ILAsm" Value=".class public sequential ansi serializable beforefieldinit Exception extends System.Object implements class System.Runtime.InteropServices._Exception, class System.Runtime.Serialization.ISerializable" />
   <TypeSignature Language="DocId" Value="T:System.Exception" />
   <TypeSignature Language="VB.NET" Value="Public Class Exception&#xA;Implements _Exception, ISerializable" />
@@ -65,11 +65,11 @@
  このセクションの内容:  
   
  [エラーと例外](#Errors)   
- [Try ブロックと catch ブロック](#TryCatch)   
+ [Try/catch ブロック](#TryCatch)   
  [例外の種類の機能](#Features)   
  [Exception クラスのプロパティ](#Properties)   
  [パフォーマンスに関する考慮事項](#Performance)   
- [例外を再スローする](#Rethrow)   
+ [例外を再スロー](#Rethrow)   
  [標準例外の選択](#Standard)   
  [カスタム例外の実装](#Custom)  
   
@@ -77,57 +77,57 @@
 ## <a name="errors-and-exceptions"></a>エラーと例外  
  実行時エラーは、さまざまな理由で発生する可能性があります。 ただし、すべてのエラーをコード内で例外として処理する必要はありません。 ここでは、実行時に発生する可能性があるエラーのカテゴリと、それらに対処するための適切な方法を示します。  
   
--   **使用エラー。** 使用エラーは、例外が発生する可能性があるプログラムロジックのエラーを表します。 ただし、エラーは例外処理ではなく、問題のあるコードを変更することによって対処する必要があります。 たとえば、次の例の<xref:System.Object.Equals%28System.Object%29?displayProperty=nameWithType>メソッドのオーバーライドは、 `obj`引数が常に null 以外である必要があることを前提としています。  
+-   **使用エラー。** 使用エラーは、例外が発生する可能性があるプログラムロジックのエラーを表します。 ただし、エラーは例外処理ではなく、問題のあるコードを変更することによって対処する必要があります。 たとえば、次の例の <xref:System.Object.Equals%28System.Object%29?displayProperty=nameWithType> メソッドのオーバーライドは、`obj` 引数が常に null 以外である必要があることを前提としています。  
   
      [!code-csharp[System.Exception.Class#4](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.class/cs/usageerrors1.cs#4)]
      [!code-vb[System.Exception.Class#4](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.exception.class/vb/usageerrors1.vb#4)]  
   
-     この<xref:System.NullReferenceException>例外は、が`obj` `null`である場合に、 <xref:System.Object.Equals%2A?displayProperty=nameWithType>オーバーライドを呼び出してから再コンパイルする前に、明示的に null をテストするようにソースコードを変更することによって、結果を取り除くことができます。 次の例には、引数を`null`処理する修正済みのソースコードが含まれています。  
+     `obj` が `null` 場合に結果として生成される <xref:System.NullReferenceException> 例外は、<xref:System.Object.Equals%2A?displayProperty=nameWithType> のオーバーライドを呼び出して再コンパイルする前に、null を明示的にテストするようにソースコードを変更することで排除できます。 次の例には、`null` の引数を処理する、修正されたソースコードが含まれています。  
   
      [!code-csharp[System.Exception.Class#5](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.class/cs/usageerrors2.cs#5)]
      [!code-vb[System.Exception.Class#5](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.exception.class/vb/usageerrors2.vb#5)]  
   
-     使用エラーに対して例外処理を使用する代わりに、 <xref:System.Diagnostics.Debug.Assert%2A?displayProperty=nameWithType>メソッドを使用してデバッグビルドの使用エラーを<xref:System.Diagnostics.Trace.Assert%2A?displayProperty=nameWithType>識別し、メソッドを使用してデバッグビルドとリリースビルドの両方で使用エラーを識別することができます。 詳細については、「[マネージド コードのアサーション](/visualstudio/debugger/assertions-in-managed-code)」を参照してください。  
+     使用エラーに対して例外処理を使用する代わりに、<xref:System.Diagnostics.Debug.Assert%2A?displayProperty=nameWithType> メソッドを使用してデバッグビルドの使用エラーを識別し、<xref:System.Diagnostics.Trace.Assert%2A?displayProperty=nameWithType> メソッドを使用してデバッグビルドとリリースビルドの両方で使用エラーを識別できます。 詳細については、「[マネージド コードのアサーション](/visualstudio/debugger/assertions-in-managed-code)」を参照してください。  
   
 -   **プログラムエラーです。** プログラムエラーは、バグのないコードを記述することによって必ずしも回避できないランタイムエラーです。  
   
-     場合によっては、プログラムエラーによって予期されるエラー条件またはルーチンエラーが反映されることがあります。 この場合、プログラムエラーに対処するために例外処理を使用せずに、操作を再試行することができます。 たとえば、ユーザーが特定の形式で日付を入力することが想定されている場合、 <xref:System.DateTime.TryParseExact%2A?displayProperty=nameWithType>メソッドを呼び出すことで日付文字列を解析できます。このメソッドは、解析操作が成功<xref:System.Boolean>  <xref:System.DateTime.ParseExact%2A?displayProperty=nameWithType> したかどうかを示す値を返します。メソッド。日付文字列を<xref:System.FormatException> <xref:System.DateTime>値に変換できない場合に例外をスローします。 同様に、存在しないファイルを開こうとした場合は、最初に<xref:System.IO.File.Exists%2A?displayProperty=nameWithType>メソッドを呼び出して、ファイルが存在するかどうかを確認し、存在しない場合は、作成するかどうかを確認するメッセージをユーザーに表示することができます。  
+     場合によっては、プログラムエラーによって予期されるエラー条件またはルーチンエラーが反映されることがあります。 この場合、プログラムエラーに対処するために例外処理を使用せずに、操作を再試行することができます。 たとえば、ユーザーが特定の形式で日付を入力することが想定されている場合、<xref:System.DateTime.TryParseExact%2A?displayProperty=nameWithType> メソッドを呼び出すことによって日付文字列を解析できます。このメソッドは、<xref:System.DateTime.ParseExact%2A?displayProperty=nameWithType> メソッドを使用する代わりに、解析操作が成功したかどうかを示す <xref:System.Boolean> 値を返します。日付文字列を <xref:System.DateTime> 値に変換できない場合に <xref:System.FormatException> 例外をスローします。 同様に、存在しないファイルを開こうとした場合は、最初に <xref:System.IO.File.Exists%2A?displayProperty=nameWithType> メソッドを呼び出して、ファイルが存在するかどうかを確認し、存在しない場合は、ユーザーに作成を希望するかどうかを確認するメッセージを表示することができます。  
   
-     それ以外の場合、プログラムエラーには、コードで処理できる予期しないエラー状態が反映されます。 たとえば、ファイルが存在することを確認した場合でも、ファイルを開く前に削除するか、破損している可能性があります。 この場合、オブジェクトを<xref:System.IO.StreamReader>インスタンス化するか、 <xref:System.IO.File.Open%2A>メソッドを呼び出すことによってファイルを<xref:System.IO.FileNotFoundException>開こうとすると、例外がスローされる可能性があります。 このような場合は、例外処理を使用してエラーから復旧する必要があります。  
+     それ以外の場合、プログラムエラーには、コードで処理できる予期しないエラー状態が反映されます。 たとえば、ファイルが存在することを確認した場合でも、ファイルを開く前に削除するか、破損している可能性があります。 この場合、<xref:System.IO.StreamReader> オブジェクトをインスタンス化するか、<xref:System.IO.File.Open%2A> メソッドを呼び出すことによってファイルを開こうとすると、<xref:System.IO.FileNotFoundException> 例外がスローされる可能性があります。 このような場合は、例外処理を使用してエラーから復旧する必要があります。  
   
--   **システムエラー。** システム障害は、プログラムによって意味のない方法で処理できない実行時エラーです。 たとえば、共通言語ランタイムが追加の<xref:System.OutOfMemoryException>メモリを割り当てられない場合、どのメソッドでも例外がスローされる可能性があります。 通常、システム障害は例外処理を使用しても処理されません。 代わりに、などのイベント<xref:System.AppDomain.UnhandledException?displayProperty=nameWithType>を使用し、メソッドを<xref:System.Environment.FailFast%2A?displayProperty=nameWithType>呼び出して例外情報をログに記録し、アプリケーションが終了する前にエラーをユーザーに通知することができます。  
+-   **システムエラー。** システム障害は、プログラムによって意味のない方法で処理できない実行時エラーです。 たとえば、共通言語ランタイムが追加のメモリを割り当てられない場合、どのメソッドでも <xref:System.OutOfMemoryException> 例外がスローされる可能性があります。 通常、システム障害は例外処理を使用しても処理されません。 代わりに、<xref:System.AppDomain.UnhandledException?displayProperty=nameWithType> などのイベントを使用して、<xref:System.Environment.FailFast%2A?displayProperty=nameWithType> メソッドを呼び出して例外情報をログに記録し、アプリケーションが終了する前にエラーをユーザーに通知することができます。  
   
 <a name="TryCatch"></a>   
 ## <a name="trycatch-blocks"></a>Try ブロックと catch ブロック  
- 共通言語ランタイムは、例外をオブジェクトとして表現し、プログラムコードと例外処理コードをブロックおよび`try` `catch`ブロックに分離することに基づいて、例外処理モデルを提供します。 1つまたは複数`catch`のブロックがあり、それぞれが特定の種類の例外を処理するように設計されているか、別のブロックよりも具体的な例外をキャッチするように設計されているブロックがあります。  
+ 共通言語ランタイムは、例外をオブジェクトとして表現し、プログラムコードと例外処理コードを `try` ブロックと `catch` ブロックに分離することに基づいて、例外処理モデルを提供します。 1つまたは複数の `catch` ブロックがあり、それぞれが特定の種類の例外を処理するように設計されています。または、別のブロックよりも具体的な例外をキャッチするように設計された1つのブロックを指定できます。  
   
- アプリケーションコードのブロックの実行中に発生した例外をアプリケーションが処理する場合は、コードを`try`ステートメント内に配置し、 `try`ブロックと呼ばれる必要があります。 `try`ブロックによってスローされた例外を処理するアプリケーション`catch`コードは、 `catch`ステートメント内に配置され、ブロックと呼ばれます。 0個以上`catch`のブロックが`try`ブロックに関連付けられ`catch`ており、各ブロックには、処理する例外の種類を決定する型フィルターが含まれています。  
+ アプリケーションコードのブロックの実行中に発生した例外をアプリケーションが処理する場合は、コードを `try` ステートメント内に配置し、`try` ブロックと呼ばれる必要があります。 `try` ブロックによってスローされた例外を処理するアプリケーションコードは、`catch` ステートメント内に配置され、`catch` ブロックと呼ばれます。 0個以上の `catch` ブロックが `try` ブロックに関連付けられており、各 `catch` ブロックには、処理する例外の種類を決定する型フィルターが含まれています。  
   
- `try`ブロックで例外が発生すると、システムは、例外を`catch`処理するブロックを`catch`見つけるまで、関連付けられているブロックをアプリケーションコードに出現する順序で検索します。 Catch `catch`ブロックの型フィルターでまた`T`はから派生した型が`T`指定`T`されている場合、ブロックは型の例外を処理します。 例外を処理する最初`catch`のブロックが検索された後、システムは検索を停止します。 このため、アプリケーションコード`catch`では、このセクションの後の例に示すように、その基本型を処理する`catch`ブロックの前に、型を処理するブロックを指定する必要があります。 を処理`System.Exception`する catch ブロックが最後に指定されています。  
+ `try` ブロックで例外が発生すると、システムは、例外を処理する `catch` ブロックを見つけるまで、関連付けられている `catch` ブロックをアプリケーションコードに出現する順序で検索します。 Catch ブロックの型フィルターで `T` またはその派生元で `T` あるすべての型が指定されている場合、`catch` ブロックは型 `T` の例外を処理します。 例外を処理する最初の `catch` ブロックが検出されると、システムは検索を停止します。 このため、アプリケーションコードでは、このセクションの後の例に示すように、型を処理する `catch` ブロックを、その基本型を処理する `catch` ブロックの前に指定する必要があります。 `System.Exception` を処理する catch ブロックが最後に指定されます。  
   
- `try` `try` `catch` `catch`現在のブロックに関連付けられているブロックで例外が処理されず、現在のブロックが現在の呼び出しの他のブロック内で入れ子になっている場合は、次のブロックに関連付けられ `try` ているブロック。囲む`try`ブロックが検索されます。 例外の`catch`ブロックが見つからない場合は、現在の呼び出しで前の入れ子レベルが検索されます。 現在の`catch`呼び出しで例外のブロックが見つからない場合は、例外が呼び出し履歴に渡され、例外を処理する`catch`ブロックの前のスタックフレームが検索されます。 呼び出し履歴の検索は、例外が処理されるか、または呼び出し履歴にフレームが存在しなくなるまで続行されます。 例外を処理するブロックを`catch`検索せずにコールスタックの一番上に到達した場合、既定の例外ハンドラーはそれを処理してアプリケーションを終了します。  
+ 現在の `try` ブロックに関連付けられている `catch` ブロックで例外がハンドルされず、現在の `try` ブロックが現在の呼び出しの他の `try` ブロック内に入れ子になっている場合は、次に外側にある `catch` ブロックに関連付けられている `try` ブロック。検索されます。 例外の `catch` ブロックが見つからない場合は、現在の呼び出しで前の入れ子レベルが検索されます。 現在の呼び出しで例外の `catch` ブロックが見つからない場合は、例外が呼び出し履歴に渡され、例外を処理する `catch` ブロックの前のスタックフレームが検索されます。 呼び出し履歴の検索は、例外が処理されるか、または呼び出し履歴にフレームが存在しなくなるまで続行されます。 例外を処理する `catch` ブロックを検出せずにコールスタックの一番上に到達した場合、既定の例外ハンドラーはそれを処理してアプリケーションを終了します。  
   
 <a name="Features"></a>   
 ## <a name="exception-type-features"></a>例外の種類の機能  
  例外の種類では、次の機能がサポートされます。  
   
--   人間が判読できる、エラーを説明するテキスト。 例外が発生すると、ランタイムは、エラーの性質をユーザーに通知し、問題を解決するためのアクションを提案するためのテキストメッセージを使用できるようにします。 このテキストメッセージは、exception オブジェクト<xref:System.Exception.Message%2A>のプロパティに保持されます。 例外オブジェクトの作成時に、その特定の例外の詳細を記述するテキスト文字列をコンストラクターに渡すことができます。 コンストラクターにエラーメッセージ引数が指定されていない場合は、既定のエラーメッセージが使用されます。 詳細については、<xref:System.Exception.Message%2A> プロパティを参照してください。  
+-   人間が判読できる、エラーを説明するテキスト。 例外が発生すると、ランタイムは、エラーの性質をユーザーに通知し、問題を解決するためのアクションを提案するためのテキストメッセージを使用できるようにします。 このテキストメッセージは、exception オブジェクトの <xref:System.Exception.Message%2A> プロパティに保持されます。 例外オブジェクトの作成時に、その特定の例外の詳細を記述するテキスト文字列をコンストラクターに渡すことができます。 コンストラクターにエラーメッセージ引数が指定されていない場合は、既定のエラーメッセージが使用されます。 詳細については、<xref:System.Exception.Message%2A> プロパティを参照してください。  
   
--   例外がスローされたときの呼び出し履歴の状態。 プロパティ<xref:System.Exception.StackTrace%2A>は、コード内でエラーが発生した場所を判断するために使用できるスタックトレースを保持します。 スタックトレースでは、呼び出されたすべてのメソッドと、呼び出しが行われたソースファイル内の行番号が一覧表示されます。  
+-   例外がスローされたときの呼び出し履歴の状態。 <xref:System.Exception.StackTrace%2A> プロパティには、コード内でエラーが発生した場所を判断するために使用できるスタックトレースが含まれています。 スタックトレースでは、呼び出されたすべてのメソッドと、呼び出しが行われたソースファイル内の行番号が一覧表示されます。  
   
 <a name="Properties"></a>   
 ## <a name="exception-class-properties"></a>Exception クラスのプロパティ  
- クラス<xref:System.Exception>には、コードの場所、型、ヘルプファイル、および例外の理由<xref:System.Exception.Message%2A> <xref:System.Exception.Source%2A>( <xref:System.Exception.StackTrace%2A> <xref:System.Exception.InnerException%2A> <xref:System.Exception.HelpLink%2A> <xref:System.Exception.HResult%2A>、、、、、、) を識別するのに役立つ多数のプロパティが含まれています。、、  <xref:System.Exception.Data%2A> および。  <xref:System.Exception.TargetSite%2A>  
+ <xref:System.Exception> クラスには、コードの場所、種類、ヘルプファイル、例外の理由 (<xref:System.Exception.StackTrace%2A>、<xref:System.Exception.InnerException%2A>、<xref:System.Exception.Message%2A>、<xref:System.Exception.HelpLink%2A>、<xref:System.Exception.HResult%2A>、<xref:System.Exception.Source%2A>、<xref:System.Exception.TargetSite%2A>) を識別するためのプロパティが多数含まれています。、、および <xref:System.Exception.Data%2A>ます。  
   
- 2つ以上の例外の間に因果関係が存在<xref:System.Exception.InnerException%2A>する場合、プロパティはこの情報を保持します。 外側の例外は、この内部例外に応答してスローされます。 外側の例外を処理するコードでは、前の内部例外の情報を使用して、エラーをより適切に処理できます。 例外に関する補足情報は、 <xref:System.Exception.Data%2A>プロパティのキーと値のペアのコレクションとして格納できます。  
+ 2つ以上の例外の間に因果関係が存在する場合、<xref:System.Exception.InnerException%2A> プロパティはこの情報を保持します。 外側の例外は、この内部例外に応答してスローされます。 外側の例外を処理するコードでは、前の内部例外の情報を使用して、エラーをより適切に処理できます。 例外に関する補足情報は、<xref:System.Exception.Data%2A> プロパティにキーと値のペアのコレクションとして格納できます。  
   
- 例外オブジェクトの作成時にコンストラクターに渡されるエラーメッセージ文字列はローカライズされ、 <xref:System.Resources.ResourceManager>クラスを使用してリソースファイルから渡すことができます。 ローカライズされたリソースの詳細については、「[サテライトアセンブリの作成](~/docs/framework/resources/creating-satellite-assemblies-for-desktop-apps.md)」および「[リソースのパッケージ化と配置](~/docs/framework/resources/packaging-and-deploying-resources-in-desktop-apps.md)」のトピックを参照してください。  
+ 例外オブジェクトの作成時にコンストラクターに渡されるエラーメッセージ文字列はローカライズされ、<xref:System.Resources.ResourceManager> クラスを使用してリソースファイルから渡すことができます。 ローカライズされたリソースの詳細については、「[サテライトアセンブリの作成](~/docs/framework/resources/creating-satellite-assemblies-for-desktop-apps.md)」および「[リソースのパッケージ化と配置](~/docs/framework/resources/packaging-and-deploying-resources-in-desktop-apps.md)」のトピックを参照してください。  
   
- 例外が発生した理由に関する詳細情報をユーザーに提供<xref:System.Exception.HelpLink%2A>するために、プロパティはヘルプファイルへの URL (または URN) を保持できます。  
+ 例外が発生した理由に関する詳細情報をユーザーに提供するために、<xref:System.Exception.HelpLink%2A> プロパティは、ヘルプファイルへの URL (または URN) を保持できます。  
   
- クラス<xref:System.Exception>は、値0x80131500 を持つ HRESULT COR_E_EXCEPTION を使用します。  
+ <xref:System.Exception> クラスでは、値0x80131500 を持つ HRESULT COR_E_EXCEPTION を使用します。  
   
- <xref:System.Exception>クラスのインスタンスの初期プロパティ値の一覧につい<xref:System.Exception.%23ctor%2A>ては、「コンストラクター」を参照してください。  
+ <xref:System.Exception> クラスのインスタンスの初期プロパティ値の一覧については、「<xref:System.Exception.%23ctor%2A> コンストラクター」を参照してください。  
   
 <a name="Performance"></a>   
 ## <a name="performance-considerations"></a>パフォーマンスに関する考慮事項  
@@ -143,12 +143,12 @@
   
 -   致命的な例外が発生したアプリケーションまたはライブラリ。 例外ハンドラーは例外をログに記録し、例外を再スローすることができます。  
   
- 例外を再スローするには、のC# [throw](~/docs/csharp/language-reference/keywords/throw.md)ステートメントと、式を含まない Visual Basic の[throw](~/docs/visual-basic/language-reference/statements/throw-statement.md)ステートメントを使用することをお勧めします。 これにより、例外が呼び出し元に反映されるときに、すべてのコールスタック情報が保持されます。 次に例を示します。 文字列拡張メソッド`FindOccurrences`は、引数を事前に検証せず<xref:System.String.IndexOf%28System.String%2CSystem.Int32%29?displayProperty=nameWithType>に、の1つ以上の呼び出しをラップします。  
+ 例外を再スローするには、のC# [throw](~/docs/csharp/language-reference/keywords/throw.md)ステートメントと、式を含まない Visual Basic の[throw](~/docs/visual-basic/language-reference/statements/throw-statement.md)ステートメントを使用することをお勧めします。 これにより、例外が呼び出し元に反映されるときに、すべてのコールスタック情報が保持されます。 次に例を示します。 文字列の拡張メソッド `FindOccurrences`は、引数を事前に検証せずに、<xref:System.String.IndexOf%28System.String%2CSystem.Int32%29?displayProperty=nameWithType> の1つ以上の呼び出しをラップします。  
   
  [!code-csharp[System.Exception.Class#6](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.class/cs/rethrow1.cs#6)]
  [!code-vb[System.Exception.Class#6](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.exception.class/vb/rethrow1.vb#6)]  
   
- 次に、呼び出し`FindOccurrences`元は2回を呼び出します。 の2回目の`FindOccurrences`呼び出しでは、呼び出し`null`元はを検索文字列として<xref:System.String.IndexOf%28System.String%2CSystem.Int32%29?displayProperty=nameWithType>渡します。この<xref:System.ArgumentNullException>場合、メソッドは例外をスローします。 この例外は、 `FindOccurrences`メソッドによって処理され、呼び出し元に戻されます。 Throw ステートメントは式なしで使用されるため、この例の出力は、呼び出し履歴が保持されていることを示しています。  
+ その後、呼び出し元は `FindOccurrences` を2回呼び出します。 `FindOccurrences`の2回目の呼び出しでは、呼び出し元は検索文字列として `null` を渡します。この場合、<xref:System.String.IndexOf%28System.String%2CSystem.Int32%29?displayProperty=nameWithType> メソッドは <xref:System.ArgumentNullException> 例外をスローします。 この例外は、`FindOccurrences` メソッドによって処理され、呼び出し元に渡されます。 Throw ステートメントは式なしで使用されるため、この例の出力は、呼び出し履歴が保持されていることを示しています。  
   
  [!code-csharp[System.Exception.Class#7](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.class/cs/rethrow1.cs#7)]
  [!code-vb[System.Exception.Class#7](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.exception.class/vb/rethrow1.vb#7)]  
@@ -180,12 +180,12 @@ Stack Trace:
   
 ```  
   
- もう少し厄介な方法は、新しい例外をスローし、元の例外の呼び出し履歴情報を内部例外で保持することです。 呼び出し元は、新しい例外の<xref:System.Exception.InnerException%2A>プロパティを使用して、元の例外に関するスタックフレームおよびその他の情報を取得できます。 この場合、throw ステートメントは次のようになります。  
+ もう少し厄介な方法は、新しい例外をスローし、元の例外の呼び出し履歴情報を内部例外で保持することです。 呼び出し元は、新しい例外の <xref:System.Exception.InnerException%2A> プロパティを使用して、元の例外に関するスタックフレームやその他の情報を取得できます。 この場合、throw ステートメントは次のようになります。  
   
  [!code-csharp[System.Exception.Class#8](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.class/cs/rethrow3.cs#8)]
  [!code-vb[System.Exception.Class#8](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.exception.class/vb/rethrow3.vb#8)]  
   
- 例外を処理するユーザーコードは、次の例外ハンドラー <xref:System.Exception.InnerException%2A>に示すように、プロパティに元の例外に関する情報が含まれていることを認識している必要があります。  
+ 次の例外ハンドラーに示すように、例外を処理するユーザーコードは、<xref:System.Exception.InnerException%2A> プロパティに元の例外に関する情報が含まれていることを認識している必要があります。  
   
  [!code-csharp[System.Exception.Class#9](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.class/cs/rethrow3.cs#9)]
  [!code-vb[System.Exception.Class#9](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.exception.class/vb/rethrow3.vb#9)]  
@@ -194,22 +194,22 @@ Stack Trace:
 ## <a name="choosing-standard-exceptions"></a>標準例外の選択  
  例外をスローする必要がある場合は、カスタム例外を実装するのではなく、.NET Framework で既存の例外の種類を使用することがよくあります。 次の2つの条件下では、標準の例外の種類を使用する必要があります。  
   
--   使用エラー (つまり、メソッドを呼び出している開発者によって作成されたプログラムロジックのエラー) によって発生した例外をスローしています。 通常は、 <xref:System.ArgumentException>、、 <xref:System.InvalidOperationException>、 <xref:System.ArgumentNullException> <xref:System.NotSupportedException>などの例外をスローします。 例外オブジェクトをインスタンス化するときに例外オブジェクトのコンストラクターに渡す文字列は、開発者が修正できるようにエラーを記述する必要があります。 詳細については、<xref:System.Exception.Message%2A> プロパティを参照してください。  
+-   使用エラー (つまり、メソッドを呼び出している開発者によって作成されたプログラムロジックのエラー) によって発生した例外をスローしています。 通常は、<xref:System.ArgumentException>、<xref:System.ArgumentNullException>、<xref:System.InvalidOperationException>、<xref:System.NotSupportedException>などの例外をスローします。 例外オブジェクトをインスタンス化するときに例外オブジェクトのコンストラクターに渡す文字列は、開発者が修正できるようにエラーを記述する必要があります。 詳細については、<xref:System.Exception.Message%2A> プロパティを参照してください。  
   
--   既存の .NET Framework 例外を使用して呼び出し元に伝達できるエラーを処理しています。 できるだけ多くの派生された例外をスローする必要があります。 たとえば、メソッドで、引数が列挙型の有効なメンバーである必要がある場合は、では<xref:System.ComponentModel.InvalidEnumArgumentException>なく<xref:System.ArgumentException>、(最も派生クラスの) をスローする必要があります。  
+-   既存の .NET Framework 例外を使用して呼び出し元に伝達できるエラーを処理しています。 できるだけ多くの派生された例外をスローする必要があります。 たとえば、メソッドで引数が列挙型の有効なメンバーである必要がある場合は、<xref:System.ArgumentException>ではなく <xref:System.ComponentModel.InvalidEnumArgumentException> (最も派生クラス) をスローする必要があります。  
   
  次の表に、一般的な例外の種類と、それらをスローする条件を示します。  
   
 |例外|条件|  
 |---------------|---------------|  
 |<xref:System.ArgumentException>|メソッドに渡された null 以外の引数が無効です。|  
-|<xref:System.ArgumentNullException>|メソッドに渡される引数は`null`です。|  
+|<xref:System.ArgumentNullException>|メソッドに渡される引数が `null`ます。|  
 |<xref:System.ArgumentOutOfRangeException>|引数が有効な値の範囲外です。|  
 |<xref:System.IO.DirectoryNotFoundException>|ディレクトリパスの一部が無効です。|  
-|<xref:System.DivideByZeroException>|整数または<xref:System.Decimal>除算演算の分母が0です。|  
+|<xref:System.DivideByZeroException>|整数または <xref:System.Decimal> 除算演算の分母が0です。|  
 |<xref:System.IO.DriveNotFoundException>|ドライブが使用できないか、または存在しません。|  
 |<xref:System.IO.FileNotFoundException>|ファイルが存在しません。|  
-|<xref:System.FormatException>|値は、など`Parse`の変換メソッドによって文字列から変換される適切な形式ではありません。|  
+|<xref:System.FormatException>|値が、`Parse`などの変換メソッドによって文字列から変換される適切な形式ではありません。|  
 |<xref:System.IndexOutOfRangeException>|インデックスが配列またはコレクションの範囲外です。|  
 |<xref:System.InvalidOperationException>|メソッドの呼び出しは、オブジェクトの現在の状態では無効です。|  
 |<xref:System.Collections.Generic.KeyNotFoundException>|コレクション内のメンバーにアクセスするために指定されたキーが見つかりません。|  
@@ -229,50 +229,50 @@ Stack Trace:
   
 -   例外が、既存の .NET Framework 例外にマップできない一意のプログラムエラーを反映した場合。  
   
--   既存の .NET Framework 例外に適した処理とは異なる処理が例外に必要な場合、または同様の例外から例外を明確する必要がある場合。 たとえば、ターゲットの整数型の<xref:System.ArgumentOutOfRangeException>範囲外にある文字列の数値表現を解析するときに例外をスローした場合、呼び出し元がを指定していないというエラーに対して同じ例外を使用することはできません。メソッドを呼び出すときの適切な制約値。  
+-   既存の .NET Framework 例外に適した処理とは異なる処理が例外に必要な場合、または同様の例外から例外を明確する必要がある場合。 たとえば、ターゲットの整数型の範囲外にある文字列の数値表現を解析するときに <xref:System.ArgumentOutOfRangeException> 例外をスローした場合、呼び出し元が適切なを提供しないというエラーに対して同じ例外を使用することはできません。メソッドを呼び出すときの制約値。  
   
- <xref:System.Exception>クラスは、.NET Framework 内のすべての例外の基本クラスです。 多くの派生クラスは、 <xref:System.Exception>クラスのメンバーの継承された動作に依存しています。のメンバーをオーバーライドしたり、一意の<xref:System.Exception>メンバーを定義したりすることはありません。  
+ <xref:System.Exception> クラスは、.NET Framework 内のすべての例外の基本クラスです。 多くの派生クラスは、<xref:System.Exception> クラスのメンバーの継承された動作に依存しています。<xref:System.Exception>のメンバーをオーバーライドしたり、一意のメンバーを定義したりすることはありません。  
   
  独自の例外クラスを定義するには、次のようにします。  
   
-1.  を<xref:System.Exception>継承するクラスを定義します。 必要に応じて、クラスに必要な一意のメンバーを定義して、例外に関する追加情報を提供します。 たとえば、クラスに<xref:System.ArgumentException>は、引数<xref:System.ArgumentException.ParamName%2A>によって例外<xref:System.Text.RegularExpressions.RegexMatchTimeoutException>が発生したパラメーターの名前を指定するプロパティが含まれて<xref:System.Text.RegularExpressions.RegexMatchTimeoutException.MatchTimeout%2A>います。また、プロパティには、タイムアウト間隔を示すプロパティが含まれています。  
+1.  <xref:System.Exception>から継承するクラスを定義します。 必要に応じて、クラスに必要な一意のメンバーを定義して、例外に関する追加情報を提供します。 たとえば、<xref:System.ArgumentException> クラスには、引数によって例外が発生したパラメーターの名前を指定する <xref:System.ArgumentException.ParamName%2A> プロパティと、タイムアウト間隔を示す <xref:System.Text.RegularExpressions.RegexMatchTimeoutException.MatchTimeout%2A> プロパティが <xref:System.Text.RegularExpressions.RegexMatchTimeoutException> プロパティに含まれています。  
   
-2.  必要に応じて、変更または変更する機能を持つ継承されたメンバーをオーバーライドします。 の既存の派生クラスの<xref:System.Exception>ほとんどは、継承されたメンバーの動作をオーバーライドしないことに注意してください。  
+2.  必要に応じて、変更または変更する機能を持つ継承されたメンバーをオーバーライドします。 <xref:System.Exception> の既存の派生クラスのほとんどは、継承されたメンバーの動作をオーバーライドしないことに注意してください。  
   
-3.  カスタム例外オブジェクトがシリアル化可能であるかどうかを判断します。 シリアル化を使用すると、例外に関する情報を保存し、例外情報をサーバーとクライアントプロキシがリモート処理コンテキストで共有できるようになります。 例外オブジェクトをシリアル化できるようにするには<xref:System.SerializableAttribute> 、属性でマークします。  
+3.  カスタム例外オブジェクトがシリアル化可能であるかどうかを判断します。 シリアル化を使用すると、例外に関する情報を保存し、例外情報をサーバーとクライアントプロキシがリモート処理コンテキストで共有できるようになります。 例外オブジェクトをシリアル化できるようにするには、<xref:System.SerializableAttribute> 属性でマークします。  
   
 4.  Exception クラスのコンストラクターを定義します。 通常、例外クラスには、次のコンストラクターが1つ以上含まれています。  
   
-    -   <xref:System.Exception.%23ctor>。既定値を使用して、新しい exception オブジェクトのプロパティを初期化します。  
+    -   <xref:System.Exception.%23ctor>、既定値を使用して新しい exception オブジェクトのプロパティを初期化します。  
   
-    -   <xref:System.Exception.%23ctor%28System.String%29>。指定したエラーメッセージを使用して、新しい例外オブジェクトを初期化します。  
+    -   <xref:System.Exception.%23ctor%28System.String%29>。指定したエラーメッセージを使用して新しい例外オブジェクトを初期化します。  
   
     -   <xref:System.Exception.%23ctor%28System.String%2CSystem.Exception%29>。指定したエラーメッセージと内部例外を使用して、新しい例外オブジェクトを初期化します。  
   
-    -   <xref:System.Exception.%23ctor%28System.Runtime.Serialization.SerializationInfo%2CSystem.Runtime.Serialization.StreamingContext%29>。これは、 `protected`シリアル化されたデータから新しい例外オブジェクトを初期化するコンストラクターです。 例外オブジェクトをシリアル化可能にすることを選択した場合は、このコンストラクターを実装する必要があります。  
+    -   <xref:System.Exception.%23ctor%28System.Runtime.Serialization.SerializationInfo%2CSystem.Runtime.Serialization.StreamingContext%29>。これは、シリアル化されたデータから新しい例外オブジェクトを初期化する `protected` コンストラクターです。 例外オブジェクトをシリアル化可能にすることを選択した場合は、このコンストラクターを実装する必要があります。  
   
- 次の例は、カスタム例外クラスの使用方法を示しています。 これは、 `NotPrimeException`クライアントが素数ではない開始番号を指定して素数のシーケンスを取得しようとしたときにスローされる例外を定義します。 例外は、例外の原因と`NonPrime`なった素数以外の数値を返す新しいプロパティを定義します。 保護されたパラメーターなしのコンストラクターと、 <xref:System.Runtime.Serialization.SerializationInfo>シリアル<xref:System.Runtime.Serialization.StreamingContext>化のパラメーターとパラメーター `NotPrimeException`を持つコンストラクターを実装するだけで`NonPrime`なく、クラスは、プロパティをサポートするために3つの追加のコンストラクターを定義します。  各コンストラクターは、非素数の値を保持するだけでなく、基底クラスのコンストラクターも呼び出します。 クラスは、 <xref:System.SerializableAttribute>属性でもマークされます。 `NotPrimeException`  
+ 次の例は、カスタム例外クラスの使用方法を示しています。 これは、クライアントが素数ではない開始番号を指定して素数のシーケンスを取得しようとしたときにスローされる `NotPrimeException` 例外を定義します。 例外は、例外の原因となった素数以外の数値を返す新しいプロパティ `NonPrime`を定義します。 保護されたパラメーターなしのコンストラクターと、シリアル化のために <xref:System.Runtime.Serialization.SerializationInfo> パラメーターと <xref:System.Runtime.Serialization.StreamingContext> パラメーターを持つコンストラクターを実装するだけでなく、`NotPrimeException` クラスは、`NonPrime` プロパティをサポートするために3つの追加のコンストラクターを定義します。  各コンストラクターは、非素数の値を保持するだけでなく、基底クラスのコンストラクターも呼び出します。 `NotPrimeException` クラスは、<xref:System.SerializableAttribute> 属性でもマークされます。  
   
  [!code-csharp[System.Exception.Class#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.class/cs/notprimeexception.cs#1)]
  [!code-vb[System.Exception.Class#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.exception.class/vb/notprimeexception.vb#1)]  
   
- 次の例に示すクラスでは、ありのエラトステネスを使用して、2からの素数のシーケンスを、クラスコンストラクターの呼び出しでクライアントによって指定された制限に計算します。 `PrimeNumberGenerator` メソッド`GetPrimesFrom`は、指定された下限を超えるすべての素数を返しますが、下限の値`NotPrimeException`が素数でない場合はをスローします。  
+ 次の例に示す `PrimeNumberGenerator` クラスでは、ありのエラトステネスを使用して、2からの素数のシーケンスを、クラスコンストラクターの呼び出しでクライアントによって指定された制限に計算します。 `GetPrimesFrom` メソッドは、指定された下限を超えるすべての素数を返しますが、下限の値が素数でない場合は `NotPrimeException` をスローします。  
   
  [!code-csharp[System.Exception.Class#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.class/cs/primenumbergenerator.cs#2)]
  [!code-vb[System.Exception.Class#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.exception.class/vb/primenumbergenerator.vb#2)]  
   
- 次の例では、2つ`GetPrimesFrom`のメソッドを呼び出します。素数以外の数値が含まれています。その1つは、アプリケーションドメインの境界を越えています。 どちらの場合も、例外がスローされ、クライアントコードで正常に処理されます。  
+ 次の例では、`GetPrimesFrom` メソッドに2つの呼び出しを行います。素数以外の数値が含まれています。その1つは、アプリケーションドメインの境界を越えています。 どちらの場合も、例外がスローされ、クライアントコードで正常に処理されます。  
   
  [!code-csharp[System.Exception.Class#3](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.class/cs/example.cs#3)]
  [!code-vb[System.Exception.Class#3](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.exception.class/vb/example.vb#3)]  
   
-## <a name="windows-runtime-and-includenet_v451includesnet-v451-mdmd"></a>Windows ランタイムと[!INCLUDE[net_v451](~/includes/net-v451-md.md)]  
- [!INCLUDE[net_win8_profile](~/includes/net-win8-profile-md.md)] の [!INCLUDE[win8](~/includes/win8-md.md)] では、例外が non-.NET Framework スタックフレームを通じて伝達されると、通常、一部の例外情報が失われます。 と以降では、non-.NET Framework スタックフレームで例外が変更さ<xref:System.Exception>れていない限り、共通言語ランタイムは、スローされた元のオブジェクトを引き続き使用します。 [!INCLUDE[win81](~/includes/win81-md.md)] [!INCLUDE[net_v451](~/includes/net-v451-md.md)]  
+## <a name="windows-runtime-and-includenet_v451includesnet-v451-mdmd"></a>Windows ランタイムと [!INCLUDE[net_v451](~/includes/net-v451-md.md)]  
+ [!INCLUDE[win8](~/includes/win8-md.md)]の [!INCLUDE[net_win8_profile](~/includes/net-win8-profile-md.md)] では、non-.NET Framework スタックフレームを通じて例外が伝達されると、通常、一部の例外情報が失われます。 [!INCLUDE[net_v451](~/includes/net-v451-md.md)] と [!INCLUDE[win81](~/includes/win81-md.md)]以降、共通言語ランタイムは、non-.NET Framework スタックフレームで例外が変更されていない限り、スローされた元の <xref:System.Exception> オブジェクトを引き続き使用します。  
   
    
   
 ## Examples  
- 次の例は、 `catch`エラーを処理<xref:System.ArithmeticException>するために定義されているブロックを示しています。 この`catch`ブロックは、 <xref:System.DivideByZeroException>から`catch` <xref:System.DivideByZeroException> <xref:System.DivideByZeroException> 派生し <xref:System.ArithmeticException>  、エラーのために明示的に定義されたブロックがないため、エラーもキャッチします。  
+ 次の例は、<xref:System.ArithmeticException> エラーを処理するように定義されている `catch` ブロックを示しています。 また、この `catch` ブロックは <xref:System.DivideByZeroException> エラーをキャッチします。これは <xref:System.DivideByZeroException> が <xref:System.ArithmeticException> から派生し、`catch` エラーに対して明示的に定義された <xref:System.DivideByZeroException> ブロックがないためです。  
   
  [!code-cpp[CatchException#1](~/samples/snippets/cpp/VS_Snippets_CLR/CatchException/CPP/catchexception.cpp#1)]
  [!code-csharp[CatchException#1](~/samples/snippets/csharp/VS_Snippets_CLR/CatchException/CS/catchexception.cs#1)]
@@ -345,7 +345,7 @@ Stack Trace:
    
   
 ## Examples  
- 次のコード例では`Exception` 、定義済みのメッセージを使用するを派生させることができます。 このコードは、派生クラスと基底`Exception`クラスに対してパラメーターなしのコンストラクターを使用する方法を示しています。  
+ 次のコード例では、定義済みのメッセージを使用する `Exception` を派生させることができます。 このコードは、派生クラスと基本 `Exception` クラスのパラメーターなしのコンストラクターの使用方法を示しています。  
   
  [!code-cpp[System.Exception.Ctor#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.Ctor/CPP/new.cpp#1)]
  [!code-csharp[System.Exception.Ctor#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.Ctor/CS/new.cs#1)]
@@ -394,7 +394,7 @@ Stack Trace:
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- このコンストラクターは、 <xref:System.Exception.Message%2A> `message`パラメーターを使用して、新しいインスタンスのプロパティを初期化します。 パラメーターが`null`の場合、これはコンストラクターの<xref:System.Exception.%23ctor%2A>呼び出しと同じです。 `message`  
+ このコンストラクターは、`message` パラメーターを使用して、新しいインスタンスの <xref:System.Exception.Message%2A> プロパティを初期化します。 `message` パラメーターが `null`の場合、これは <xref:System.Exception.%23ctor%2A> コンストラクターを呼び出すことと同じです。  
   
  <xref:System.Exception> インスタンスの初期プロパティ値を次の表に示します。  
   
@@ -406,7 +406,7 @@ Stack Trace:
    
   
 ## Examples  
- 次のコード例では`Exception` 、特定の条件に対してを派生させることができます。 このコードは、派生クラスと基本`Exception`クラスの両方について、呼び出し元が指定したメッセージをパラメーターとして受け取るコンストラクターの使用方法を示しています。  
+ 次のコード例では、特定の条件の `Exception` を派生させることができます。 このコードは、派生クラスと基本 `Exception` クラスの両方について、呼び出し元が指定したメッセージをパラメーターとして受け取るコンストラクターの使用方法を示しています。  
   
  [!code-cpp[System.Exception.Ctor#2](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.Ctor/CPP/news.cpp#2)]
  [!code-csharp[System.Exception.Ctor#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.Ctor/CS/news.cs#2)]
@@ -463,7 +463,7 @@ Stack Trace:
    
   
 ## Examples  
- 次のコード例では、派生`Exception`シリアル化可能なクラスを定義します。 このコードは、0除算エラーを強制的に実行し、(<xref:System.Runtime.Serialization.SerializationInfo>, <xref:System.Runtime.Serialization.StreamingContext>) コンストラクターを使用して、派生例外のインスタンスを作成します。 このコードは、インスタンスをファイルにシリアル化し、そのファイルを新しい例外にシリアル化解除して、例外のデータをキャッチして表示します。  
+ 次のコード例では、派生シリアル化可能な `Exception` クラスを定義します。 このコードでは、0除算エラーが強制的に発生し、(<xref:System.Runtime.Serialization.SerializationInfo>、<xref:System.Runtime.Serialization.StreamingContext>) コンストラクターを使用して、派生例外のインスタンスが作成されます。 このコードは、インスタンスをファイルにシリアル化し、そのファイルを新しい例外にシリアル化解除して、例外のデータをキャッチして表示します。  
   
  [!code-cpp[System.Exception.GetObjectData#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.GetObjectData/CPP/getobjdata.cpp#1)]
  [!code-csharp[System.Exception.GetObjectData#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.GetObjectData/CS/getobjdata.cs#1)]
@@ -471,7 +471,7 @@ Stack Trace:
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="info" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="info" /> は <see langword="null" />です。</exception>
         <exception cref="T:System.Runtime.Serialization.SerializationException">クラス名が <see langword="null" /> であるか、<see cref="P:System.Exception.HResult" /> が 0 です。</exception>
         <altmember cref="T:System.Runtime.Serialization.SerializationInfo" />
         <altmember cref="T:System.Runtime.Serialization.StreamingContext" />
@@ -531,7 +531,7 @@ Stack Trace:
    
   
 ## Examples  
- 次のコード例では`Exception` 、特定の条件に対してを派生させることができます。 このコードは、派生クラスと基本`Exception`クラスの両方について、メッセージと内部例外をパラメーターとして受け取るコンストラクターの使用方法を示しています。  
+ 次のコード例では、特定の条件の `Exception` を派生させることができます。 このコードは、派生クラスと基本 `Exception` クラスの両方について、メッセージと内部例外をパラメーターとして受け取るコンストラクターの使用方法を示しています。  
   
  [!code-cpp[System.Exception.Ctor#3](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.Ctor/CPP/newsi.cpp#3)]
  [!code-csharp[System.Exception.Ctor#3](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.Ctor/CS/newsi.cs#3)]
@@ -584,10 +584,10 @@ Stack Trace:
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- プロパティによって返されるオブジェクトを使用して、例外に関連する補足情報を格納および取得します。 <xref:System.Collections.IDictionary?displayProperty=nameWithType>  <xref:System.Exception.Data%2A> この情報は、任意の数のユーザー定義のキーと値のペアの形式になっています。 各キーと値のペアの主要なコンポーネントは、通常、識別文字列です。一方、ペアの値コンポーネントは任意の型のオブジェクトにすることができます。  
+ <xref:System.Exception.Data%2A> プロパティによって返される <xref:System.Collections.IDictionary?displayProperty=nameWithType> オブジェクトを使用して、例外に関連する補足情報を格納および取得します。 この情報は、任意の数のユーザー定義のキーと値のペアの形式になっています。 各キーと値のペアの主要なコンポーネントは、通常、識別文字列です。一方、ペアの値コンポーネントは任意の型のオブジェクトにすることができます。  
   
 ## <a name="keyvalue-pair-security"></a>キー/値ペアのセキュリティ  
- <xref:System.Exception.Data%2A>プロパティによって返されたコレクションに格納されているキーと値のペアはセキュリティで保護されていません。 入れ子になった一連のルーチンをアプリケーションが呼び出し、各ルーチンに例外ハンドラーが含まれている場合、結果として得られる呼び出し履歴には、これらの例外ハンドラーの階層が含まれます。 下位レベルのルーチンが例外をスローした場合、コールスタック階層内の上位レベルの例外ハンドラーは、他の例外ハンドラーによってコレクションに格納されているキーと値のペアの読み取りや変更を行うことができます。 つまり、キーと値のペアの情報が機密情報ではないこと、およびキーと値のペアの情報が破損している場合にアプリケーションが正しく動作することを保証する必要があります。  
+ <xref:System.Exception.Data%2A> プロパティによって返されたコレクションに格納されているキーと値のペアはセキュリティで保護されていません。 入れ子になった一連のルーチンをアプリケーションが呼び出し、各ルーチンに例外ハンドラーが含まれている場合、結果として得られる呼び出し履歴には、これらの例外ハンドラーの階層が含まれます。 下位レベルのルーチンが例外をスローした場合、コールスタック階層内の上位レベルの例外ハンドラーは、他の例外ハンドラーによってコレクションに格納されているキーと値のペアの読み取りや変更を行うことができます。 つまり、キーと値のペアの情報が機密情報ではないこと、およびキーと値のペアの情報が破損している場合にアプリケーションが正しく動作することを保証する必要があります。  
   
 ## <a name="key-conflicts"></a>キーの競合  
  キーの競合は、キーと値のペアにアクセスするために異なる例外ハンドラーが同じキーを指定した場合に発生します。 アプリケーションを開発するときは注意が必要です。これは、キーの競合の結果として、下位レベルの例外ハンドラーが、より上位レベルの例外ハンドラーと誤って通信する可能性があるためです。この通信により、プログラムエラーが発生する可能性があります。 ただし、注意が必要な場合は、キーの競合を使用してアプリケーションを強化できます。  
@@ -598,16 +598,16 @@ Stack Trace:
  "Products" と "仕入先" という名前の2つのアプリケーションがあり、それぞれ Sales という名前のメソッドがあるとします。 Products アプリケーションの Sales メソッドは、製品の識別番号 (Stock Keeping Unit または SKU) を提供します。 Supplier アプリケーションの Sales メソッドは、仕入先の id 番号 (SID) を提供します。 そのため、この例の命名規則では、"Products. Sales. SKU" と "仕入先. Sales. SID" というキーが生成されます。  
   
 ## <a name="exploiting-key-conflicts"></a>キーの競合の悪用  
- 1つ以上の特殊な既定キーを使用して処理を制御することで、キーの競合を悪用します。 1つのシナリオで、コールスタック階層内の最上位レベルの例外ハンドラーが、下位レベルの例外ハンドラーによってスローされたすべての例外をキャッチするとします。 特殊なキーを持つキーと値のペアが存在する場合、上位レベルの例外ハンドラーは、 <xref:System.Collections.IDictionary>オブジェクト内の残りのキーと値のペアを非標準の方法で書式設定します。それ以外の場合、残りのキーと値のペアは通常の方法で書式設定されます。  
+ 1つ以上の特殊な既定キーを使用して処理を制御することで、キーの競合を悪用します。 1つのシナリオで、コールスタック階層内の最上位レベルの例外ハンドラーが、下位レベルの例外ハンドラーによってスローされたすべての例外をキャッチするとします。 特殊なキーを持つキーと値のペアが存在する場合、高レベルの例外ハンドラーによって、<xref:System.Collections.IDictionary> オブジェクト内の残りのキーと値のペアが非標準的な方法で書式設定されます。それ以外の場合、残りのキーと値のペアは通常の方法で書式設定されます。  
   
- 次に、別のシナリオで、コールスタック階層の各レベルの例外ハンドラーが、次の下位レベルの例外ハンドラーによってスローされた例外をキャッチしたとします。 また、各例外ハンドラーは、 <xref:System.Exception.Data%2A>プロパティによって返されるコレクションに、キーの既定セットを使用してアクセスできるキーと値のペアのセットが含まれていることを認識しています。  
+ 次に、別のシナリオで、コールスタック階層の各レベルの例外ハンドラーが、次の下位レベルの例外ハンドラーによってスローされた例外をキャッチしたとします。 さらに、<xref:System.Exception.Data%2A> プロパティによって返されるコレクションには、既定のキーセットを使用してアクセスできるキーと値のペアのセットが含まれていることが、各例外ハンドラーによって認識されます。  
   
  各例外ハンドラーは、キーの既定セットを使用して、対応するキー/値ペアの値コンポーネントを、その例外ハンドラーに固有の情報で更新します。 更新プロセスが完了すると、例外ハンドラーは次の上位レベルの例外ハンドラーに例外をスローします。 最後に、最上位レベルの例外ハンドラーがキーと値のペアにアクセスし、すべての下位レベルの例外ハンドラーから統合された更新情報を表示します。  
   
    
   
 ## Examples  
- 次の例は、 <xref:System.Exception.Data%2A>プロパティを使用して情報を追加および取得する方法を示しています。  
+ 次の例では、<xref:System.Exception.Data%2A> プロパティを使用して情報を追加および取得する方法を示します。  
   
  [!code-cpp[exception.data#1](~/samples/snippets/cpp/VS_Snippets_CLR/exception.data/CPP/data.cpp#1)]
  [!code-csharp[exception.data#1](~/samples/snippets/csharp/VS_Snippets_CLR/exception.data/CS/data.cs#1)]
@@ -655,22 +655,22 @@ Stack Trace:
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>派生クラスでオーバーライドされた場合、それ以後に発生する 1 つ以上の例外の主要な原因である <see cref="T:System.Exception" /> を返します。</summary>
-        <returns>例外のチェインでスローされた最初の例外。 現在の例外の <see cref="P:System.Exception.InnerException" /> プロパティが null 参照 (Visual Basic の場合は<see langword="Nothing" /> ) である場合、このプロパティは現在の例外を返します。</returns>
+        <summary>派生クラスでオーバーライドされた場合、それ以後に発生する 1 つ以上の例外の根本原因である <see cref="T:System.Exception" /> を返します。</summary>
+        <returns>例外のチェインでスローされた最初の例外。 現在の例外の <see cref="P:System.Exception.InnerException" /> プロパティが null 参照 (Visual Basic の場合は <see langword="Nothing" />) である場合、このプロパティは現在の例外を返します。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- 例外のチェーンは、その`InnerException`プロパティで参照される例外の直接的な結果として、チェーン内の各例外がスローされた例外のセットで構成されます。 特定のチェーンに対して、チェーン内の他のすべての例外の根本原因である例外を1つだけ指定できます。 この例外は、基本例外と呼ばれ`InnerException` 、そのプロパティには常に null 参照が含まれます。  
+ 例外のチェーンは、その `InnerException` プロパティで参照される例外の直接的な結果として、チェーン内の各例外がスローされた例外のセットで構成されます。 特定のチェーンに対して、チェーン内の他のすべての例外の根本原因である例外を1つだけ指定できます。 この例外は、基本例外と呼ばれ、その `InnerException` プロパティには常に null 参照が含まれます。  
   
- 例外チェーン内のすべての例外について`GetBaseException` 、メソッドは同じオブジェクト (基本例外) を返す必要があります。  
+ 例外チェーン内のすべての例外について、`GetBaseException` メソッドは同じオブジェクト (基本例外) を返す必要があります。  
   
- 例外の`GetBaseException`根本原因を特定するが、現在の例外と最初の例外の間に発生した可能性がある例外に関する情報を必要としない場合は、メソッドを使用します。  
+ `GetBaseException` メソッドは、例外の根本原因を特定するときに、現在の例外と最初の例外の間で発生した可能性がある例外に関する情報を必要としない場合に使用します。  
   
    
   
 ## Examples  
- 次のコード例では、 `Exception` 2 つの派生クラスを定義します。 例外が強制的に発生し、派生した各クラスで再びスローされます。 このコードは、 `GetBaseException`メソッドを使用して元の例外を取得する方法を示しています。  
+ 次のコード例では、2つの派生 `Exception` クラスを定義します。 例外が強制的に発生し、派生した各クラスで再びスローされます。 このコードは、`GetBaseException` メソッドを使用して元の例外を取得する方法を示しています。  
   
  [!code-cpp[System.Exception.GetBaseException#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.GetBaseException/CPP/getbaseexc.cpp#1)]
  [!code-csharp[System.Exception.GetBaseException#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.GetBaseException/CS/getbaseexc.cs#1)]
@@ -678,7 +678,7 @@ Stack Trace:
   
  ]]></format>
         </remarks>
-        <block subset="none" type="overrides"><para><see langword="GetBaseException" />メソッドは、例外の内容または形式に対する制御を必要とするクラスでオーバーライドされます。</para></block>
+        <block subset="none" type="overrides"><para><see langword="GetBaseException" /> メソッドは、例外の内容または形式に対する制御を必要とするクラスでオーバーライドされます。</para></block>
       </Docs>
     </Member>
     <Member MemberName="GetObjectData">
@@ -735,7 +735,7 @@ Stack Trace:
    
   
 ## Examples  
- 次のコード例では、を`Exception`実装`GetObjectData`する派生シリアル化可能なクラスを定義します。これにより、2つのプロパティを少し変更した後、シリアル化を実行するための基本クラスを呼び出します。 この例では、0除算エラーが強制的に発生し、派生した例外のインスタンスが作成されます。 このコードは、インスタンスをファイルにシリアル化し、そのファイルを新しい例外にシリアル化解除して、例外のデータをキャッチして表示します。  
+ 次のコード例では、`GetObjectData`を実装する、派生シリアル化可能な `Exception` クラスを定義します。これにより、2つのプロパティに対して軽微な変更を行い、シリアル化を実行するために基本クラスを呼び出します。 この例では、0除算エラーが強制的に発生し、派生した例外のインスタンスが作成されます。 このコードは、インスタンスをファイルにシリアル化し、そのファイルを新しい例外にシリアル化解除して、例外のデータをキャッチして表示します。  
   
  [!code-cpp[System.Exception.GetObjectData#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.GetObjectData/CPP/getobjdata.cpp#1)]
  [!code-csharp[System.Exception.GetObjectData#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.GetObjectData/CS/getobjdata.cs#1)]
@@ -751,11 +751,13 @@ Stack Trace:
     </Member>
     <Member MemberName="GetType">
       <MemberSignature Language="C#" Value="public Type GetType ();" />
-      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Type GetType() cil managed" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance class System.Type GetType() cil managed" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.0;netstandard-2.1" />
       <MemberSignature Language="DocId" Value="M:System.Exception.GetType" />
       <MemberSignature Language="VB.NET" Value="Public Function GetType () As Type" />
-      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual Type ^ GetType();" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; Type ^ GetType();" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netstandard-2.0;netstandard-2.1" />
       <MemberSignature Language="F#" Value="override this.GetType : unit -&gt; Type" Usage="exception.GetType " />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance class System.Type GetType() cil managed" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; virtual Type ^ GetType();" FrameworkAlternate="netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       <MemberType>Method</MemberType>
       <Implements>
         <InterfaceMember>M:System.Runtime.InteropServices._Exception.GetType</InterfaceMember>
@@ -787,7 +789,7 @@ Stack Trace:
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- メソッド<xref:System.Exception.GetType%2A>は、.NET Framework インフラストラクチャをサポートするために存在し、内部的に<xref:System.Object.GetType%2A?displayProperty=nameWithType>は基本的なメソッドを呼び出します。  
+ <xref:System.Exception.GetType%2A> メソッドは、.NET Framework インフラストラクチャをサポートするために存在し、内部的には <xref:System.Object.GetType%2A?displayProperty=nameWithType>の基本的なメソッドを呼び出します。  
   
  ]]></format>
         </remarks>
@@ -837,14 +839,14 @@ Stack Trace:
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- ヘルプ ファイルを表す戻り値は、URN または URL です。 たとえば、値は`HelpLink`次のようになります。  
+ ヘルプ ファイルを表す戻り値は、URN または URL です。 たとえば、`HelpLink` の値は次のようになります。  
   
  "file:///C:/Applications/Bazzal/help.html#ErrorNum42"  
   
    
   
 ## Examples  
- 次のコード例では`Exception` 、コンストラクターで`HelpLink`プロパティを設定し、例外をキャッチして表示`HelpLink`するをスローします。  
+ 次のコード例では、コンストラクターの `HelpLink` プロパティを設定し、例外をキャッチして `HelpLink`を表示する `Exception` をスローします。  
   
  [!code-cpp[System.Exception.Properties#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.Properties/CPP/properties.cpp#1)]
  [!code-csharp[System.Exception.Properties#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.Properties/CS/properties.cs#1)]
@@ -855,12 +857,17 @@ Stack Trace:
       </Docs>
     </Member>
     <Member MemberName="HResult">
-      <MemberSignature Language="C#" Value="public int HResult { get; protected set; }" />
+      <MemberSignature Language="C#" Value="public int HResult { get; protected set; }" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       <MemberSignature Language="ILAsm" Value=".property instance int32 HResult" />
       <MemberSignature Language="DocId" Value="P:System.Exception.HResult" />
-      <MemberSignature Language="VB.NET" Value="Public Property HResult As Integer" />
-      <MemberSignature Language="C++ CLI" Value="public:  property int HResult {  public:&#xA;int get(); protected:&#xA; void set(int value); };" />
+      <MemberSignature Language="VB.NET" Value="Public Property HResult As Integer" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
+      <MemberSignature Language="C++ CLI" Value="public:  property int HResult {  public:&#xA;int get(); protected:&#xA; void set(int value); };" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6;netstandard-2.0;netstandard-2.1;xamarinandroid-7.1;xamarinios-10.8;xamarinmac-3.0" />
       <MemberSignature Language="F#" Value="member this.HResult : int with get, set" Usage="System.Exception.HResult" />
+      <MemberSignature Language="C#" Value="public int HResult { get; set; }" FrameworkAlternate="netcore-3.0" />
+      <MemberSignature Language="C++ CLI" Value="public:&#xA; property int HResult { int get(); void set(int value); };" FrameworkAlternate="netcore-3.0" />
+      <MemberSignature Language="C#" Value="protected int HResult { get; set; }" FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0" />
+      <MemberSignature Language="VB.NET" Value="Protected Property HResult As Integer" FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0" />
+      <MemberSignature Language="C++ CLI" Value="protected:&#xA; property int HResult { int get(); void set(int value); };" FrameworkAlternate="netframework-1.1;netframework-2.0;netframework-3.0;netframework-3.5;netframework-4.0" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>System.Runtime</AssemblyName>
@@ -900,7 +907,7 @@ Stack Trace:
    
   
 ## Examples  
- 次のコード例では、 `Exception` `HResult`プロパティをコンストラクター内のカスタム値に設定する派生クラスを定義します。  
+ 次のコード例では、`HResult` プロパティをコンストラクター内のカスタム値に設定する派生 `Exception` クラスを定義します。  
   
  [!code-cpp[System.Exception.HResult#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.HResult/CPP/hresult.cpp#1)]
  [!code-csharp[System.Exception.HResult#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.HResult/CS/hresult.cs#1)]
@@ -954,15 +961,15 @@ Stack Trace:
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- 前の例外`X` `Y`の直接的な結果として例外がスローされ<xref:System.Exception.InnerException%2A>た場合`X` 、のプロパティには`Y`への参照が含まれている必要があります。  
+ 前の例外 `Y`の直接的な結果として例外 `X` がスローされた場合、`X` の <xref:System.Exception.InnerException%2A> プロパティに `Y`への参照が含まれている必要があります。  
   
  <xref:System.Exception.InnerException%2A> プロパティを使用して、現在の例外の原因になった例外のセットを取得します。  
   
  以前の例外をキャッチする新しい例外を作成できます。 2つ目の例外を処理するコードは、エラーをより適切に処理するために、前の例外の追加情報を使用できます。  
   
- ファイルを読み取り、そのファイルのデータを書式設定する関数があるとします。 この例では、コードがファイル<xref:System.IO.IOException>を読み取ろうとすると、がスローされます。 関数はをキャッチ<xref:System.IO.IOException>し、を<xref:System.IO.FileNotFoundException>スローします。 をの<xref:System.Exception.InnerException%2A> <xref:System.IO.FileNotFoundException>プロパティに <xref:System.IO.FileNotFoundException> 保存して、をキャッチしたコードで最初のエラーの原因を調べることができます。 <xref:System.IO.IOException>  
+ ファイルを読み取り、そのファイルのデータを書式設定する関数があるとします。 この例では、コードがファイルを読み取ろうとすると、<xref:System.IO.IOException> がスローされます。 関数は、<xref:System.IO.IOException> をキャッチし、<xref:System.IO.FileNotFoundException>をスローします。 <xref:System.IO.IOException> を <xref:System.IO.FileNotFoundException>の <xref:System.Exception.InnerException%2A> プロパティに保存すると、<xref:System.IO.FileNotFoundException> をキャッチしたコードで最初のエラーの原因を調べることができます。  
   
- 内部例外への参照を保持するプロパティは、例外オブジェクトの初期化時に設定されます。 <xref:System.Exception.InnerException%2A>  
+ 内部例外への参照を保持する <xref:System.Exception.InnerException%2A> プロパティは、exception オブジェクトの初期化時に設定されます。  
   
    
   
@@ -1024,20 +1031,20 @@ Stack Trace:
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- エラーメッセージは、例外を処理している開発者を対象としています。 <xref:System.Exception.Message%2A>プロパティのテキストは、エラーを完全に説明する必要があります。また、可能であれば、エラーの修正方法についても説明します。 最上位レベルの例外ハンドラーでは、エンドユーザーにメッセージが表示される場合があります。そのため、文法が正しいことと、メッセージの各文がピリオドで終わっていることを確認する必要があります。 疑問符や感嘆符は使用しないでください。 アプリケーションでローカライズされた例外メッセージを使用する場合は、それらが正確に翻訳されていることを確認する必要があります。  
+ エラーメッセージは、例外を処理している開発者を対象としています。 <xref:System.Exception.Message%2A> プロパティのテキストは、エラーを完全に説明する必要があります。また、可能であれば、エラーの修正方法についても説明します。 最上位レベルの例外ハンドラーでは、エンドユーザーにメッセージが表示される場合があります。そのため、文法が正しいことと、メッセージの各文がピリオドで終わっていることを確認する必要があります。 疑問符や感嘆符は使用しないでください。 アプリケーションでローカライズされた例外メッセージを使用する場合は、それらが正確に翻訳されていることを確認する必要があります。  
   
 > [!IMPORTANT]
 >  適切なアクセス許可を確認せずに、例外メッセージに機密情報を開示しないようにします。  
   
- <xref:System.Exception.Message%2A>プロパティの値は、によって<xref:System.Exception.ToString%2A>返される情報に含まれます。プロパティは、 <xref:System.Exception>の作成時にのみ設定されます。 <xref:System.Exception.Message%2A> 現在のインスタンスのコンストラクターにメッセージが指定されていない場合、システムは、現在のシステムカルチャを使用して書式設定された既定のメッセージを提供します。  
+ <xref:System.Exception.Message%2A> プロパティの値は、<xref:System.Exception.ToString%2A>によって返される情報に含まれます。<xref:System.Exception.Message%2A> プロパティは、<xref:System.Exception>の作成時にのみ設定されます。 現在のインスタンスのコンストラクターにメッセージが指定されていない場合、システムは、現在のシステムカルチャを使用して書式設定された既定のメッセージを提供します。  
   
-## <a name="windows-runtime-and-includenet_v451includesnet-v451-mdmd"></a>Windows ランタイムと[!INCLUDE[net_v451](~/includes/net-v451-md.md)]  
- [!INCLUDE[net_v451](~/includes/net-v451-md.md)] と [!INCLUDE[win81](~/includes/win81-md.md)] 以降では、.NET Framework の一部ではない Windows ランタイム型およびメンバーから伝達された例外からのエラーメッセージの忠実性が向上しています。 特に、Visual C++ component extensions (C++/cx) からの例外メッセージは、.NET Framework <xref:System.Exception>オブジェクトに反映されるようになりました。  
+## <a name="windows-runtime-and-includenet_v451includesnet-v451-mdmd"></a>Windows ランタイムと [!INCLUDE[net_v451](~/includes/net-v451-md.md)]  
+ [!INCLUDE[net_v451](~/includes/net-v451-md.md)] と [!INCLUDE[win81](~/includes/win81-md.md)]以降では、.NET Framework の一部ではない Windows ランタイム型およびメンバーから伝達された例外からのエラーメッセージの忠実性が向上しています。 特に、Visual C++ component extensions (C++/cx) からの例外メッセージは .NET Framework <xref:System.Exception> オブジェクトに反映されるようになりました。  
   
    
   
 ## Examples  
- 次のコード例では、 <xref:System.Exception>例外をスローしてキャッチし、 <xref:System.Exception.Message%2A>プロパティを使用して例外のテキストメッセージを表示します。
+ 次のコード例では、<xref:System.Exception> 例外をスローしてキャッチし、<xref:System.Exception.Message%2A> プロパティを使用して例外のテキストメッセージを表示します。
   
  [!code-cpp[System.Exception.Properties#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.Properties/CPP/properties.cpp#1)]
  [!code-csharp[System.Exception.Properties#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.Properties/CS/properties.cs#1)]
@@ -1045,8 +1052,8 @@ Stack Trace:
   
  ]]></format>
         </remarks>
-        <block subset="none" type="overrides"><para>プロパティから例外をスローし、設定または取得したプロパティ引数にの<see cref="P:System.Exception.Message" />テキストを参照する必要がある場合は、プロパティ引数の名前として "value" を使用します。</para></block>
-        <block subset="none" type="overrides"><para>プロパティ<see cref="P:System.Exception.Message" />は、メッセージの内容または形式を制御する必要があるクラスでオーバーライドされます。 通常、アプリケーションコードは、キャッチされた例外に関する情報を表示する必要があるときに、このプロパティにアクセスします。  
+        <block subset="none" type="overrides"><para>プロパティから例外をスローし、設定または取得したプロパティ引数に <see cref="P:System.Exception.Message" /> のテキストを参照する必要がある場合は、プロパティ引数の名前として "value" を使用します。</para></block>
+        <block subset="none" type="overrides"><para><see cref="P:System.Exception.Message" /> プロパティは、メッセージの内容または形式を制御する必要があるクラスでオーバーライドされます。 通常、アプリケーションコードは、キャッチされた例外に関する情報を表示する必要があるときに、このプロパティにアクセスします。  
   
 エラーメッセージはローカライズされている必要があります。</para></block>
       </Docs>
@@ -1083,25 +1090,25 @@ Stack Trace:
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- 例外状態オブジェクトは、インターフェイス<xref:System.Runtime.Serialization.ISafeSerializationData>を実装します。  
+ 例外状態オブジェクトは、<xref:System.Runtime.Serialization.ISafeSerializationData> インターフェイスを実装します。  
   
- <xref:System.Exception.SerializeObjectState>イベントがサブスクライブされると、例外が逆シリアル化され、空の例外として作成されます。 例外のコンストラクターは実行されず、例外の状態も逆シリアル化されます。 次に、例外状態オブジェクトのコールバックメソッドに通知し、逆シリアル化されたデータを空の例外にプッシュできるようにします。 <xref:System.Runtime.Serialization.ISafeSerializationData.CompleteDeserialization%2A>  
+ <xref:System.Exception.SerializeObjectState> イベントがサブスクライブされると、例外が逆シリアル化され、空の例外として作成されます。 例外のコンストラクターは実行されず、例外の状態も逆シリアル化されます。 その後、例外状態オブジェクトの <xref:System.Runtime.Serialization.ISafeSerializationData.CompleteDeserialization%2A> コールバックメソッドに通知され、逆シリアル化されたデータを空の例外にプッシュできるようになります。  
   
- イベント<xref:System.Exception.SerializeObjectState>を使用すると、透過的な例外の種類で例外データをシリアル化および逆シリアル化できます。 透過的なコードは、操作中のアクセス許可セットの境界内でコマンドを実行できますが、実行、呼び出し、派生、またはクリティカルコードを含むことはできません。  
+ <xref:System.Exception.SerializeObjectState> イベントを使用すると、透過的な例外の種類で例外データをシリアル化および逆シリアル化できます。 透過的なコードは、操作中のアクセス許可セットの境界内でコマンドを実行できますが、実行、呼び出し、派生、またはクリティカルコードを含むことはできません。  
   
- イベントがサブスクライブされていない場合、シリアル化は通常<xref:System.Exception.%23ctor%2A>どおりコンストラクターを使用して発生します。 <xref:System.Exception.SerializeObjectState>  
+ <xref:System.Exception.SerializeObjectState> イベントがサブスクライブされていない場合、逆シリアル化は、<xref:System.Exception.%23ctor%2A> コンストラクターを使用して通常どおり実行されます。  
   
- 通常、 <xref:System.Exception.SerializeObjectState>イベントのハンドラーは、例外のコンストラクターに追加され、シリアル化を提供します。 ただし、イベントハンドラーの<xref:System.Exception.SerializeObjectState>実行時にコンストラクターは実行されないため、逆シリアル化された例外をシリアル化すると、例外を逆シリアル化しようとすると<xref:System.Runtime.Serialization.SerializationException>例外がスローされる可能性があります。 これを回避するには、 <xref:System.Exception.SerializeObjectState> <xref:System.Runtime.Serialization.ISafeSerializationData.CompleteDeserialization%2A?displayProperty=nameWithType>メソッドでイベントのハンドラーを追加する必要もあります。 例については、「例」を参照してください。  
+ 通常、<xref:System.Exception.SerializeObjectState> イベントのハンドラーは、例外のコンストラクターに追加され、シリアル化を提供します。 ただし、<xref:System.Exception.SerializeObjectState> イベントハンドラーの実行時にコンストラクターは実行されないため、逆シリアル化された例外をシリアル化すると、例外を逆シリアル化しようとすると <xref:System.Runtime.Serialization.SerializationException> 例外がスローされる可能性があります。 これを回避するには、<xref:System.Runtime.Serialization.ISafeSerializationData.CompleteDeserialization%2A?displayProperty=nameWithType> メソッドに <xref:System.Exception.SerializeObjectState> イベントのハンドラーも追加する必要があります。 例については、「例」を参照してください。  
   
    
   
 ## Examples  
- 次の例では`BadDivisionException` 、 <xref:System.Exception.SerializeObjectState>イベントを処理するを定義します。 また、状態オブジェクトも含まれます。これは、 `BadDivisionExceptionState` <xref:System.Runtime.Serialization.ISafeSerializationData>インターフェイスを実装するという名前の入れ子になった構造体です。  
+ 次の例では、<xref:System.Exception.SerializeObjectState> イベントを処理する `BadDivisionException` を定義します。 また、状態オブジェクトも含まれています。これは、<xref:System.Runtime.Serialization.ISafeSerializationData> インターフェイスを実装する `BadDivisionExceptionState` という名前の入れ子構造です。  
   
  [!code-csharp[System.Exception.SerializeObjectState#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.serializeobjectstate/cs/example2.cs#1)]
  [!code-vb[System.Exception.SerializeObjectState#1](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.exception.serializeobjectstate/vb/example2.vb#1)]  
   
- この`BadDivisionException`例外は、0による浮動小数点除算が発生した場合にスローされます。 0による最初の除算では、 `BadDivisionException`オブジェクトをインスタンス化してシリアル化し、例外をスローします。 後続の除算が0の場合、この例では、以前にシリアル化されたオブジェクトを逆シリアル化し、そのオブジェクトを再シリアル化して、例外をスローします。 オブジェクトのシリアル化、逆シリアル化、再シリアル化、および逆シリアル化を<xref:System.Exception.SerializeObjectState>提供するために、 `BadDivisionException`この例では、 <xref:System.Runtime.Serialization.ISafeSerializationData.CompleteDeserialization%2A?displayProperty=nameWithType>クラスコンストラクターと実装の両方にイベントハンドラーを追加します。  
+ `BadDivisionException` 例外は、浮動小数点除算が0で発生した場合にスローされます。 最初の0除算では、`BadDivisionException` オブジェクトをインスタンス化し、シリアル化して、例外をスローします。 後続の除算が0の場合、この例では、以前にシリアル化されたオブジェクトを逆シリアル化し、そのオブジェクトを再シリアル化して、例外をスローします。 オブジェクトのシリアル化、逆シリアル化、再シリアル化、および逆シリアル化を提供するために、この例では、`BadDivisionException` クラスコンストラクターと <xref:System.Runtime.Serialization.ISafeSerializationData.CompleteDeserialization%2A?displayProperty=nameWithType> 実装の両方に <xref:System.Exception.SerializeObjectState> イベントハンドラーを追加します。  
   
  ]]></format>
         </remarks>
@@ -1155,12 +1162,12 @@ Stack Trace:
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Exception.Source%2A>プロパティが明示的に設定されていない場合は、ランタイムによって、例外が発生したアセンブリの名前に自動的に設定されます。  
+ <xref:System.Exception.Source%2A> プロパティが明示的に設定されていない場合は、ランタイムによって、例外が発生したアセンブリの名前に自動的に設定されます。  
   
    
   
 ## Examples  
- 次の例では`Exception` 、コンストラクターで`Source`プロパティを設定し、例外をキャッチしてを`Source`表示するをスローします。  
+ 次の例では、コンストラクターの `Source` プロパティを設定し、例外をキャッチして `Source`を表示する `Exception` をスローします。  
   
  [!code-cpp[System.Exception.Properties#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.Properties/CPP/properties.cpp#1)]
  [!code-csharp[System.Exception.Properties#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.Properties/CS/properties.cs#1)]
@@ -1220,16 +1227,16 @@ Stack Trace:
 ## Remarks  
  実行スタックは、指定された時点で実行されているすべてのメソッドを追跡します。 メソッド呼び出しのトレースは、スタック トレースと呼ばれます。 スタックトレースリストは、例外が発生したメソッド内の行番号にコールスタックをたどる方法を提供します。  
   
- プロパティ<xref:System.Exception.StackTrace%2A>は、例外がスローされた場所で発生したコールスタックのフレームを返します。 呼び出し履歴では、 <xref:System.Diagnostics.StackTrace?displayProperty=nameWithType>クラスの新しいインスタンスを作成し、その<xref:System.Diagnostics.StackTrace.ToString%2A?displayProperty=nameWithType>メソッドを使用して、追加のフレームに関する情報を取得できます。  
+ <xref:System.Exception.StackTrace%2A> プロパティは、例外がスローされた場所で発生したコールスタックのフレームを返します。 <xref:System.Diagnostics.StackTrace?displayProperty=nameWithType> クラスの新しいインスタンスを作成し、その <xref:System.Diagnostics.StackTrace.ToString%2A?displayProperty=nameWithType> メソッドを使用することによって、呼び出し履歴の追加フレームに関する情報を取得できます。  
   
- 共通言語ランタイム (CLR) は、 `throw`キーワードを使用して、アプリケーションコードで例外がスローされるたびにスタックトレースを更新します。 最初にスローされたメソッドとは異なるメソッドで例外が再スローされた場合、スタックトレースには、例外が最初にスローされたメソッド内の場所と、例外が発生したメソッド内の場所の両方が含まれます。再スロー. 例外がスローされ、後で再スローされた場合、同じメソッドでスタックトレースには、例外が再スローされた場所だけが含まれ、例外が最初にスローされた場所は含まれません。  
+ 共通言語ランタイム (CLR) は、アプリケーションコードで例外がスローされるたびに (`throw` キーワードを使用して) スタックトレースを更新します。 最初にスローされたメソッドとは異なるメソッドで例外が再スローされた場合、スタックトレースには、例外が最初にスローされたメソッド内の場所と、例外が発生したメソッド内の場所の両方が含まれます。再スロー. 例外がスローされ、後で再スローされた場合、同じメソッドでスタックトレースには、例外が再スローされた場所だけが含まれ、例外が最初にスローされた場所は含まれません。  
   
- プロパティ<xref:System.Exception.StackTrace%2A>は、最適化時にインライン展開などのコード変換が発生したため、予想どおりに多くのメソッド呼び出しを報告しない場合があります。  
+ <xref:System.Exception.StackTrace%2A> プロパティでは、最適化時にインライン展開などのコード変換が発生するため、予想どおりに多くのメソッド呼び出しが報告されない場合があります。  
   
    
   
 ## Examples  
- 次のコード例では`Exception` 、をスローしてからキャッチし、 `StackTrace`プロパティを使用してスタックトレースを表示します。  
+ 次のコード例では、`Exception` をスローし、それをキャッチして、`StackTrace` プロパティを使用してスタックトレースを表示します。  
   
  [!code-cpp[System.Exception.Properties#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.Properties/CPP/properties.cpp#1)]
  [!code-csharp[System.Exception.Properties#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.Properties/CS/properties.cs#1)]
@@ -1237,9 +1244,9 @@ Stack Trace:
   
  ]]></format>
         </remarks>
-        <block subset="none" type="overrides"><para><see langword="StackTrace" />プロパティは、スタックトレースの内容または形式に対する制御を必要とするクラスでオーバーライドされます。  
+        <block subset="none" type="overrides"><para><see langword="StackTrace" /> プロパティは、スタックトレースの内容または形式に対する制御を必要とするクラスでオーバーライドされます。  
   
-既定では、例外オブジェクトがスローされる直前にスタックトレースがキャプチャされます。 例外<see cref="P:System.Environment.StackTrace" />がスローされない場合にスタックトレース情報を取得するには、を使用します。</para></block>
+既定では、例外オブジェクトがスローされる直前にスタックトレースがキャプチャされます。 例外がスローされない場合にスタックトレース情報を取得するには、<see cref="P:System.Environment.StackTrace" /> を使用します。</para></block>
         <altmember cref="P:System.Environment.StackTrace" />
       </Docs>
     </Member>
@@ -1286,15 +1293,15 @@ Stack Trace:
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- この例外をスローするメソッドが使用できず、スタックトレースが null 参照 (`Nothing` Visual Basic) でない場合、 <xref:System.Exception.TargetSite%2A>はスタックトレースからメソッドを取得します。 スタック トレースが null 参照であると、<xref:System.Exception.TargetSite%2A> も null 参照を返します。  
+ この例外をスローするメソッドが使用できず、スタックトレースが null 参照 (Visual Basic で`Nothing`) でない場合、<xref:System.Exception.TargetSite%2A> はスタックトレースからメソッドを取得します。 スタック トレースが null 参照であると、<xref:System.Exception.TargetSite%2A> も null 参照を返します。  
   
 > [!NOTE]
->  例外<xref:System.Exception.TargetSite%2A>ハンドラーがアプリケーションドメインの境界を越えて例外を処理する場合、プロパティは例外がスローされたメソッドの名前を正確に報告できない可能性があります。  
+>  例外ハンドラーがアプリケーションドメインの境界を越えて例外を処理する場合、<xref:System.Exception.TargetSite%2A> プロパティは、例外がスローされたメソッドの名前を正確に報告できないことがあります。  
   
    
   
 ## Examples  
- 次のコード例では`Exception` 、をスローし、それをキャッチして、 `TargetSite`プロパティを使用して、元のメソッドを表示します。  
+ 次のコード例では、`Exception` をスローし、それをキャッチして、`TargetSite` プロパティを使用して、元のメソッドを表示します。  
   
  [!code-cpp[System.Exception.Properties#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.Exception.Properties/CPP/properties.cpp#1)]
  [!code-csharp[System.Exception.Properties#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.Exception.Properties/CS/properties.cs#1)]
@@ -1352,18 +1359,18 @@ Stack Trace:
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- <xref:System.Exception.ToString%2A>人間によって認識されることを意図した現在の例外の表現を返します。 例外にカルチャに依存するデータが含まれている場合、 `ToString`によって返される文字列形式は、現在のシステムカルチャを考慮する必要があります。 返される文字列の形式については正確な要件はありませんが、ユーザーが認識したオブジェクトの値を反映しようとします。  
+ <xref:System.Exception.ToString%2A> は、人間によって認識されることを意図した現在の例外の表現を返します。 例外にカルチャに依存するデータが含まれている場合、`ToString` によって返される文字列形式は、現在のシステムカルチャを考慮する必要があります。 返される文字列の形式については正確な要件はありませんが、ユーザーが認識したオブジェクトの値を反映しようとします。  
   
- の既定の実装<xref:System.Exception.ToString%2A>では、現在の例外をスローしたクラスの名前、メッセージ、内部例外で<xref:System.Exception.ToString%2A>を呼び出した結果、およびを呼び出し<xref:System.Environment.StackTrace%2A?displayProperty=nameWithType>た結果を取得します。 これらのメンバーのいずれか`null`がの場合、その値は返される文字列に含まれません。  
+ <xref:System.Exception.ToString%2A> の既定の実装では、現在の例外をスローしたクラスの名前、メッセージ、内部例外で <xref:System.Exception.ToString%2A> を呼び出した結果、および <xref:System.Environment.StackTrace%2A?displayProperty=nameWithType>を呼び出した結果を取得します。 これらのメンバーのいずれかが `null`場合、その値は返される文字列に含まれません。  
   
- エラーメッセージがない場合、または空の文字列 ("") の場合は、エラーメッセージは返されません。 内部例外の名前とスタックトレースは、存在しない`null`場合にのみ返されます。  
+ エラーメッセージがない場合、または空の文字列 ("") の場合は、エラーメッセージは返されません。 内部例外の名前とスタックトレースは、`null`されていない場合にのみ返されます。  
   
  このメソッドは、<xref:System.Object.ToString%2A?displayProperty=nameWithType> をオーバーライドします。  
   
    
   
 ## Examples  
- 次の例では、例外を発生させ、 <xref:System.Exception.ToString%2A>その例外に対してを呼び出した結果を表示します。 メソッドは、 <xref:System.Exception.ToString%2A?displayProperty=nameWithType>例外クラスのインスタンスが<xref:System.Console.WriteLine%2A?displayProperty=nameWithType>メソッドの引数リストに含まれている場合に、暗黙的に呼び出されることに注意してください。  
+ 次の例では、例外を発生させ、その例外に対して <xref:System.Exception.ToString%2A> を呼び出した結果を表示します。 <xref:System.Exception.ToString%2A?displayProperty=nameWithType> メソッドは、例外クラスのインスタンスが <xref:System.Console.WriteLine%2A?displayProperty=nameWithType> メソッドの引数リストに存在する場合に、暗黙的に呼び出されることに注意してください。  
   
  [!code-cpp[System.Exception.ToString#1](~/samples/snippets/cpp/VS_Snippets_CLR_System/system.exception.tostring/cpp/ToStringEx1.cpp#1)]
  [!code-csharp[System.Exception.ToString#1](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.exception.tostring/cs/ToStringEx1.cs#1)]
