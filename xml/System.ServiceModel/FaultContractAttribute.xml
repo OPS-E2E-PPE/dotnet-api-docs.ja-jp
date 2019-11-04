@@ -1,5 +1,5 @@
 <Type Name="FaultContractAttribute" FullName="System.ServiceModel.FaultContractAttribute">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="258dde72e7912d28ac6a726677683455fbada41b" /><Meta Name="ms.sourcegitcommit" Value="88014e1c5440e3df4f66ef04393854d15b1fd534" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="09/05/2019" /><Meta Name="ms.locfileid" Value="70648394" /></Metadata><TypeSignature Language="C#" Value="public sealed class FaultContractAttribute : Attribute" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="7d55e28a240dfabc7d2afba4d320903cbf7d3484" /><Meta Name="ms.sourcegitcommit" Value="0084afad1b3b1cb2c8ad2c142ae3597d08bad4a7" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="10/31/2019" /><Meta Name="ms.locfileid" Value="73381921" /></Metadata><TypeSignature Language="C#" Value="public sealed class FaultContractAttribute : Attribute" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit FaultContractAttribute extends System.Attribute" />
   <TypeSignature Language="DocId" Value="T:System.ServiceModel.FaultContractAttribute" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class FaultContractAttribute&#xA;Inherits Attribute" />
@@ -19,6 +19,7 @@
     <AssemblyVersion>4.2.0.0</AssemblyVersion>
     <AssemblyVersion>4.5.0.1</AssemblyVersion>
     <AssemblyVersion>4.5.0.3</AssemblyVersion>
+    <AssemblyVersion>4.6.0.0</AssemblyVersion>
   </AssemblyInfo>
   <Base>
     <BaseTypeName>System.Attribute</BaseTypeName>
@@ -60,10 +61,10 @@
   
  ほとんどの場合、エラー メッセージでは、<xref:System.ServiceModel.FaultContractAttribute.ProtectionLevel%2A> を <xref:System.Net.Security.ProtectionLevel.EncryptAndSign> に設定すれば十分です。 詳細については、「[保護レベルについ](~/docs/framework/wcf/understanding-protection-level.md)て」を参照してください。  
   
- 指定したエラーを <xref:System.ServiceModel.FaultContractAttribute> でマークした操作から返すには、操作中にマネージド例外が発生したときに、<xref:System.ServiceModel.FaultException%601> をスローします (型パラメーターは、シリアル化可能なエラー情報です)。 WCF クライアントアプリケーションは、クライアント実装<xref:System.ServiceModel.FaultException%601>でスローされたのと同じ型 (つまり、typeparameter がシリアル化可能なエラー情報である) として SOAP エラーを格納します。 <xref:System.ServiceModel.FaultContractAttribute> は、双方向サービス操作と非同期操作のペアで発生する SOAP エラーを指定する場合のみ使用できます。一方向操作では SOAP エラーはサポートされないため、<xref:System.ServiceModel.FaultContractAttribute> もサポートされません。  
+ 指定したエラーを <xref:System.ServiceModel.FaultContractAttribute> でマークした操作から返すには、操作中にマネージド例外が発生したときに、<xref:System.ServiceModel.FaultException%601> をスローします (型パラメーターは、シリアル化可能なエラー情報です)。 WCF クライアントアプリケーションは、クライアント実装でスローされたのと同じ型 (つまり <xref:System.ServiceModel.FaultException%601>、typeparameter がシリアル化可能なエラー情報である) として SOAP エラーを格納します。 <xref:System.ServiceModel.FaultContractAttribute> は、双方向サービス操作と非同期操作のペアで発生する SOAP エラーを指定する場合のみ使用できます。一方向操作では SOAP エラーはサポートされないため、<xref:System.ServiceModel.FaultContractAttribute> もサポートされません。  
   
 > [!NOTE]
->  エラー情報を伝えるために、任意のシリアル化可能な型を使用できます。 このバージョンの WCF では、に<xref:System.ServiceModel.FaultContractAttribute>指定された型はに<xref:System.Runtime.Serialization.DataContractSerializer?displayProperty=nameWithType>よってシリアル化可能である必要があります。 が提供する<xref:System.Runtime.Serialization.DataContractSerializer>シリアル化のサポートについては、「[データコントラクトシリアライザー](~/docs/framework/wcf/feature-details/data-contract-serializer.md)」を参照してください。  
+>  エラー情報を伝えるために、任意のシリアル化可能な型を使用できます。 このバージョンの WCF で唯一の制限は、<xref:System.ServiceModel.FaultContractAttribute> で指定された型が <xref:System.Runtime.Serialization.DataContractSerializer?displayProperty=nameWithType>によってシリアル化できる必要があることです。 <xref:System.Runtime.Serialization.DataContractSerializer> が提供するシリアル化のサポートについては、「[データコントラクトシリアライザー](~/docs/framework/wcf/feature-details/data-contract-serializer.md)」を参照してください。  
   
  たとえば、クライアントが <xref:System.Int32> を含む SOAP エラーの受信を想定できるように指定するには、サービス メソッドの <xref:System.ServiceModel.FaultContractAttribute> に型パラメーターを配置します。  
   
@@ -83,14 +84,14 @@
 > [!NOTE]
 >  型パラメーターが <xref:System.ServiceModel.FaultException%601> である <xref:System.String?displayProperty=nameWithType> を指定した場合、クライアント アプリケーションでは文字列値に Detail プロパティが割り当てられ、クライアントは <xref:System.ServiceModel.FaultException%601.ToString%2A?displayProperty=nameWithType> メソッドを呼び出しても、その文字列を取得できません。 クライアント アプリケーションが <xref:System.Exception.ToString%2A?displayProperty=nameWithType> を呼び出したときにこの文字列値を返すには、操作内で <xref:System.ServiceModel.FaultException?displayProperty=nameWithType> 例外をスローし、この文字列をコンストラクターに渡します。  
   
- 例外または <xref:System.ServiceModel.FaultException%601> がスローされるときのアプリケーションの動作を明示的に制御するには、<xref:System.ServiceModel.Dispatcher.IErrorHandler?displayProperty=nameWithType>、<xref:System.ServiceModel.Description.IServiceBehavior?displayProperty=nameWithType>、または <xref:System.ServiceModel.Description.IContractBehavior?displayProperty=nameWithType> で <xref:System.ServiceModel.Description.IEndpointBehavior?displayProperty=nameWithType> インターフェイスを実装し、これを <xref:System.ServiceModel.Dispatcher.ChannelDispatcher.ErrorHandlers%2A?displayProperty=nameWithType> プロパティに割り当てます。 <xref:System.ServiceModel.Dispatcher.IErrorHandler>生成された SOAP エラーと、それをクライアントに送信するかどうかを明示的に制御できます。  
+ 例外または <xref:System.ServiceModel.FaultException%601> がスローされるときのアプリケーションの動作を明示的に制御するには、<xref:System.ServiceModel.Dispatcher.IErrorHandler?displayProperty=nameWithType>、<xref:System.ServiceModel.Description.IServiceBehavior?displayProperty=nameWithType>、または <xref:System.ServiceModel.Description.IContractBehavior?displayProperty=nameWithType> で <xref:System.ServiceModel.Description.IEndpointBehavior?displayProperty=nameWithType> インターフェイスを実装し、これを <xref:System.ServiceModel.Dispatcher.ChannelDispatcher.ErrorHandlers%2A?displayProperty=nameWithType> プロパティに割り当てます。 <xref:System.ServiceModel.Dispatcher.IErrorHandler> を使用すると、生成される SOAP エラーと、それをクライアントに送信するかどうかを明示的に制御できます。  
   
- デバッグを容易にするに<xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType>は`true` 、コードでをに設定する<xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType>か、アプリケーション構成ファイルでを使用します。 有効な場合は、サービスが自動的に例外情報を呼び出し元に返します。 これらのエラーは、<xref:System.ServiceModel.FaultException> 例外としてクライアントに表示されます。  
+ デバッグを容易にするには、コードで <xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> を `true` に設定するか、アプリケーション構成ファイルで <xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> を使用します。 有効な場合は、サービスが自動的に例外情報を呼び出し元に返します。 これらのエラーは、<xref:System.ServiceModel.FaultException> 例外としてクライアントに表示されます。  
   
 > [!IMPORTANT]
->  マネージ例外によって内部アプリケーション情報が公開<xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType>される`true`可能性があるため、またはをに設定すると<xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> 、WCF クライアントは、個人を含む内部サービス操作例外に関する情報を取得することができます。特定可能な情報またはその他の機密情報。  
+>  マネージ例外によって内部アプリケーション情報が公開される可能性があるため、<xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> または <xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> を `true` に設定すると、WCF クライアントは、個人を特定できるなどの内部サービス操作例外に関する情報を取得することができます。機密情報。  
 >   
->  したがって、<xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> または <xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> を `true` に設定することは、サービス アプリケーションを一時的にデバッグする方法としてのみお勧めできます。 さらに、このようにして未処理のマネージド例外を返すメソッドの WSDL には、<xref:System.ServiceModel.FaultException%601> 型の <xref:System.String> のコントラクトが含まれません。 クライアントは、デバッグ情報を適切に取得するために、不明な SOAP <xref:System.ServiceModel.FaultException?displayProperty=nameWithType>エラー (WCF クライアントにオブジェクトとして返される) の可能性を期待する必要があります。  
+>  したがって、<xref:System.ServiceModel.ServiceBehaviorAttribute.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> または <xref:System.ServiceModel.Description.ServiceDebugBehavior.IncludeExceptionDetailInFaults%2A?displayProperty=nameWithType> を `true` に設定することは、サービス アプリケーションを一時的にデバッグする方法としてのみお勧めできます。 さらに、このようにして未処理のマネージド例外を返すメソッドの WSDL には、<xref:System.ServiceModel.FaultException%601> 型の <xref:System.String> のコントラクトが含まれません。 クライアントは、デバッグ情報を適切に取得するために、不明な SOAP エラー (<xref:System.ServiceModel.FaultException?displayProperty=nameWithType> オブジェクトとして WCF クライアントに返される) の可能性を期待する必要があります。  
   
    
   
@@ -100,7 +101,7 @@
  [!code-csharp[FaultContractAttribute#1](~/samples/snippets/csharp/VS_Snippets_CFX/faultcontractattribute/cs/services.cs#1)]
  [!code-vb[FaultContractAttribute#1](~/samples/snippets/visualbasic/VS_Snippets_CFX/faultcontractattribute/vb/services.vb#1)]  
   
- 次のコード例は、の`ISampleService` WCF クライアントが、 <xref:System.ServiceModel.FaultException%601>この SOAP エラーを型`GreetingFault`のとして経験していることを示しています。  
+ 次のコード例は、`ISampleService` の WCF クライアントが、`GreetingFault`型の <xref:System.ServiceModel.FaultException%601> としてこの SOAP エラーを発生させることを示しています。  
   
  [!code-csharp[FaultContractAttribute#3](~/samples/snippets/csharp/VS_Snippets_CFX/faultcontractattribute/cs/client.cs#3)]
  [!code-vb[FaultContractAttribute#3](~/samples/snippets/visualbasic/VS_Snippets_CFX/faultcontractattribute/vb/client.vb#3)]  
@@ -131,6 +132,7 @@
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.5.0.1</AssemblyVersion>
         <AssemblyVersion>4.5.0.3</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters>
         <Parameter Name="detailType" Type="System.Type" />
@@ -179,6 +181,7 @@
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.5.0.1</AssemblyVersion>
         <AssemblyVersion>4.5.0.3</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0">
@@ -223,6 +226,7 @@
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.5.0.1</AssemblyVersion>
         <AssemblyVersion>4.5.0.3</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0">
@@ -234,7 +238,7 @@
       </ReturnValue>
       <Docs>
         <summary>エラー情報を含むシリアル化可能なオブジェクトの型を取得します。</summary>
-        <value>シリアル化できるエラー クラスを表す型。</value>
+        <value>シリアル化可能なエラー クラスを表す型。</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -308,6 +312,7 @@
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.5.0.1</AssemblyVersion>
         <AssemblyVersion>4.5.0.3</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0">
@@ -345,6 +350,7 @@
         <AssemblyVersion>4.2.0.0</AssemblyVersion>
         <AssemblyVersion>4.5.0.1</AssemblyVersion>
         <AssemblyVersion>4.5.0.3</AssemblyVersion>
+        <AssemblyVersion>4.6.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute FrameworkAlternate="netframework-4.0">
@@ -387,7 +393,7 @@
       </ReturnValue>
       <Docs>
         <summary>SOAP エラーがバインドに要求する保護レベルを指定します。</summary>
-        <value><see cref="T:System.Net.Security.ProtectionLevel" /> 値のいずれか。 既定値は、<see cref="F:System.Net.Security.ProtectionLevel.None" /> です。</value>
+        <value><see cref="T:System.Net.Security.ProtectionLevel" /> の値の 1 つ。 既定値は、<see cref="F:System.Net.Security.ProtectionLevel.None" /> です。</value>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
