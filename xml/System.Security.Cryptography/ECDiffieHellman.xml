@@ -1,5 +1,5 @@
 <Type Name="ECDiffieHellman" FullName="System.Security.Cryptography.ECDiffieHellman">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="299577c299fefd8c8c66e3ccb842aa5d2d9ad6b4" /><Meta Name="ms.sourcegitcommit" Value="385ff23cc00fe9aa1c93460c62603b45c2041d0b" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="11/22/2019" /><Meta Name="ms.locfileid" Value="74388406" /></Metadata><TypeSignature Language="C#" Value="public abstract class ECDiffieHellman : System.Security.Cryptography.AsymmetricAlgorithm" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="b4ed87e32d598047c7b33c8ec5b55e24f72e1bac" /><Meta Name="ms.sourcegitcommit" Value="6c0b6310824199ff476e4a9eec6e9ed0bd1a51c9" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="12/05/2019" /><Meta Name="ms.locfileid" Value="74875130" /></Metadata><TypeSignature Language="C#" Value="public abstract class ECDiffieHellman : System.Security.Cryptography.AsymmetricAlgorithm" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit ECDiffieHellman extends System.Security.Cryptography.AsymmetricAlgorithm" />
   <TypeSignature Language="DocId" Value="T:System.Security.Cryptography.ECDiffieHellman" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class ECDiffieHellman&#xA;Inherits AsymmetricAlgorithm" />
@@ -260,7 +260,7 @@
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Docs>
-        <summary>ハッシュ関数を使用してキーとして使用できるバイト数を派生しています。</summary>
+        <summary>指定されたハッシュ アルゴリズムを使用して、キー派生を実行します。</summary>
       </Docs>
     </MemberGroup>
     <Member MemberName="DeriveKeyFromHash">
@@ -293,8 +293,8 @@
       <Docs>
         <param name="otherPartyPublicKey">もう一方のパーティの公開キー。</param>
         <param name="hashAlgorithm">キー マテリアルを派生させるために使用するハッシュ アルゴリズム。</param>
-        <summary>別のパーティの公開キーとハッシュ アルゴリズムの名前を指定し、ハッシュ関数を使用するキーとして使用できるバイトを派生させます。</summary>
-        <returns>他のパーティの公開キーとのキー交換からのキー マテリアル。</returns>
+        <summary>指定されたハッシュ アルゴリズムを使用して、キー派生を実行します。</summary>
+        <returns>共有シークレットのハッシュ。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -303,7 +303,17 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> はこのキーとは異なる曲線上にあります。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> によって使用される曲線のサイズが、このキーの曲線のサイズと異なります。
+
+- または -
+
+<paramref name="hashAlgorithm" /> パラメーターにハッシュが指定されていません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="otherPartyPublicKey" /> によって使用される曲線が、このキーの曲線と異なります。
+
+- または -
+
+このインスタンスでは公開キーのみ表されます。</exception>
       </Docs>
     </Member>
     <Member MemberName="DeriveKeyFromHash">
@@ -340,11 +350,32 @@
         <param name="hashAlgorithm">キー マテリアルを派生させるために使用するハッシュ アルゴリズム。</param>
         <param name="secretPrepend">ハッシュ前に派生の機密情報の先頭に追加する値。</param>
         <param name="secretAppend">ハッシュ前に派生の機密情報に追加する値。</param>
-        <summary>派生クラスに実装した場合は、別のパーティの公開キー、ハッシュ アルゴリズムの名前、先頭の値、および追加の値を指定し、ハッシュ関数を使用するキーとして使用できるバイトを派生させます。</summary>
-        <returns>他のパーティの公開キーとのキー交換からのキー マテリアル。</returns>
-        <remarks>To be added.</remarks>
+        <summary>派生クラスに実装されている場合、指定されたハッシュ アルゴリズムを省略可能な先頭または末尾に追加されたデータと共に使用して、キー派生を実行します。</summary>
+        <returns>要求に応じてデータを先頭または末尾に追加した後の共有シークレットのハッシュ。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+このメソッドは、楕円曲線 Diffie-hellman キーアグリーメントを内部で実行して、共有シークレット (`z`) を生成します。
+このメソッドからの戻り値は、指定されたハッシュアルゴリズムを使用した `HASH(secretPrepend || z || secretAppend)` の結果であり、`||` は連結を意味します。
+
+`secretPrepend` または `secretAppend` の値が `null`場合、それらは空の配列として扱われます。  
+
+ ]]></format>
+        </remarks>
         <exception cref="T:System.NotImplementedException">派生クラスはこのメソッドをオーバーライドする必要があります。</exception>
-        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> はこのキーとは異なる曲線上にあります。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> によって使用される曲線のサイズが、このキーの曲線のサイズと異なります。
+
+- または -
+
+<paramref name="hashAlgorithm" /> パラメーターにハッシュが指定されていません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="otherPartyPublicKey" /> によって使用される曲線が、このキーの曲線と異なります。
+
+- または -
+
+このインスタンスでは公開キーのみ表されます。</exception>
       </Docs>
     </Member>
     <MemberGroup MemberName="DeriveKeyFromHmac">
@@ -353,7 +384,7 @@
         <AssemblyVersion>4.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Docs>
-        <summary>ハッシュ ベース メッセージ認証コード (HMAC) を使用して、キーとして使用できるバイト数を派生しています。</summary>
+        <summary>指定された HMAC (Hash-based Message Authentication Code) アルゴリズムを使用して、キー派生を実行します。</summary>
       </Docs>
     </MemberGroup>
     <Member MemberName="DeriveKeyFromHmac">
@@ -388,8 +419,8 @@
         <param name="otherPartyPublicKey">もう一方のパーティの公開キー。</param>
         <param name="hashAlgorithm">キー マテリアルを派生させるために使用するハッシュ アルゴリズム。</param>
         <param name="hmacKey">HMAC のキー。</param>
-        <summary>ハッシュ ベース メッセージ認証コード (HMAC) を使用して、キーとして使用できるバイト数を派生しています。</summary>
-        <returns>他のパーティの公開キーとのキー交換からのキー マテリアル。</returns>
+        <summary>指定された HMAC (Hash-based Message Authentication Code) アルゴリズムを使用して、キー派生を実行します。</summary>
+        <returns>共有シークレットの HMAC。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -398,7 +429,17 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> はこのキーとは異なる曲線上にあります。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> によって使用される曲線のサイズが、このキーの曲線のサイズと異なります。
+
+- または -
+
+<paramref name="hashAlgorithm" /> パラメーターにハッシュが指定されていません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="otherPartyPublicKey" /> によって使用される曲線が、このキーの曲線と異なります。
+
+- または -
+
+このインスタンスでは公開キーのみ表されます。</exception>
       </Docs>
     </Member>
     <Member MemberName="DeriveKeyFromHmac">
@@ -437,11 +478,33 @@
         <param name="hmacKey">HMAC のキー。</param>
         <param name="secretPrepend">ハッシュ前に派生の機密情報の先頭に追加する値。</param>
         <param name="secretAppend">ハッシュ前に派生の機密情報に追加する値。</param>
-        <summary>派生クラスに実装された場合、ハッシュ ベース メッセージ認証コード (HMAC) を使用して、キーとして使用できるバイト数を派生します。</summary>
-        <returns>他のパーティの公開キーとのキー交換からのキー マテリアル。</returns>
-        <remarks>To be added.</remarks>
+        <summary>派生クラスに実装されている場合、指定された HMAC (Hash-based Message Authentication Code) アルゴリズムを省略可能な先頭または末尾に追加されたデータと共に使用して、キー派生を実行します。</summary>
+        <returns>要求に応じてデータを先頭または末尾に追加した後の共有シークレットの HMAC。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+このメソッドは、楕円曲線 Diffie-hellman キーアグリーメントを内部で実行して、共有シークレット (`z`) を生成します。
+
+`hmacKey` が `null`場合、このメソッドからの戻り値は、指定された HMAC アルゴリズムを使用した `HMAC-HASH(z, secretPrepend || z || secretAppend)` の結果になります。ここで、`||` は連結を意味します。 それ以外の場合、このメソッドからの戻り値は `HMAC-HASH(hmacKey, secretPrepend || z || secretAppend)`の結果になります。
+
+`secretPrepend` または `secretAppend` の値が `null`場合、それらは空の配列として扱われます。  
+
+ ]]></format>
+        </remarks>
         <exception cref="T:System.NotImplementedException">派生クラスはこのメソッドをオーバーライドする必要があります。</exception>
-        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> はこのキーとは異なる曲線上にあります。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> によって使用される曲線のサイズが、このキーの曲線のサイズと異なります。
+
+- または -
+
+<paramref name="hashAlgorithm" /> パラメーターにハッシュが指定されていません。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="otherPartyPublicKey" /> によって使用される曲線が、このキーの曲線と異なります。
+
+- または -
+
+このインスタンスでは公開キーのみ表されます。</exception>
       </Docs>
     </Member>
     <Member MemberName="DeriveKeyMaterial">
@@ -477,16 +540,25 @@
       </Parameters>
       <Docs>
         <param name="otherPartyPublicKey">もう一方のパーティの公開キー。</param>
-        <summary>相手の公開キーを指定した場合に、キーとして使用できるバイトを派生させます。</summary>
-        <returns>他のパーティの公開キーとのキー交換からのキー マテリアル。</returns>
+        <summary>派生クラスに実装されている場合、共有シークレットに対してキー派生を実行します。</summary>
+        <returns>共有シークレットを入力として使用したキー派生関数の結果。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
-## Remarks  
- 公開キーの詳細については、<xref:System.Security.Cryptography.ECDiffieHellmanPublicKey> クラスを参照してください。  
-  
+## Remarks
+
+このメソッドの既定の動作は、<xref:System.Security.Cryptography.ECDiffieHellman.DeriveKeyFromHash%2A> を呼び出して、先頭または末尾の値を持たないハッシュアルゴリズムとして SHA-256 を指定することと同じです。
+一部の実装では、このメソッドの動作を変更できます。また、呼び出し元は、必要なキー派生を実行するように明示的に指示するメソッドを呼び出すことをお勧めします。
+
  ]]></format>
         </remarks>
+        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> によって使用される曲線のサイズが、このキーの曲線のサイズと異なります。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="otherPartyPublicKey" /> によって使用される曲線が、このキーの曲線と異なります。
+
+- または -
+
+このインスタンスでは公開キーのみ表されます。</exception>
       </Docs>
     </Member>
     <Member MemberName="DeriveKeyTls">
@@ -521,13 +593,33 @@
         <param name="otherPartyPublicKey">もう一方のパーティの公開キー。</param>
         <param name="prfLabel">ASCII エンコードされた PRF ラベル。</param>
         <param name="prfSeed">64 バイト PRF シード。</param>
-        <summary>派生クラスで実装された場合、トランスポート層セキュリティ (TLS) 擬似ランダム関数 (PRF) 派生アルゴリズムを使用してキーとして使用できるバイトを派生します。</summary>
-        <returns>他のパーティの公開キーとのキー交換からのキー マテリアル。</returns>
-        <remarks>To be added.</remarks>
+        <summary>派生クラスに実装されている場合、TLS (トランスポート層セキュリティ) 1.1 PRF (擬似ランダム関数) を使用してキー派生を実行します。</summary>
+        <returns>キーとして共有シークレットを使用した TLS 1.1 PRF の最初の 48 バイト。</returns>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+このメソッドは、楕円曲線 Diffie-hellman キーアグリーメントを内部で実行して、共有シークレット (`z`) を生成します。
+
+このメソッドの戻り値は、TLS 1.1 PRF (擬似ランダム関数) `PRF(z, prfLabel, prfSeed)`の48バイトの出力です。
+
+詳細については、「 [IETF RFC 4346 のセクション 5](https://tools.ietf.org/html/rfc4346#section-5)」を参照してください。
+
+]]></format>
+        </remarks>
         <exception cref="T:System.NotImplementedException">派生クラスはこのメソッドをオーバーライドする必要があります。</exception>
-        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> はこのキーとは異なる曲線上にあります。</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="prfLabel" /> または <paramref name="prfSeed" /> が <see langword="null" /> です。</exception>
-        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="prfSeed" /> は 64 バイト長に完全には一致しません。</exception>
+        <exception cref="T:System.ArgumentException"><paramref name="otherPartyPublicKey" /> によって使用される曲線のサイズが、このキーの曲線のサイズと異なります。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="otherPartyPublicKey" />、<paramref name="prfLabel" />、または <paramref name="prfSeed" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="prfSeed" /> は 64 バイト長に完全には一致しません。
+
+- または -
+
+<paramref name="otherPartyPublicKey" /> によって使用される曲線が、このキーの曲線と異なります。
+
+- または -
+
+このインスタンスでは公開キーのみ表されます。</exception>
       </Docs>
     </Member>
     <Member MemberName="ExportECPrivateKey">
@@ -745,8 +837,10 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- このメソッドは、ECPrivateKey のバイナリ (BER/CER/DER) エンコーディングのみをサポートしています。
+
+このメソッドは、ECPrivateKey のバイナリ (BER/CER/DER) エンコーディングのみをサポートしています。
 値が Base64 でエンコードされている場合、または PEM テキスト形式の場合、呼び出し元は、このメソッドを呼び出す前にコンテンツを Base64 でデコードする必要があります。
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="source" /> のコンテンツは、ASN.1-BER でエンコードされた PKCS#8 ECPrivateKey 構造体を表していません。
@@ -790,11 +884,13 @@
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
-## Remarks  
+## Remarks
+
  パスワードバイトは、EncryptedPrivateKeyInfo コンテンツによって示されるアルゴリズムによって使用されるキー派生関数 (KDF) に直接渡されます。
 これにより、PBKDF2 (パスワードベースのキー派生関数 2) でパスワードを処理するときに、UTF-8 以外のテキストエンコードを使用する他のシステムとの互換性が確保されます。
 このメソッドは、EncryptedPrivateKeyInfo の binary (BER/CER/DER) エンコードのみをサポートします。
 値が Base64 でエンコードされている場合、または PEM テキスト形式の場合、呼び出し元は、このメソッドを呼び出す前にコンテンツを Base64 でデコードする必要があります。
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">パスワードが正しくありません。
@@ -858,6 +954,7 @@
  `source` の内容が、PBKDF1 (パスワードベースのキー派生関数 1) または PBKDF2 (パスワードベースのキー派生関数 2) を使用するアルゴリズムを示している場合、パスワードは UTF-8 エンコードを使用してバイトに変換されます。
 このメソッドは、EncryptedPrivateKeyInfo の binary (BER/CER/DER) エンコードのみをサポートします。
 値が Base64 でエンコードされている場合、または PEM テキスト形式の場合、呼び出し元は、このメソッドを呼び出す前にコンテンツを Base64 でデコードする必要があります。
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">パスワードが正しくありません。
@@ -957,6 +1054,7 @@
 ## Remarks  
  このメソッドでは、PrivateKeyInfo のバイナリ (BER/CER/DER) エンコードのみがサポートされます。
 値が Base64 でエンコードされている場合、または PEM テキスト形式の場合、呼び出し元は、このメソッドを呼び出す前にコンテンツを Base64 でデコードする必要があります。
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="source" /> のコンテンツは、ASN.1-BER でエンコードされた PKCS#8 PrivateKeyInfo 構造体を表していません。
@@ -1009,6 +1107,7 @@
 ## Remarks  
  このメソッドは、SubjectPublicKeyInfo のバイナリ (DER) エンコーディングのみをサポートしています。
 値が Base64 でエンコードされている場合、または PEM テキスト形式の場合、呼び出し元は、このメソッドを呼び出す前にコンテンツを Base64 でデコードする必要があります。
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="source" /> のコンテンツは、ASN.1-DER でエンコードされた X.509 SubjectPublicKeyInfo 構造体を表していません。
@@ -1242,6 +1341,7 @@
 ## Remarks  
  パスワードのバイト数は、`pbeParameters`によって示されるアルゴリズムによって使用されるキー派生関数 (KDF) に直接渡されます。
 これにより、PBKDF2 (パスワードベースのキー派生関数 2) でパスワードを処理するときに、UTF-8 以外のテキストエンコードを使用する他のシステムとの互換性が確保されます。
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">キーをエクスポートすることができませんでした。
@@ -1290,6 +1390,7 @@
   
 ## Remarks  
  `pbeParameters` が、PBKDF2 (パスワードベースのキー派生関数 2) を使用するアルゴリズムを示している場合、パスワードは UTF-8 エンコードを使用してバイトに変換されます。
+
  ]]></format>
         </remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException">キーをエクスポートすることができませんでした。</exception>

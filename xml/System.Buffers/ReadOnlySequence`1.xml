@@ -1,5 +1,5 @@
 <Type Name="ReadOnlySequence&lt;T&gt;" FullName="System.Buffers.ReadOnlySequence&lt;T&gt;">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="950af3d1586452bc44a25cd976b48a9ee7e3b2ba" /><Meta Name="ms.sourcegitcommit" Value="0084afad1b3b1cb2c8ad2c142ae3597d08bad4a7" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="10/31/2019" /><Meta Name="ms.locfileid" Value="73376086" /></Metadata><TypeSignature Language="C#" Value="public struct ReadOnlySequence&lt;T&gt;" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="181fdb5c23969a42d7417eae16a42399138acf9c" /><Meta Name="ms.sourcegitcommit" Value="6c0b6310824199ff476e4a9eec6e9ed0bd1a51c9" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="12/05/2019" /><Meta Name="ms.locfileid" Value="74874830" /></Metadata><TypeSignature Language="C#" Value="public struct ReadOnlySequence&lt;T&gt;" />
   <TypeSignature Language="ILAsm" Value=".class public sequential ansi sealed beforefieldinit ReadOnlySequence`1&lt;T&gt; extends System.ValueType" />
   <TypeSignature Language="DocId" Value="T:System.Buffers.ReadOnlySequence`1" />
   <TypeSignature Language="VB.NET" Value="Public Structure ReadOnlySequence(Of T)" />
@@ -28,7 +28,7 @@
     </Attribute>
   </Attributes>
   <Docs>
-    <typeparam name="T">To be added.</typeparam>
+    <typeparam name="T">読み取り専用シーケンス内の要素の型。</typeparam>
     <summary>一連の <typeparamref name="T" /> を読み取ることができるシーケンスを表します。</summary>
     <remarks>To be added.</remarks>
   </Docs>
@@ -55,7 +55,7 @@
         <Parameter Name="memory" Type="System.ReadOnlyMemory&lt;T&gt;" />
       </Parameters>
       <Docs>
-        <param name="memory">To be added.</param>
+        <param name="memory"><typeparamref name="T" /> 型の要素のメモリの読み取り専用ブロック。</param>
         <summary><see cref="T:System.ReadOnlyMemory`1" /> から <see cref="T:System.Buffers.ReadOnlySequence`1" /> のインスタンスを作成します。</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
@@ -148,12 +148,22 @@
         <Parameter Name="endIndex" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="startSegment">To be added.</param>
-        <param name="startIndex">To be added.</param>
-        <param name="endSegment">To be added.</param>
-        <param name="endIndex">To be added.</param>
+        <param name="startSegment">リンクされたメモリ リストの最初のノード。</param>
+        <param name="startIndex"><paramref name="startSegment" /> 内のシーケンスの先頭の位置。</param>
+        <param name="endSegment">リンクされたメモリ リストの最後のノード。</param>
+        <param name="endIndex"><paramref name="endSegment" /> 内のシーケンスの末尾の位置。</param>
         <summary>開始と終了のセグメントおよびそのセグメント内の対応するインデックスによって表されるリンクされたメモリ リストから <see cref="T:System.Buffers.ReadOnlySequence`1" /> のインスタンスを作成します。</summary>
         <remarks>To be added.</remarks>
+        <exception cref="T:System.ArgumentNullException"><paramref name="startSegment" /> または <paramref name="endSegment" /> が <see langword="null" /> です。</exception>
+        <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="startSegment" /> は <paramref name="endSegment" /> と異なりますが、<paramref name="startSegment" /> の実行インデックスが <paramref name="endSegment" /> の実行インデックスより大きくなっています。
+
+- または -
+
+<paramref name="startSegment" /> は <paramref name="endSegment" /> と同じですが、<paramref name="endIndex" /> は <paramref name="startIndex" /> より小さくなっています。
+
+- または -
+
+<paramref name="startIndex" /> が <paramref name="startSegment" /> の基になるメモリ ブロックの長さを超えています。</exception>
       </Docs>
     </Member>
     <Member MemberName="Empty">
@@ -314,9 +324,9 @@
         <Parameter Name="offset" Type="System.Int64" />
       </Parameters>
       <Docs>
-        <param name="offset">To be added.</param>
+        <param name="offset">シーケンスの先頭からのオフセット。</param>
         <summary><paramref name="offset" /> にあるシーケンスの先頭から新しい <see cref="T:System.SequencePosition" /> を返します。</summary>
-        <returns>To be added.</returns>
+        <returns>シーケンスの先頭から指定した <paramref name="offset" /> で始まるシーケンス位置を表すオブジェクト。</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -346,10 +356,10 @@
         <Parameter Name="origin" Type="System.SequencePosition" />
       </Parameters>
       <Docs>
-        <param name="offset">To be added.</param>
-        <param name="origin">To be added.</param>
-        <summary><paramref name="offset" /> にある<paramref name="origin" /> から新しい <see cref="T:System.SequencePosition" /> を返します。</summary>
-        <returns>元のオブジェクトの <paramref name="offset" /> の位置で始まる新しいオブジェクト。</returns>
+        <param name="offset">指定した <paramref name="origin" /> シーケンス位置からのオフセット。</param>
+        <param name="origin">オフセットの開始位置を表すシーケンス位置。</param>
+        <summary><paramref name="origin" /> 位置から指定したオフセットで開始する新しい <see cref="T:System.SequencePosition" /> を返します。</summary>
+        <returns>指定した <paramref name="origin" /> 位置オブジェクトの <paramref name="offset" /> 位置から始まるシーケンス位置を表すオブジェクト。</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -403,7 +413,7 @@
       </ReturnValue>
       <Docs>
         <summary><see cref="T:System.Buffers.ReadOnlySequence`1" /> に 1 つの <see cref="T:System.ReadOnlyMemory`1" /> セグメントが含まれているかどうかを示す値を取得します。</summary>
-        <value><see langword="true" /> (読み取り専用のシーケンスが空の場合)それ以外の場合は、<see langword="false" /> です。</value>
+        <value>読み取り専用シーケンスが空の場合は <see langword="true" />。それ以外の場合は、<see langword="false" />ます。</value>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -777,8 +787,8 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <summary>現在のシーケンスを表す文字列を返します。</summary>
+        <returns>現在のシーケンスを表す文字列。</returns>
         <remarks>To be added.</remarks>
         <inheritdoc />
       </Docs>

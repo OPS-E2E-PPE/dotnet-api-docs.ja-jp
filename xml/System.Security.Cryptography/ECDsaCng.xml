@@ -1,5 +1,5 @@
 <Type Name="ECDsaCng" FullName="System.Security.Cryptography.ECDsaCng">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="6805504eb676aa056830a2f3b5d194b28a469b0c" /><Meta Name="ms.sourcegitcommit" Value="0084afad1b3b1cb2c8ad2c142ae3597d08bad4a7" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="10/31/2019" /><Meta Name="ms.locfileid" Value="73394044" /></Metadata><TypeSignature Language="C#" Value="public sealed class ECDsaCng : System.Security.Cryptography.ECDsa" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="20f94e9836c6b0c61d4397932295d34553c11e78" /><Meta Name="ms.sourcegitcommit" Value="6c0b6310824199ff476e4a9eec6e9ed0bd1a51c9" /><Meta Name="ms.translationtype" Value="HT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="12/05/2019" /><Meta Name="ms.locfileid" Value="74875090" /></Metadata><TypeSignature Language="C#" Value="public sealed class ECDsaCng : System.Security.Cryptography.ECDsa" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed beforefieldinit ECDsaCng extends System.Security.Cryptography.ECDsa" />
   <TypeSignature Language="DocId" Value="T:System.Security.Cryptography.ECDsaCng" />
   <TypeSignature Language="VB.NET" Value="Public NotInheritable Class ECDsaCng&#xA;Inherits ECDsa" />
@@ -32,7 +32,8 @@
       <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- このクラスは <xref:System.Security.Cryptography.ECDsa> 抽象基本クラスから派生します。  
+このクラスは、Windows CNG ライブラリとプラットフォームの相互運用を行う場合にのみ、直接使用する必要があります。
+プラットフォームの相互運用が不要な場合は、特定の派生実装ではなく、<xref:System.Security.Cryptography.ECDsa.Create%2A?displayProperty=nameWithType> ファクトリメソッドを使用する必要があります。
   
    
   
@@ -92,11 +93,15 @@
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- ランダムキーペアの公開キーの長さは521ビットです。  
+
+このコンストラクターは、新しいパブリック/プライベートのペアを直ちに生成しません。
+このコンストラクターは、<xref:System.Security.Cryptography.ECDsaCng.KeySize> プロパティを521に設定し、キーが必要な場合は、保存されているサイズを使用してターゲット曲線を識別します。
+キーが <xref:System.Security.Cryptography.ECDsaCng.ImportParameters%2A> メソッドまたはその他のキーのインポートメソッドを使用して読み込まれる場合、このコンストラクターからのキーサイズは意味を持ちません。
   
  ]]></format>
         </remarks>
         <exception cref="T:System.PlatformNotSupportedException">Cryptography Next Generation (CNG) クラスは、このシステムではサポートされていません。</exception>
+        <altmember cref="M:System.Security.Cryptography.ECDsa.Create" />
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -133,18 +138,23 @@
         <Parameter Name="keySize" Type="System.Int32" />
       </Parameters>
       <Docs>
-        <param name="keySize">キーのサイズです。 有効なキーのサイズは、256、384、および 521 ビットです。</param>
-        <summary>指定されたキー サイズを使用して、ランダムなキー ペアで、<see cref="T:System.Security.Cryptography.ECDsaCng" /> クラスの新しいインスタンスを初期化します。</summary>
+        <param name="keySize">キーのサイズです。 有効なキー サイズは、256 ビット、384 ビット、521 ビットです。</param>
+        <summary>指定されたターゲット キー サイズを使用して、<see cref="T:System.Security.Cryptography.ECDsaCng" /> クラスの新しいインスタンスを初期化します。</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
 ## Remarks  
- ランダムなキーのペアには、`keySize` パラメーターによって定義される公開キーの長さが含まれます。  
+
+このコンストラクターは、新しいパブリック/プライベートのペアを直ちに生成しません。
+このコンストラクターは、指定された値に <xref:System.Security.Cryptography.ECDsaCng.KeySize> プロパティを設定し、キーが必要な場合は、保存されているサイズを使用してターゲット曲線を識別します。
+キーが <xref:System.Security.Cryptography.ECDsaCng.ImportParameters%2A> メソッドまたはその他のキーのインポートメソッドを使用して読み込まれる場合、このコンストラクターからのキーサイズは意味を持ちません。
+ 
   
  ]]></format>
         </remarks>
         <exception cref="T:System.PlatformNotSupportedException">Cryptography Next Generation (CNG) クラスは、このシステムではサポートされていません。</exception>
         <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="keySize" /> に指定された長さが無効です。</exception>
+        <altmember cref="Overload:System.Security.Cryptography.ECDsa.Create" />
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -188,7 +198,7 @@
         <summary>指定した <see cref="T:System.Security.Cryptography.CngKey" /> オブジェクトを使用して、<see cref="T:System.Security.Cryptography.ECDsaCng" /> クラスの新しいインスタンスを初期化します。</summary>
         <remarks>To be added.</remarks>
         <exception cref="T:System.ArgumentException"><paramref name="key" /> に、ECDSA (Elliptic Curve Digital Signature Algorithm) グループが指定されていません。</exception>
-        <exception cref="T:System.ArgumentNullException"><paramref name="key" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="key" /> が <see langword="null" /> です。</exception>
         <exception cref="T:System.PlatformNotSupportedException">Cryptography Next Generation (CNG) クラスは、このシステムではサポートされていません。</exception>
       </Docs>
     </Member>
@@ -266,8 +276,8 @@
         <Parameter Name="disposing" Type="System.Boolean" Index="0" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-3.5;netframework-4.0;netframework-4.5;netframework-4.5.1;netframework-4.5.2;netframework-4.6;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
       </Parameters>
       <Docs>
-        <param name="disposing">To be added.</param>
-        <summary>To be added.</summary>
+        <param name="disposing">マネージド リソースとアンマネージド リソースを解放する場合は <see langword="true" />。アンマネージド リソースだけを解放する場合は <see langword="false" />。</param>
+        <summary><see cref="T:System.Security.Cryptography.ECDsaCng" /> クラスの現在のインスタンスによって使用されているリソースを解放します。</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -458,7 +468,7 @@
       </Parameters>
       <Docs>
         <param name="curve">キーの生成に使用する曲線。</param>
-        <summary>ECDsaCng アルゴリズムに使用するキーを生成します。</summary>
+        <summary>現在のキーに代えて、指定された曲線の新しい一時的な公開/秘密キー ペアを生成します。</summary>
         <remarks>To be added.</remarks>
         <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="curve" /> は検証されません。</exception>
       </Docs>
@@ -541,10 +551,10 @@
         <Parameter Name="hashAlgorithm" Type="System.Security.Cryptography.HashAlgorithmName" Index="1" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
       </Parameters>
       <Docs>
-        <param name="data">To be added.</param>
-        <param name="hashAlgorithm">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="data">ハッシュするバイナリ ストリーム。</param>
+        <param name="hashAlgorithm">データのハッシュに使用するアルゴリズム。</param>
+        <summary>指定されたハッシュ アルゴリズムを使用して、指定されたバイナリ ストリームのハッシュ値を計算します。</summary>
+        <returns>ハッシュされたデータ。</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -581,12 +591,12 @@
         <Parameter Name="hashAlgorithm" Type="System.Security.Cryptography.HashAlgorithmName" Index="3" FrameworkAlternate="dotnet-plat-ext-2.1;dotnet-plat-ext-2.2;dotnet-plat-ext-3.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netframework-4.6.1;netframework-4.6.2;netframework-4.7;netframework-4.7.1;netframework-4.7.2;netframework-4.8" />
       </Parameters>
       <Docs>
-        <param name="data">To be added.</param>
-        <param name="offset">To be added.</param>
-        <param name="count">To be added.</param>
-        <param name="hashAlgorithm">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="data">ハッシュされるデータ。</param>
+        <param name="offset">ハッシュされる <paramref name="data" /> の最初のバイトのインデックス。</param>
+        <param name="count">ハッシュするバイト数。</param>
+        <param name="hashAlgorithm">データのハッシュに使用するアルゴリズム。</param>
+        <summary>指定されたハッシュ アルゴリズムを使用して、指定されたバイト配列部分のハッシュ値を計算します。</summary>
+        <returns>ハッシュされたデータ。</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -695,9 +705,22 @@
         <ReturnType>System.Int32</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>非対称アルゴリズムで使用されるキー モジュラスのサイズをビット単位で取得または設定します。</summary>
+        <value>非対称アルゴリズムで使用するキー モジュラスのサイズ (ビット単位)。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+このプロパティを現在の値に設定しても、可視効果はありません。
+このプロパティを新しい有効な値に設定すると、現在のキーは破棄されますが、必要になるまで新しいキーの作成が延期されます。
+
+キーのサイズは楕円曲線を一意に識別しないので、プロパティ setter の使用は推奨されません。 特定の曲線に新しいキーを生成するには、<xref:System.Security.Cryptography.ECDsaCng.GenerateKey%2A> メソッドを使用します。
+
+]]></format>
+        </remarks> 
+        <exception cref="T:System.Security.Cryptography.CryptographicException"><paramref name="value" /> は <see cref="P:System.Security.Cryptography.ECDsaCng.LegalKeySizes" /> によって許可されていません。</exception>
+        <altmember cref="M:System.Security.Cryptography.ECDsaCng.GenerateKey(System.Security.Cryptography.ECCurve)" />
       </Docs>
     </Member>
     <Member MemberName="LegalKeySizes">
@@ -726,9 +749,22 @@
         <ReturnType>System.Security.Cryptography.KeySizes[]</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary><see cref="P:System.Security.Cryptography.ECDsaCng.KeySize" /> プロパティ セッターでサポートされているキー サイズ (ビット単位) を取得します。</summary>
+        <value><see cref="P:System.Security.Cryptography.ECDsaCng.KeySize" /> プロパティ setter によってサポートされるキーサイズを格納している配列。</value>
+        <remarks>
+          <format type="text/markdown"><![CDATA[  
+  
+## Remarks  
+
+楕円曲線暗号 (ECC) では、キーのサイズはキー生成プロセスへの唯一の入力ではなく、特定の楕円曲線の曲線パラメーターから派生します。
+このプロパティは、3つの有効なキーサイズ (256、384、および521ビット) のみを報告します。
+キーの生成のベースとしてキーサイズが単独で使用される場合、サポートされるサイズは、名前付き曲線 secp256r1 (NIST P-256)、secp384r1 (NIST p-384)、および secp521r1 (nist P-521) にマップされます。
+
+このクラスは、Windows 10 で実行された場合、多くの追加の名前付き曲線をサポートしますが、このプロパティには反映されません。
+
+ ]]></format>
+        </remarks>
+        <altmember cref="M:System.Security.Cryptography.ECDsaCng.GenerateKey(System.Security.Cryptography.ECCurve)" />
       </Docs>
     </Member>
     <MemberGroup MemberName="SignData">
@@ -890,7 +926,7 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="data" /> は <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="data" /> が <see langword="null" /> です。</exception>
         <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="count" /> または <paramref name="offset" /> が原因で、データ文字列の境界外で読み取りが行われました。</exception>
         <exception cref="T:System.Security.Cryptography.CryptographicException">インスタンスに関連付けられているキーの情報に秘密キーはありません。</exception>
         <permission cref="T:System.Security.Permissions.KeyContainerPermission">データに署名するためのアクセス許可。 要求の値: <see cref="F:System.Security.Permissions.SecurityAction.Demand" />。 関連付けられた列挙型: <see cref="F:System.Security.Permissions.KeyContainerPermissionFlags.Sign" /></permission>
@@ -1058,13 +1094,12 @@
         <Parameter Name="bytesWritten" Type="System.Int32" RefType="out" Index="3" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0" />
       </Parameters>
       <Docs>
-        <param name="source">To be added.</param>
-        <param name="destination">To be added.</param>
-        <param name="hashAlgorithm">To be added.</param>
-        <param name="bytesWritten">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="source">ハッシュされるデータ。</param>
+        <param name="destination">ハッシュ値を受け取るバッファー。</param>
+        <param name="hashAlgorithm">データのハッシュに使用するアルゴリズム。</param>
+        <param name="bytesWritten">このメソッドから制御が戻るとき、<paramref name="destination" /> に書き込まれている総バイト数。 このパラメーターは初期化前として処理されます。</param>
+        <summary>指定されたハッシュ アルゴリズムを使用して、指定された宛先への、指定されたバイト型の読み取り専用スパンのハッシュ値の計算を試みます。</summary>
+        <returns><paramref name="destination" /> がハッシュ値を受け取るのに十分な長さでない場合は、<see langword="false" />。</returns>
       </Docs>
     </Member>
     <Member MemberName="TrySignHash">
@@ -1092,11 +1127,11 @@
         <Parameter Name="bytesWritten" Type="System.Int32" RefType="out" Index="2" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0" />
       </Parameters>
       <Docs>
-        <param name="source">To be added.</param>
-        <param name="destination">To be added.</param>
-        <param name="bytesWritten">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="source">署名されたデータのハッシュ値。</param>
+        <param name="destination">署名を受け取るバッファー。</param>
+        <param name="bytesWritten">このメソッドから制御が戻るとき、<paramref name="destination" /> に書き込まれている総バイト数。 このパラメーターは初期化前として処理されます。</param>
+        <summary>現在のキーを使用して、指定された宛先への、データ ハッシュを表す指定されたバイト型の読み取り専用スパン用の ECDSA デジタル署名の計算を試みます。</summary>
+        <returns><paramref name="destination" /> が署名を受け取るのに十分な長さでない場合は、<see langword="false" />。</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -1305,7 +1340,7 @@
       <Docs>
         <param name="hash">検証されるデータのハッシュ値。</param>
         <param name="signature">ハッシュ値に対して検証するデータのデジタル署名。</param>
-        <summary>特定のデジタル署名を、特定のハッシュ値に対して検証します。</summary>
+        <summary>デジタル署名が、現在のキーおよび指定されたデータ ハッシュに適していることを確認します。</summary>
         <returns>署名が有効な場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
         <remarks>To be added.</remarks>
         <exception cref="T:System.ArgumentNullException"><paramref name="hash" /> または <paramref name="signature" /> が <see langword="null" /> です。</exception>
@@ -1334,10 +1369,10 @@
         <Parameter Name="signature" Type="System.ReadOnlySpan&lt;System.Byte&gt;" Index="1" FrameworkAlternate="netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0" />
       </Parameters>
       <Docs>
-        <param name="hash">To be added.</param>
-        <param name="signature">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
+        <param name="hash">検証されるデータのハッシュ値。</param>
+        <param name="signature">ハッシュ値に対して検証するデータのデジタル署名。</param>
+        <summary>デジタル署名が、現在のキーおよび指定されたデータ ハッシュに適していることを確認します。</summary>
+        <returns>署名が有効な場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</returns>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
