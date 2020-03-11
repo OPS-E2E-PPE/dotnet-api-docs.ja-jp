@@ -1,9 +1,9 @@
 ---
 ms.openlocfilehash: c57222be00e42bd671e687407ce8ebe7fc72087e
-ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.sourcegitcommit: 5ef0d02cb57c7153fd9d5417cdcad45665af832e
 ms.translationtype: HT
 ms.contentlocale: ja-JP
-ms.lasthandoff: 06/15/2019
-ms.locfileid: "63877297"
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "71137951"
 ---
-<span data-ttu-id="d8518-101">Visual Studio 2005</span><span class="sxs-lookup"><span data-stu-id="d8518-101">Visual Studio 2005</span></span>
+<span data-ttu-id="b87db-101">Visual Studio 2005</span><span class="sxs-lookup"><span data-stu-id="b87db-101">Visual Studio 2005</span></span>

@@ -1,9 +1,9 @@
 ---
 ms.openlocfilehash: c4106c80e227105f5797cae3ba1e7a79a498d685
-ms.sourcegitcommit: 1bb00d2f4343e73ae8d58668f02297a3cf10a4c1
+ms.sourcegitcommit: 5ef0d02cb57c7153fd9d5417cdcad45665af832e
 ms.translationtype: HT
 ms.contentlocale: ja-JP
-ms.lasthandoff: 06/15/2019
-ms.locfileid: "63871494"
+ms.lasthandoff: 08/29/2019
+ms.locfileid: "71140441"
 ---
-<span data-ttu-id="013a9-101">ADO.NET 2.0</span><span class="sxs-lookup"><span data-stu-id="013a9-101">ADO.NET 2.0</span></span>
+<span data-ttu-id="b06cc-101">ADO.NET 2.0</span><span class="sxs-lookup"><span data-stu-id="b06cc-101">ADO.NET 2.0</span></span>
