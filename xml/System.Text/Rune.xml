@@ -1,5 +1,5 @@
 <Type Name="Rune" FullName="System.Text.Rune">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="ccd800c394b1cec987d6e6d9159e72f5b0385984" /><Meta Name="ms.sourcegitcommit" Value="8ae9a18b248625c8e1851e607c00346a64849587" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="12/17/2019" /><Meta Name="ms.locfileid" Value="75118660" /></Metadata><TypeSignature Language="C#" Value="public struct Rune : IComparable&lt;System.Text.Rune&gt;, IEquatable&lt;System.Text.Rune&gt;" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="ff9c267452a86e0b4821e842a90dedf5d05b6760" /><Meta Name="ms.sourcegitcommit" Value="b0947fed0227b6b2e292d7efb43705b488b130aa" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="04/29/2020" /><Meta Name="ms.locfileid" Value="82303972" /></Metadata><TypeSignature Language="C#" Value="public struct Rune : IComparable&lt;System.Text.Rune&gt;, IEquatable&lt;System.Text.Rune&gt;" />
   <TypeSignature Language="ILAsm" Value=".class public sequential ansi sealed beforefieldinit Rune extends System.ValueType implements class System.IComparable`1&lt;valuetype System.Text.Rune&gt;, class System.IEquatable`1&lt;valuetype System.Text.Rune&gt;" />
   <TypeSignature Language="DocId" Value="T:System.Text.Rune" />
   <TypeSignature Language="VB.NET" Value="Public Structure Rune&#xA;Implements IComparable(Of Rune), IEquatable(Of Rune)" />
@@ -9,6 +9,7 @@
     <AssemblyName>System.Runtime</AssemblyName>
     <AssemblyVersion>4.2.1.0</AssemblyVersion>
     <AssemblyVersion>4.2.2.0</AssemblyVersion>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
   </AssemblyInfo>
   <Base>
     <BaseTypeName>System.ValueType</BaseTypeName>
@@ -33,7 +34,200 @@
 
 ## Remarks
 
-この型のコンストラクターと変換演算子によって入力が検証されるため、基になる <xref:System.Text.Rune> インスタンスが整形式であると仮定して、コンシューマーは Api を呼び出すことができます。
+<xref:System.Text.Rune> インスタンスは、Unicode スカラー値を表します。これは、サロゲート範囲を除く任意のコードポイント (U + D800..U + DFFF)。 型のコンストラクターと変換演算子によって入力が検証されるため、基になる <xref:System.Text.Rune> インスタンスが整形式であると仮定して、コンシューマーは Api を呼び出すことができます。
+
+Unicode スカラー値、コードポイント、サロゲート範囲、および適切な形式の用語について詳しく理解していない場合は、「 [.net での文字エンコードの概要](/dotnet/standard/base-types/character-encoding-introduction)」を参照してください。
+
+次のセクションでは、について説明します。
+
+* [ルーン型を使用する場合](#when-to-use-the-rune-type)
+* [ルーン型を使用しない場合](#when-not-to-use-rune)
+* [ルーンをインスタンス化する方法](#how-to-instantiate-a-rune)
+* [ルーンインスタンスのプロパティを照会する方法](#query-properties-of-a-rune)
+* [`Rune` を UTF-8 または UTF-16 に変換します。](#convert-a-rune-to-utf-8-or-utf-16)
+* [.NET とその他の言語のルーン](#rune-in-net-vs-other-languages)
+
+### <a name="when-to-use-the-rune-type"></a>ルーン型を使用する場合
+
+コードを使用する場合は、`Rune` の種類を使用することを検討してください。
+
+* Unicode スカラー値を必要とする Api を呼び出します
+* サロゲートペアを明示的に処理します
+
+#### <a name="apis-that-require-unicode-scalar-values"></a>Unicode スカラー値を必要とする Api
+
+コードが `string` または `ReadOnlySpan<char>`内の `char` インスタンスを反復処理する場合、一部の `char` メソッドは、サロゲート範囲内の `char` インスタンスで正しく機能しません。 たとえば、次の Api では、正しく機能するために `char` スカラー値が必要です。
+
+* <xref:System.Char.GetNumericValue%2A?displayProperty=nameWithType>
+* <xref:System.Char.GetUnicodeCategory%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsDigit%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsLetter%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsLetterOrDigit%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsLower%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsNumber%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsPunctuation%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsSymbol%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsUpper%2A?displayProperty=nameWithType>
+
+次の例は、`char` インスタンスがサロゲートコードポイントである場合に正しく機能しないコードを示しています。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/CountLettersInString.cs" id="SnippetBadExample":::
+
+`ReadOnlySpan<char>`で動作する同等のコードを次に示します。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/CountLettersInSpan.cs" id="SnippetBadExample":::
+
+上記のコードは、英語などの一部の言語で正しく動作します。
+
+```csharp
+CountLettersInString("Hello")
+// Returns 5
+```
+
+ただし、次のような基本的な多言語プレーン以外の言語では正しく機能しません。
+
+```csharp
+CountLettersInString("𐓏𐓘𐓻𐓘𐓻𐓟 𐒻𐓟")
+// Returns 0
+```
+
+Osage テキストに対してこのメソッドが誤った結果を返す理由として、Osage 文字の `char` インスタンスがサロゲートコードポイントであることが挙げられます。 1つのサロゲートコードポイントには、それが文字かどうかを判断するのに十分な情報がありません。
+
+このコードを `char`ではなく `Rune` を使用するように変更した場合、このメソッドは基本的な多言語プレーン以外のコードポイントと正常に動作します。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/CountLettersInString.cs" id="SnippetGoodExample":::
+
+`ReadOnlySpan<char>`で動作する同等のコードを次に示します。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/CountLettersInSpan.cs" id="SnippetGoodExample":::
+
+上記のコードでは、Osage 文字が正しくカウントされます。
+
+```csharp
+CountLettersInString("𐓏𐓘𐓻𐓘𐓻𐓟 𐒻𐓟")
+// Returns 8
+```
+
+#### <a name="code-that-explicitly-handles-surrogate-pairs"></a>サロゲートペアを明示的に処理するコード
+
+コードがサロゲートコードポイントで明示的に操作する Api (次のメソッドなど) を呼び出す場合は、`Rune` の型を使用することを検討してください。
+
+* <xref:System.Char.IsSurrogate%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsSurrogatePair%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsHighSurrogate%2A?displayProperty=nameWithType>
+* <xref:System.Char.IsLowSurrogate%2A?displayProperty=nameWithType>
+* <xref:System.Char.ConvertFromUtf32%2A?displayProperty=nameWithType>
+* <xref:System.Char.ConvertToUtf32%2A?displayProperty=nameWithType>
+
+たとえば、次のメソッドには、サロゲート `char` のペアを処理するための特別なロジックがあります。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/WorkWithSurrogates.cs" id="SnippetUseChar":::
+
+このようなコードは、次の例のように `Rune`を使用すると、より簡単になります。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/WorkWithSurrogates.cs" id="SnippetUseRune":::
+
+### <a name="when-not-to-use-rune"></a>`Rune` を使用しない場合
+
+コードの場合、`Rune` の種類を使用する必要はありません。
+
+* 完全に一致する `char` を検索します
+* 既知の char 値に文字列を分割します
+
+`Rune` の型を使用すると、コードが次のような場合に正しくない結果を返すことがあります。
+
+* `string` 内の表示文字数をカウントします
+
+#### <a name="look-for-exact-char-matches"></a>完全に一致する `char` を検索する
+
+次のコードでは、特定の文字を検索する `string` を反復処理し、最初に一致した文字列のインデックスを返します。 コードが1つの `char`で表される文字を検索するため、`Rune`を使用するようにこのコードを変更する必要はありません。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/FindFirstLetter.cs" id="SnippetExample":::
+
+#### <a name="split-a-string-on-a-known-char"></a>既知の `char` で文字列を分割する
+
+次の例のように、`string.Split` を呼び出し、`' '` (スペース) や `','` (コンマ) などの区切り記号を使用するのが一般的です。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/SplitStringOnChar.cs" id="SnippetExample":::
+
+このコードでは1つの `char`で表される文字を検索するため、ここでは `Rune` を使用する必要はありません。
+
+#### <a name="count-the-number-of-display-characters-in-a-string"></a>`string` 内の表示文字数をカウントする
+
+文字列内の `Rune` インスタンスの数が、文字列を表示するときに表示されるユーザー perceivable の文字数と一致しない場合があります。
+
+`Rune` のインスタンスは Unicode スカラー値を表しているため、 [unicode テキストセグメントのガイドライン](https://www.unicode.org/reports/tr29/)に従うコンポーネントでは、`Rune` を表示文字をカウントするための構成要素として使用できます。
+
+<xref:System.Globalization.StringInfo> 型は、表示文字をカウントするために使用できますが、.NET 5 以外の .NET の実装では、すべてのシナリオで適切にカウントされません。
+
+詳細については、「[書記素クラスター](/dotnet/standard/base-types/character-encoding-introduction#grapheme-clusters)」を参照してください。
+
+### <a name="how-to-instantiate-a-rune"></a>`Rune` をインスタンス化する方法
+
+`Rune` インスタンスを取得するには、いくつかの方法があります。 コンストラクターを使用して、から直接 `Rune` を作成できます。
+
+* コードポイント。
+
+  :::code language="csharp" source="~/snippets/System.Text/Rune/csharp/InstantiateRunes.cs" id="SnippetCodePoint":::
+
+* 1つの `char`。
+
+  :::code language="csharp" source="~/snippets/System.Text/Rune/csharp/InstantiateRunes.cs" id="SnippetChar":::
+
+* サロゲート `char` ペア。
+
+  :::code language="csharp" source="~/snippets/System.Text/Rune/csharp/InstantiateRunes.cs" id="SnippetSurrogate":::
+
+入力が有効な Unicode スカラー値を表していない場合、すべてのコンストラクターは `ArgumentException` をスローします。
+
+エラー発生時に例外がスローされないようにする呼び出し元には、<xref:System.Text.Rune.TryCreate%2A?displayProperty=nameWithType> メソッドが用意されています。
+
+`Rune` インスタンスは、既存の入力シーケンスから読み取ることもできます。 たとえば、UTF-16 データを表す `ReadOnlySpan<char>` を指定した場合、<xref:System.Text.Rune.DecodeFromUtf16%2A?displayProperty=nameWithType> メソッドは、入力スパンの先頭にある最初の `Rune` インスタンスを返します。 <xref:System.Text.Rune.DecodeFromUtf8%2A?displayProperty=nameWithType> メソッドは同様に動作し、UTF-8 データを表す `ReadOnlySpan<byte>` パラメーターを受け取ります。 スパンの先頭ではなく、スパンの末尾から読み取る同等のメソッドがあります。
+
+### <a name="query-properties-of-a-rune"></a>`Rune` のクエリプロパティ
+
+`Rune` インスタンスの整数コードポイント値を取得するには、<xref:System.Text.Rune.Value?displayProperty=nameWithType> プロパティを使用します。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/InstantiateRunes.cs" id="SnippetValue":::
+
+`char` の種類で使用できる静的 Api の多くは、`Rune` の種類でも使用できます。 たとえば、<xref:System.Text.Rune.IsWhiteSpace%2A?displayProperty=nameWithType> と <xref:System.Text.Rune.GetUnicodeCategory%2A?displayProperty=nameWithType> は <xref:System.Char.IsWhiteSpace%2A?displayProperty=nameWithType> メソッドと <xref:System.Char.GetUnicodeCategory%2A?displayProperty=nameWithType> メソッドに相当します。 `Rune` メソッドは、サロゲートペアを正しく処理します。
+
+次のコード例では、入力として `ReadOnlySpan<char>` を受け取り、文字または数字ではない `Rune` ごとにスパンの先頭と末尾の両方からトリムしています。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/TrimNonLettersAndNonDigits.cs" id="SnippetExample":::
+
+`char` と `Rune`には API の違いがいくつかあります。 次に例を示します。
+
+* 定義によって `Rune` インスタンスをサロゲートコードポイントにすることはできないため、<xref:System.Char.IsSurrogate(System.Char)?displayProperty=nameWithType>に相当する `Rune` はありません。
+* <xref:System.Text.Rune.GetUnicodeCategory%2A?displayProperty=nameWithType> は、必ずしも <xref:System.Char.GetUnicodeCategory%2A?displayProperty=nameWithType>と同じ結果を返しません。 <xref:System.Globalization.CharUnicodeInfo.GetUnicodeCategory%2A?displayProperty=nameWithType>と同じ値が返されます。 詳細については、<xref:System.Char.GetUnicodeCategory%2A?displayProperty=nameWithType>の**解説**を参照してください。
+
+### <a name="convert-a-rune-to-utf-8-or-utf-16"></a>`Rune` を UTF-8 または UTF-16 に変換します。
+
+`Rune` は Unicode スカラー値であるため、UTF-8、UTF-16、または32エンコードに変換することができます。 `Rune` 型には、UTF-8 および UTF-16 に変換するためのサポートが組み込まれています。
+
+<xref:System.Text.Rune.EncodeToUtf16%2A?displayProperty=nameWithType> は、`Rune` インスタンスを `char` インスタンスに変換します。 `Rune` インスタンスを UTF-16 に変換した結果として得られる `char` インスタンスの数を照会するには、<xref:System.Text.Rune.Utf16SequenceLength?displayProperty=nameWithType> プロパティを使用します。 UTF-8 変換でも同様のメソッドが存在します。
+
+次の例では、`Rune` インスタンスを `char` 配列に変換します。 このコードは、`rune` 変数に `Rune` インスタンスがあることを前提としています。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/EncodeRune.cs" id="SnippetUtf16CharArray":::
+
+`string` は一連の UTF-16 文字であるため、次の例では、`Rune` のインスタンスも UTF-16 に変換します。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/EncodeRune.cs" id="SnippetUtf16String":::
+
+次の例では、`Rune` インスタンスを `UTF-8` バイト配列に変換します。
+
+:::code language="csharp" source="~/snippets/System.Text/Rune/csharp/EncodeRune.cs" id="SnippetUtf8ByteArray":::
+
+<xref:System.Text.Rune.EncodeToUtf16%2A?displayProperty=nameWithType> メソッドと <xref:System.Text.Rune.EncodeToUtf8%2A?displayProperty=nameWithType> メソッドは、書き込まれた実際の要素数を返します。 コピー先のバッファーが短すぎて結果を格納できない場合は、例外がスローされます。 例外を回避する必要がある呼び出し元に対して、スローされない <xref:System.Text.Rune.TryEncodeToUtf8%2A> および <xref:System.Text.Rune.EncodeToUtf16%2A> メソッドもあります。
+
+### <a name="rune-in-net-vs-other-languages"></a>.NET とその他の言語のルーン
+
+"ルーン" という用語は、Unicode 規格で定義されていません。 日付という用語は、 [utf-8 の作成](https://www.cl.cam.ac.uk/~mgk25/ucs/utf-8-history.txt)に戻ります。 渡シャーマンと Ken Thompson は、最終的にコードポイントとして知られることを説明する用語を探していました。 [これらは "ルーン" という用語で決済](https://twitter.com/rob_pike/status/732353233474064384)され、後で渡シャーマンが Popularize のようなプログラミング言語に影響を及ぼします。
+
+ただし、.NET `Rune` の種類は、[`rune` の種類] と同じではありません。 外出先では、`rune` の種類は[`int32`のエイリアス](https://blog.golang.org/strings)です。 ゴールーンは、Unicode コードポイントを表すことを目的としていますが、サロゲートコードポイントや有効な Unicode コードポイントではない値など、任意の32ビット値にすることができます。
+
+他のプログラミング言語の類似する型については、「 [Rust のプリミティブ `char` type](https://doc.rust-lang.org/std/primitive.char.html) 」または「 [Swift の `Unicode.Scalar` 型](https://developer.apple.com/documentation/swift/unicode/scalar)」を参照してください。どちらも Unicode スカラー値を表します。 と同様の機能を提供します。NET の `Rune` 型で、有効な Unicode スカラー値ではない値のインスタンス化を許可しません。
 
           ]]></format>
     </remarks>
@@ -51,6 +245,7 @@
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters>
         <Parameter Name="ch" Type="System.Char" />
@@ -74,6 +269,7 @@
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters>
         <Parameter Name="value" Type="System.Int32" />
@@ -97,6 +293,7 @@
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute>
@@ -125,6 +322,7 @@
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters>
         <Parameter Name="highSurrogate" Type="System.Char" />
@@ -157,6 +355,7 @@
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -185,6 +384,7 @@
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Buffers.OperationStatus</ReturnType>
@@ -228,6 +428,7 @@ UTF-16 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Buffers.OperationStatus</ReturnType>
@@ -271,6 +472,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Buffers.OperationStatus</ReturnType>
@@ -314,6 +516,7 @@ UTF-16 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Buffers.OperationStatus</ReturnType>
@@ -357,6 +560,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -384,6 +588,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -411,6 +616,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -440,6 +646,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -466,6 +673,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -489,6 +697,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Double</ReturnType>
@@ -523,6 +732,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -554,6 +764,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Globalization.UnicodeCategory</ReturnType>
@@ -588,6 +799,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -610,6 +822,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -632,6 +845,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -670,6 +884,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -706,6 +921,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -742,6 +958,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -778,6 +995,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -814,6 +1032,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -850,6 +1069,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -886,6 +1106,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -922,6 +1143,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -958,6 +1180,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -994,6 +1217,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1020,6 +1244,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute>
@@ -1051,6 +1276,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1087,6 +1313,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1115,6 +1342,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1142,6 +1370,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1169,6 +1398,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute>
@@ -1201,6 +1431,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1229,6 +1460,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1257,6 +1489,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1285,6 +1518,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1313,6 +1547,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1341,6 +1576,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -1363,6 +1599,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1385,6 +1622,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1413,6 +1651,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1439,6 +1678,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.String</ReturnType>
@@ -1462,6 +1702,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1490,6 +1731,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Text.Rune</ReturnType>
@@ -1516,6 +1758,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1544,6 +1787,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1572,6 +1816,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Attributes>
         <Attribute>
@@ -1605,6 +1850,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1635,6 +1881,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1671,6 +1918,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1707,6 +1955,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Boolean</ReturnType>
@@ -1739,6 +1988,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -1769,6 +2019,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
@@ -1799,6 +2050,7 @@ UTF-8 でエンコードされた、形式が正しくないスカラー値で�
         <AssemblyName>System.Runtime</AssemblyName>
         <AssemblyVersion>4.2.1.0</AssemblyVersion>
         <AssemblyVersion>4.2.2.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>System.Int32</ReturnType>
