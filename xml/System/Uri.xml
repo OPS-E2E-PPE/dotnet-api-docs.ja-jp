@@ -1,5 +1,5 @@
 <Type Name="Uri" FullName="System.Uri">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="d183fa8f0e433b79fea8517dace8dd25199b6ff7" /><Meta Name="ms.sourcegitcommit" Value="b0947fed0227b6b2e292d7efb43705b488b130aa" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="04/29/2020" /><Meta Name="ms.locfileid" Value="82482891" /></Metadata><TypeSignature Language="C#" Value="public class Uri" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="e6e9d7ac553f17d52bee3fb9adcca6f425b6862b" /><Meta Name="ms.sourcegitcommit" Value="b6b9d5f3f9c7eb43f14a8a1a68d044603cb8ed73" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="05/18/2020" /><Meta Name="ms.locfileid" Value="83446055" /></Metadata><TypeSignature Language="C#" Value="public class Uri" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit Uri extends System.Object" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
   <TypeSignature Language="DocId" Value="T:System.Uri" />
   <TypeSignature Language="VB.NET" Value="Public Class Uri" FrameworkAlternate="dotnet-uwp-10.0;netcore-1.0;netcore-1.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.5;netstandard-1.6" />
@@ -41,6 +41,7 @@
   </AssemblyInfo>
   <TypeForwardingChain>
     <TypeForwarding From="System" FromVersion="4.0.0.0" To="System.Runtime" ToVersion="0.0.0.0" FrameworkAlternate="dotnet-uwp-10.0" />
+    <TypeForwarding From="netstandard" FromVersion="2.1.0.0" To="System.Runtime" ToVersion="5.0.0.0" FrameworkAlternate="net-5.0" />
   </TypeForwardingChain>
   <Base>
     <BaseTypeName>System.Object</BaseTypeName>
@@ -187,6 +188,36 @@ Uri uri1 = new Uri("C:/test/path/file.txt") // Implicit file path.
 Uri uri2 = new Uri("file:///C:/test/path/file.txt") // Explicit file path.
 ```
  これらの暗黙的なファイルパスは URI 仕様に準拠していないため、可能な限り回避する必要があります。 Unix ベースのシステムで .NET Core を使用する場合、暗黙的なファイルパスは特に問題になることがあります。これは、暗黙的な絶対ファイルパスが相対パスと*区別*できないためです。 このようなあいまいさが存在する場合は、絶対 URI としてパスを解釈するように既定 <xref:System.Uri> します。
+
+## <a name="security-considerations"></a>セキュリティの考慮事項
+
+セキュリティ上の問題により、アプリケーションは、信頼されていないソースから <xref:System.Uri> インスタンスを受け入れ、`dontEscape` を[コンストラクター](xref:System.Uri.%23ctor(System.String,System.Boolean))で `true` に設定する場合には注意が必要です。 <xref:System.Uri.IsWellFormedOriginalString%2A> メソッドを呼び出すことによって、URI 文字列が有効かどうかを確認できます。
+
+信頼されていないユーザー入力を処理する場合は、新しく作成された `Uri` インスタンスの前提条件を確認してから、そのプロパティを信頼します。
+これは、次の方法で行うことができます。
+
+```csharp
+string userInput = ...;
+
+Uri baseUri = new Uri("https://myWebsite/files/");
+
+if (!Uri.TryCreate(baseUri, userInput, out Uri newUri))
+{
+    // Fail: invalid input.
+}
+
+if (!baseUri.IsBaseOf(newUri))
+{
+    // Fail: the Uri base has been modified - the created Uri is not rooted in the original directory.
+}
+```
+
+この検証は、`baseUri`を変更するだけで、UNC パスを扱うときなど、他のケースでも使用できます。
+
+```csharp
+Uri baseUri = new Uri(@"\\host\share\some\directory\name\");
+```
+
   
 ## <a name="performance-considerations"></a>パフォーマンスに関する考慮事項  
  アプリケーションを初期化するために Uri を含む * Web.config * ファイルを使用する場合、スキーム識別子が非標準である場合は、Uri を処理するために追加の時間が必要になります。 このような場合は、開始時ではなく、Uri が必要になったときに、アプリケーションの影響を受ける部分を初期化します。  
@@ -202,7 +233,6 @@ Uri uri2 = new Uri("file:///C:/test/path/file.txt") // Explicit file path.
   
  ]]></format>
     </remarks>
-    <block subset="none" type="usage"><para>セキュリティ上の問題のため、信頼されていないソースから <see cref="T:System.Uri" /> インスタンスを受け入れ、<paramref name="dontEscape" /> を <see langword="true" />に設定する場合は、アプリケーションで注意が必要です。<see cref="M:System.Uri.IsWellFormedOriginalString" /> メソッドを呼び出すことによって、URI 文字列が有効かどうかを確認できます。</para></block>
     <altmember cref="T:System.Configuration.IdnElement" />
     <altmember cref="T:System.Configuration.IriParsingElement" />
     <altmember cref="T:System.Configuration.UriSection" />
