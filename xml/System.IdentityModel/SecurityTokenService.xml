@@ -1,5 +1,5 @@
 <Type Name="SecurityTokenService" FullName="System.IdentityModel.SecurityTokenService">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="1e0e3e073399fdd83dfecd08d6b19593747b1f7d" /><Meta Name="ms.sourcegitcommit" Value="1b924db57b3a1cf768d98c21f9b988d6966a0f2b" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="03/06/2020" /><Meta Name="ms.locfileid" Value="78701825" /></Metadata><TypeSignature Language="C#" Value="public abstract class SecurityTokenService" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="178d7c121e25517828e3ec3661390cd3481a387f" /><Meta Name="ms.sourcegitcommit" Value="11d168140aa8fade0768c2a9dde3e3bcacfdfb7d" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="05/27/2020" /><Meta Name="ms.locfileid" Value="83951281" /></Metadata><TypeSignature Language="C#" Value="public abstract class SecurityTokenService" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract beforefieldinit SecurityTokenService extends System.Object" />
   <TypeSignature Language="DocId" Value="T:System.IdentityModel.SecurityTokenService" />
   <TypeSignature Language="VB.NET" Value="Public MustInherit Class SecurityTokenService" />
@@ -22,7 +22,7 @@
  STS を作成するには、<xref:System.IdentityModel.SecurityTokenService> クラスから派生する必要があります。 カスタムクラスでは、少なくとも <xref:System.IdentityModel.SecurityTokenService.GetScope%2A> および <xref:System.IdentityModel.SecurityTokenService.GetOutputClaimsIdentity%2A> メソッドをオーバーライドする必要があります。 これらのオーバーライドを使用すると、クラスで定義されている他のすべてのメソッドの既定の実装を使用して作成された STS は、セキュリティトークン要求 (RST) に応答してセキュリティトークンを発行することができます。 つまり、WS-TRUST 仕様で定義されている問題バインディングが実装されます。 このバインディングは、<xref:System.IdentityModel.SecurityTokenService.Issue%2A> メソッドに実装されています。 その他の WS-TRUST バインド (更新、キャンセル、および検証) は、既定のケースで実装されていません。これらのバインドのいずれかに対応する RST が検出された場合は、適切なエラーが呼び出し元に返されます。 もちろん、適切なメソッド (<xref:System.IdentityModel.SecurityTokenService.Renew%2A>、<xref:System.IdentityModel.SecurityTokenService.Cancel%2A>、および <xref:System.IdentityModel.SecurityTokenService.Validate%2A>) をオーバーライドして、これらのバインドを STS に実装することができます。  
   
 > [!IMPORTANT]
->  運用の準備ができている STS を実装するには、そのようなサービスの公開に固有のセキュリティリスクを軽減するために、慎重に計画し、大量のリソースを消費することがあります。 Windows Identity Foundation (WIF) を使用するほとんどの開発者は、STS 自体を開発するのではなく、STS に id 管理をアウトソーシングするアプリケーションを開発します。 WIF は visual Studio の拡張機能であり、Visual Studio 2012 の Id およびアクセスツールであり、開発環境で開発者がソリューションをテストするのに役立ちます。 このツールには、開発中のアプリケーションに対して特定の要求を処理するように構成できる STS の `LocalSTS`が含まれています。 Id およびアクセスツールの詳細については、「 [Visual Studio 2012 用 id およびアクセスツール](~/docs/framework/security/identity-and-access-tool-for-vs.md)」を参照してください。 場合によっては、`LocalSTS` は、アプリケーションを適切にテストするために必要な機能を提供しないことがあります。たとえば、アプリケーションで使用するためのカスタムトークンハンドラーの開発が必要なシナリオで、 このような場合は、<xref:System.IdentityModel.SecurityTokenService> から派生させて、開発環境に配置でき、アプリケーションでそのような機能をテストするために使用できる1つ以上の単純な STSs を作成できます。 このセクションの残りの部分では、<xref:System.IdentityModel.SecurityTokenService> クラスによって公開されるメソッドに焦点を当て、単純な STS を実装し、トークン発行パイプラインを拡張できるようにします。  
+>  運用の準備ができている STS を実装するには、そのようなサービスの公開に固有のセキュリティリスクを軽減するために、慎重に計画し、大量のリソースを消費することがあります。 Windows Identity Foundation (WIF) を使用するほとんどの開発者は、STS 自体を開発するのではなく、STS に id 管理をアウトソーシングするアプリケーションを開発します。 WIF は visual Studio の拡張機能であり、Visual Studio 2012 の Id およびアクセスツールであり、開発環境で開発者がソリューションをテストするのに役立ちます。 このツールには、開発中のアプリケーションに対して特定の要求を処理するように構成できる STS の `LocalSTS`が含まれています。 Id およびアクセスツールの詳細については、「 [Visual Studio 2012 用 id およびアクセスツール](/dotnet/framework/security/identity-and-access-tool-for-vs)」を参照してください。 場合によっては、`LocalSTS` は、アプリケーションを適切にテストするために必要な機能を提供しないことがあります。たとえば、アプリケーションで使用するためのカスタムトークンハンドラーの開発が必要なシナリオで、 このような場合は、<xref:System.IdentityModel.SecurityTokenService> から派生させて、開発環境に配置でき、アプリケーションでそのような機能をテストするために使用できる1つ以上の単純な STSs を作成できます。 このセクションの残りの部分では、<xref:System.IdentityModel.SecurityTokenService> クラスによって公開されるメソッドに焦点を当て、単純な STS を実装し、トークン発行パイプラインを拡張できるようにします。  
   
  次の一覧は、テスト環境または開発環境で使用するために開発者にとって重要な主要な方法の概要を示しています。  
   
@@ -37,7 +37,7 @@
    
   
 ## Examples  
- <xref:System.IdentityModel.SecurityTokenService> のトピックで使用されているコード例は、`Custom Token` のサンプルから抜粋したものです。 このサンプルは、単純な Web トークン (SWT) の処理を可能にするカスタムクラスを提供します。これには、SWT トークンを提供できるパッシブ STS の実装が含まれています。 アクティブな STS を実装する方法の例については、`Federation Metadata` のサンプルを参照してください。 これらのサンプルと、WIF で使用できるその他のサンプルと、それらをダウンロードする場所については、「 [WIF Code Sample Index](~/docs/framework/security/wif-code-sample-index.md)」を参照してください。 次のコードは、<xref:System.IdentityModel.SecurityTokenService> クラスを使用してパッシブ STS を実装する方法を示しています。  
+ <xref:System.IdentityModel.SecurityTokenService> のトピックで使用されているコード例は、`Custom Token` のサンプルから抜粋したものです。 このサンプルは、単純な Web トークン (SWT) の処理を可能にするカスタムクラスを提供します。これには、SWT トークンを提供できるパッシブ STS の実装が含まれています。 アクティブな STS を実装する方法の例については、`Federation Metadata` のサンプルを参照してください。 これらのサンプルと、WIF で使用できるその他のサンプルと、それらをダウンロードする場所については、「 [WIF Code Sample Index](/dotnet/framework/security/wif-code-sample-)」を参照してください。 次のコードは、<xref:System.IdentityModel.SecurityTokenService> クラスを使用してパッシブ STS を実装する方法を示しています。  
   
  [!code-csharp[WIFCustomTokenSTS#3](~/samples/snippets/csharp/VS_Snippets_Misc/wifcustomtokensts/cs/passivests/customsecuritytokenservice.cs#3)]  
   
@@ -79,7 +79,7 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="securityTokenServiceConfiguration" /> が <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="securityTokenServiceConfiguration" /> は <see langword="null" /> です。</exception>
       </Docs>
     </Member>
     <Member MemberName="BeginCancel">
@@ -378,10 +378,10 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="request" /> が <see langword="null" />です。  
+        <exception cref="T:System.ArgumentNullException"><paramref name="request" /> は <see langword="null" /> です。  
   
-- または - 
- <paramref name="scope" /> が <see langword="null" />です。</exception>
+または 
+ <paramref name="scope" /> は <see langword="null" /> です。</exception>
       </Docs>
     </Member>
     <Member MemberName="EndCancel">
@@ -647,7 +647,7 @@
    
   
 ## Examples  
- このトピックで使用するコード例は、`Custom Token` のサンプルから抜粋したものです。 このサンプルは、単純な Web トークン (SWT) の処理を可能にするカスタムクラスを提供します。これには、SWT トークンを提供できるパッシブ STS の実装が含まれています。 アクティブな STS を実装する方法の例については、`Federation Metadata` のサンプルを参照してください。 これらのサンプルと、WIF で使用できるその他のサンプルと、それらをダウンロードする場所については、「 [WIF Code Sample Index](~/docs/framework/security/wif-code-sample-index.md)」を参照してください。 次のコードは、<xref:System.IdentityModel.SecurityTokenService.GetOutputClaimsIdentity%2A> メソッドをオーバーライドして STS の要求を返す方法を示しています。 この例では、要求セキュリティトークン (RST) メッセージは無視され、STS で認証されたユーザーに基づくクレームのコレクションが返されます。  
+ このトピックで使用するコード例は、`Custom Token` のサンプルから抜粋したものです。 このサンプルは、単純な Web トークン (SWT) の処理を可能にするカスタムクラスを提供します。これには、SWT トークンを提供できるパッシブ STS の実装が含まれています。 アクティブな STS を実装する方法の例については、`Federation Metadata` のサンプルを参照してください。 これらのサンプルと、WIF で使用できるその他のサンプルと、それらをダウンロードする場所については、「 [WIF Code Sample Index](/dotnet/framework/security/wif-code-sample-)」を参照してください。 次のコードは、<xref:System.IdentityModel.SecurityTokenService.GetOutputClaimsIdentity%2A> メソッドをオーバーライドして STS の要求を返す方法を示しています。 この例では、要求セキュリティトークン (RST) メッセージは無視され、STS で認証されたユーザーに基づくクレームのコレクションが返されます。  
   
  [!code-csharp[WIFCustomTokenSTS#6](~/samples/snippets/csharp/VS_Snippets_Misc/wifcustomtokensts/cs/passivests/customsecuritytokenservice.cs#6)]  
   
@@ -692,10 +692,10 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="request" /> が <see langword="null" />です。  
+        <exception cref="T:System.ArgumentNullException"><paramref name="request" /> は <see langword="null" /> です。  
   
-- または - 
- <paramref name="scope" /> が <see langword="null" />です。</exception>
+または 
+ <paramref name="scope" /> は <see langword="null" /> です。</exception>
         <altmember cref="M:System.IdentityModel.SecurityTokenService.Issue(System.Security.Claims.ClaimsPrincipal,System.IdentityModel.Protocols.WSTrust.RequestSecurityToken)" />
       </Docs>
     </Member>
@@ -731,7 +731,7 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentNullException"><paramref name="request" /> が <see langword="null" />です。</exception>
+        <exception cref="T:System.ArgumentNullException"><paramref name="request" /> は <see langword="null" /> です。</exception>
       </Docs>
     </Member>
     <Member MemberName="GetResponse">
@@ -768,9 +768,9 @@
   
 |`RST.ReplyTo` プロパティ|<xref:System.IdentityModel.Tokens.SecurityTokenDescriptor.AppliesToAddress%2A?displayProperty=nameWithType> プロパティ。|`RSTR.ReplyTo` プロパティ|  
 |----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|  
-|設定|未設定|未設定|  
-|設定|設定|<xref:System.IdentityModel.Tokens.SecurityTokenDescriptor.AppliesToAddress%2A?displayProperty=nameWithType>|  
-|未設定|設定|未設定|  
+|オン|未設定|未設定|  
+|オン|オン|<xref:System.IdentityModel.Tokens.SecurityTokenDescriptor.AppliesToAddress%2A?displayProperty=nameWithType>|  
+|未設定|オン|未設定|  
 |未設定|未設定|未設定|  
   
  ]]></format>
@@ -822,7 +822,7 @@
    
   
 ## Examples  
- このトピックで使用するコード例は、`Custom Token` のサンプルから抜粋したものです。 このサンプルは、単純な Web トークン (SWT) の処理を可能にするカスタムクラスを提供します。これには、SWT トークンを提供できるパッシブ STS の実装が含まれています。 アクティブな STS を実装する方法の例については、`Federation Metadata` のサンプルを参照してください。 これらのサンプルと、WIF で使用できるその他のサンプルと、それらをダウンロードする場所については、「 [WIF Code Sample Index](~/docs/framework/security/wif-code-sample-index.md)」を参照してください。  
+ このトピックで使用するコード例は、`Custom Token` のサンプルから抜粋したものです。 このサンプルは、単純な Web トークン (SWT) の処理を可能にするカスタムクラスを提供します。これには、SWT トークンを提供できるパッシブ STS の実装が含まれています。 アクティブな STS を実装する方法の例については、`Federation Metadata` のサンプルを参照してください。 これらのサンプルと、WIF で使用できるその他のサンプルと、それらをダウンロードする場所については、「 [WIF Code Sample Index](/dotnet/framework/security/wif-code-sample-)」を参照してください。  
   
  <xref:System.IdentityModel.SecurityTokenService.GetScope%2A> メソッドを実装する方法を次のコード例に示します。 この実装では、RP が STS によって認識されていることを確認し、要求の <xref:System.IdentityModel.Protocols.WSTrust.WSTrustMessage.ReplyTo%2A> アドレスを検証して、<xref:System.IdentityModel.Scope.ReplyToAddress%2A?displayProperty=nameWithType> プロパティを設定します。また、ファイルにハードコーディングされている証明書に基づいて、RP で使用する署名と暗号化の資格情報を設定します。  
   
@@ -1173,15 +1173,15 @@
   
  ]]></format>
         </remarks>
-        <exception cref="T:System.IdentityModel.Protocols.WSTrust.InvalidRequestException"><paramref name="request" /> が <see langword="null" />です。  
+        <exception cref="T:System.IdentityModel.Protocols.WSTrust.InvalidRequestException"><paramref name="request" /> は <see langword="null" /> です。  
   
-- または - 
+または 
 要求の <see cref="P:System.IdentityModel.Protocols.WSTrust.WSTrustMessage.RequestType" /> プロパティは <see cref="F:System.IdentityModel.Protocols.WSTrust.RequestTypes.Issue" /> に設定されません。  
   
-- または - 
+または 
 要求の <see cref="P:System.IdentityModel.Protocols.WSTrust.WSTrustMessage.KeyType" /> プロパティが <see langword="null" /> でなく、<see cref="T:System.IdentityModel.Protocols.WSTrust.KeyTypes" /> クラスで定義されている定数の 1 つでもありません。  
   
-- または - 
+または 
 要求の <see cref="P:System.IdentityModel.Protocols.WSTrust.WSTrustMessage.KeyType" /> が <see cref="F:System.IdentityModel.Protocols.WSTrust.KeyTypes.Bearer" /> であり、<see langword="KeySize" /> 要素が存在しますが、その値が 0 と等しくありません。</exception>
         <exception cref="T:System.IdentityModel.UnsupportedTokenTypeBadRequestException">STS が、要求トークンの種類をサポートしていません (要求の <see cref="P:System.IdentityModel.Protocols.WSTrust.WSTrustMessage.TokenType" /> プロパティの値に基づく)。</exception>
         <altmember cref="M:System.IdentityModel.SecurityTokenService.Issue(System.Security.Claims.ClaimsPrincipal,System.IdentityModel.Protocols.WSTrust.RequestSecurityToken)" />
