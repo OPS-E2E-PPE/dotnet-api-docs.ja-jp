@@ -1,5 +1,5 @@
 <Type Name="DynamicObject" FullName="System.Dynamic.DynamicObject">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="f94a014fa74de83ca84864c870375c76500e303a" /><Meta Name="ms.sourcegitcommit" Value="b0947fed0227b6b2e292d7efb43705b488b130aa" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="04/29/2020" /><Meta Name="ms.locfileid" Value="82474389" /></Metadata><TypeSignature Language="C#" Value="public class DynamicObject : System.Dynamic.IDynamicMetaObjectProvider" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="8aa844ca254fc0aa66843ae517e627f7417df303" /><Meta Name="ms.sourcegitcommit" Value="b6b9d5f3f9c7eb43f14a8a1a68d044603cb8ed73" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="05/18/2020" /><Meta Name="ms.locfileid" Value="83524484" /></Metadata><TypeSignature Language="C#" Value="public class DynamicObject : System.Dynamic.IDynamicMetaObjectProvider" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit DynamicObject extends System.Object implements class System.Dynamic.IDynamicMetaObjectProvider" FrameworkAlternate="dotnet-uwp-10.0;net-5.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netframework-4.0;netstandard-2.0;netstandard-2.1" />
   <TypeSignature Language="DocId" Value="T:System.Dynamic.DynamicObject" />
   <TypeSignature Language="VB.NET" Value="Public Class DynamicObject&#xA;Implements IDynamicMetaObjectProvider" />
@@ -29,6 +29,7 @@
   </AssemblyInfo>
   <TypeForwardingChain>
     <TypeForwarding From="System.Core" FromVersion="4.0.0.0" To="System.Dynamic.Runtime" ToVersion="0.0.0.0" FrameworkAlternate="dotnet-uwp-10.0" />
+    <TypeForwarding From="netstandard" FromVersion="2.1.0.0" To="System.Linq.Expressions" ToVersion="5.0.0.0" FrameworkAlternate="net-5.0" />
     <TypeForwarding From="System.Dynamic.Runtime" FromVersion="5.0.0.0" To="System.Linq.Expressions" ToVersion="5.0.0.0" FrameworkAlternate="net-5.0" />
     <TypeForwarding From="System.Dynamic.Runtime" FromVersion="4.1.0.0" To="System.Linq.Expressions" ToVersion="4.2.0.0" FrameworkAlternate="netcore-2.0" />
     <TypeForwarding From="System.Dynamic.Runtime" FromVersion="4.1.1.0" To="System.Linq.Expressions" ToVersion="4.2.1.0" FrameworkAlternate="netcore-2.1;netcore-2.2;netcore-3.0" />
@@ -48,7 +49,7 @@
     </Attribute>
   </Attributes>
   <Docs>
-    <summary>実行時の動的な動作を指定するための基本クラスを提供します。 このクラスは継承される必要があります。直接インスタンス化することはできません。</summary>
+    <summary>実行時の動的な動作を指定する基底クラスを提供します。 このクラスは継承される必要があります。直接インスタンス化することはできません。</summary>
     <remarks>
       <format type="text/markdown"><![CDATA[  
   
@@ -305,7 +306,7 @@ Dim sampleObject As Object = New SampleDynamicObject()
         <param name="arg">二項演算の右オペランド。 たとえば、<c>sum = first + second</c> ステートメントの場合 (<c>first</c> と <c>second</c> は <see langword="DynamicObject" /> クラスから派生)、<paramref name="arg" /> は <c>second</c> と等しくなります。</param>
         <param name="result">二項演算の結果。</param>
         <summary>二項演算の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、加算や乗算などの演算の動的な動作を指定できます。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -318,7 +319,7 @@ Dim sampleObject As Object = New SampleDynamicObject()
   
  動的オブジェクトがおよび Visual Basic のみでC#使用される場合、`binder.Operation` プロパティは、<xref:System.Linq.Expressions.ExpressionType> 列挙体の次のいずれかの値を持つことができます。 ただし、IronPython や IronRuby などの他の言語では、他の値を使用できます。
   
-|[値]|説明|C#|Visual Basic|  
+|値|説明|C#|Visual Basic|  
 |-----------|-----------------|---------|------------------|  
 |`Add`|オーバーフローチェックを行わない加算演算 (数値オペランドの場合)。|`a + b`|`a + b`|  
 |`AddAssign`|オーバーフローチェックを行わない、数値オペランドに対する加算の複合代入演算。|`a += b`|サポートされていません。|  
@@ -407,10 +408,10 @@ Dim sampleObject As Object = New SampleDynamicObject()
         <Parameter Name="result" Type="System.Object" RefType="out" />
       </Parameters>
       <Docs>
-        <param name="binder">変換演算に関する情報を提供します。 <c>binder.Type</c> プロパティは、オブジェクトの変換後の型を提供します。 たとえば、C# のステートメント <c>(String)sampleObject</c> (Visual Basic では <c>CType(sampleObject, Type)</c>) の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスのインスタンス)、<c>binder.Type</c> は <see cref="T:System.String" /> 型を返します。 <c>binder.Explicit</c> プロパティは、行われる変換の種類に関する情報を提供します。 このプロパティは、明示的な変換の場合は <see langword="true" />、暗黙の変換の場合は <see langword="false" /> を返します。</param>
+        <param name="binder">変換処理に関する情報を提供します。 <c>binder.Type</c> プロパティは、オブジェクトの変換後の型を提供します。 たとえば、C# のステートメント <c>(String)sampleObject</c> (Visual Basic では <c>CType(sampleObject, Type)</c>) の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスのインスタンス)、<c>binder.Type</c> は <see cref="T:System.String" /> 型を返します。 <c>binder.Explicit</c> プロパティは、行われる変換の種類に関する情報を提供します。 このプロパティは、明示的な変換の場合は <see langword="true" />、暗黙の変換の場合は <see langword="false" /> を返します。</param>
         <param name="result">型変換演算の結果。</param>
         <summary>型変換演算の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、オブジェクトの型を別の型に変換する演算の動的な動作を指定できます。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -493,7 +494,7 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
         <param name="args">初期化中にオブジェクトに渡される引数。 たとえば、<c>new SampleType(100)</c> 演算の場合 (<c>SampleType</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生型)、<c>args[0]</c> は 100 に等しくなります。</param>
         <param name="result">初期化の結果。</param>
         <summary>動的オブジェクトの新しいインスタンスを初期化する演算の実装を提供します。 このメソッドは、C# または Visual Basic で使用するためのものではありません。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -546,7 +547,7 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
         <param name="binder">削除に関する情報を提供します。</param>
         <param name="indexes">削除するインデックス。</param>
         <summary>インデックスを使用してオブジェクトを削除する演算の実装を提供します。 このメソッドは、C# または Visual Basic で使用するためのものではありません。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -597,7 +598,7 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
       <Docs>
         <param name="binder">削除に関する情報を提供します。</param>
         <summary>オブジェクト メンバーを削除する演算の実装を提供します。 このメソッドは、C# または Visual Basic で使用するためのものではありません。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -652,7 +653,7 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
         <param name="indexes">演算に使用されるインデックス。 たとえば、C# の <c>sampleObject[3]</c> (Visual Basic では <c>sampleObject(3)</c>) 演算の場合 (<c>sampleObject</c> は <see langword="DynamicObject" /> クラスから派生)、<c>indexes[0]</c> は 3 に等しくなります。</param>
         <param name="result">インデックス演算の結果。</param>
         <summary>インデックスを使用して値を取得する演算の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、インデックス演算の動的な動作を指定できます。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、実行時例外がスローされます)。</returns>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -712,10 +713,10 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
         <Parameter Name="result" Type="System.Object" RefType="out" />
       </Parameters>
       <Docs>
-        <param name="binder">動的演算を呼び出したオブジェクトに関する情報を提供します。 <c>binder.Name</c> プロパティは、動的演算の対象であるメンバーの名前を提供します。 たとえば、<c>Console.WriteLine(sampleObject.SampleProperty)</c> ステートメントの場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスのインスタンス)、<c>binder.Name</c> は "SampleProperty" を返します。 メンバー名で大文字と小文字を区別するかどうかを <c>binder.IgnoreCase</c> プロパティで指定します。</param>
+        <param name="binder">動的操作を呼び出したオブジェクトに関する情報を提供します。 <c>binder.Name</c> プロパティは、動的演算の対象であるメンバーの名前を提供します。 たとえば、<c>Console.WriteLine(sampleObject.SampleProperty)</c> ステートメントの場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスのインスタンス)、<c>binder.Name</c> は "SampleProperty" を返します。 メンバー名で大文字と小文字を区別するかどうかを <c>binder.IgnoreCase</c> プロパティで指定します。</param>
         <param name="result">取得操作の結果。 たとえば、このメソッドがプロパティに対して呼び出された場合、プロパティ値を <paramref name="result" /> に割り当てることができます。</param>
-        <summary>メンバー値を取得する演算の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、プロパティ値の取得などの演算の動的な動作を指定できます。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、実行時例外がスローされます)。</returns>
+        <summary>メンバー値を取得する操作の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、プロパティ値の取得などの演算の動的な動作を指定できます。</summary>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -782,7 +783,7 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
         <param name="args">呼び出し演算でオブジェクトに渡される引数。 たとえば、<c>sampleObject(100)</c> 演算の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスから派生)、<c>args[0]</c> は 100 に等しくなります。</param>
         <param name="result">オブジェクト呼び出しの結果。</param>
         <summary>オブジェクトを呼び出す演算の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、オブジェクトやデリゲートの呼び出しなどの演算の動的な動作を指定できます。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -844,11 +845,11 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
         <Parameter Name="result" Type="System.Object" RefType="out" />
       </Parameters>
       <Docs>
-        <param name="binder">動的な演算に関する情報を提供します。 <c>binder.Name</c> プロパティは、動的演算の対象であるメンバーの名前を提供します。 たとえば、ステートメント <c>sampleObject.SampleMethod(100)</c> の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスのインスタンス)、<c>binder.Name</c> は "SampleMethod" を返します。 メンバー名で大文字と小文字を区別するかどうかを <c>binder.IgnoreCase</c> プロパティで指定します。</param>
-        <param name="args">呼び出し演算でオブジェクト メンバーに渡される引数。 たとえば、ステートメント <c>sampleObject.SampleMethod(100)</c> の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスから派生)、<c>args[0]</c> は 100 に等しくなります。</param>
+        <param name="binder">動的な操作に関する情報を提供します。 <c>binder.Name</c> プロパティは、動的演算の対象であるメンバーの名前を提供します。 たとえば、ステートメント <c>sampleObject.SampleMethod(100)</c> の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスのインスタンス)、<c>binder.Name</c> は "SampleMethod" を返します。 メンバー名で大文字と小文字を区別するかどうかを <c>binder.IgnoreCase</c> プロパティで指定します。</param>
+        <param name="args">呼び出し操作の間にオブジェクト メンバーに渡される引数。 たとえば、ステートメント <c>sampleObject.SampleMethod(100)</c> の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスから派生)、<c>args[0]</c> は 100 に等しくなります。</param>
         <param name="result">メンバー呼び出しの結果。</param>
-        <summary>メンバーを呼び出す演算の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、メソッドの呼び出しなどの演算の動的な動作を指定できます。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
+        <summary>メンバーを呼び出す操作の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、メソッドの呼び出しなどの演算の動的な動作を指定できます。</summary>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -917,7 +918,7 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
         <param name="indexes">演算に使用されるインデックス。 たとえば、C# の <c>sampleObject[3] = 10</c> (Visual Basic では <c>sampleObject(3) = 10</c>) 演算の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスから派生)、<c>indexes[0]</c> は 3 に等しくなります。</param>
         <param name="value">指定したインデックスのオブジェクトに設定する値。 たとえば、C# の <c>sampleObject[3] = 10</c> (Visual Basic では <c>sampleObject(3) = 10</c>) 演算の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスから派生)、<paramref name="value" /> は 10 に等しくなります。</param>
         <summary>インデックスを使用して値を設定する演算の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、指定したインデックスを使用してオブジェクトにアクセスする演算の動的な動作を指定できます。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -977,10 +978,10 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
         <Parameter Name="value" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="binder">動的演算を呼び出したオブジェクトに関する情報を提供します。 <c>binder.Name</c> プロパティは、値の割り当て先のメンバーの名前を提供します。 たとえば、ステートメント <c>sampleObject.SampleProperty = "Test"</c> の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスのインスタンス)、<c>binder.Name</c> は "SampleProperty" を返します。 メンバー名で大文字と小文字を区別するかどうかを <c>binder.IgnoreCase</c> プロパティで指定します。</param>
+        <param name="binder">動的操作を呼び出したオブジェクトに関する情報を提供します。 <c>binder.Name</c> プロパティは、値の割り当て先のメンバーの名前を提供します。 たとえば、ステートメント <c>sampleObject.SampleProperty = "Test"</c> の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスのインスタンス)、<c>binder.Name</c> は "SampleProperty" を返します。 メンバー名で大文字と小文字を区別するかどうかを <c>binder.IgnoreCase</c> プロパティで指定します。</param>
         <param name="value">メンバーに設定する値。 たとえば、<c>sampleObject.SampleProperty = "Test"</c> の場合 (<c>sampleObject</c> は <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスのインスタンス)、<paramref name="value" /> は "Test" となります。</param>
-        <summary>メンバー値を設定する演算の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、プロパティ値の設定などの演算の動的な動作を指定できます。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
+        <summary>メンバー値を設定する操作の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、プロパティ値の設定などの演算の動的な動作を指定できます。</summary>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -1045,7 +1046,7 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
         <param name="binder">単項演算に関する情報を提供します。 <c>binder.Operation</c> プロパティは <see cref="T:System.Linq.Expressions.ExpressionType" /> オブジェクトを返します。 たとえば、<c>negativeNumber = -number</c> ステートメントの場合 (<c>number</c> は <see langword="DynamicObject" /> クラスから派生)、<c>binder.Operation</c> は "Negate" を返します。</param>
         <param name="result">単項演算の結果。</param>
         <summary>単項演算の実装を提供します。 <see cref="T:System.Dynamic.DynamicObject" /> クラスの派生クラスでこのメソッドをオーバーライドして、否定、インクリメント、デクリメントなどの演算の動的な動作を指定できます。</summary>
-        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります  (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
+        <returns>操作が正常に終了した場合は <see langword="true" />。それ以外の場合は <see langword="false" />。 このメソッドが <see langword="false" /> を返す場合、言語のランタイム バインダーによって動作が決まります (ほとんどの場合、言語固有の実行時例外がスローされます)。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[  
   
@@ -1058,7 +1059,7 @@ Dim testExplicit2 = CTypeDynamic(sampleObject, GetType(String))
   
  動的オブジェクトがおよび Visual Basic のみでC#使用される場合、`binder.Operation` プロパティは、<xref:System.Linq.Expressions.ExpressionType> 列挙体の次のいずれかの値を持つことができます。 ただし、IronPython や IronRuby などの他の言語では、他の値を使用できます。
   
-|[値]|説明|C#|Visual Basic|  
+|値|説明|C#|Visual Basic|  
 |-----------|-----------------|---------|------------------|  
 |`Decrement`|単項デクリメント演算。|`a--`|サポートされていません。|  
 |`Increment`|単項インクリメント演算。|`a++`|サポートされていません。|  
