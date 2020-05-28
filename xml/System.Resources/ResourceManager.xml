@@ -1,5 +1,5 @@
 <Type Name="ResourceManager" FullName="System.Resources.ResourceManager">
-  <Metadata><Meta Name="ms.openlocfilehash" Value="99a7b8054e09ae82bf5c1457d6382ef54aedc7ce" /><Meta Name="ms.sourcegitcommit" Value="b0947fed0227b6b2e292d7efb43705b488b130aa" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="04/29/2020" /><Meta Name="ms.locfileid" Value="82407933" /></Metadata><TypeSignature Language="C#" Value="public class ResourceManager" />
+  <Metadata><Meta Name="ms.openlocfilehash" Value="9fd2e633a32be6953af44364497d8bfaaea7c7ba" /><Meta Name="ms.sourcegitcommit" Value="b6b9d5f3f9c7eb43f14a8a1a68d044603cb8ed73" /><Meta Name="ms.translationtype" Value="MT" /><Meta Name="ms.contentlocale" Value="ja-JP" /><Meta Name="ms.lasthandoff" Value="05/18/2020" /><Meta Name="ms.locfileid" Value="83542813" /></Metadata><TypeSignature Language="C#" Value="public class ResourceManager" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit ResourceManager extends System.Object" FrameworkAlternate="dotnet-uwp-10.0;net-5.0;netcore-1.0;netcore-1.1;netcore-2.0;netcore-2.1;netcore-2.2;netcore-3.0;netcore-3.1;netstandard-1.0;netstandard-1.1;netstandard-1.2;netstandard-1.3;netstandard-1.4;netstandard-1.6;netstandard-2.0;netstandard-2.1" />
   <TypeSignature Language="DocId" Value="T:System.Resources.ResourceManager" />
   <TypeSignature Language="VB.NET" Value="Public Class ResourceManager" />
@@ -31,6 +31,7 @@
   </AssemblyInfo>
   <TypeForwardingChain>
     <TypeForwarding From="mscorlib" FromVersion="4.0.0.0" To="System.Resources.ResourceManager" ToVersion="0.0.0.0" FrameworkAlternate="dotnet-uwp-10.0" />
+    <TypeForwarding From="netstandard" FromVersion="2.1.0.0" To="System.Runtime" ToVersion="5.0.0.0" FrameworkAlternate="net-5.0" />
     <TypeForwarding From="System.Resources.ResourceManager" FromVersion="5.0.0.0" To="System.Runtime" ToVersion="5.0.0.0" FrameworkAlternate="net-5.0" />
   </TypeForwardingChain>
   <Base>
@@ -81,7 +82,7 @@
 
 <a name="desktop"></a>
 ## <a name="desktop-apps"></a>デスクトップアプリ
- デスクトップ アプリの場合、<xref:System.Resources.ResourceManager> クラスは、バイナリ リソース (.resources) ファイルからリソースを取得します。 通常は、言語コンパイラか[アセンブリ リンカー (AL.exe)](~/docs/framework/tools/al-exe-assembly-linker.md) がアセンブリにこれらのリソース ファイルを埋め込みます。 <xref:System.Resources.ResourceManager> メソッドを呼び出すことによって、<xref:System.Resources.ResourceManager.CreateFileBasedResourceManager%2A> オブジェクトを使用して、アセンブリに埋め込まれていない .resources ファイルからリソースを直接取得できます。
+ デスクトップ アプリの場合、<xref:System.Resources.ResourceManager> クラスは、バイナリ リソース (.resources) ファイルからリソースを取得します。 通常は、言語コンパイラか[アセンブリ リンカー (AL.exe)](~/docs/framework/tools/al-exe-assembly-linker.md) がアセンブリにこれらのリソース ファイルを埋め込みます。 <xref:System.Resources.ResourceManager.CreateFileBasedResourceManager%2A> メソッドを呼び出すことによって、<xref:System.Resources.ResourceManager> オブジェクトを使用して、アセンブリに埋め込まれていない .resources ファイルからリソースを直接取得できます。
 
 > [!CAUTION]
 >  ASP.NET アプリでスタンドアロン .resources ファイルを使用すると、XCOPY による配置が中断されます。<xref:System.Resources.ResourceManager.ReleaseAllResources%2A> メソッドによって明示的に解放されるまで、リソースがロックされたままになるためです。 ASP.NET アプリでリソースを配置する場合は、サテライト アセンブリに .resources ファイルをコンパイルする必要があります。
@@ -92,7 +93,7 @@
 ### <a name="creating-resources"></a>リソースの作成
  リソース ベースのアプリを開発する際は、テキスト ファイル (.txt か .restext 拡張子を持つファイル) または XML ファイル (.resx 拡張子を持つファイル) にリソース情報を格納します。 それから[リソース ファイル ジェネレーター (Resgen.exe)](~/docs/framework/tools/resgen-exe-resource-file-generator.md) を使用して、テキスト ファイルまたは XML ファイルをコンパイルし、バイナリ .resources ファイルを作成します。 C# や Visual Basic コンパイラにおける `/resources` のようなコンパイラ オプションを使用して、作成した .resources ファイルを実行可能ファイルまたはライブラリに埋め込むことができます。または、アセンブリ リンカー (Al.exe) を使用して、サテライト アセンブリに埋め込むことができます。 Visual Studio プロジェクトに .resx ファイルを含めると、Visual Studio はビルド プロセスの一部として、既定のリソースとローカライズされたリソースのコンパイルおよび埋め込みを自動的に処理します。
 
- 理想的には、アプリがサポートするすべての言語か、少なくとも各言語で意味をなすサブセットに対して、リソースを作成してください。 バイナリ .resources ファイルの名前は、*basename*.*cultureName*.resources の名前付け規則に従います。ここで *basename* は、必要な詳細のレベルに応じて、アプリの名前またはクラスの名前になります。 <xref:System.Globalization.CultureInfo.Name%2A?displayProperty=nameWithType>cultureName *を判断するには、* プロパティを使用します。 アプリの既定のカルチャのリソースには、*basename*.resources の名前をつけてください。
+ 理想的には、アプリがサポートするすべての言語か、少なくとも各言語で意味をなすサブセットに対して、リソースを作成してください。 バイナリ .resources ファイルの名前は、*basename*.*cultureName*.resources の名前付け規則に従います。ここで *basename* は、必要な詳細のレベルに応じて、アプリの名前またはクラスの名前になります。 *cultureName* を判断するには、<xref:System.Globalization.CultureInfo.Name%2A?displayProperty=nameWithType> プロパティを使用します。 アプリの既定のカルチャのリソースには、*basename*.resources の名前をつけてください。
 
  たとえば、ベースの名前に MyResources を持つリソース ファイルにいくつかのリソースが含まれているアセンブリを想定します。 これらのリソース ファイルは、日本 (日本語) のカルチャには MyResources.ja-JP.resources、ドイツのカルチャには MyResources.de.resources、簡体中国語のカルチャには MyResources.zh-CHS.resources、フランス語 (ベルギー) のカルチャには MyResources.fr-BE.resources、などの名前を持つ必要があります。 既定のリソース ファイルは MyResources.resources の名前を持つ必要があります。 通常は、カルチャ固有のリソース ファイルは、カルチャごとにサテライト アセンブリにパッケージ化されます。 既定のリソース ファイルは、アプリのメイン アセンブリに埋め込まれる必要があります。
 
@@ -106,7 +107,7 @@
 
  最もよく呼び出されるコンストラクターは次の 2 つです。
 
--   <xref:System.Resources.ResourceManager.%23ctor%28System.String%2CSystem.Reflection.Assembly%29> は、指定した 2 つの情報に基づいてリソースを検索します。それらは .resources ファイルのベース名と、既定の .resources ファイルが存在するアセンブリです。 ベース名は、.resources ファイルの名前空間とルート名を含み、それのカルチャや拡張子を含みません。 コマンド ラインからコンパイルされた .resources ファイルは、通常は名前空間の名前を含みませんが、Visual Studio 環境で作成した .resources ファイルはそれを含むことに注意してください。 たとえば、リソース ファイルの名前が MyCompany.StringResources.resources であり、<xref:System.Resources.ResourceManager> という名前の静的メソッドから `Example.Main` コンストラクターを呼び出す場合、次のコードが .resources ファイルからリソースを取得できる <xref:System.Resources.ResourceManager> オブジェクトをインスタンス化します。
+-   <xref:System.Resources.ResourceManager.%23ctor%28System.String%2CSystem.Reflection.Assembly%29> は、指定した 2 つの情報に基づいてリソースを検索します。それらは .resources ファイルのベース名と、既定の .resources ファイルが存在するアセンブリです。 ベース名は、.resources ファイルの名前空間とルート名を含み、それのカルチャや拡張子を含みません。 コマンド ラインからコンパイルされた .resources ファイルは、通常は名前空間の名前を含みませんが、Visual Studio 環境で作成した .resources ファイルはそれを含むことに注意してください。 たとえば、リソース ファイルの名前が MyCompany.StringResources.resources であり、`Example.Main` という名前の静的メソッドから <xref:System.Resources.ResourceManager> コンストラクターを呼び出す場合、次のコードが .resources ファイルからリソースを取得できる <xref:System.Resources.ResourceManager> オブジェクトをインスタンス化します。
 
      [!code-csharp[Conceptual.Resources.Retrieving#1](~/samples/snippets/csharp/VS_Snippets_CLR/conceptual.resources.retrieving/cs/ctor1.cs#1)]
      [!code-vb[Conceptual.Resources.Retrieving#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/conceptual.resources.retrieving/vb/ctor1.vb#1)]
@@ -157,7 +158,7 @@ vbc ShowTime.vb /resource:strings.resources
 
      <xref:System.Threading.Thread.CurrentUICulture%2A?displayProperty=nameWithType> プロパティを明示的に設定することによって、そのスレッドの現在の UI カルチャが定義されます。 これは、アプリの他のスレッドの現在の UI カルチャには影響しません。
 
--   <xref:System.Globalization.CultureInfo> 静的プロパティに UI カルチャを表す <xref:System.Globalization.CultureInfo.DefaultThreadCurrentUICulture%2A?displayProperty=nameWithType> オブジェクトを割り当てることで、アプリ ドメイン内のすべてのスレッドの UI カルチャを設定できます。
+-   <xref:System.Globalization.CultureInfo.DefaultThreadCurrentUICulture%2A?displayProperty=nameWithType> 静的プロパティに UI カルチャを表す <xref:System.Globalization.CultureInfo> オブジェクトを割り当てることで、アプリ ドメイン内のすべてのスレッドの UI カルチャを設定できます。
 
 -   現在の UI カルチャを明示的に設定せず、現在のアプリ ドメインに既定のカルチャを定義しない場合、<xref:System.Globalization.CultureInfo.CurrentUICulture%2A?displayProperty=nameWithType> プロパティは Windows の `GetUserDefaultUILanguage` 関数によって暗黙的に設定されます。 この関数は Multilingual User Interface (MUI) によって提供されます。MUI は、ユーザーが既定の言語を設定できるようにします。 UI 言語がユーザーによって設定されていない場合、その既定値はシステムによってインストールされた言語になります。これはオペレーティング システムのリソースの言語です。
 
@@ -184,7 +185,7 @@ HelloString=Всем привет!
  [!code-csharp[Conceptual.Resources.CurrentCulture#1](~/samples/snippets/csharp/VS_Snippets_CLR/conceptual.resources.currentculture/cs/example.cs#1)]
  [!code-vb[Conceptual.Resources.CurrentCulture#1](~/samples/snippets/visualbasic/VS_Snippets_CLR/conceptual.resources.currentculture/vb/example.vb#1)]
 
- この例をコンパイルするには、次のコマンドを含むバッチ (.bat) ファイルを作成し、コマンド プロンプトからそれを実行します。 C# を使用している場合は、`csc` の代わりに `vbc` を指定し、`Example.cs` の代わりに `Example.vb` を指定します。
+ この例をコンパイルするには、次のコマンドを含むバッチ (.bat) ファイルを作成し、コマンド プロンプトからそれを実行します。 C# を使用している場合は、`vbc` の代わりに `csc` を指定し、`Example.vb` の代わりに `Example.cs` を指定します。
 
 ```
 resgen Greetings.txt
@@ -221,7 +222,7 @@ al /embed:Greetings.ru-RU.resources /culture:ru-RU /out:ru-RU\Example.resources.
  [!code-csharp[System.Resources.ResourceManager.Class#2](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.resources.resourcemanager.class/cs/showdate.cs#2)]
  [!code-vb[System.Resources.ResourceManager.Class#2](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.resources.resourcemanager.class/vb/showdate.vb#2)]
 
- この例をコンパイルするには、次のコマンドを含むバッチ ファイルを作成し、コマンド プロンプトからそれを実行します。 C# を使用している場合は、`csc` の代わりに `vbc` を指定し、`showdate.cs` の代わりに `showdate.vb` を指定します。
+ この例をコンパイルするには、次のコマンドを含むバッチ ファイルを作成し、コマンド プロンプトからそれを実行します。 C# を使用している場合は、`vbc` の代わりに `csc` を指定し、`showdate.vb` の代わりに `showdate.cs` を指定します。
 
 ```
 
@@ -254,7 +255,7 @@ al /out:ru-RU\Showdate.resources.dll /culture:ru-RU /embed:DateStrings.ru-RU.res
 
 -   アプリに既定のカルチャ、あるいはニュートラル カルチャがありません。 ソース コード ファイルまたはプロジェクトの情報ファイル (Visual Basic アプリでは AssemblyInfo.vb、C# アプリでは AssemblyInfo.cs) に <xref:System.Resources.NeutralResourcesLanguageAttribute> 属性を追加します。
 
--   `baseName` コンストラクターの <xref:System.Resources.ResourceManager.%23ctor%28System.String%2CSystem.Reflection.Assembly%29> パラメーターに .resources ファイルの名前が指定されていません。 名前には、リソース ファイルの完全修飾名前空間を含める必要がありますが、そのファイル名拡張子は不要です。 通常、Visual Studio で作成されるリソース ファイルは名前空間の名前を含みますが、コマンド プロンプトで作成されコンパイルされたリソース ファイルはそれを含みません。 次のユーティリティをコンパイルして実行すると、埋め込まれた .resources ファイルの名前を判断できます。 これは、メイン アセンブリまたはサテライト アセンブリの名前をコマンド ライン パラメーターとして指定するコンソール アプリです。 これは、リソース マネージャーがリソースを正しく特定できるように、`baseName` パラメーターに指定するべき文字列を表示します。
+-   <xref:System.Resources.ResourceManager.%23ctor%28System.String%2CSystem.Reflection.Assembly%29> コンストラクターの `baseName` パラメーターに .resources ファイルの名前が指定されていません。 名前には、リソース ファイルの完全修飾名前空間を含める必要がありますが、そのファイル名拡張子は不要です。 通常、Visual Studio で作成されるリソース ファイルは名前空間の名前を含みますが、コマンド プロンプトで作成されコンパイルされたリソース ファイルはそれを含みません。 次のユーティリティをコンパイルして実行すると、埋め込まれた .resources ファイルの名前を判断できます。 これは、メイン アセンブリまたはサテライト アセンブリの名前をコマンド ライン パラメーターとして指定するコンソール アプリです。 これは、リソース マネージャーがリソースを正しく特定できるように、`baseName` パラメーターに指定するべき文字列を表示します。
 
      [!code-csharp[System.Resources.ResourceManager.Class#4](~/samples/snippets/csharp/VS_Snippets_CLR_System/system.resources.resourcemanager.class/cs/resourcenames.cs#4)]
      [!code-vb[System.Resources.ResourceManager.Class#4](~/samples/snippets/visualbasic/VS_Snippets_CLR_System/system.resources.resourcemanager.class/vb/resourcenames.vb#4)]
@@ -313,7 +314,7 @@ al /out:ru-RU\Showdate.resources.dll /culture:ru-RU /embed:DateStrings.ru-RU.res
 
  [!INCLUDE[win8_appname_long](~/includes/win8-appname-long-md.md)] アプリでは、<xref:System.Resources.ResourceManager> クラスはパッケージ リソース インデックス (PRI) ファイルからリソースを取得します。 単一の PRI ファイル (アプリケーション パッケージの PRI ファイル) には、既定のカルチャとすべてのローカライズされたリソースの両方が含まれています。 1 つ以上の XML リソース (.resw) 形式のリソース ファイルから PRI ファイルを作成するには、MakePRI ユーティリティを使用します。 Visual Studio プロジェクトに含まれているリソースは、Visual Studio が自動的に PRI ファイルの作成とパッケージ化のプロセスを処理します。 その後、.NET Framework の <xref:System.Resources.ResourceManager> クラスを使用して、アプリやライブラリのリソースにアクセスできます。
 
- <xref:System.Resources.ResourceManager> アプリでは、デスクトップ アプリの場合と同じ方法で [!INCLUDE[win8_appname_long](~/includes/win8-appname-long-md.md)] オブジェクトのインスタンスを作成できます。
+ [!INCLUDE[win8_appname_long](~/includes/win8-appname-long-md.md)] アプリでは、デスクトップ アプリの場合と同じ方法で <xref:System.Resources.ResourceManager> オブジェクトのインスタンスを作成できます。
 
  それから、<xref:System.Resources.ResourceManager.GetString%28System.String%29> メソッドに取得するリソースの名前を渡すことによって、特定のカルチャのリソースにアクセスすることができます。 既定では、このメソッドは、呼び出しを行ったスレッドの現在の UI カルチャによって決定されるカルチャのリソースを返します。 リソースの名前と、取得するリソースのカルチャを表す <xref:System.Globalization.CultureInfo> オブジェクトを <xref:System.Resources.ResourceManager.GetString%28System.String%2CSystem.Globalization.CultureInfo%29> メソッドに渡すことによって、特定のカルチャのリソースも取得できます。 現在の UI カルチャまたは指定したカルチャのリソースが見つからない場合、リソース マネージャーは UI 言語フォールバック リストを使用して、適切なリソースを見つけます。
 
@@ -711,7 +712,7 @@ csc Example.cs /resource:ExampleResources.resources
         <param name="baseName">拡張子はないが、完全修飾名前空間名を含んだ、リソース ファイルのルート名。 たとえば、"MyApplication.MyResource.en-US.resources" というリソース ファイルのルート名は "MyApplication.MyResource" です。</param>
         <param name="assembly">リソースのメイン アセンブリ。</param>
         <param name="usingResourceSet">使用するカスタム <see cref="T:System.Resources.ResourceSet" /> の種類。 <see langword="null" /> の場合は、既定のランタイム <see cref="T:System.Resources.ResourceSet" /> オブジェクトが使用されます。</param>
-        <summary>指定した <see cref="T:System.Resources.ResourceManager" /> クラスを使用して、指定したアセンブリ内で指定したルート名を持つファイルに含まれるリソースを検索する <see cref="T:System.Resources.ResourceSet" /> クラスの新しいインスタンスを初期化します。</summary>
+        <summary>指定した <see cref="T:System.Resources.ResourceSet" /> クラスを使用して、指定したアセンブリ内で指定したルート名を持つファイルに含まれるリソースを検索する <see cref="T:System.Resources.ResourceManager" /> クラスの新しいインスタンスを初期化します。</summary>
         <remarks>
           <format type="text/markdown"><![CDATA[
 
@@ -1138,7 +1139,7 @@ GetObject.exe
         <param name="name">取得するリソースの名前。</param>
         <param name="culture">リソースのローカライズ対象のカルチャ。 リソースがこのカルチャにローカライズされていない場合、リソース マネージャーはフォールバック規則を使用して適切なリソースを探します。
 
-この値が <see langword="null" /> の場合、<see cref="T:System.Globalization.CultureInfo" /> プロパティを使用して <see cref="P:System.Globalization.CultureInfo.CurrentUICulture" /> オブジェクトが取得されます。</param>
+この値が <see langword="null" /> の場合、<see cref="P:System.Globalization.CultureInfo.CurrentUICulture" /> プロパティを使用して <see cref="T:System.Globalization.CultureInfo" /> オブジェクトが取得されます。</param>
         <summary>指定されたカルチャ用にローカライズされている指定された文字列以外のリソースの値を取得します。</summary>
         <returns>指定されたカルチャに合わせてローカライズされているリソースの値。 適切なリソース セットが存在するが、<paramref name="name" /> が見つからない場合、メソッドは <see langword="null" /> を返します。</returns>
         <remarks>
@@ -1446,7 +1447,7 @@ al /out:fr-FR\ShowNumbers.resources.dll /culture:fr-FR /embed:NumberResources.fr
 
  ]]></format>
         </remarks>
-        <exception cref="T:System.ArgumentException">アセンブリの <see cref="T:System.Version" /> で見つかった <paramref name="a" /> が無効です。</exception>
+        <exception cref="T:System.ArgumentException">アセンブリの <paramref name="a" /> で見つかった <see cref="T:System.Version" /> が無効です。</exception>
         <exception cref="T:System.ArgumentNullException"><paramref name="a" /> が <see langword="null" /> です。</exception>
         <altmember cref="T:System.Resources.SatelliteContractVersionAttribute" />
       </Docs>
@@ -1785,7 +1786,7 @@ al /out:ru-RU\Showdate.resources.dll /culture:ru-RU /embed:DateStrings.ru-RU.res
         <param name="name">取得するリソースの名前。</param>
         <param name="culture">リソースのローカライズ先のカルチャを表すオブジェクト。</param>
         <summary>指定したカルチャにローカライズされている文字列リソースの値を返します。</summary>
-        <returns>指定されたカルチャのためにローカライズされたリソースの値、または、リソース セットで <see langword="null" /> が見つからない場合は <paramref name="name" />。</returns>
+        <returns>指定されたカルチャのためにローカライズされたリソースの値、または、リソース セットで <paramref name="name" /> が見つからない場合は <see langword="null" />。</returns>
         <remarks>
           <format type="text/markdown"><![CDATA[
 
@@ -1987,7 +1988,7 @@ al /out:ru-RU\Showdate.resources.dll /culture:ru-RU /embed:DateStrings.ru-RU.res
       <Docs>
         <param name="culture">検索対象のカルチャ オブジェクト。</param>
         <param name="createIfNotExists">リソース セットがまだ読み込まれていなければ読み込む場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</param>
-        <param name="tryParents">リソース セットを読み込むことができないときに、親 <see langword="true" /> オブジェクトを確認する場合は <see cref="T:System.Globalization.CultureInfo" />。それ以外の場合は <see langword="false" />。</param>
+        <param name="tryParents">リソース セットを読み込むことができないときに、親 <see cref="T:System.Globalization.CultureInfo" /> オブジェクトを確認する場合は <see langword="true" />。それ以外の場合は <see langword="false" />。</param>
         <summary>リソース セットを検索するための実装を提供します。</summary>
         <returns>指定されたリソース セット。</returns>
         <remarks>To be added.</remarks>
